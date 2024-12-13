@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  gtk4-app:
+    build: .
+    container_name: gtk4_project
+    volumes:
+      - .:/app
+    stdin_open: true
+    tty: true
+    command: ["make", "run"]

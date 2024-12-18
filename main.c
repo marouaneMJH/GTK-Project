@@ -2,10 +2,17 @@
 #include "./include/index.h"
 static void activate(GtkApplication *app, gpointer user_data)
 {
-  gchar title[] = "Hello World";
-  Window *window_data = init_window(title);
-  GtkWindow *window=create_window(app, window_data);
+  // Window *window_data = 
+
+
+  Window* win1=init_window("window 1");
+  Window* wn2=init_window("window 2");
+
+  GtkWindow *window=create_window(app, init_window("window 1"));
+  GtkWindow *window2=create_window(app, init_window("window 2"));
+  
   gtk_widget_show_all(GTK_WIDGET(window));
+  gtk_widget_show_all(GTK_WIDGET(window2));
 }
 
 

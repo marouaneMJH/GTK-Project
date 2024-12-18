@@ -1,14 +1,47 @@
+#include <gtk/gtk.h>
 #include "./include/index.h"
-
-
-
-int main(){
-  
-
-
-  return 0;
-
+static void activate(GtkApplication *app, gpointer user_data)
+{
+  gchar title[] = "Hello World";
+  Window *window_data = init_window(title);
+  GtkWindow *window=create_window(app, window_data);
+  gtk_widget_show_all(GTK_WIDGET(window));
 }
+
+
+
+
+
+
+
+
+int main(int argc, char *argv[]) {
+
+    GtkApplication *app;
+    int status;
+
+    app = gtk_application_new("gtk.app.root", G_APPLICATION_DEFAULT_FLAGS);
+
+    g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
+
+
+    status = g_application_run(G_APPLICATION(app), argc, argv);
+
+    g_object_unref(app);
+
+    return status;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 // #include <gtk/gtk.h>

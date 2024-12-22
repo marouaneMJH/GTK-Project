@@ -11,7 +11,8 @@ Window* init_window(gchar *title)
 
     Window *window = (Window*)malloc(sizeof(Window));
     window->title = (gchar*) malloc(50*sizeof(gchar));
-    strcpy(window->title, title);
+    if(title)
+        strcpy(window->title, title);
     window->new_startup_id = NULL;
     window->dimension.width = 400;
     window->dimension.height = 400;
@@ -30,6 +31,34 @@ Window* init_window(gchar *title)
     window->move_y = 0;
     window->opacity = 1;
     strcpy(window->bg_color, "#000000");
+
+    return window;
+}
+
+Window* edit_window(Window *window, 
+                 gchar *title, 
+                 gint width, 
+                 gint height, 
+                 gboolean is_resizable, 
+                 gchar *bg_color)
+{
+    if( !window){
+        printf("\nthe window not exist");
+        return window;
+    }
+
+    if (title != NULL)
+        strcpy(window->title, title);
+    
+    if (width > 0) 
+        window->dimension.width = width;
+
+    if (height > 0) 
+        window->dimension.height = height;
+    
+    window->is_resizable = is_resizable;
+    if (bg_color != NULL)
+        strcpy(window->bg_color, bg_color);
 
     return window;
 }
@@ -64,6 +93,5 @@ GtkWindow* create_window(GtkApplication *app , Window *window_data)
     GdkRGBA bg_color;
     gdk_rgba_parse(&bg_color, window_data->bg_color);
     gtk_widget_override_background_color(GTK_WIDGET(window), GTK_STATE_FLAG_NORMAL, &bg_color);
-
     return window;
 }

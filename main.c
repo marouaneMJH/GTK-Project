@@ -2,17 +2,34 @@
 #include "./include/index.h"
 static void activate(GtkApplication *app, gpointer user_data)
 {
-  // Window *window_data = 
 
 
   Window* win1=init_window("window 1");
-  Window* wn2=init_window("window 2");
+
 
   GtkWindow *window=create_window(app, init_window("window 1"));
-  GtkWindow *window2=create_window(app, init_window("window 2"));
-  
+
+    // button 
+
+  GtkWidget *button1=gtk_button_new_with_label("ILISI1");
+  GtkWidget *button2=gtk_button_new_with_label("ILISI2");
+  GtkWidget *button3=gtk_button_new_with_label("ILISI3");
+
+  gtk_widget_set_size_request(button1,100,300);
+  gtk_widget_set_size_request(button2,200,100);
+  gtk_widget_set_size_request(button3,300,10);
+
+  GtkWidget* box=gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+
+  gtk_box_pack_start(GTK_BOX(box),button1,FALSE,FALSE,0);
+  gtk_box_pack_start(GTK_BOX(box),button2,TRUE,FALSE,0);
+  gtk_box_pack_end(GTK_BOX(box),button3,TRUE,TRUE,0);
+
+  GtkWidget* fixed=gtk_fixed_new();
+  gtk_fixed_put(GTK_FIXED(fixed),box,150,150);
+
+  gtk_container_add(GTK_CONTAINER(window),fixed);
   gtk_widget_show_all(GTK_WIDGET(window));
-  gtk_widget_show_all(GTK_WIDGET(window2));
 }
 
 

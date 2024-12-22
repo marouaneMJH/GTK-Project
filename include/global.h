@@ -1,6 +1,7 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 #include <gtk/gtk.h>
+#include <stdbool.h>
 
 
 

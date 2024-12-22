@@ -3,7 +3,6 @@
 
 #include "./../global.h"
 
-
 typedef struct
 {
     /* Positions and dimention of window */
@@ -44,7 +43,23 @@ typedef struct
 
 } Window;
 
+
+/**
+ * @brief initial the window by default value 
+ * @return the default window structure 
+ */
 Window *init_window(gchar *title);
+
+/**
+ * @brief function to edit predefined window with juste
+ * @return the edited window   
+*/ 
+Window* edit_window(Window *window,
+                 gchar *title,
+                 gint width,
+                 gint height,
+                 gboolean is_resizable,
+                 gchar *bg_color);
 
 GtkWindow *create_window(GtkApplication *app, Window *window_data);
 

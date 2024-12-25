@@ -16,7 +16,7 @@ all: $(EXECUTABLE)
 $(EXECUTABLE): $(SOURCES)
 	$(CC) main.c $(SOURCES) -o $(EXECUTABLE) $(CFLAGS) $(LDFLAGS) && ./$(EXECUTABLE)
 
-run: $(EXECUTABLE)
+run:
 	./$(EXECUTABLE)
 
 clean:

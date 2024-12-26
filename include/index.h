@@ -7,5 +7,5 @@
 
 // Widget
 #include "./widget/window.h"
-
+#include "./widget/entry.h"
 #endif

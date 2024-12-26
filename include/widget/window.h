@@ -45,7 +45,6 @@ typedef struct
 } Window;
 
 Window *init_window(gchar *title);
-
 GtkWindow *create_window(GtkApplication *app, Window *window_data);
 
 #endif

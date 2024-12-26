@@ -2,77 +2,71 @@
 #include "./include/index.h"
 static void activate(GtkApplication *app, gpointer user_data)
 {
-  // Window *window_data = 
+  // Window *window_data =
 
+  Window *win1 = init_window("window 1");
+  Window *wn2 = init_window("window 2");
 
-  Window* win1=init_window("window 1");
-  Window* wn2=init_window("window 2");
+  GtkWindow *window = create_window(app, init_window("window 1"));
+  //GtkWindow *window2 = create_window(app, init_window("window 2"));
 
-  GtkWindow *window=create_window(app, init_window("window 1"));
-  GtkWindow *window2=create_window(app, init_window("window 2"));
-  
+  GtkWidget *entry = gtk_entry_new();
+  GtkWidget *entry2 = gtk_entry_new();
+  //gtk_entry_set_text(GTK_ENTRY(entry),"hiiiiii");
+  gtk_entry_set_input_purpose(GTK_ENTRY(entry), GTK_INPUT_PURPOSE_PASSWORD);
+  //gtk_entry_set_visibility(GTK_ENTRY(entry),FALSE);
+   GdkRGBA color,bg_color;
+  gdk_rgba_parse(&color, "red");
+  gdk_rgba_parse(&bg_color,"green");
+  gtk_widget_override_color(entry,GTK_STATE_FLAG_FOCUSED,&color);
+  gtk_widget_override_background_color(entry,GTK_STATE_FLAG_FOCUSED,&bg_color);
+  gtk_entry_set_placeholder_text(GTK_ENTRY(entry), "Enter your name");
+  gtk_entry_set_alignment(GTK_ENTRY(entry), 0.5);
+  GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+  gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry), FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry2), FALSE, FALSE, 0);
+  gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(box));
+ 
+
   gtk_widget_show_all(GTK_WIDGET(window));
-  gtk_widget_show_all(GTK_WIDGET(window2));
+  //gtk_widget_show_all(GTK_WIDGET(window2));
 }
 
+int main(int argc, char *argv[])
+{
 
+  GtkApplication *app;
+  int status;
 
+  app = gtk_application_new("gtk.app.root", G_APPLICATION_DEFAULT_FLAGS);
 
+  g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
 
+  status = g_application_run(G_APPLICATION(app), argc, argv);
 
+  g_object_unref(app);
 
-
-int main(int argc, char *argv[]) {
-
-    GtkApplication *app;
-    int status;
-
-    app = gtk_application_new("gtk.app.root", G_APPLICATION_DEFAULT_FLAGS);
-
-    g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
-
-
-    status = g_application_run(G_APPLICATION(app), argc, argv);
-
-    g_object_unref(app);
-
-    return status;
+  return status;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // #include <gtk/gtk.h>
 
-
-
 // /* the demention of Widget*/
-// typedef struct 
+// typedef struct
 // {
 //   gint width;
 //   gint gheight;
 // }Demention;
 
-
-
 // // the position of the widget in the window
-// typedef struct 
-// {              
+// typedef struct
+// {
 //   gint x;
 //   gint y;
 // }Bound;
 
 // // the start up position of the window
-// typedef enum 
+// typedef enum
 // {
 //   GTK_WINDOW_CENTER,
 //   GTK_WINDOW_POS_CENTER_ALWAYS,
@@ -81,11 +75,9 @@ int main(int argc, char *argv[]) {
 //   GTK_WINDOW_POS_NONE
 // }GtkPosit;
 
-
-
 // typedef struct window
 // {
-//   // title of the window 
+//   // title of the window
 //   gchar *title;
 //   Demention demention;
 //   // if it resizable or not
@@ -98,15 +90,13 @@ int main(int argc, char *argv[]) {
 //   gboolean is_maximized;
 
 //   // if the window is modal or not (we can use other windows in same time )
-//   gboolean is_modal;  
-
+//   gboolean is_modal;
 
 //   // the parent window
 //   GtkWindow* parent;
 
 //   // functions
 // }Window;
-
 
 // // Callback function to print "Hello World"
 // static void
@@ -167,8 +157,6 @@ int main(int argc, char *argv[]) {
 
 //   return app;
 // }
-
-
 
 // int
 // main (int    argc,

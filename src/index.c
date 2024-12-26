@@ -3,7 +3,7 @@
 
 
 
-
+/*
 
 Window* init_window(gchar *title)
 {
@@ -29,7 +29,8 @@ Window* init_window(gchar *title)
     window->move_x = 0;
     window->move_y = 0;
     window->opacity = 1;
-    strcpy(window->bg_color, "#000000");
+    strcpy(window->bg_color, "#ffffff");
+
 
     return window;
 }
@@ -67,3 +68,4 @@ GtkWindow* create_window(GtkApplication *app , Window *window_data)
 
     return window;
 }
+*/

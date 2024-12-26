@@ -1,4 +1,5 @@
-#include "./../include/index.h"
+#include "./../../include/global.h"
+#include "./../../include/widget/window.h"
 
 
 

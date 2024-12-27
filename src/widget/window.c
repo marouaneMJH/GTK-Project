@@ -87,7 +87,6 @@ GtkWindow* create_window(GtkApplication *app , Window *window_data)
     gtk_window_set_decorated(window, window_data->is_decorated);
     gtk_window_set_type_hint(window, window_data->hint_type);
     gtk_widget_set_opacity(GTK_WIDGET(window), window_data->opacity);
-    //gtk_window_move(window, window_data->move_x, window_data->move_y);
     gtk_window_set_startup_id(window, window_data->new_startup_id);
     if(window_data->parent) gtk_window_set_transient_for(window, window_data->parent);
 

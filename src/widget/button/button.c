@@ -33,7 +33,6 @@ Button edit_button(
 
     b.is_sensitive=is_sensitive;
     b.is_visible=is_visible;
-    b.tooltip=tooltip;
     b.dimensions=dimensions;
     b.margin=margin;
     b.expand=expand;
@@ -97,8 +96,16 @@ GtkWidget* create_button(Button button)
     return ((GtkWidget*)b);
 }
 
+GtkWidget* create_button_icon(gchar* icon_name,GtkIconSize icon_size)
+{
+    GtkWidget* b;
+    if(icon_name)
+        b=gtk_button_new_from_icon_name(icon_name,icon_size);
+    else
+        b=gtk_button_new_from_icon_name("computer",GTK_ICON_SIZE_BUTTON);
 
-
+    return ((GtkWidget*)b);
+}
 
 
 

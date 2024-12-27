@@ -1,6 +1,11 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
+
+// todo button icon
+// todo button image
+// todo background-color problem
+
 #include "./../../global.h"
 
 /* Max size of element */
@@ -10,8 +15,8 @@
 /*  default values */
 #define DEFAULT_BUTTON_DIMENSIONS \
     {                             \
-        .height = 0,              \
-        .width = 0}
+        .height = 100,            \
+        .width = 100}
 
 #define DEFAULT_BUTTON_MARGIN \
     {                         \
@@ -20,25 +25,26 @@
         .start = 0,           \
         .end = 0}
 
-#define DEFAULT_BUTTON                           \
-    {                                            \
-        .label = "Hello",                        \
-        .is_sensitive = TRUE,                    \
-        .is_visible = TRUE,                      \
-        .tooltip = NULL,                         \
-        .dimensions = DEFAULT_BUTTON_DIMENSIONS, \
-        .margin = DEFAULT_BUTTON_MARGIN,         \
-        .expand = FALSE,                         \
-        .bg_color = "#FFFF00",                   \
-        .text_color = "#000000"}
+#define DEFAULT_BUTTON                                  \
+    {                                                   \
+        .label          = '\0',                      \
+        .is_sensitive   = TRUE,                         \
+        .is_visible     = TRUE,                         \
+        .tooltip        = '\0',                         \
+        .dimensions     = DEFAULT_BUTTON_DIMENSIONS,    \
+        .margin         = DEFAULT_BUTTON_MARGIN,        \
+        .expand = FALSE,                                \
+        .bg_color = "#FFFF00",                          \
+        .text_color = "#000000",                        \
+        .image = NULL}
 
 typedef struct
 {
     /* Basic properties */
-    gchar *label;          // The text displayed on the button
+    gchar label[MAX_TEXT_LABEL];          // The text displayed on the button
     gboolean is_sensitive; // Whether the button is clickable or not
     gboolean is_visible;   // Whether the button is visible or hidden
-    gchar *tooltip;        // Tooltip text shown when hovering over the button
+    gchar tooltip[MAX_BUTTON_TOOLTIP];        // Tooltip text shown when hovering over the button
 
     /* Dimensions and placement */
     Dimensions dimensions; // dimensions of the button
@@ -48,6 +54,9 @@ typedef struct
     /* Button appearance */
     gchar bg_color[10];   // Background color (e.g., "#FFFFFF")
     gchar text_color[10]; // Text color (e.g., "#0000000" )
+
+    /* widget relation */
+    GtkWidget *image;
 
 } Button;
 
@@ -75,5 +84,13 @@ Button edit_button(
  * @return[ou] GtkWidget pointer to new button widget
  */
 GtkWidget *create_button(Button button);
+
+/**
+ * @brief create button icon
+ * @param[in] icon_name look here for more infomation https://www.notion.so/Button-1627f0b86e0380af9957e029522d8b22?pvs=4
+ * @param icon_size enum, icon predefined size
+ * @return icon on button form
+ */
+GtkWidget* create_button_icon(gchar* icon_name,GtkIconSize icon_size);
 
 #endif

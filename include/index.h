@@ -8,6 +8,7 @@
 // Widget
 #include "./widget/window.h"
 #include "./widget/button/button.h"
+#include "./widget/button/spin_button.h"
 #include "./widget/label.h"
 
 

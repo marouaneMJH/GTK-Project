@@ -1,30 +1,36 @@
 #include "./include/index.h"
 
 
-void exits(GtkWidget* button,gpointer user_data)
-{
-  g_print("\nHello");
+// Callback function for button click
+static void run_run(GtkWidget *button, GtkWidget *spin_button) {
+    gdouble value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_button)); // Get current spin button value
+    g_print("\nSpin button value: %f\n", value);
 }
 
+// Main activate function
+static void activate(GtkApplication *app, gpointer user_data) {
+    // Create spin button adjustment
+    GtkAdjustment *adjustment = gtk_adjustment_new(50, 0, 100, 1, 1, 0);
 
-static void activate(GtkApplication *app, gpointer user_data)
-{
+    // Create window
+    GtkWindow *window = create_window(app, init_window(NULL));
+    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
+    // Create spin button
+    GtkWidget *spin_button = gtk_spin_button_new(adjustment, 1, 0);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin_button), 50);
 
-  Window* win1=init_window("window 1");
-  GtkWindow *window=create_window(app, init_window("window 1"));
-  
-  Button button_struct=DEFAULT_BUTTON;
-  g_strlcpy(button_struct.bg_color,"#FF0000",MAX_COLOR);
-  GtkWidget* button=create_button(button_struct);
-  GtkWidget* container= gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0);
-  
+    // Create button to check value
+    GtkWidget *button_check = gtk_button_new_with_label("Check Value");
+    g_signal_connect(button_check, "clicked", G_CALLBACK(run_run), spin_button); // Pass spin button to callback
 
-  gtk_container_add(GTK_CONTAINER(window),container);
-  gtk_container_add(GTK_CONTAINER(container),button);
+    // Pack widgets into box and add to window
+    gtk_box_pack_start(GTK_BOX(box), spin_button, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), button_check, FALSE, FALSE, 0);
+    gtk_container_add(GTK_CONTAINER(window), box);
 
-
-  gtk_widget_show_all(GTK_WIDGET(window));
+    // Show all widgets
+    gtk_widget_show_all(GTK_WIDGET(window));
 }
 
 

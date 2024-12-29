@@ -7,8 +7,9 @@
 
 // Widget
 #include "./widget/window.h"
-#include "./widget/button/button.h"
 #include "./widget/label.h"
+#include "./widget/button/button.h"
+#include "./widget/button/radio_button.h"
 
 
 #endif

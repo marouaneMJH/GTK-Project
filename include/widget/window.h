@@ -39,28 +39,28 @@ typedef struct
 
     gchar *new_startup_id;
 
-    gchar bg_color[10];
+    gchar bg_color[MAX_COLOR_SIZE];
 
-} Window;
+} WindowConfig;
 
 
 /**
  * @brief initial the window by default value 
  * @return the default window structure 
  */
-Window *init_window(gchar *title);
+WindowConfig *init_window(gchar *title);
 
 /**
  * @brief function to edit predefined window with juste
  * @return the edited window   
 */ 
-Window* edit_window(Window *window,
+WindowConfig* edit_window(WindowConfig *window_config,
                  gchar *title,
                  gint width,
                  gint height,
                  gboolean is_resizable,
                  gchar *bg_color);
 
-GtkWindow *create_window(GtkApplication *app, Window *window_data);
+GtkWidget *create_window(GtkApplication *app, WindowConfig *window_config);
 
 #endif

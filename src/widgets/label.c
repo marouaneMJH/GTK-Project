@@ -1,5 +1,4 @@
-#include "./../../include/global.h"
-#include "./../../include/widget/label.h"
+#include "./../../include/widgets/label.h"
 
 
 
@@ -21,7 +20,7 @@ Label* init_label(const gchar *label_text)
     label->is_wrap = FALSE;
     g_strlcpy(label->text_color, "#000000", MAX_COLOR_SIZE - 1);
     label->text_color[MAX_COLOR_SIZE - 1] = '\0';
-    g_strlcpy(label->background_color, "#FFFFFF", MAX_COLOR_SIZE - 1);
+    g_strlcpy(label->background_color, "\0", MAX_COLOR_SIZE - 1);
     label->background_color[MAX_COLOR_SIZE - 1] = '\0';
 
     /* Behavior */
@@ -59,7 +58,7 @@ Label* edit_label(
     // Update colors
     g_strlcpy(label->text_color, text_color ? text_color : "#000000", MAX_COLOR_SIZE - 1);
     label->text_color[MAX_COLOR_SIZE - 1] = '\0';
-    g_strlcpy(label->background_color, background_color ? background_color : "#FFFFFF", MAX_COLOR_SIZE - 1);
+    g_strlcpy(label->background_color, background_color ? background_color : "\0", MAX_COLOR_SIZE - 1);
     label->background_color[MAX_COLOR_SIZE - 1] = '\0';
 
     return label;

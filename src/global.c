@@ -9,39 +9,33 @@
 //     }
 // }
 
-GtkStyleContext* get_style_provider_context(GtkWidget *widget, const gchar *bg_color, const gchar *color)
+/////////// /_!_\ Untouchable please //////////////
+GtkStyleContext *get_style_provider_context(GtkWidget *widget, const gchar *bg_color, const gchar *color, const gchar *bg_image)
 {
     GtkCssProvider *css_provider = gtk_css_provider_new();
     gchar *css_style = NULL;
 
-    if (bg_color && color)
+    GString *css_builder = g_string_new(".style { ");
+
+    if ((color && color[0] != '\0') || (bg_color && bg_color[0] != '\0') || (bg_image && bg_image[0] != '\0'))
     {
-        css_style = g_strconcat(
-            ".colors { ",
-            "background-image: none; ",
-            "background-color: ", bg_color,
-            "; color: ", color,
-            "; }", NULL);
-    }
-    else if (bg_color)
-    {
-        css_style = g_strconcat(
-            ".colors { ",
-            "background-image: none; ",
-            "background-color: ", bg_color,
-            "; }", NULL);
-    }
-    else if (color)
-    {
-        css_style = g_strconcat(
-            ".colors { ",
-            "background-image: none; ",
-            "color: ", color,
-            "; }", NULL);
+        g_string_append_printf(css_builder, "background-image: url('./assets/images/%s'); ", (bg_image && bg_image[0] != '\0') ? bg_image : "none;");
+        if ((bg_image && bg_image[0] != '\0'))
+            g_string_append_printf(css_builder, "background-size: cover; ");
+        if ((bg_color && bg_color[0] != '\0'))
+            g_string_append_printf(css_builder, "background-color: %s; ", bg_color);
+        if ((color && color[0] != '\0'))
+            g_string_append_printf(css_builder, "color: %s; ", color);
+
+        g_string_append(css_builder, "}");
+
+        css_style = g_string_free(css_builder, FALSE);
+
+        g_print("CSS style: \n %s \n", css_style);
     }
     else
     {
-        // Use a default stylesheet if no color is provided
+        // Use a default stylesheet if all args are null
         gtk_css_provider_load_from_path(css_provider, "./assets/style.css", NULL);
     }
 
@@ -68,5 +62,18 @@ GtkStyleContext* get_style_provider_context(GtkWidget *widget, const gchar *bg_c
 
 void widget_set_colors(GtkWidget *widget, const gchar *bg_color, const gchar *color)
 {
-    gtk_style_context_add_class(get_style_provider_context(widget, bg_color, color), "colors");
+    gtk_style_context_add_class(get_style_provider_context(widget, bg_color, color, NULL), "style");
+}
+
+void widget_set_background_image(GtkWidget *widget, const gchar *bg_image, const gchar *color)
+{
+    gtk_style_context_add_class(get_style_provider_context(widget, NULL, color, bg_image), "style");
+}
+
+void widget_set_margins(GtkWidget *widget, Margins margins)
+{
+    gtk_widget_set_margin_top(widget, margins.top);
+    gtk_widget_set_margin_bottom(widget, margins.bottom);
+    gtk_widget_set_margin_start(widget, margins.start);
+    gtk_widget_set_margin_end(widget, margins.end);
 }

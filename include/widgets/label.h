@@ -1,5 +1,6 @@
 #ifndef LABEL_H
 #define LABEL_H
+
 #include "./../global.h"
 
 #define MAX_LABEL_TEXT_SIZE 100

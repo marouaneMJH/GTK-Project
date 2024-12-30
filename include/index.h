@@ -4,7 +4,6 @@
 #include "./global.h"
 
 // Widget
-
 #include "./containers/windows/window.h"
 #include "./containers/layouts/box.h"
 #include "./containers/layouts/fixed.h"
@@ -18,6 +17,7 @@
 #include "./widgets/button/button.h"
 #include "./widgets/button/radio_button.h"
 #include "./widgets/button/switch_button.h"
+#include "./widgets/button/spin_button.h"
 #include "./widgets/separator.h"
 
 #endif

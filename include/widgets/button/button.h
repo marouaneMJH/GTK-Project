@@ -1,6 +1,11 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
+
+// todo button icon
+// todo button image
+// todo background-color problem
+
 #include "./../../global.h"
 
 /* Max size of element */
@@ -9,8 +14,8 @@
 /*  default values */
 #define DEFAULT_BUTTON_DIMENSIONS \
     {                             \
-        .height = 0,              \
-        .width = 0}
+        .height = 100,            \
+        .width = 100}
 
 #define DEFAULT_BUTTON_MARGINS \
     {                          \
@@ -74,5 +79,13 @@ ButtonConfig edit_button(
  * @return[ou] GtkWidget pointer to new button widget
  */
 GtkWidget *create_button(ButtonConfig button);
+
+/**
+ * @brief create button icon
+ * @param[in] icon_name look here for more infomation https://www.notion.so/Button-1627f0b86e0380af9957e029522d8b22?pvs=4
+ * @param icon_size enum, icon predefined size
+ * @return icon on button form
+ */
+GtkWidget* create_button_icon(gchar* icon_name,GtkIconSize icon_size);
 
 #endif

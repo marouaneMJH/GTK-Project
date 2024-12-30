@@ -1,24 +1,24 @@
 #include "./include/index.h"
 
-static void activate(GtkApplication *app, gpointer data)
-{
-  WindowConfig window_config = DEFAULT_WINDOW;
-  g_strlcpy(window_config.title, "Containers testing", MAX_WINDOW_TITLE_SIZE);
-  g_strlcpy(window_config.icon_name, "go-home", MAX_ICON_NAME_SIZE);
-  g_strlcpy(window_config.bg_color, "#999999", MAX_COLOR_SIZE);
-  window_config.dimensions.width = 700;
-  window_config.dimensions.height = 500;
-  GtkWidget *window = create_window(app, &window_config);
+// static void activate(GtkApplication *app, gpointer data)
+// {
+//   WindowConfig window_config = DEFAULT_WINDOW;
+//   g_strlcpy(window_config.title, "Containers testing", MAX_WINDOW_TITLE_SIZE);
+//   g_strlcpy(window_config.icon_name, "go-home", MAX_ICON_NAME_SIZE);
+//   g_strlcpy(window_config.bg_color, "#999999", MAX_COLOR_SIZE);
+//   window_config.dimensions.width = 700;
+//   window_config.dimensions.height = 500;
+//   GtkWidget *window = create_window(app, &window_config);
 
-  ButtonConfig btn_config = DEFAULT_BUTTON;
-  g_strlcpy(btn_config.label, "Button 1", MAX_BUTTON_LABEL_SIZE);
-  GtkWidget *btn1 = create_button(btn_config);
+//   ButtonConfig btn_config = DEFAULT_BUTTON;
+//   g_strlcpy(btn_config.label, "Button 1", MAX_BUTTON_LABEL_SIZE);
+//   GtkWidget *btn1 = create_button(btn_config);
 
-  g_strlcpy(btn_config.label, "Button 2", MAX_BUTTON_LABEL_SIZE);
-  GtkWidget *btn2 = create_button(btn_config);
+//   g_strlcpy(btn_config.label, "Button 2", MAX_BUTTON_LABEL_SIZE);
+//   GtkWidget *btn2 = create_button(btn_config);
 
-  g_strlcpy(btn_config.label, "Button 3", MAX_BUTTON_LABEL_SIZE);
-  GtkWidget *btn3 = create_button(btn_config);
+//   g_strlcpy(btn_config.label, "Button 3", MAX_BUTTON_LABEL_SIZE);
+//   GtkWidget *btn3 = create_button(btn_config);
 
   // Box container //////////////////
   // BoxConfig box_config = DEFAULT_BOX;
@@ -160,23 +160,55 @@ static void activate(GtkApplication *app, gpointer data)
   // gtk_container_add(GTK_CONTAINER(window), paned);
   // gtk_container_add(GTK_CONTAINER(window), stack);
 
-  gtk_widget_show_all(window);
+//   gtk_widget_show_all(window);
+// }
+
+// int main(int argc, char *argv[])
+// {
+
+//   GtkApplication *app;
+//   int status;
+
+//   app = gtk_application_new("gtk.app.root", G_APPLICATION_DEFAULT_FLAGS);
+
+//   g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
+
+//   status = g_application_run(G_APPLICATION(app), argc, argv);
+
+//   g_object_unref(app);
+
+//   return status;
+// }
+
+// Callback function for button click
+static void run_run(GtkWidget *button, GtkWidget *spin_button) {
+    gdouble value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_button)); // Get current spin button value
+    g_print("\nSpin button value: %f\n", value);
 }
 
-int main(int argc, char *argv[])
-{
+// Main activate function
+static void activate(GtkApplication *app, gpointer user_data) {
+    // Create spin button adjustment
+    GtkAdjustment *adjustment = gtk_adjustment_new(50, 0, 100, 1, 1, 0);
 
-  GtkApplication *app;
-  int status;
+    // Create window
+    GtkWindow *window = create_window(app, init_window(NULL));
+    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
-  app = gtk_application_new("gtk.app.root", G_APPLICATION_DEFAULT_FLAGS);
+    // Create spin button
+    GtkWidget *spin_button = gtk_spin_button_new(adjustment, 1, 0);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin_button), 50);
 
-  g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
+    // Create button to check value
+    GtkWidget *button_check = gtk_button_new_with_label("Check Value");
+    g_signal_connect(button_check, "clicked", G_CALLBACK(run_run), spin_button); // Pass spin button to callback
 
-  status = g_application_run(G_APPLICATION(app), argc, argv);
+    // Pack widgets into box and add to window
+    gtk_box_pack_start(GTK_BOX(box), spin_button, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), button_check, FALSE, FALSE, 0);
+    gtk_container_add(GTK_CONTAINER(window), box);
 
-  g_object_unref(app);
-
-  return status;
+    // Show all widgets
+    gtk_widget_show_all(GTK_WIDGET(window));
 }
 

@@ -1,9 +1,10 @@
 #ifndef ENTRY_H
 #define ENTRY_H
 
-#include "../global.h"
+#include "./../global.h"
 
-typedef struct {
+typedef struct
+{
 
     GtkWidget *entry;
     Dimensions dimension;
@@ -18,10 +19,9 @@ typedef struct {
     gchar bg_color[10];
     gchar text_color[10];
 
-}Entry;
+} Entry;
 
-Entry *init_entry(gchar *text, gchar *placeholder_text,Dimensions dimension);
+Entry *init_entry(gchar *text, gchar *placeholder_text, Dimensions dimension);
 GtkWidget *create_entry(Entry *entry_data);
-
 
 #endif

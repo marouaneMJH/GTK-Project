@@ -5,7 +5,7 @@ FROM ubuntu:22.04
 RUN apt-get update && apt-get install -y \
     build-essential \
     gcc \
-    libgtk-4-dev \
+    libgtk-3-dev \
     git \
     pkg-config \
     && rm -rf /var/lib/apt/lists/*

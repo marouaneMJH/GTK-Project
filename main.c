@@ -181,10 +181,10 @@
 // }
 
 // Callback function for button click
-static void run_run(GtkWidget *button, GtkWidget *spin_button) {
-    gdouble value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_button)); // Get current spin button value
-    g_print("\nSpin button value: %f\n", value);
-}
+// static void run_run(GtkWidget *button, GtkWidget *toggle_button) {
+//     gdouble value = gtk_toggle_button_get_value(GTK_SPIN_BUTTON(toggle_button)); // Get current spin button value
+//     g_print("\nSpin button value: %f\n", value);
+// }
 
 // Main activate function
 static void activate(GtkApplication *app, gpointer user_data) {
@@ -195,17 +195,17 @@ static void activate(GtkApplication *app, gpointer user_data) {
     GtkWindow *window = create_window(app, init_window(NULL));
     GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
-    // Create spin button
-    GtkWidget *spin_button = gtk_spin_button_new(adjustment, 1, 0);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin_button), 50);
 
-    // Create button to check value
-    GtkWidget *button_check = gtk_button_new_with_label("Check Value");
-    g_signal_connect(button_check, "clicked", G_CALLBACK(run_run), spin_button); // Pass spin button to callback
+    // creat widget
+    
+    GtkWidget *toggle_button=gtk_toggle_button_new_with_label("Name of God") ;
+    // gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(toggle_button));
+    if(gtk_toggle_button_get_mode(GTK_TOGGLE_BUTTON(toggle_button)));
+        g_print("\n button toggoled");
 
     // Pack widgets into box and add to window
-    gtk_box_pack_start(GTK_BOX(box), spin_button, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(box), button_check, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), toggle_button, FALSE, FALSE, 0);
+    // gtk_box_pack_start(GTK_BOX(box), button_check, FALSE, FALSE, 0);
     gtk_container_add(GTK_CONTAINER(window), box);
 
     // Show all widgets

@@ -1,4 +1,27 @@
 #include "./include/index.h"
+
+// Function to create the completion system
+GtkEntryCompletion* create_completion_system() {
+    // Create a completion object
+    GtkEntryCompletion *completion = gtk_entry_completion_new();
+
+    // Create a model with some sample completion data (a simple list of strings)
+    GtkListStore *store = gtk_list_store_new(1, G_TYPE_STRING);
+    gtk_list_store_insert_with_values(store, NULL, -1, 0, "Apple", -1);
+    gtk_list_store_insert_with_values(store, NULL, -1, 0, "Banana", -1);
+    gtk_list_store_insert_with_values(store, NULL, -1, 0, "Cherry", -1);
+    gtk_list_store_insert_with_values(store, NULL, -1, 0, "Grape", -1);
+    gtk_list_store_insert_with_values(store, NULL, -1, 0, "Orange", -1);
+
+    // Set the model for the completion system
+    gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(store));
+
+    // Set the column that will be used for completion (in this case, the first column)
+    gtk_entry_completion_set_text_column(completion, 0);
+
+    return completion;
+}
+
 static void activate(GtkApplication *app, gpointer user_data)
 {
   // Window *window_data = 
@@ -10,25 +33,38 @@ static void activate(GtkApplication *app, gpointer user_data)
   g_strlcpy(win1.title, "Window 1", MAX_WINDOW_TITLE_SIZE);
   WindowConfig wn2 = DEFAULT_WINDOW;
 
-  GtkWindow *window = create_window(app, init_window("window 1"));
+  GtkWidget *window = create_window(app, &win1);
+  EntryConfig entry = DEFAULT_ENTRY;
+  g_strlcpy(entry.placeholder_text, "Enter your name", entry.max_length);
+  //g_strlcpy(entry.bg_color, "red", 50);
+  entry.margins.top = 100;
+  GtkWidget* Myentry = create_entry(&entry);
+  
+    
+
   //GtkWindow *window2 = create_window(app, init_window("window 2"));
 
-  GtkWidget *entry = gtk_entry_new();
-  GtkWidget *entry2 = gtk_entry_new();
-  //gtk_entry_set_text(GTK_ENTRY(entry),"hiiiiii");
-  gtk_entry_set_input_purpose(GTK_ENTRY(entry), GTK_INPUT_PURPOSE_PASSWORD);
-  //gtk_entry_set_visibility(GTK_ENTRY(entry),FALSE);
-   GdkRGBA color,bg_color;
-  gdk_rgba_parse(&color, "red");
-  gdk_rgba_parse(&bg_color,"green");
-  gtk_widget_override_color(entry,GTK_STATE_FLAG_FOCUSED,&color);
-  gtk_widget_override_background_color(entry,GTK_STATE_FLAG_FOCUSED,&bg_color);
-  gtk_entry_set_placeholder_text(GTK_ENTRY(entry), "Enter your name");
-  gtk_entry_set_alignment(GTK_ENTRY(entry), 0.5);
+  // GtkWidget *entry = gtk_entry_new();
+  
+  // GtkWidget *entry2 = gtk_entry_new();
+  // //gtk_entry_set_text(GTK_ENTRY(entry),"hiiiiii");
+  // gtk_entry_set_input_purpose(GTK_ENTRY(entry), GTK_INPUT_PURPOSE_PASSWORD);
+  // gtk_widget_set_size_request(entry, 50, 200);
+  // //gtk_entry_set_visibility(GTK_ENTRY(entry),FALSE);
+  //  GdkRGBA color,bg_color;
+  // gdk_rgba_parse(&color, "red");
+  // gdk_rgba_parse(&bg_color,"green");
+  // gtk_widget_override_color(entry,GTK_STATE_FLAG_FOCUSED,&color);
+  // gtk_widget_override_background_color(entry,GTK_STATE_FLAG_FOCUSED,&bg_color);
+  // gtk_entry_set_placeholder_text(GTK_ENTRY(entry), "Enter your name");
+  // gtk_entry_set_alignment(GTK_ENTRY(entry), 0.5);
+
   GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
-  gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry), FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry2), FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(Myentry), FALSE, FALSE, 0);
+  //gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry2), FALSE, FALSE, 0);
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(box));
+
+
  
   gtk_widget_show_all(GTK_WIDGET(window));
 }

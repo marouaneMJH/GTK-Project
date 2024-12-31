@@ -24,7 +24,7 @@ GtkWidget *create_notebook(NotebookConfig notebook_config)
     // Set tab position
     gtk_notebook_set_tab_pos(GTK_NOTEBOOK(notebook), notebook_config.tab_position);
 
-    // Set group name
+    // Set group name (Not sure)
     if (notebook_config.group_name)
         gtk_notebook_set_group_name(GTK_NOTEBOOK(notebook), notebook_config.group_name);
 

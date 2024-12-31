@@ -2,7 +2,7 @@
 #define RADIO_BUTTON_H
 
 #include "./../../global.h"
-#include "./../../../include/widgets/button/button.h"
+#include "./button.h"
 
 /*  default values */
 #define DEFAULT_RADIO_BUTTON_DIMENSIONS \
@@ -55,6 +55,13 @@ typedef struct
 } RadioButtonConfig;
 
 RadioButtonConfig *init_radio_button_config(const gchar *label, gboolean is_group);
+
+int init(RadioButtonConfig *radio_button_config);
+
+// Implementation
+RadioButtonConfig radio_button_config = DEFAULT_RADIO_BUTTON;
+init(radio_button_config);
+
 
 GtkWidget *create_radio_button(RadioButtonConfig radio_button_config);
 

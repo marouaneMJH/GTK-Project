@@ -56,13 +56,6 @@ typedef struct
 
 RadioButtonConfig *init_radio_button_config(const gchar *label, gboolean is_group);
 
-int init(RadioButtonConfig *radio_button_config);
-
-// Implementation
-RadioButtonConfig radio_button_config = DEFAULT_RADIO_BUTTON;
-init(radio_button_config);
-
-
 GtkWidget *create_radio_button(RadioButtonConfig radio_button_config);
 
 void radio_button_set_group(GtkWidget *widget, GtkWidget *group);

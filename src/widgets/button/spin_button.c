@@ -1,5 +1,5 @@
 #include "./../../../include/global.h"
-#include "./../../../include/widget/button/spin_button.h"
+#include "./../../../include/widgets/button/spin_button.h"
 
 
 SpinButton edit_spin_button(

@@ -187,28 +187,28 @@
 // }
 
 // Main activate function
-static void activate(GtkApplication *app, gpointer user_data) {
-    // Create spin button adjustment
-    GtkAdjustment *adjustment = gtk_adjustment_new(50, 0, 100, 1, 1, 0);
+// static void activate(GtkApplication *app, gpointer user_data) {
+//     // Create spin button adjustment
+//     GtkAdjustment *adjustment = gtk_adjustment_new(50, 0, 100, 1, 1, 0);
 
-    // Create window
-    GtkWindow *window = create_window(app, init_window(NULL));
-    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+//     // Create window
+//     GtkWindow *window = create_window(app, init_window(NULL));
+//     GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
 
-    // creat widget
+//     // creat widget
     
-    GtkWidget *toggle_button=gtk_toggle_button_new_with_label("Name of God") ;
-    // gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(toggle_button));
-    if(gtk_toggle_button_get_mode(GTK_TOGGLE_BUTTON(toggle_button)));
-        g_print("\n button toggoled");
+//     GtkWidget *toggle_button=gtk_toggle_button_new_with_label("Name of God") ;
+//     // gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(toggle_button));
+//     if(gtk_toggle_button_get_mode(GTK_TOGGLE_BUTTON(toggle_button)));
+//         g_print("\n button toggoled");
 
-    // Pack widgets into box and add to window
-    gtk_box_pack_start(GTK_BOX(box), toggle_button, FALSE, FALSE, 0);
-    // gtk_box_pack_start(GTK_BOX(box), button_check, FALSE, FALSE, 0);
-    gtk_container_add(GTK_CONTAINER(window), box);
+//     // Pack widgets into box and add to window
+//     gtk_box_pack_start(GTK_BOX(box), toggle_button, FALSE, FALSE, 0);
+//     // gtk_box_pack_start(GTK_BOX(box), button_check, FALSE, FALSE, 0);
+//     gtk_container_add(GTK_CONTAINER(window), box);
 
-    // Show all widgets
-    gtk_widget_show_all(GTK_WIDGET(window));
-}
+//     // Show all widgets
+//     gtk_widget_show_all(GTK_WIDGET(window));
+// }
 

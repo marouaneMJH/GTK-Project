@@ -36,8 +36,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
 
 
 
-
-
+//The main function
 
 
 int main(int argc, char *argv[]) {

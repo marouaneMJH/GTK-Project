@@ -8,11 +8,11 @@
 typedef struct
 {
     
-    gchar label[MAX_TOGGLE_BUTTON_LABEL];
+    // gchar label[MAX_TOGGLE_BUTTON_LABEL];
 
     /* Behavior */
     // todo not 
-    gboolean is_avtive; 
+    // gboolean is_avtive; 
 
 } ToggleButton;
 

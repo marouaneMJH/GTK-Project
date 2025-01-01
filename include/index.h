@@ -22,4 +22,5 @@
 #include "./widgets/separator.h"
 #include "./widgets/entry.h"
 #include "./widgets/progress_bar.h"
+#include "./widgets/image.h"
 #endif

@@ -23,12 +23,16 @@ static void activate(GtkApplication *app, gpointer user_data)
   GtkWidget* Myentry = create_entry(&entry);
   //----------------------------------------------
 
-  ProgressBarConfig progress_bar_data = DEFAULT_PROGRESS_BAR;
-  progress_bar_data.progress_fraction = 0.5;
-  progress_bar_data.is_text_visible = FALSE;
-  GtkWidget *progress_bar = create_progress_bar(&progress_bar_data);
+  // ProgressBarConfig progress_bar_data = DEFAULT_PROGRESS_BAR;
+  // progress_bar_data.progress_fraction = 0.5;
+  // progress_bar_data.is_text_visible = FALSE;
+  // GtkWidget *progress_bar = create_progress_bar(&progress_bar_data);
 
-
+  ImageConfig image_data = DEFAULT_IMAGE;
+  image_data.type = IMAGE_FILE;
+  g_strlcpy(image_data.path,"assets/images/programer.jpg",MAX_IMAGE_PATH_SIZE);
+  GtkWidget *image = create_image(&image_data);
+  
   //GtkWindow *window2 = create_window(app, init_window("window 2"));
 
   // GtkWidget *entry = gtk_entry_new();
@@ -48,7 +52,8 @@ static void activate(GtkApplication *app, gpointer user_data)
 
   GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
   gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(Myentry), FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(progress_bar), FALSE, FALSE, 0);
+  //gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(progress_bar), FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(image), FALSE, FALSE, 0);
   //gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry2), FALSE, FALSE, 0);
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(box));
 

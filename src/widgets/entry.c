@@ -80,3 +80,13 @@ GtkWidget *create_entry(EntryConfig *entry_data)
 
 //     return completion;
 // }
+
+// void on_insert_text(GtkEntry *entry, const gchar *text, gint length) {
+//     // Allow only digits
+//     for (int i = 0; i < length; i++) {
+//         if (!g_ascii_isdigit(text[i])) {
+//             g_signal_stop_emission_by_name(entry, "insert-text");
+//             return;
+//         }
+//     }
+// }

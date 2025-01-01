@@ -74,6 +74,14 @@ void widget_set_background_image(GtkWidget *widget, const gchar *bg_image, const
  */
 void widget_set_margins(GtkWidget *widget, Margins margins);
 
+/**
+ * @brief This function set the font of a widget
+ * @param widget Widget cible
+ * @param font_name The font name or family (ex: "Arial, SansSerif")
+ * @param font_size The font size
+ * @return void
+ */
+void widget_set_font(GtkWidget *widget, const gchar *font_name, gint font_size);
 /* Global macros  */
 
 // check if the pointer is not null

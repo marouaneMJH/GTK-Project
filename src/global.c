@@ -77,3 +77,13 @@ void widget_set_margins(GtkWidget *widget, Margins margins)
     gtk_widget_set_margin_start(widget, margins.start);
     gtk_widget_set_margin_end(widget, margins.end);
 }
+
+
+void widget_set_font(GtkWidget *widget, const gchar *font_name, gint font_size)
+{
+    PangoFontDescription *font_desc = pango_font_description_new();
+    pango_font_description_set_family(font_desc, font_name);
+    pango_font_description_set_size(font_desc, font_size * PANGO_SCALE);
+    gtk_widget_override_font(widget, font_desc);
+    pango_font_description_free(font_desc);
+}

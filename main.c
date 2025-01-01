@@ -2,6 +2,8 @@
 
 
 
+
+
 static void activate(GtkApplication *app, gpointer user_data)
 {
   // Window *window_data = 
@@ -15,12 +17,14 @@ static void activate(GtkApplication *app, gpointer user_data)
 
   GtkWidget *window = create_window(app, &win1);
   EntryConfig entry = DEFAULT_ENTRY;
+  entry.purpose = GTK_INPUT_PURPOSE_PIN;
   g_strlcpy(entry.placeholder_text, "Enter your name", entry.max_length);
   //g_strlcpy(entry.bg_color, "red", 50);
-  entry.margins.top = 100;
-  entry.opacity = 0.1;
+  entry.margins.top = 50;
+  entry.opacity = 1;
   g_strlcpy(entry.bg_color, "red", MAX_COLOR_SIZE);
   GtkWidget* Myentry = create_entry(&entry);
+  widget_set_font(Myentry,"xxxxx,xxxxxx,SansSerif", 20);
   //----------------------------------------------
 
   // ProgressBarConfig progress_bar_data = DEFAULT_PROGRESS_BAR;

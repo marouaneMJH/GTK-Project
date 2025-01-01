@@ -1,26 +1,6 @@
 #include "./include/index.h"
 
-// Function to create the completion system
-GtkEntryCompletion* create_completion_system() {
-    // Create a completion object
-    GtkEntryCompletion *completion = gtk_entry_completion_new();
 
-    // Create a model with some sample completion data (a simple list of strings)
-    GtkListStore *store = gtk_list_store_new(1, G_TYPE_STRING);
-    gtk_list_store_insert_with_values(store, NULL, -1, 0, "Apple", -1);
-    gtk_list_store_insert_with_values(store, NULL, -1, 0, "Banana", -1);
-    gtk_list_store_insert_with_values(store, NULL, -1, 0, "Cherry", -1);
-    gtk_list_store_insert_with_values(store, NULL, -1, 0, "Grape", -1);
-    gtk_list_store_insert_with_values(store, NULL, -1, 0, "Orange", -1);
-
-    // Set the model for the completion system
-    gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(store));
-
-    // Set the column that will be used for completion (in this case, the first column)
-    gtk_entry_completion_set_text_column(completion, 0);
-
-    return completion;
-}
 
 static void activate(GtkApplication *app, gpointer user_data)
 {
@@ -43,17 +23,11 @@ static void activate(GtkApplication *app, gpointer user_data)
   GtkWidget* Myentry = create_entry(&entry);
   //----------------------------------------------
 
+  ProgressBarConfig progress_bar_data = DEFAULT_PROGRESS_BAR;
+  progress_bar_data.progress_fraction = 0.5;
+  progress_bar_data.is_text_visible = FALSE;
+  GtkWidget *progress_bar = create_progress_bar(&progress_bar_data);
 
-  GtkWidget *progress_bar = gtk_progress_bar_new();
-  gtk_widget_set_size_request(progress_bar, 50, 50);
-  gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress_bar), 0.9);
-  gtk_progress_bar_set_show_text(GTK_PROGRESS_BAR(progress_bar), TRUE);
-  gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress_bar), "99999999999999999999999999999999999999999999999999999999999999999999999999çç%");
-  gtk_progress_bar_set_inverted(GTK_PROGRESS_BAR(progress_bar), FALSE);
-  gtk_progress_bar_set_pulse_step(GTK_PROGRESS_BAR(progress_bar), 0.1);
-  gtk_progress_bar_set_ellipsize(GTK_PROGRESS_BAR(progress_bar), PANGO_ELLIPSIZE_END);
-  gtk_widget_set_opacity(progress_bar, 0.5);
-    
 
   //GtkWindow *window2 = create_window(app, init_window("window 2"));
 

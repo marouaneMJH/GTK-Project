@@ -43,7 +43,7 @@
  */
 typedef struct
 {
-    gchar text[MAX_ENTRY_TEXT_SIZE];               ///< The text displayed in the progress bar
+    gchar text[MAX_PROGRESS_BAR_TEXT_SIZE];               ///< The text displayed in the progress bar
     Dimensions dimension;                          ///< The dimensions of the progress bar
     Margins margins;                               ///< The margins of the progress bar
     gdouble progress_fraction;                     ///< The fraction of the progress bar (0.0 to 1.0)
@@ -54,7 +54,7 @@ typedef struct
     gboolean opacity;                              ///< The opacity of the progress bar (0.0 to 1.0)
     gchar bg_color[MAX_COLOR_SIZE];                ///< The background color of the progress bar
     gchar text_color[MAX_COLOR_SIZE];              ///< The text color of the progress bar
-} ProgresBarConfig;
+} ProgressBarConfig;
 #endif
 
 /**
@@ -62,4 +62,4 @@ typedef struct
  * @param progress_bar_data The configuration of the progress bar
  * @return GtkWidget* The progress bar widget
  */
-GtkWidget *create_progress_bar(ProgresBarConfig *progress_bar_data);
+GtkWidget *create_progress_bar(ProgressBarConfig *progress_bar_data);

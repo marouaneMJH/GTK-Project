@@ -57,3 +57,26 @@ GtkWidget *create_entry(EntryConfig *entry_data)
     // gtk_widget_override_color(GTK_WIDGET(entry), GTK_STATE_FLAG_NORMAL, &text_color);
     return entry;
 }
+
+// To look at later: Function to create a completion system for an entry
+
+// GtkEntryCompletion* create_completion_system() {
+//     // Create a completion object
+//     GtkEntryCompletion *completion = gtk_entry_completion_new();
+
+//     // Create a model with some sample completion data (a simple list of strings)
+//     GtkListStore *store = gtk_list_store_new(1, G_TYPE_STRING);
+//     gtk_list_store_insert_with_values(store, NULL, -1, 0, "Apple", -1);
+//     gtk_list_store_insert_with_values(store, NULL, -1, 0, "Banana", -1);
+//     gtk_list_store_insert_with_values(store, NULL, -1, 0, "Cherry", -1);
+//     gtk_list_store_insert_with_values(store, NULL, -1, 0, "Grape", -1);
+//     gtk_list_store_insert_with_values(store, NULL, -1, 0, "Orange", -1);
+
+//     // Set the model for the completion system
+//     gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(store));
+
+//     // Set the column that will be used for completion (in this case, the first column)
+//     gtk_entry_completion_set_text_column(completion, 0);
+
+//     return completion;
+// }

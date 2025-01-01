@@ -21,4 +21,5 @@
 #include "./widgets/button/spin_button.h"
 #include "./widgets/separator.h"
 #include "./widgets/entry.h"
+#include "./widgets/progress_bar.h"
 #endif

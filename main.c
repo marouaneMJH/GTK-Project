@@ -38,8 +38,21 @@ static void activate(GtkApplication *app, gpointer user_data)
   g_strlcpy(entry.placeholder_text, "Enter your name", entry.max_length);
   //g_strlcpy(entry.bg_color, "red", 50);
   entry.margins.top = 100;
+  entry.opacity = 0.1;
+  g_strlcpy(entry.bg_color, "red", MAX_COLOR_SIZE);
   GtkWidget* Myentry = create_entry(&entry);
-  
+  //----------------------------------------------
+
+
+  GtkWidget *progress_bar = gtk_progress_bar_new();
+  gtk_widget_set_size_request(progress_bar, 50, 50);
+  gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress_bar), 0.9);
+  gtk_progress_bar_set_show_text(GTK_PROGRESS_BAR(progress_bar), TRUE);
+  gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress_bar), "99999999999999999999999999999999999999999999999999999999999999999999999999çç%");
+  gtk_progress_bar_set_inverted(GTK_PROGRESS_BAR(progress_bar), FALSE);
+  gtk_progress_bar_set_pulse_step(GTK_PROGRESS_BAR(progress_bar), 0.1);
+  gtk_progress_bar_set_ellipsize(GTK_PROGRESS_BAR(progress_bar), PANGO_ELLIPSIZE_END);
+  gtk_widget_set_opacity(progress_bar, 0.5);
     
 
   //GtkWindow *window2 = create_window(app, init_window("window 2"));
@@ -61,6 +74,7 @@ static void activate(GtkApplication *app, gpointer user_data)
 
   GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
   gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(Myentry), FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(progress_bar), FALSE, FALSE, 0);
   //gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry2), FALSE, FALSE, 0);
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(box));
 

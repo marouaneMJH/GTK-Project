@@ -6,8 +6,8 @@
 /*  default values */
 #define DEFAULT_BOX_DIMENSIONS \
     {                          \
-        .height = 0,           \
-        .width = 0}
+        .height = 100,           \
+        .width = 100}
 
 #define DEFAULT_BOX_MARGINS \
     {                       \

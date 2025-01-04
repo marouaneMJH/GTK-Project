@@ -5,6 +5,7 @@
 
 // Widget
 
+/* containers */
 #include "./containers/windows/window.h"
 #include "./containers/layouts/box.h"
 #include "./containers/layouts/fixed.h"
@@ -14,11 +15,24 @@
 #include "./containers/layouts/notebook.h"
 #include "./containers/layouts/paned.h"
 #include "./containers/layouts/stack.h"
+
+/*       widgets        */
 #include "./widgets/label.h"
+// buttons
 #include "./widgets/button/button.h"
 #include "./widgets/button/radio_button.h"
 #include "./widgets/button/switch_button.h"
 #include "./widgets/button/spin_button.h"
+// #include "./widgets/button/toggle_button.h"
+
+// Dialogs
+#include "./widgets/dialogs/dialog.h"
+#include "./widgets/dialogs/message_dialog.h"
+#include "./widgets/dialogs/color_chooser_dialog.h"
+#include "./widgets/dialogs/file_chooser_dialog.h"
+#include "./widgets/dialogs/font_choser_dialog.h"
+
+
 #include "./widgets/separator.h"
 #include "./widgets/entry.h"
 #include "./widgets/progress_bar.h"

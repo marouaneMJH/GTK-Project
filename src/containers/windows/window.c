@@ -90,3 +90,9 @@ GtkWidget *create_window(GtkApplication *app, WindowConfig *window_config)
     widget_set_margins(GTK_WIDGET(window), window_config->margins);
     return GTK_WIDGET(window);
 }
+
+
+void show_window(GtkWidget* window)
+{
+    gtk_widget_show_all(GTK_WIDGET(window)); 
+}

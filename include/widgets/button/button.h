@@ -14,8 +14,8 @@
 /*  default values */
 #define DEFAULT_BUTTON_DIMENSIONS \
     {                             \
-        .height = 100,            \
-        .width = 100}
+        .height = 10,            \
+        .width = 10}
 
 #define DEFAULT_BUTTON_MARGINS \
     {                          \

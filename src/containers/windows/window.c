@@ -1,6 +1,9 @@
 #include "./../../../include/global.h"
 #include "./../../../include/containers/windows/window.h"
 
+
+// TODO: Should be not manipulate the end of tag ">" in the file
+// TODO: Should manipulate spaces and tabs and new lines
 gchar *read_property(FILE *index, int *status)
 {
     gchar *property = NULL;
@@ -24,6 +27,8 @@ gchar *read_property(FILE *index, int *status)
     return NULL;
 }
 
+
+// Ignore space within the value
 gchar *read_value(FILE *index, int *status)
 {
     gchar *value = NULL;

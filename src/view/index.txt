@@ -1,6 +1,6 @@
 <window
 	id="window_1  "
-	title="  WindowT"
+	title="  Abdellah window"
 	icon_name="folder"
 	width="500"
 	height="400"

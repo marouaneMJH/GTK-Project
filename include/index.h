@@ -4,6 +4,7 @@
 #include "./global.h"
 
 // Widget
+
 /* containers */
 #include "./containers/windows/window.h"
 #include "./containers/layouts/box.h"
@@ -33,5 +34,7 @@
 
 
 #include "./widgets/separator.h"
-
+#include "./widgets/entry.h"
+#include "./widgets/progress_bar.h"
+#include "./widgets/image.h"
 #endif

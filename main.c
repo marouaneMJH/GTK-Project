@@ -1,108 +1,65 @@
 #include "./include/index.h"
 
-
-
-static void activate(GtkApplication *app, gpointer user_data)
-{
+static void activate(GtkApplication *app, gpointer user_data) {
+    /* Window Configuration */
     WindowConfig win1 = DEFAULT_WINDOW;
     g_strlcpy(win1.title, "Window 1", MAX_WINDOW_TITLE_SIZE);
 
-    WindowConfig win2 = DEFAULT_WINDOW;
     BoxConfig box_config = DEFAULT_BOX;
+    GtkWidget *window = create_window(app, &win1);
+    GtkWidget *box = create_box(box_config);
 
-    g_strlcpy(win2.bg_color, "#FF0000", sizeof(win2.bg_color));
-    GtkWidget *box;      // the box container
-    GtkWidget *window;    // the main window
-    window = create_window(app, &win1);
-    box = create_box(box_config);
+    /* Entry Configuration */
+    EntryConfig entry = DEFAULT_ENTRY;
+    entry.purpose = GTK_INPUT_PURPOSE_PIN;
+    g_strlcpy(entry.placeholder_text, "Enter your name", entry.max_length);
+    entry.margins.top = 50;
+    entry.opacity = 1;
+    g_strlcpy(entry.bg_color, "red", MAX_COLOR_SIZE);
+    entry.completion = create_completion_system();
 
-    /* Structures Declaration */
-    MessageDialogConfig dialog_config = DEFAULT_MESSAGE_DIALOG_CONFIG;
-    
-    dialog_config.parent = GTK_WINDOW(window);
-    strcpy(dialog_config.message, "Hello! This is a message dialog.");
+    GtkWidget *Myentry = create_entry(&entry);
+    g_signal_connect(Myentry, "insert-text", G_CALLBACK(on_insert_textsss), NULL);
+    widget_set_font(Myentry, "SansSerif", 20);
 
-    /* Widget Declaration */
-    GtkWidget *dialog;
+    /* Progress Bar Configuration */
+    ProgressBarConfig progress_bar_data = DEFAULT_PROGRESS_BAR;
+    progress_bar_data.progress_fraction = 0.5;
+    progress_bar_data.is_text_visible = TRUE;
 
-    /* Widget creation */
-    dialog = create_message_dialog(dialog_config);
+    GtkWidget *progress_bar = create_progress_bar(&progress_bar_data);
+    gtk_progress_bar_set_pulse_step(GTK_PROGRESS_BAR(progress_bar), 0.8);
+    g_timeout_add(100, (GSourceFunc)progress_pulse, progress_bar);
 
+    /* Image Configuration */
+    ImageConfig image_data = DEFAULT_IMAGE;
+    image_data.type = IMAGE_ICON_NAME;
+    g_strlcpy(image_data.path, "go-home", MAX_ICON_NAME_SIZE);
 
+    GtkWidget *image = create_image_from_icon_name(&image_data, GTK_ICON_SIZE_DIALOG);
 
-    ButtonConfig button_config;
-    strcpy(button_config.bg_color,"#FF0000");
-    button_config.dimensions.height=20;
-    button_config.dimensions.width=20;
-    // GtkWidget* button = create_button(button_config);
+    /* Packing Widgets into Box */
+    gtk_box_pack_start(GTK_BOX(box), Myentry, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), progress_bar, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), image, FALSE, FALSE, 0);
+    gtk_container_add(GTK_CONTAINER(window), box);
 
-    /* Widget packing */
-    // gtk_box_pack_start(GTK_BOX(box),button,FALSE,FALSE,0);
-    gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(box));
-
-
+    /* Show Window */
     show_window(window);
-    show_dialog(dialog);
 }
 
-
-
-int main_window(int argc, char *argv[])
-{
+int main_window(int argc, char *argv[]) {
     GtkApplication *app;
     int status;
 
     app = gtk_application_new("gtk.app.root", G_APPLICATION_DEFAULT_FLAGS);
-
     g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
 
-
     status = g_application_run(G_APPLICATION(app), argc, argv);
-
     g_object_unref(app);
     return status;
 }
 
-
-int main(int argc, char *argv[])
-{
-    return main_window(argc,argv);
+int main(int argc, char *argv[]) {
+    return main_window(argc, argv);
 }
-
-
-// static void activate(GtkApplication *app, gpointer user_data)
-// {
-//     WindowConfig win1 = DEFAULT_WINDOW;
-//     g_strlcpy(win1.title, "Window 1", MAX_WINDOW_TITLE_SIZE);
-
-//     WindowConfig win2 = DEFAULT_WINDOW;
-//     BoxConfig box_config = DEFAULT_BOX;
-
-//     g_strlcpy(win2.bg_color, "#FF0000", sizeof(win2.bg_color));
-//     GtkWidget *box;      // the box container
-//     GtkWidget *window;    // the main window
-//     window = create_window(app, &win1);
-//     box = create_box(box_config);
-
-//     /* Structures Declaration */
-//     FileChooserDialogConfig dialog_config = DEFAULT_FILE_CHOOSER_DIALOG_CONFIG;
-//     dialog_config.parent = GTK_WINDOW(window);
-//     // strcpy(dialog_config.message, "Hello! This is a message dialog.");
-
-//     /* Widget Declaration */
-//     GtkWidget *dialog;
-
-//     /* Widget creation */
-//     dialog = create_file_chooser_dialog(dialog_config);
-
-//     /* Run and destroy dialog */
-//     gtk_widget_show_all(dialog);
-//     gtk_dialog_run(GTK_DIALOG(dialog));
-//     gtk_widget_destroy(dialog);
-
-//     /* Widget packing */
-//     gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(box));
-
-//     show_window(window);
-// }
-

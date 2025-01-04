@@ -8,5 +8,16 @@
 #define MAX_TOOLTIP_SIZE 100
 #define MAX_ICON_NAME_SIZE 50
 
+typedef enum 
+{
+    IMAGE_EMPTY,
+    IMAGE_FILE,
+    IMAGE_ICON,
+    IMAGE_ICON_NAME,
+    IMAGE_PIXBUF,
+    IMAGE_RESOURCE,
+    IMAGE_ANIMATION
+} ImageConfigType ;
+
 
 #endif

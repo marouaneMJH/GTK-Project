@@ -1,0 +1,19 @@
+<window
+    id="window1"
+    title="XML Window"
+    width="500"
+    height="400"
+>
+
+    <fixed>
+
+        <button 
+            id="button1"
+            text="Clicker ici"
+            position_x="100"
+            position_y="100"
+        />
+
+    </fixed>
+
+</window>

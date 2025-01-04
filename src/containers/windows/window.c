@@ -1,17 +1,75 @@
 #include "./../../../include/global.h"
 #include "./../../../include/containers/windows/window.h"
 
-WindowConfig *init_window(gchar *title)
+gchar *read_property(FILE *index, int *status)
+{
+    gchar *property = NULL;
+    SAFE_ALLOC(property, gchar, MAX_PROPERTY_SIZE);
+
+    int i = 0;
+    gchar c;
+    while ((c = fgetc(index)) != '>')
+    {
+        if (c == '=')
+        {
+            *status = 1;
+            return property;
+        }
+        if (c != ' ' && c != '\n' && c != '\t')
+            property[i++] = c;
+    }
+    *status = 0;
+    return NULL;
+}
+
+gchar *read_value(FILE *index, int *status)
+{
+    gchar *value = NULL;
+    SAFE_ALLOC(value, gchar, MAX_PROPERTY_SIZE);
+
+    int i = 0;
+    gchar c;
+    while ((c = fgetc(index)) != '>')
+    {
+        if (c == '"')
+        {
+            *status = 0;
+            return value;
+        }
+        if (c != ' ' && c != '\n' && c != '\t')
+            value[i++] = c;
+    }
+    *status = 1;
+    return NULL;
+}
+
+int init_window(WindowConfig *window_config, FILE *index)
 {
     // TODO: After initializing windowConfig with DEFAULT_WINDOW Macro
     // TODO: Read from xml file and initialize the window structure that is passed from argument as WindowConfig
+    if (!window_config)
+        return -1;
 
-    WindowConfig *window_config = NULL;
-    SAFE_ALLOC(window_config, WindowConfig, 1);
-    if (title)
-        strcpy(window_config->title, title);
+    if (!index)
+        return 0;
 
-    return window_config;
+    gchar c;
+    gchar *property = NULL;
+    gchar *value = NULL;
+    while ((c = fgetc(index)) != '>')
+    {
+        if ((c > 'A' && c < 'Z') || (c > 'a' && c < 'z'))
+            fseek(index, -1, SEEK_CUR);
+
+        int status = -1;
+        property = read_property(index, &status);
+        if (status == 1) 
+        {
+            value = read_value(index, &status);
+        }
+
+    }
+    return 1;
 }
 
 WindowConfig *edit_window(WindowConfig *window_config,

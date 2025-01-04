@@ -18,6 +18,11 @@
 #include "./widgets/button/radio_button.h"
 #include "./widgets/button/switch_button.h"
 #include "./widgets/button/spin_button.h"
+#include "./widgets/menu/menu_bar.h"
+#include "./widgets/menu/menu.h"
+#include "./widgets/menu/menu_item.h"
 #include "./widgets/separator.h"
+
+// #include "./builder.h"
 
 #endif

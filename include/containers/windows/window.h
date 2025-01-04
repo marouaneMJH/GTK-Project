@@ -7,6 +7,7 @@
 #define MAX_WINDOW_TITLE_SIZE 50
 #define MAX_ICON_PATH_SIZE 50
 #define MAX_STARTUP_ID_SIZE 50
+#define MAX_PROPERTY_SIZE 50
 
 /*  default values */
 #define DEFAULT_WINDOW_DIMENSIONS \
@@ -97,11 +98,12 @@ typedef struct
 
 } WindowConfig;
 
+
 /**
  * @brief initial the window by default value
  * @return the default window structure
  */
-WindowConfig *init_window(gchar *title);
+int init_window(WindowConfig *window_config, FILE *index);
 
 /**
  * @brief function to edit predefined window with juste

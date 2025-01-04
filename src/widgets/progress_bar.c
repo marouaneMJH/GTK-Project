@@ -9,6 +9,7 @@ GtkWidget *create_progress_bar(ProgressBarConfig *progress_bar_data)
 
     GtkWidget *progress_bar = gtk_progress_bar_new();
 
+    gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress_bar), progress_bar_data->text);
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress_bar), progress_bar_data->progress_fraction);
     if (progress_bar_data->progress_pulse_step > 0)
     gtk_progress_bar_set_pulse_step(GTK_PROGRESS_BAR(progress_bar), progress_bar_data->progress_pulse_step);

@@ -1,7 +1,40 @@
 #include "./include/index.h"
 
+void on_insert_textsss(GtkEntry *entry, const gchar *text, gint length) {
+    // Allow only digits
+    for (int i = 0; i < length; i++) {
+        if (!g_ascii_isdigit(text[i])) {
+            g_signal_stop_emission_by_name(entry, "insert-text");
+            return;
+        }
+    }
+}
 
+GtkEntryCompletion* create_completion_system() {
+    // Create a completion object
+    GtkEntryCompletion *completion = gtk_entry_completion_new();
 
+    // Create a model with some sample completion data (a simple list of strings)
+    GtkListStore *store = gtk_list_store_new(1, G_TYPE_STRING);
+    gtk_list_store_insert_with_values(store, NULL, -1, 0, "Apple", -1);
+    gtk_list_store_insert_with_values(store, NULL, -1, 0, "Banana", -1);
+    gtk_list_store_insert_with_values(store, NULL, -1, 0, "Cherry", -1);
+    gtk_list_store_insert_with_values(store, NULL, -1, 0, "Grape", -1);
+    gtk_list_store_insert_with_values(store, NULL, -1, 0, "Orange", -1);
+
+    // Set the model for the completion system
+    gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(store));
+
+    // Set the column that will be used for completion (in this case, the first column)
+    gtk_entry_completion_set_text_column(completion, 0);
+
+    return completion;
+}
+
+bool progress_pulse(GtkWidget *progress_bar) {
+    gtk_progress_bar_pulse(GTK_PROGRESS_BAR(progress_bar));
+    return TRUE;
+}
 
 
 static void activate(GtkApplication *app, gpointer user_data)
@@ -23,19 +56,25 @@ static void activate(GtkApplication *app, gpointer user_data)
   entry.margins.top = 50;
   entry.opacity = 1;
   g_strlcpy(entry.bg_color, "red", MAX_COLOR_SIZE);
+  entry.completion = create_completion_system();
   GtkWidget* Myentry = create_entry(&entry);
+  g_signal_connect(Myentry, "insert-text", G_CALLBACK(on_insert_textsss), NULL);
   widget_set_font(Myentry,"xxxxx,xxxxxx,SansSerif", 20);
   //----------------------------------------------
 
-  // ProgressBarConfig progress_bar_data = DEFAULT_PROGRESS_BAR;
-  // progress_bar_data.progress_fraction = 0.5;
-  // progress_bar_data.is_text_visible = FALSE;
-  // GtkWidget *progress_bar = create_progress_bar(&progress_bar_data);
+   ProgressBarConfig progress_bar_data = DEFAULT_PROGRESS_BAR;
+  progress_bar_data.progress_fraction = 0.5;
+   progress_bar_data.is_text_visible = TRUE;
+  GtkWidget *progress_bar = create_progress_bar(&progress_bar_data);
 
+  gtk_progress_bar_set_pulse_step(GTK_PROGRESS_BAR(progress_bar), 0.8);
+  gtk_progress_bar_pulse(GTK_PROGRESS_BAR(progress_bar));
+  g_timeout_add(100, (GSourceFunc)progress_pulse, progress_bar);
   ImageConfig image_data = DEFAULT_IMAGE;
-  image_data.type = IMAGE_FILE;
-  g_strlcpy(image_data.path,"assets/images/programer.jpg",MAX_IMAGE_PATH_SIZE);
-  GtkWidget *image = create_image(&image_data);
+  image_data.type = IMAGE_ICON_NAME;
+  //g_strlcpy(image_data.path,"assets/images/programer.jpg",MAX_IMAGE_PATH_SIZE);
+    g_strlcpy(image_data.path, "go-home", MAX_ICON_NAME_SIZE);
+  GtkWidget *image = create_image_from_icon_name(&image_data, GTK_ICON_SIZE_DIALOG);
   
   //GtkWindow *window2 = create_window(app, init_window("window 2"));
 
@@ -56,7 +95,7 @@ static void activate(GtkApplication *app, gpointer user_data)
 
   GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
   gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(Myentry), FALSE, FALSE, 0);
-  //gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(progress_bar), FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(progress_bar), FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(image), FALSE, FALSE, 0);
   //gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry2), FALSE, FALSE, 0);
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(box));

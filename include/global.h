@@ -75,6 +75,24 @@ void widget_set_background_image(GtkWidget *widget, const gchar *bg_image, const
 void widget_set_margins(GtkWidget *widget, Margins margins);
 
 /**
+ * @brief This function set the text color of a widget
+ * @param widget Widget cible
+ * @param color The text color
+ * @param state The state of the widget (ex: GTK_STATE_FLAG_NORMAL, GTK_STATE_FLAG_ACTIVE, ...)
+ * @return void
+ */
+void widget_set_background_color(GtkWidget *widget, const gchar *color, GtkStateFlags state);
+
+/**
+ * @brief This function set the text color of a widget
+ * @param widget Widget cible
+ * @param color The text color
+ * @param state The state of the widget (ex: GTK_STATE_FLAG_NORMAL, GTK_STATE_FLAG_ACTIVE, ...)
+ * @return void
+ */
+void widget_set_text_color(GtkWidget *widget, const gchar *color, GtkStateFlags state);
+
+/**
  * @brief This function set the font of a widget
  * @param widget Widget cible
  * @param font_name The font name or family (ex: "Arial, SansSerif")

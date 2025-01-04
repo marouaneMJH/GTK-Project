@@ -55,3 +55,7 @@ dkms.conf
 .vscode/
  
 tmp
+
+main.c
+
+.idea/

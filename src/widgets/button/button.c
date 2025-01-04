@@ -1,4 +1,3 @@
-#include "./../../../include/global.h"
 #include "./../../../include/widgets/button/button.h"
 
 ButtonConfig edit_button(

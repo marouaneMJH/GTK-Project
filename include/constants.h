@@ -7,6 +7,6 @@
 #define MAX_COLOR_SIZE 10
 #define MAX_TOOLTIP_SIZE 100
 #define MAX_ICON_NAME_SIZE 50
-
+#define MAX_URI_SIZE 1200
 
 #endif

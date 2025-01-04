@@ -1,5 +1,44 @@
 #include "./include/index.h"
 
+
+
+
+// // Fonction appelée lorsque le bouton est cliqué
+// static void on_button_clicked(GtkWidget *button, gpointer data) {
+//     g_print("Le bouton a été cliqué !\n");
+// }
+
+// int main(int argc, char *argv[]) {
+//     // Initialisation de GTK
+//     gtk_init(&argc, &argv);
+
+//     // Création d'une fenêtre
+//     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+//     gtk_window_set_title(GTK_WINDOW(window), "Exemple GTK");
+//     gtk_window_set_default_size(GTK_WINDOW(window), 400, 300);
+
+//     // Connecter le signal "destroy" pour fermer l'application
+//     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+
+//     // Création d'un bouton
+//     GtkWidget *button = gtk_button_new_with_label("Cliquez-moi");
+
+//     // Connecter le signal "clicked" du bouton à notre fonction
+//     g_signal_connect(button, "clicked", G_CALLBACK(on_button_clicked), NULL);
+
+//     // Ajouter le bouton à la fenêtre
+//     gtk_container_add(GTK_CONTAINER(window), button);
+
+//     // Afficher tous les widgets
+//     gtk_widget_show_all(window);
+
+//     // Boucle principale GTK
+//     gtk_main();
+
+//     return 0;
+// }
+
+
 // static void activate(GtkApplication *app, gpointer data)
 // {
 //   WindowConfig window_config = DEFAULT_WINDOW;

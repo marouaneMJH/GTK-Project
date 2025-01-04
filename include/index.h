@@ -14,10 +14,14 @@
 #include "./containers/layouts/paned.h"
 #include "./containers/layouts/stack.h"
 #include "./widgets/label.h"
+#include "./widgets/scroll.h"
 #include "./widgets/button/button.h"
 #include "./widgets/button/radio_button.h"
 #include "./widgets/button/switch_button.h"
 #include "./widgets/button/spin_button.h"
+#include "./widgets/button/link_button.h"
+#include "./widgets/button/check_button.h"
+
 #include "./widgets/separator.h"
 
 #endif

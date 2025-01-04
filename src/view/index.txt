@@ -1,19 +1,59 @@
 <window
-    id="window1"
-    title="XML Window"
-    width="500"
-    height="400"
+	id="window_1  "
+	title="  WindowT"
+	icon_name="folder"
+	width="500"
+	height="400"
 >
-
-    <fixed>
-
-        <button 
-            id="button1"
-            text="Clicker ici"
-            position_x="100"
-            position_y="100"
-        />
-
-    </fixed>
-
+	<box 
+		id="box_1"orientation="horizantal"
+	>
+	
+		<box
+			id="box_2"
+			orientation="vertical"
+		>
+			<entry
+				id="entry_1"
+				placeholder="Hi"
+			/>
+			<radiobutton
+				id="radiobutton_1"
+				label="Male"
+			/>
+			<radio_button
+				id="radiobutton_2"
+				Label="Female"
+			/>
+			<button
+				id="button_1"
+				Label="Clicker ici"
+			/>
+		</box>
+		<box
+			id="box_3"
+			orientation="vertical"
+		>
+			<label
+				id="label1"
+				text="Label"
+			/>
+			<fixed
+				id="fixed_1"
+				width="300"
+				height="300"
+			>
+				<image
+					id="img_1"
+					path="src/imgs/i.png"
+				/>
+				<button
+					id="button_2"
+					label="Ok"
+					position_x="150"
+					position_y="390"
+				/>
+			</fixed>
+		</box>
+	</box>
 </window>

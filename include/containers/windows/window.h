@@ -103,7 +103,7 @@ typedef struct
  * @brief initial the window by default value
  * @return the default window structure
  */
-int init_window(WindowConfig *window_config, FILE *index);
+gchar* init_window(WindowConfig *window_config, FILE *index);
 
 /**
  * @brief function to edit predefined window with juste

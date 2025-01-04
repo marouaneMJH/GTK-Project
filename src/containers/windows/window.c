@@ -13,12 +13,14 @@ gchar *read_property(FILE *index, int *status)
         if (c == '=')
         {
             *status = 1;
+            property[i] = '\0';
             return property;
         }
         if (c != ' ' && c != '\n' && c != '\t')
             property[i++] = c;
     }
-    *status = 0;
+    if (c == '>') 
+        *status = 2;
     return NULL;
 }
 
@@ -28,34 +30,146 @@ gchar *read_value(FILE *index, int *status)
     SAFE_ALLOC(value, gchar, MAX_PROPERTY_SIZE);
 
     int i = 0;
+    gboolean reading_flag = FALSE;
     gchar c;
-    while ((c = fgetc(index)) != '>')
+
+    while ((c = fgetc(index)) != '"' || !reading_flag)
     {
-        if (c == '"')
+        if (c != '"' && !reading_flag)
         {
-            *status = 0;
+            *status = -1;
             return value;
         }
-        if (c != ' ' && c != '\n' && c != '\t')
+
+        if (c == '"' && !reading_flag)
+            reading_flag = !reading_flag;
+
+        else if (c != ' ' && c != '\n' && c != '\t')
             value[i++] = c;
     }
+    value[i] = '\0';
     *status = 1;
-    return NULL;
+    return value;
 }
 
-int init_window(WindowConfig *window_config, FILE *index)
+int apply_property_value(WindowConfig *window_config, gchar *property, gchar *value)
 {
-    // TODO: After initializing windowConfig with DEFAULT_WINDOW Macro
-    // TODO: Read from xml file and initialize the window structure that is passed from argument as WindowConfig
-    if (!window_config)
+    if (!window_config || !property || !value)
         return -1;
 
-    if (!index)
-        return 0;
+    if (g_strcmp0(property, "title") == 0)
+        strcpy(window_config->title, value);
+
+    if (g_strcmp0(property, "icon_path") == 0)
+        strcpy(window_config->icon_path, value);
+
+    if (g_strcmp0(property, "icon_name") == 0)
+    {
+        printf("Icon name: %s\n", value);
+        strcpy(window_config->icon_name, value);
+    }
+
+    // Margins
+    if (g_strcmp0(property, "mrgin_top") == 0)
+        window_config->dimensions.width = atoi(value);
+
+    if (g_strcmp0(property, "mrgin_bottom") == 0)
+        window_config->dimensions.width = atoi(value);
+
+    if (g_strcmp0(property, "mrgin_left") == 0)
+        window_config->dimensions.width = atoi(value);
+
+    if (g_strcmp0(property, "mrgin_right") == 0)
+        window_config->dimensions.width = atoi(value);
+
+    // Dimensions
+    if (g_strcmp0(property, "width") == 0)
+        window_config->dimensions.width = atoi(value);
+
+    if (g_strcmp0(property, "height") == 0)
+        window_config->dimensions.height = atoi(value);
+
+    if (g_strcmp0(property, "border_width") == 0)
+        window_config->border_width = atoi(value);
+
+    if (g_strcmp0(property, "opacity") == 0)
+        window_config->opacity = atof(value);
+
+    // Boolean options
+    if (g_strcmp0(property, "resizable") == 0)
+        window_config->is_resizable = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
+    if (g_strcmp0(property, "is_fullscreen") == 0)
+        window_config->is_resizable = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
+    if (g_strcmp0(property, "is_maximized") == 0)
+        window_config->is_resizable = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
+    if (g_strcmp0(property, "is_modal") == 0)
+        window_config->is_resizable = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
+    if (g_strcmp0(property, "is_decorated") == 0)
+        window_config->is_resizable = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
+    if (g_strcmp0(property, "is_keep_above") == 0)
+        window_config->is_resizable = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
+    if (g_strcmp0(property, "is_keep_below") == 0)
+        window_config->is_resizable = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
+    if (g_strcmp0(property, "new_startup_id") == 0)
+        strcpy(window_config->new_startup_id, value);
+
+    if (g_strcmp0(property, "bg_color") == 0)
+        strcpy(window_config->bg_color, value);
+
+    if (g_strcmp0(property, "text_color") == 0)
+        strcpy(window_config->bg_color, value);
+
+    if (g_strcmp0(property, "position") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            window_config->position = GTK_WIN_POS_CENTER;
+        else if (g_strcmp0(value, "mouse") == 0)
+            window_config->position = GTK_WIN_POS_MOUSE;
+        else if (g_strcmp0(value, "center_always") == 0)
+            window_config->position = GTK_WIN_POS_CENTER_ALWAYS;
+        else if (g_strcmp0(value, "none") == 0)
+            window_config->position = GTK_WIN_POS_NONE;
+    }
+
+    if (g_strcmp0(property, "hint_type") == 0)
+    {
+        if (g_strcmp0(value, "normal") == 0)
+            window_config->hint_type = GDK_WINDOW_TYPE_HINT_NORMAL;
+        else if (g_strcmp0(value, "dialog") == 0)
+            window_config->hint_type = GDK_WINDOW_TYPE_HINT_DIALOG;
+        else if (g_strcmp0(value, "menu") == 0)
+            window_config->hint_type = GDK_WINDOW_TYPE_HINT_MENU;
+        else if (g_strcmp0(value, "toolbar") == 0)
+            window_config->hint_type = GDK_WINDOW_TYPE_HINT_TOOLBAR;
+        else if (g_strcmp0(value, "splashscreen") == 0)
+            window_config->hint_type = GDK_WINDOW_TYPE_HINT_SPLASHSCREEN;
+        else if (g_strcmp0(value, "utility") == 0)
+            window_config->hint_type = GDK_WINDOW_TYPE_HINT_UTILITY;
+        else if (g_strcmp0(value, "dock") == 0)
+            window_config->hint_type = GDK_WINDOW_TYPE_HINT_DOCK;
+        else if (g_strcmp0(value, "desktop") == 0)
+            window_config->hint_type = GDK_WINDOW_TYPE_HINT_DESKTOP;
+    }
+
+    return 1;
+}
+
+gchar *init_window(WindowConfig *window_config, FILE *index)
+{
+    if (!window_config || !index)
+        return NULL;
 
     gchar c;
     gchar *property = NULL;
     gchar *value = NULL;
+    gchar *view_id = NULL;
     while ((c = fgetc(index)) != '>')
     {
         if ((c > 'A' && c < 'Z') || (c > 'a' && c < 'z'))
@@ -63,13 +177,26 @@ int init_window(WindowConfig *window_config, FILE *index)
 
         int status = -1;
         property = read_property(index, &status);
-        if (status == 1) 
+        if (status == 2)
         {
-            value = read_value(index, &status);
+            return view_id;
         }
-
+        else if (status == 1 && property)
+        {
+            printf("Property: %s\n", property);
+            value = read_value(index, &status);
+            if (status == 1 && value)
+            {
+                printf("Value: %s\n", value);
+                if (g_strcmp0(property, "id") == 0)
+                    view_id = value;
+                else
+                    apply_property_value(window_config, property, value);
+            }
+        }
     }
-    return 1;
+
+    return view_id;
 }
 
 WindowConfig *edit_window(WindowConfig *window_config,

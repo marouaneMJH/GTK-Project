@@ -82,6 +82,9 @@ GtkWidget *create_radio_button(RadioButtonConfig radio_button_config)
         gtk_button_set_image_position(GTK_BUTTON(radio_button), GTK_POS_RIGHT);
     }
 
+    // Set margins
+    widget_set_margins(radio_button, radio_button_config.margins);
+
     // Set dimensions
     if (radio_button_config.dimensions.width > 0 && radio_button_config.dimensions.height > 0)
     {

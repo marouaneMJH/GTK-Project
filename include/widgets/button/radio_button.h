@@ -30,6 +30,7 @@
         .is_inconsistent = FALSE,                      \
         .use_underline = FALSE,                        \
         .icon_position = GTK_POS_LEFT,                 \
+        .margins = DEFAULT_RADIO_BUTTON_MARGIN,        \
         .dimensions = DEFAULT_RADIO_BUTTON_DIMENSIONS, \
         .bg_color = "\0",                         \
         .text_color = "\0"}
@@ -47,6 +48,7 @@ typedef struct
     gboolean is_button_mode;
     gboolean is_inconsistent;
     gboolean use_underline;
+    Margins margins;
     GtkPositionType icon_position;
     Dimensions dimensions;
     gchar bg_color[MAX_COLOR_SIZE];

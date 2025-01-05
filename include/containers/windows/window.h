@@ -104,7 +104,7 @@ typedef struct
  * @brief initial the window by default value
  * @return the default window structure
  */
-gchar *init_window(WindowConfig *window_config, FILE *index);
+gchar *init_window_config(FILE *index, WindowConfig *window_config, ViewConfig *view_config);
 
 GtkWidget *create_window(GtkApplication *app, WindowConfig window_config);
 

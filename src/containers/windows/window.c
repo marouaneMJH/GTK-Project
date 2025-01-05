@@ -1,7 +1,7 @@
 #include "./../../../include/global.h"
 #include "./../../../include/containers/windows/window.h"
 
-int configure_window_property(WindowConfig *window_config, gchar *property, gchar *value)
+int configure_window_property(WindowConfig *window_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
     if (!window_config || !property || !value)
         return -1;
@@ -107,10 +107,12 @@ int configure_window_property(WindowConfig *window_config, gchar *property, gcha
             window_config->hint_type = GDK_WINDOW_TYPE_HINT_DESKTOP;
     }
 
+    SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
+
     return 1;
 }
 
-gchar *init_window(WindowConfig *window_config, FILE *index)
+gchar *init_window_config( FILE *index, WindowConfig *window_config, ViewConfig *view_config)
 {
     // Check if the window config and the index file is not null
     if (!window_config || !index)
@@ -127,6 +129,7 @@ gchar *init_window(WindowConfig *window_config, FILE *index)
     gchar c;
     while ((c = fgetc(index)) != '>')
     {
+        printf("INIT : C => %c\n", c);
         /* If the character is a letter then go back one character
             Because when the tag is readed the cursor will start with the first letter in the property and it will be lost */
         if (is_character(c))
@@ -156,13 +159,14 @@ gchar *init_window(WindowConfig *window_config, FILE *index)
                 else
                 {
                     // Apply the property value to the window config
-                    configure_window_property(window_config, property, value);
+                    configure_window_property(window_config, view_config, property, value);
                     free(value);
                     free(property);
                 }
             }
         }
     }
+    printf("END INIT C => %c\n", c);
 
     return view_id;
 }

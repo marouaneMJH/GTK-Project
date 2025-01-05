@@ -105,6 +105,7 @@ void widget_set_font(GtkWidget *widget, const gchar *font_name, gint font_size)
 
 // TODO: Should be not manipulate the end of tag ">" in the file
 // TODO: Should manipulate spaces and tabs and new lines
+// ########################## "This function should stop reading after the greater then symbol " > " exactelly"
 gchar *read_property(FILE *index, int *status)
 {
     gchar *property = NULL;
@@ -124,14 +125,10 @@ gchar *read_property(FILE *index, int *status)
             property[i++] = c;
     }
     if (c == '>')
-    {
-        fseek(index, -1, SEEK_CUR);
         *status = 2;
-    }
     return NULL;
 }
 
-// Ignore space within the value
 gchar *read_value(FILE *index, int *status)
 {
     gchar *value = NULL;
@@ -141,7 +138,7 @@ gchar *read_value(FILE *index, int *status)
     gboolean reading_flag = FALSE;
     gchar c;
 
-    while ((c = fgetc(index)) != '"' || !reading_flag)
+    while (((c = fgetc(index)) != '"' || !reading_flag) && c != EOF)
     {
         if (c != '"' && !reading_flag)
         {
@@ -152,8 +149,18 @@ gchar *read_value(FILE *index, int *status)
         if (c == '"' && !reading_flag)
             reading_flag = !reading_flag;
 
-        else if (c != ' ' && c != '\n' && c != '\t')
+        else if (c != '\n')
             value[i++] = c;
+        else
+        {
+            // Debugging part
+            if (c == '\n')
+            {
+                value[i] = '\0';
+                printf("ERROR: while reading the value %s\n", value);
+                exit(EXIT_FAILURE);
+            }
+        }
     }
     value[i] = '\0';
     *status = 1;

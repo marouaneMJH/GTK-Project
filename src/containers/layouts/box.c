@@ -52,7 +52,7 @@ int configure_box_property(BoxConfig *box_config, gchar *property, gchar *value)
     return 1;
 }
 
-gchar *init_box(BoxConfig *box_config, FILE *index)
+gchar *init_box_config(FILE *index, BoxConfig *box_config, ViewConfig *view_config)
 {
     // Check if the window config and the index file is not null
     if (!box_config || !index)

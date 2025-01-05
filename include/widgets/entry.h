@@ -86,7 +86,7 @@ typedef struct
 
 } EntryConfig;
 
-gchar *init_entry(EntryConfig *entry_config, FILE *index);
+gchar *init_entry_config(FILE *index, EntryConfig *entry_config, ViewConfig *view_config);
 
 /**
  * @brief Create an entry widget with the specified configuration

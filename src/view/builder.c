@@ -1,6 +1,6 @@
 #include "./../../include/builder.h"
 
-View *create_view(gchar *view_id, GtkWidget *widget)
+View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
 {
     View *view = NULL;
     SAFE_ALLOC(view, View, 1);
@@ -10,6 +10,7 @@ View *create_view(gchar *view_id, GtkWidget *widget)
     view->child = NULL;
     view->parent = NULL;
     view->next = NULL;
+    view->view_config = view_config;
     view->widget = widget;
 
     g_strlcpy(view->view_id, view_id, MAX_VIEW_ID_SIZE);
@@ -50,7 +51,7 @@ int get_view_index(FILE *index, gchar *widget_tag)
         return ScrolledWindowTag;
 
     if (g_strcmp0(widget_tag, "box") == 0)
-        return EntryTag;
+        return BoxTag;
 
     if (g_strcmp0(widget_tag, "fixed") == 0)
         return FixedTag;
@@ -85,7 +86,44 @@ int get_view_index(FILE *index, gchar *widget_tag)
     if (g_strcmp0(widget_tag, "menu_item") == 0)
         return MenuItemTag;
 
+    if (g_strcmp0(widget_tag, "radio_button") == 0)
+        return RadioButtonTag;
+
+    if (g_strcmp0(widget_tag, "image") == 0)
+        return ImageTag;
+
     return -1;
+}
+
+int link_with_box_container(GtkWidget *child, GtkWidget *parent, ViewConfig *view_config)
+{
+    if (!GTK_IS_BOX(parent))
+        return 0;
+
+    if (view_config->pack_direction == 0)
+        gtk_box_pack_end(GTK_BOX(parent), child, FALSE, FALSE, 5);
+    else
+        gtk_box_pack_start(GTK_BOX(parent), child, FALSE, FALSE, 5);
+
+    return 1;
+}
+
+int link_with_fixed_container(GtkWidget *child, GtkWidget *parent, ViewConfig *view_config)
+{
+    if (!GTK_IS_FIXED(parent))
+        return 0;
+    gtk_fixed_put(GTK_FIXED(parent), child, 10, 10);
+    return 1;
+}
+
+int link_with_container(GtkWidget *child, GtkWidget *parent, ViewConfig *view_config)
+{
+    if (link_with_box_container(parent, child, view_config))
+        return 1;
+    if (link_with_fixed_container(parent, child, view_config))
+        return 1;
+
+    return 0;
 }
 
 View *add_view(View *view, View *relative, gboolean is_relative_container)
@@ -96,33 +134,102 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
     if (!relative)
         return view;
 
+    // Group radio buttons
+    if (GTK_IS_RADIO_BUTTON(view->widget))
+    {
+        printf("This view is a RADIO BUTTON => %s\n", view->view_id);
+
+        if (GTK_IS_RADIO_BUTTON(relative->widget) && !relative->view_config->group)
+        {
+            view->view_config->group = relative->widget;
+            radio_button_set_group(view->widget, relative->widget);
+        }
+        else
+        {
+            view->view_config->group = relative->view_config->group;
+            radio_button_set_group(view->widget, relative->view_config->group);
+        }
+    }
+
     if (is_relative_container)
     {
-        // view->parent = relative;
-        // relative->child = view;
-        // gtk_container_add(GTK_CONTAINER(relative->widget), view->widget);
-        printf("WIEW ID: Is Container");
+        view->parent = relative;
+        relative->child = view;
+
+        // Window case
+        if (GTK_IS_WINDOW(relative->widget))
+        {
+            printf("The relative: %s ==> is a window\n", relative->view_id);
+            gtk_container_add(GTK_CONTAINER(relative->widget), view->widget);
+        }
+
+        link_with_container(relative->widget, view->widget, view->view_config);
     }
     else
     {
-        // view->parent = relative->parent;
-        // relative->next = view;
-        printf("WIEW ID: IS CONTAINER\n");
-        // gtk_container_add(GTK_CONTAINER(relative->parent->widget), view->widget);
+        view->parent = relative->parent;
+        relative->next = view;
+
+        link_with_container(relative->parent->widget, view->widget, view->view_config);
     }
 
     return view;
 }
 
+// This function is not nesseccary we can use GTK_IS_CONTAINER instead
 gboolean is_container_view(FILE *index)
 {
     fseek(index, -2, SEEK_CUR);
     gchar c1 = fgetc(index);
     gchar c2 = fgetc(index);
     if (c1 == '/' && c2 == '>')
-        return TRUE;
-    else if (c2 == '>')
         return FALSE;
+    else if (c2 == '>')
+        return TRUE;
+
+    return FALSE;
+}
+
+View *read_window_tag(FILE *index, GtkApplication *app, View *parent_view, gboolean is_relative_container)
+{
+    WindowConfig window_config = DEFAULT_WINDOW;
+    ViewConfig view_config;
+
+    gchar *view_id = init_window_config(index, &window_config, &view_config);
+
+    GtkWidget *window_widget = create_window(app, window_config);
+
+    // GtkWidget *window_widget = NULL;
+    View *window_view = create_view(view_id, window_widget, &view_config);
+
+    // Should be returned as the top of the graph
+    // root_view = window_view;
+
+    // Add view to view model
+    add_view(window_view, parent_view, is_relative_container);
+
+    // Update parent view
+    return window_view;
+}
+
+// TODO: There is a bug in this function
+View *read_box_tag(FILE *index, View *parent_view, gboolean is_relative_container)
+{
+    BoxConfig box_config = DEFAULT_BOX;
+    ViewConfig view_config;
+
+    gchar *view_id = init_box_config(index, &box_config, &view_config);
+
+    GtkWidget *box_widget = create_box(box_config);
+
+    View *box_view = create_view(view_id, box_widget, &view_config);
+
+    // Add view to view model
+    add_view(box_view, parent_view, is_relative_container);
+
+    free(view_id);
+    // Update parent view
+    return box_view;
 }
 
 View *build_app(GtkApplication *app, View *root_view)
@@ -153,11 +260,8 @@ View *build_app(GtkApplication *app, View *root_view)
         {
             if (fgetc(index) == '/')
             {
-                if (fgetc(index) == '>')
-                {
-                    is_relative_container = FALSE;
-                    continue;
-                }
+                is_relative_container = FALSE;
+                continue;
             }
             else
             {
@@ -173,86 +277,172 @@ View *build_app(GtkApplication *app, View *root_view)
                 widget_index = get_view_index(index, widget_tag);
             }
 
-            if (widget_index == WindowTag)
+            ViewConfig view_config;
+            switch (widget_index)
             {
+
+            case WindowTag:
+                // Read window tag
+                // parent_view = read_window_tag(index, app, parent_view, is_relative_container);
+                // Set window as root view
+                // root_view = parent_view;
+                // Update container flag
+                // is_relative_container = is_container_view(index);
+                // return window_view;
 
                 WindowConfig window_config = DEFAULT_WINDOW;
 
-                view_id = init_window(&window_config, index);
+                view_id = init_window_config(index, &window_config, &view_config);
 
                 GtkWidget *window_widget = create_window(app, window_config);
 
                 // GtkWidget *window_widget = NULL;
-                View *window_view = create_view(view_id, window_widget);
+                View *window_view = create_view(view_id, window_widget, &view_config);
 
                 // Should be returned as the top of the graph
                 root_view = window_view;
 
                 // Add view to view model
                 add_view(window_view, parent_view, is_relative_container);
-                // Update container flag
+
                 is_relative_container = is_container_view(index);
-                printf("SWITCH => WIEW ID: %s And PARENT ID: %s\n", view_id, "parent_view");
-                // Update parent view
+
                 parent_view = window_view;
-                // return window_view;
-            }
-            else if (widget_index == BoxTag)
-            {
+
+                break;
+
+            case BoxTag:
+
+                // TODO: Fix this function to be work
+                // parent_view = read_box_tag(index, parent_view, is_relative_container);
+                // is_relative_container = is_container_view(index);
 
                 BoxConfig box_config = DEFAULT_BOX;
 
-                view_id = init_box(&box_config, index);
+                view_id = init_box_config(index, &box_config, &view_config);
 
                 GtkWidget *box_widget = create_box(box_config);
 
-                View *box_view = create_view(view_id, box_widget);
+                View *box_view = create_view(view_id, box_widget, &view_config);
 
                 // Add view to view model
                 add_view(box_view, parent_view, is_relative_container);
+
                 // Update container flag
                 is_relative_container = is_container_view(index);
+
                 // Update parent view
-                printf("SWITCH => WIEW ID: %s And PARENT ID: %s\n", view_id, parent_view->view_id);
                 parent_view = box_view;
 
-                // stop = TRUE;
-                // return box_view;
-            }
-            else if (widget_index == EntryTag)
-            {
+                break;
+            case EntryTag:
 
                 EntryConfig entry_config = DEFAULT_ENTRY;
 
-                view_id = init_entry(&entry_config, index);
+                view_id = init_entry_config(index, &entry_config, &view_config);
 
                 GtkWidget *entry_widget = create_entry(entry_config);
 
-                View *entry_view = create_view(view_id, entry_widget);
+                View *entry_view = create_view(view_id, entry_widget, &view_config);
 
                 // Add view to view model
                 add_view(entry_view, parent_view, is_relative_container);
                 // Update container flag
                 is_relative_container = is_container_view(index);
-                printf("SWITCH => WIEW ID: %s And PARENT ID: %s\n", view_id, parent_view->view_id);
+
                 // Update parent view
                 parent_view = entry_view;
-            } 
-            else
-            {
+                break;
 
+            case RadioButtonTag:
+                RadioButtonConfig radio_button_config = DEFAULT_RADIO_BUTTON;
+
+                view_id = init_radio_button_config(index, &radio_button_config, &view_config);
+
+                GtkWidget *radio_button_widget = create_radio_button(radio_button_config);
+
+                View *radio_button_view = create_view(view_id, radio_button_widget, &view_config);
+
+                // Add view to view model
+                add_view(radio_button_view, parent_view, is_relative_container);
+                // Update container flag
+                is_relative_container = is_container_view(index);
+
+                // Update parent view
+                parent_view = radio_button_view;
+                break;
+
+            case ButtonTag:
+                ButtonConfig button_config = DEFAULT_BUTTON;
+
+                view_id = init_button_config(index, &button_config, &view_config);
+
+                GtkWidget *button_widget = create_button(button_config);
+
+                View *button_view = create_view(view_id, button_widget, &view_config);
+
+                // Add view to view model
+                add_view(button_view, parent_view, is_relative_container);
+                // Update container flag
+                is_relative_container = is_container_view(index);
+
+                // Update parent view
+                parent_view = button_view;
+                break;
+            case FixedTag:
+                FixedConfig fixed_config = DEFAULT_FIXED;
+
+                view_id = init_fixed_config(index, &fixed_config, &view_config);
+
+                GtkWidget *fixed_widget = create_fixed(fixed_config);
+
+                View *fixed_view = create_view(view_id, fixed_widget, &view_config);
+
+                // Add view to view model
+                add_view(fixed_view, parent_view, is_relative_container);
+
+                // Update container flag
+                is_relative_container = is_container_view(index);
+
+                // Update parent view
+                parent_view = fixed_view;
+                break;
+            case LabelTag:
+                //  TODO Complete label
+                continue;
+                break;
+            case ImageTag:
+                ImageConfig image_config = DEFAULT_IMAGE;
+
+                view_id = init_image_config(index, &image_config, &view_config);
+
+                GtkWidget *image_widget = create_image(image_config);
+
+                View *image_view = create_view(view_id, image_widget, &view_config);
+
+                // Add view to view model
+                add_view(image_view, parent_view, is_relative_container);
+
+                // Update container flag
+                is_relative_container = is_container_view(index);
+
+                // Update parent view
+                parent_view = image_view;
+                break;
+
+            // TODO : Complete other widgets
+            default:
                 stop = TRUE;
-            //  default:
-                //  fclose(index);
-                //  g_print("ERROR: => Widget not found\n");
+                fclose(index);
+                g_print("ERROR: => Widget not found\n");
                 //  exit(EXIT_FAILURE);
-                //  break;
-             }
+                break;
+            }
+            free(widget_tag);
         }
     }
 
     fclose(index);
 
-    printf("VIEW ID: %s\n", root_view->view_id);
     return root_view;
 }

@@ -5,6 +5,12 @@ int configure_entry_property(EntryConfig *entry_config, gchar *property, gchar *
     if (!entry_config || !property || !value)
         return -1;
 
+    if (g_strcmp0(property, "placeholder_text") == 0)
+        strcpy(entry_config->placeholder_text, value);
+    
+    if (g_strcmp0(property, "max_length") == 0)
+        entry_config->max_length, atoi(value);
+
     // Margins
     if (g_strcmp0(property, "mrgin_top") == 0)
         entry_config->margins.top = atoi(value);
@@ -35,7 +41,7 @@ int configure_entry_property(EntryConfig *entry_config, gchar *property, gchar *
     return 1;
 }
 
-gchar *init_entry(EntryConfig *entry_config, FILE *index)
+gchar *init_entry_config(FILE *index, EntryConfig *entry_config, ViewConfig *view_config)
 {
     // Check if the window config and the index file is not null
     if (!entry_config || !index)

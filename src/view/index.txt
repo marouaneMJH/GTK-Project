@@ -1,36 +1,46 @@
 <window 
-	id="window_1  "
-	title="  Abdellah window"
+	id="window_1"
+	title=" Abdellah window "
 	icon_name="folder"
-	width="700"
-	height="500"
-	text_color="#FFFFFF"
-	bg_image="programer.jpg"
+	width="500"
+	height="400"
+	text_color=  "#FFFFFF"
+	bg_image="programer.jpg" 
 >
+
 	<box 
 		id="box_1"
 		orientation="horizantal"
+		bg_color="yellow"
+		box_expand="false"
+		box_fill="false"
+		box_padding="5"
 	>
-	
+
 		<box
 			id="box_2"
 			orientation="vertical"
+			bg_color="blue"
+			box_expand="false"
+			box_fill="false"
+			box_padding="20"
 		>
 			<entry
 				id="entry_1"
-				placeholder="Hi"
+				placeholder_text="Hi"
 			/>
-			<radiobutton
+			<radio_button
 				id="radiobutton_1"
 				label="Male"
+				is_group="true"
 			/>
 			<radio_button
 				id="radiobutton_2"
-				Label="Female"
+				label="Female"
 			/>
 			<button
 				id="button_1"
-				Label="Clicker ici"
+				label="Clicker ici"
 			/>
 		</box>
 		<box
@@ -48,11 +58,18 @@
 			>
 				<image
 					id="img_1"
-					path="src/imgs/i.png"
+					type="file"
+					path="./assets/images/programer.jpg"
+					position_x="120"
+					position_y="120"
+					width="100"
+					height="100"
 				/>
 				<button
 					id="button_2"
 					label="Ok"
+					width="120"
+					height="40"
 					position_x="150"
 					position_y="390"
 				/>

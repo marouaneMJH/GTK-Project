@@ -65,12 +65,5 @@ gchar *init_button_config(FILE *index, ButtonConfig *button_config, ViewConfig *
  */
 GtkWidget *create_button(ButtonConfig button);
 
-/**
- * @brief create button icon
- * @param[in] icon_name look here for more infomation https://www.notion.so/Button-1627f0b86e0380af9957e029522d8b22?pvs=4
- * @param icon_size enum, icon predefined size
- * @return icon on button form
- */
-GtkWidget* create_button_icon(gchar* icon_name,GtkIconSize icon_size);
 
 #endif

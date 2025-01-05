@@ -31,7 +31,6 @@ GtkStyleContext *get_style_provider_context(GtkWidget *widget, const gchar *bg_c
 
         css_style = g_string_free(css_builder, FALSE);
 
-        g_print("CSS style: \n %s \n", css_style);
     }
     else
     {
@@ -157,6 +156,7 @@ gchar *read_value(FILE *index, int *status)
             if (c == '\n')
             {
                 value[i] = '\0';
+                g_critical("ERROR: while reading the value %s\n", value);
                 printf("ERROR: while reading the value %s\n", value);
                 exit(EXIT_FAILURE);
             }

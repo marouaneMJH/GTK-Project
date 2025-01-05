@@ -56,6 +56,10 @@
     if (g_strcmp0(property, "box_padding") == 0)                                \
     {                                                                           \
         view_config->box_padding = atoi(value);                                 \
+    }                                                                           \
+    if (g_strcmp0(property, "flow_box_order") == 0)                             \
+    {                                                                           \
+        view_config->flow_box_order = atoi(value);                              \
     }
 
 typedef struct
@@ -69,6 +73,9 @@ typedef struct
     gboolean box_expand;
     gboolean box_fill;
     int box_padding;
+
+    // FlowBox container
+    gint flow_box_order;
 
     // Ex: radio button
     GtkWidget *group;

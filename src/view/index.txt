@@ -8,6 +8,27 @@
 	bg_image="programer.jpg" 
 >
 
+
+	<flow_box
+		min_childern_per_line="2"
+		max_childern_per_line="3"
+	>
+			<spin_button
+				order="2"
+				min="0"
+				max="50"
+				step="1"
+				initial_value="20"
+				is_numeric="false"
+				is_digits="true"
+			/>
+			<entry
+				order="1"
+				id="entry_1"
+				placeholder_text="Hi"
+			/>
+
+	</flow_box>
 	<box 
 		id="box_1"
 		orientation="horizantal"
@@ -25,6 +46,14 @@
 			box_fill="false"
 			box_padding="20"
 		>
+			<spin_button
+				min="0"
+				max="50"
+				step="1"
+				initial_value="20"
+				is_numeric="false"
+				is_digits="true"
+			/>
 			<entry
 				id="entry_1"
 				placeholder_text="Hi"

@@ -89,8 +89,6 @@ gchar *init_box_config(FILE *index, BoxConfig *box_config, ViewConfig *view_conf
             // Read the value of the property
             value = read_value(index, &status);
 
-            printf("Property %s\n", property);
-            printf("Value %s\n", value);
 
             if (status == 1 && value)
             {

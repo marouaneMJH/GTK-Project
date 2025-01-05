@@ -3,17 +3,6 @@
 
 #include "./index.h"
 
-#define MAX_TAG_SIZE 50
-
-typedef struct VIEW
-{
-    GtkWidget *widget;
-    struct VIEW *parent;
-    struct VIEW *child;
-    struct VIEW *next;
-    gchar *view_id;
-} View;
-
 typedef enum
 {
     WindowTag,
@@ -35,12 +24,15 @@ typedef enum
     FlowBoxTag,
     ListBoxTag,
     GridTag,
-    PanedTag
+    PanedTag,
+    ImageTag
 } Tags;
 
 // Global structure;
 
-View *create_view(gchar *view_id, GtkWidget *widget, View *parent);
+View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config);
+
+View *add_view(View *view, View *relative, gboolean is_relative_container);
 
 gchar *read_tag(FILE *index);
 

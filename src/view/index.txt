@@ -1,12 +1,15 @@
-<window
+<window 
 	id="window_1  "
 	title="  Abdellah window"
 	icon_name="folder"
-	width="500"
-	height="400"
+	width="700"
+	height="500"
+	text_color="#FFFFFF"
+	bg_image="programer.jpg"
 >
 	<box 
-		id="box_1"orientation="horizantal"
+		id="box_1"
+		orientation="horizantal"
 	>
 	
 		<box

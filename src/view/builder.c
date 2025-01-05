@@ -88,6 +88,38 @@ int get_view_index(FILE *index, gchar *widget_tag)
     return -1;
 }
 
+View *add_view(View *view, View *relative, gboolean is_relative_container)
+{
+    if (!view)
+        return NULL;
+
+    if (!relative)
+        return view;
+
+    if (is_relative_container)
+    {
+        view->parent = relative;
+        relative->child = view;
+    }
+    else
+    {
+        view->parent = relative->parent;
+        relative->next = view;
+    }
+    return view;
+}
+
+gboolean is_container_view(FILE *index)
+{
+    fseek(index, -2, SEEK_CUR);
+    gchar c1 = fgetc(index);
+    gchar c2 = fgetc(index);
+    if (c1 == '/' && c2 == '>')
+        return TRUE;
+    else if (c2 == '>')
+        return FALSE;
+}
+
 View *build_app(GtkApplication *app, View *root_view)
 {
     printf("Building app\n");
@@ -103,8 +135,9 @@ View *build_app(GtkApplication *app, View *root_view)
     printf("Index file opened\n");
 
     View *parent_view = root_view;
-    gboolean container_flag = FALSE;
+    gboolean is_relative_container = TRUE;
     gchar *widget_tag = NULL;
+    gchar *view_id = NULL;
     int widget_index = -1;
     char c;
 
@@ -115,8 +148,11 @@ View *build_app(GtkApplication *app, View *root_view)
         {
             if (fgetc(index) == '/')
             {
-                // TODO: Close the tag and set container_flag to TRUE
-                continue;
+                if (fgetc(index) == '>')
+                {
+                    is_relative_container = FALSE;
+                    continue;
+                }
             }
             else
             {
@@ -135,25 +171,47 @@ View *build_app(GtkApplication *app, View *root_view)
             switch (widget_index)
             {
             case WindowTag:
-                // TODO: Create window config and init a window widget
-                // TODO: Use init function to configure the widget
-                // TODO: Add view_id in WindowConfig
 
                 WindowConfig window_config = DEFAULT_WINDOW;
 
-                gchar *view_id = init_window(&window_config, index);
+                view_id = init_window(&window_config, index);
 
-                GtkWidget *window_widget = create_window(app, &window_config);
+                GtkWidget *window_widget = create_window(app, window_config);
 
                 // GtkWidget *window_widget = NULL;
                 View *window_view = create_view(view_id, window_widget, parent_view);
-                root_view = window_view;
-                stop = TRUE;
-                // return window_view;
-                // Add view to view model
-                // TODO: Add view to the view model as a child or a brother
-                // parent_view = add_to_view_model(window_view, parent_view, container_flag);
 
+                // Should be returned as the top of the graph
+                root_view = window_view;
+
+                // Add view to view model
+                add_view(window_view, parent_view, is_relative_container);
+                // Update container flag
+                is_relative_container = is_container_view(index);
+                // Update parent view
+                parent_view = window_view;
+                // return window_view;
+                break;
+
+            case BoxTag:
+            
+                BoxConfig box_config = DEFAULT_BOX;
+
+                view_id = init_box(&box_config, index);
+
+                GtkWidget *box_widget = create_box(box_config);
+
+                View *box_view = create_view(view_id, box_widget, parent_view);
+
+                // Add view to view model
+                add_view(box_view, parent_view, is_relative_container);
+                // Update container flag
+                is_relative_container = is_container_view(index);
+                // Update parent view
+                parent_view = box_view;
+                
+                stop = TRUE;
+                // return box_view;
                 break;
 
             default:

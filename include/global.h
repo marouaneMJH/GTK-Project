@@ -5,6 +5,32 @@
 
 #include "./constants.h"
 
+
+/* Global macros  */
+
+// check if the pointer is not null
+#define SAFE_ALLOC(ptr, type, length)                           \
+    do                                                          \
+    {                                                           \
+        ptr = (type *)g_malloc(length * sizeof(type));          \
+        if (!ptr)                                               \
+        {                                                       \
+            g_critical("Failed to allocate memory for " #type); \
+            return NULL;                                        \
+        }                                                       \
+    } while (0)
+
+#define IS_EXISTE(pointer)                      \
+    do                                          \
+    {                                           \
+        if (!pointer)                           \
+        {                                       \
+            g_critical(#pointer " not exist."); \
+            return NULL;                        \
+        }                                       \
+    } while (0) 
+
+
 // We should rename this from global to core wich means system libs and has more signification
 
 /**
@@ -81,7 +107,7 @@ void widget_set_margins(GtkWidget *widget, Margins margins);
  * @param state The state of the widget (ex: GTK_STATE_FLAG_NORMAL, GTK_STATE_FLAG_ACTIVE, ...)
  * @return void
  */
-void widget_set_background_color(GtkWidget *widget, const gchar *color, GtkStateFlags state);
+// void widget_set_background_color(GtkWidget *widget, const gchar *color, GtkStateFlags state);
 
 /**
  * @brief This function set the text color of a widget
@@ -90,7 +116,7 @@ void widget_set_background_color(GtkWidget *widget, const gchar *color, GtkState
  * @param state The state of the widget (ex: GTK_STATE_FLAG_NORMAL, GTK_STATE_FLAG_ACTIVE, ...)
  * @return void
  */
-void widget_set_text_color(GtkWidget *widget, const gchar *color, GtkStateFlags state);
+// void widget_set_text_color(GtkWidget *widget, const gchar *color, GtkStateFlags state);
 
 /**
  * @brief This function set the font of a widget
@@ -99,29 +125,18 @@ void widget_set_text_color(GtkWidget *widget, const gchar *color, GtkStateFlags 
  * @param font_size The font size
  * @return void
  */
-void widget_set_font(GtkWidget *widget, const gchar *font_name, gint font_size);
-/* Global macros  */
+//void widget_set_font(GtkWidget *widget, const gchar *font_name, gint font_size);
 
-// check if the pointer is not null
-#define SAFE_ALLOC(ptr, type, length)                           \
-    do                                                          \
-    {                                                           \
-        ptr = (type *)g_malloc(length * sizeof(type));          \
-        if (!ptr)                                               \
-        {                                                       \
-            g_critical("Failed to allocate memory for " #type); \
-            return NULL;                                        \
-        }                                                       \
-    } while (0)
 
-#define IS_EXISTE(pointer)                      \
-    do                                          \
-    {                                           \
-        if (!pointer)                           \
-        {                                       \
-            g_critical(#pointer " not exist."); \
-            return NULL;                        \
-        }                                       \
-    } while (0)
+
+// TODO: Should be not manipulate the end of tag ">" in the file
+// TODO: Should manipulate spaces and tabs and new lines
+gchar *read_property(FILE *index, int *status);
+
+// Ignore space within the value
+gchar *read_value(FILE *index, int *status);
+
+gboolean is_character(gchar c);
+
 
 #endif

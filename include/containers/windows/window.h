@@ -32,7 +32,7 @@
         .position = GTK_WIN_POS_CENTER,           \
         .is_fullscreen = FALSE,                   \
         .is_maximized = FALSE,                    \
-        .is_modal = TRUE,                        \
+        .is_modal = TRUE,                         \
         .is_decorated = TRUE,                     \
         .is_keep_above = FALSE,                   \
         .is_keep_below = FALSE,                   \
@@ -44,6 +44,7 @@
         .move_y = 0,                              \
         .border_width = 0,                        \
         .new_startup_id = "\0",                   \
+        .bg_image = "\0",                         \
         .bg_color = "\0",                         \
         .text_color = "\0"}
 
@@ -70,7 +71,7 @@ typedef struct
     // maximized the window or not (use it for gtk_window_maximize and gtk_window_unmaximize functions)
     gboolean is_maximized;
     // if the window is modal or not (we can use other windows in same time )
-    gboolean is_modal;  // debug to change the font color and apply the prop in dialog  should turn it off kep old code run without errors (button, box ..)
+    gboolean is_modal; // debug to change the font color and apply the prop in dialog  should turn it off kep old code run without errors (button, box ..)
     gboolean is_decorated;
     gboolean is_keep_above;
     gboolean is_keep_below;
@@ -92,41 +93,29 @@ typedef struct
 
     gchar new_startup_id[MAX_STARTUP_ID_SIZE];
 
+    gchar bg_image[MAX_ICON_PATH_SIZE];
+
     gchar bg_color[MAX_COLOR_SIZE];
     gchar text_color[MAX_COLOR_SIZE];
 
 } WindowConfig;
 
-
 /**
  * @brief initial the window by default value
  * @return the default window structure
  */
-gchar* init_window(WindowConfig *window_config, FILE *index);
+gchar *init_window(WindowConfig *window_config, FILE *index);
 
-/**
- * @brief function to edit predefined window with juste
- * @return the edited window
- */
-WindowConfig *edit_window(WindowConfig *window_config,
-                          gchar *title,
-                          gint width,
-                          gint height,
-                          gboolean is_resizable,
-                          gchar *bg_color);
-
-GtkWidget *create_window(GtkApplication *app, WindowConfig *window_config);
-
-
+GtkWidget *create_window(GtkApplication *app, WindowConfig window_config);
 
 /**
  * @brief function to show all items inside a window and the window it self
- * 
+ *
  * just to make sure the gtk name is not displayed in our main functions or components
- * 
+ *
  * @param[in] window the window that contain all other widget
  * @return void
  */
-void show_window(GtkWidget* window);
+void show_window(GtkWidget *window);
 
 #endif

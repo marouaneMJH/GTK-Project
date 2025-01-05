@@ -1,11 +1,8 @@
 #include "./../../include/widgets/scroll.h"
-//#include "../../include/widgets/scroll.h"
-
-//#include "C:/Users/Qusai/Desktop/GTK-Project/include/widgets/scroll.h"
 
 
 
-//void because the function dosen't need any parameters to perform the task
+// void because the function dosen't need any parameters to perform the task
 
 ScrolledWindowConfig *init_scrolled_window_config(void) {
     ScrolledWindowConfig *scrolled_window_config;
@@ -14,13 +11,14 @@ ScrolledWindowConfig *init_scrolled_window_config(void) {
     // Initialiser les valeurs par défaut
     scrolled_window_config->h_adjustment = NULL;
     scrolled_window_config->v_adjustment = NULL;
-    scrolled_window_config->h_policy = GTK_POLICY_AUTOMATIC;
-    scrolled_window_config->v_policy = GTK_POLICY_AUTOMATIC;
+    scrolled_window_config->h_policy = GTK_POLICY_ALWAYS;
+    scrolled_window_config->v_policy = GTK_POLICY_ALWAYS;
     scrolled_window_config->content = NULL;
     scrolled_window_config->window = NULL;
     
     return scrolled_window_config;
 }
+
 
 // Function to create a scrolled window with specified scrollbar policies
 GtkWidget* create_scrolled_window(ScrolledWindowConfig scrolled_window_config)
@@ -49,7 +47,7 @@ GtkWidget* create_scrolled_window(ScrolledWindowConfig scrolled_window_config)
 
 //     // If a parent window is defined, add the scrolled window to it
 //     if (scrolled_window_config->window) {
-//         gtk_container_add(GTK_CONTAINER(scrolled_window_config->window), scrolled_window);
+//         gtk_container_add(GTK_CONTAINER(scrolled_window_config->window), scrolle d_window);
 //     }
 
 //     return scrolled_window;

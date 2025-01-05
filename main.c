@@ -3,6 +3,166 @@
 
 
 
+// // this is link button test : 
+// int main(int argc, char *argv[]) {
+//     // Initialiser GTK
+//     gtk_init(&argc, &argv);
+
+//     // Créer une fenêtre principale
+//     GtkWidget *main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+//     gtk_window_set_title(GTK_WINDOW(main_window), "Exemple de Link Button");
+//     gtk_window_set_default_size(GTK_WINDOW(main_window), 400, 200);
+//     g_signal_connect(main_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+
+//     // Initialiser la configuration pour le bouton lien
+//     LinkButtonConfig *config = init_link_button_config("https://www.youtube.com/watch?v=l7qh30PZwpQ","click içi pour visiter le link");
+//     if (!config) {
+//         g_error("Échec de l'initialisation de la configuration du bouton lien.");
+//         return 1;
+//     }
+
+//     // Configurer des options supplémentaires
+//     g_strlcpy(config->tooltip, "Cliquez pour visiter Example.com", MAX_TOOLTIP_SIZE);
+//     config->dimensions.width = 200;
+//     config->dimensions.height = 50;
+//     g_strlcpy(config->bg_color, "#D3D3D3", MAX_COLOR_SIZE); // Couleur de fond gris clair
+//     g_strlcpy(config->text_color, "#0000FF", MAX_COLOR_SIZE); // Texte en bleu
+
+//     // Créer le bouton lien
+//     GtkWidget *link_button = create_link_button(*config);
+//     if (!link_button) {
+//         g_error("Erreur lors de la création du bouton lien.");
+//         g_free(config);
+//         return 1;
+//     }
+
+//     // Ajouter le bouton lien à la fenêtre
+//     gtk_container_add(GTK_CONTAINER(main_window), link_button);
+
+//     // Afficher tous les widgets
+//     gtk_widget_show_all(main_window);
+
+//     // Lancer la boucle principale GTK
+//     gtk_main();
+
+//     // Libérer la mémoire allouée pour la configuration
+//     g_free(config);
+
+//     return 0;
+// }
+
+
+
+
+// //this is a check button test
+
+// int main(int argc, char *argv[]) {
+//     // Initialiser GTK
+//     gtk_init(&argc, &argv);
+
+//     // Créer une fenêtre principale
+//     GtkWidget *main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+//     gtk_window_set_title(GTK_WINDOW(main_window), "Exemple de Check Button");
+//     gtk_window_set_default_size(GTK_WINDOW(main_window), 300, 200);
+//     g_signal_connect(main_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+
+//     // Initialiser la configuration pour le bouton check
+//     CheckButtonConfig *config = init_check_button_config("Activer l'option", TRUE);
+//     if (!config) {
+//         g_error("Échec de l'initialisation de la configuration du bouton check.");
+//         return 1;
+//     }
+
+//     // Configurer des options supplémentaires
+//     g_strlcpy(config->tooltip, "Cliquez pour activer/désactiver l'option", MAX_TOOLTIP_SIZE);
+//     config->dimensions.width = 150;
+//     config->dimensions.height = 50;
+//     g_strlcpy(config->bg_color, "#FFFFFF", MAX_COLOR_SIZE); // Couleur de fond blanche
+//     g_strlcpy(config->text_color, "#000000", MAX_COLOR_SIZE); // Texte en noir
+
+//     // Créer le bouton check
+//     GtkWidget *check_button = create_check_button(*config);
+//     if (!check_button) {
+//         g_error("Erreur lors de la création du bouton check.");
+//         g_free(config);
+//         return 1;
+//     }
+
+//     // Ajouter le bouton à la fenêtre
+//     gtk_container_add(GTK_CONTAINER(main_window), check_button);
+
+//     // Afficher tous les widgets
+//     gtk_widget_show_all(main_window);
+
+//     // Lancer la boucle principale GTK
+//     gtk_main();
+
+//     // Libérer la mémoire allouée pour la configuration
+//     g_free(config);
+
+//     return 0;
+// }
+
+
+
+
+// // this  a test of scrolled window with text
+// int main(int argc, char *argv[]) {
+//     // Initialisation de GTK
+//     gtk_init(&argc, &argv);
+
+//     // Créer une fenêtre principale
+//     GtkWidget *main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+//     gtk_window_set_title(GTK_WINDOW(main_window), "Exemple de Scrolled Window");
+//     gtk_window_set_default_size(GTK_WINDOW(main_window), 600, 400);
+//     g_signal_connect(main_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+
+//     // Initialiser la configuration pour la fenêtre défilable
+//     ScrolledWindowConfig *config = init_scrolled_window_config();
+//     if (!config) {
+//         g_error("Échec de l'initialisation de la configuration de la fenêtre défilable.");
+//         return 1;
+//     }
+
+//     // Créer un GtkTextView comme contenu pour la fenêtre défilable
+//     GtkWidget *text_view = gtk_text_view_new();
+//     gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(text_view), GTK_WRAP_WORD_CHAR);
+
+//     // Ajouter du texte au GtkTextView
+//     GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
+//     gtk_text_buffer_set_text(buffer, "Ceci est un exemple de texte dans une fenêtre défilable.\n"
+//                                      "Ajoutez plus de texte ici pour tester le défilement.", -1);
+
+//     // Configurer la structure ScrolledWindowConfig
+//     config->content = text_view; // Ajouter le contenu
+//     config->window = main_window; // Ajouter la fenêtre parent
+
+//     // Créer la fenêtre défilable
+//     GtkWidget *scrolled_window = create_scrolled_window(*config);
+//     if (!scrolled_window) {
+//         g_error("Erreur lors de la création de la fenêtre défilable.");
+//         return 1;
+//     }
+
+//     // Ajouter la fenêtre défilable à la fenêtre principale
+//     gtk_container_add(GTK_CONTAINER(main_window), scrolled_window);
+
+//     // Afficher tous les widgets
+//     gtk_widget_show_all(main_window);
+
+//     // Lancer la boucle principale GTK
+//     gtk_main();
+
+//     // Libérer la mémoire allouée pour la configuration
+//     g_free(config);
+
+//     return 0;
+// }
+
+
+
+
+
 // // Fonction appelée lorsque le bouton est cliqué
 // static void on_button_clicked(GtkWidget *button, gpointer data) {
 //     g_print("Le bouton a été cliqué !\n");

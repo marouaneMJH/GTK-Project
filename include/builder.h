@@ -4,6 +4,7 @@
 #include "./index.h"
 
 #define MAX_TAG_SIZE 50
+#define MAX_VIEW_ID_SIZE 50
 
 typedef struct VIEW
 {
@@ -11,7 +12,7 @@ typedef struct VIEW
     struct VIEW *parent;
     struct VIEW *child;
     struct VIEW *next;
-    gchar *view_id;
+    gchar view_id[MAX_VIEW_ID_SIZE];
 } View;
 
 typedef enum
@@ -40,7 +41,9 @@ typedef enum
 
 // Global structure;
 
-View *create_view(gchar *view_id, GtkWidget *widget, View *parent);
+View *create_view(gchar *view_id, GtkWidget *widget);
+
+View *add_view(View *view, View *relative, gboolean is_relative_container);
 
 gchar *read_tag(FILE *index);
 

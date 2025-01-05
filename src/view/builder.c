@@ -1,6 +1,6 @@
 #include "./../../include/builder.h"
 
-View *create_view(gchar *view_id, GtkWidget *widget, View *parent)
+View *create_view(gchar *view_id, GtkWidget *widget)
 {
     View *view = NULL;
     SAFE_ALLOC(view, View, 1);
@@ -8,11 +8,11 @@ View *create_view(gchar *view_id, GtkWidget *widget, View *parent)
         g_critical("Failed: create new view failed!\n");
 
     view->child = NULL;
-    view->parent = parent;
+    view->parent = NULL;
     view->next = NULL;
     view->widget = widget;
 
-    view->view_id = view_id;
+    g_strlcpy(view->view_id, view_id, MAX_VIEW_ID_SIZE);
 
     return view;
 }
@@ -50,7 +50,7 @@ int get_view_index(FILE *index, gchar *widget_tag)
         return ScrolledWindowTag;
 
     if (g_strcmp0(widget_tag, "box") == 0)
-        return BoxTag;
+        return EntryTag;
 
     if (g_strcmp0(widget_tag, "fixed") == 0)
         return FixedTag;
@@ -98,14 +98,19 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
 
     if (is_relative_container)
     {
-        view->parent = relative;
-        relative->child = view;
+        // view->parent = relative;
+        // relative->child = view;
+        // gtk_container_add(GTK_CONTAINER(relative->widget), view->widget);
+        printf("WIEW ID: Is Container");
     }
     else
     {
-        view->parent = relative->parent;
-        relative->next = view;
+        // view->parent = relative->parent;
+        // relative->next = view;
+        printf("WIEW ID: IS CONTAINER\n");
+        // gtk_container_add(GTK_CONTAINER(relative->parent->widget), view->widget);
     }
+
     return view;
 }
 
@@ -168,9 +173,8 @@ View *build_app(GtkApplication *app, View *root_view)
                 widget_index = get_view_index(index, widget_tag);
             }
 
-            switch (widget_index)
+            if (widget_index == WindowTag)
             {
-            case WindowTag:
 
                 WindowConfig window_config = DEFAULT_WINDOW;
 
@@ -179,7 +183,7 @@ View *build_app(GtkApplication *app, View *root_view)
                 GtkWidget *window_widget = create_window(app, window_config);
 
                 // GtkWidget *window_widget = NULL;
-                View *window_view = create_view(view_id, window_widget, parent_view);
+                View *window_view = create_view(view_id, window_widget);
 
                 // Should be returned as the top of the graph
                 root_view = window_view;
@@ -188,38 +192,62 @@ View *build_app(GtkApplication *app, View *root_view)
                 add_view(window_view, parent_view, is_relative_container);
                 // Update container flag
                 is_relative_container = is_container_view(index);
+                printf("SWITCH => WIEW ID: %s And PARENT ID: %s\n", view_id, "parent_view");
                 // Update parent view
                 parent_view = window_view;
                 // return window_view;
-                break;
+            }
+            else if (widget_index == BoxTag)
+            {
 
-            case BoxTag:
-            
                 BoxConfig box_config = DEFAULT_BOX;
 
                 view_id = init_box(&box_config, index);
 
                 GtkWidget *box_widget = create_box(box_config);
 
-                View *box_view = create_view(view_id, box_widget, parent_view);
+                View *box_view = create_view(view_id, box_widget);
 
                 // Add view to view model
                 add_view(box_view, parent_view, is_relative_container);
                 // Update container flag
                 is_relative_container = is_container_view(index);
                 // Update parent view
+                printf("SWITCH => WIEW ID: %s And PARENT ID: %s\n", view_id, parent_view->view_id);
                 parent_view = box_view;
-                
-                stop = TRUE;
-                // return box_view;
-                break;
 
-            default:
-                fclose(index);
-                g_print("ERROR: => Widget not found\n");
-                exit(EXIT_FAILURE);
-                break;
+                // stop = TRUE;
+                // return box_view;
             }
+            else if (widget_index == EntryTag)
+            {
+
+                EntryConfig entry_config = DEFAULT_ENTRY;
+
+                view_id = init_entry(&entry_config, index);
+
+                GtkWidget *entry_widget = create_entry(entry_config);
+
+                View *entry_view = create_view(view_id, entry_widget);
+
+                // Add view to view model
+                add_view(entry_view, parent_view, is_relative_container);
+                // Update container flag
+                is_relative_container = is_container_view(index);
+                printf("SWITCH => WIEW ID: %s And PARENT ID: %s\n", view_id, parent_view->view_id);
+                // Update parent view
+                parent_view = entry_view;
+            } 
+            else
+            {
+
+                stop = TRUE;
+            //  default:
+                //  fclose(index);
+                //  g_print("ERROR: => Widget not found\n");
+                //  exit(EXIT_FAILURE);
+                //  break;
+             }
         }
     }
 

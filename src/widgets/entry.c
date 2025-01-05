@@ -1,60 +1,131 @@
 #include "../../include/widgets/entry.h"
-//TODO: Add a init_entry with buffer function 
-// EntryConfig *init_entry(gchar *text, gchar *placeholder_text,Dimensions dimension)
-// {
-//     EntryConfig *entry = (EntryConfig*)malloc(sizeof(EntryConfig));
-//     entry->text = (gchar*) malloc(50*sizeof(gchar));
-//     entry->placeholder_text = (gchar*) malloc(50*sizeof(gchar));
-//     strcpy(entry->text, text);
-//     strcpy(entry->placeholder_text, placeholder_text);
-//     entry->dimension = dimension;
-//     entry->is_visible = TRUE;
-//     entry->is_editable = TRUE;
-//     entry->purpose = GTK_INPUT_PURPOSE_FREE_FORM;
-//     entry->max_length = 50;
-//     entry->alignment = 0;
-//     strcpy(entry->bg_color, "#FFFFFF");
-//     strcpy(entry->text_color, "#000000");
-//     return entry;
-// }
 
-GtkWidget *create_entry(EntryConfig *entry_data)
+int configure_entry_property(EntryConfig *entry_config, gchar *property, gchar *value)
 {
-    if (!entry_data)
-        exit(EXIT_FAILURE);
+    if (!entry_config || !property || !value)
+        return -1;
 
+    // Margins
+    if (g_strcmp0(property, "mrgin_top") == 0)
+        entry_config->margins.top = atoi(value);
+
+    if (g_strcmp0(property, "mrgin_bottom") == 0)
+        entry_config->margins.bottom = atoi(value);
+
+    if (g_strcmp0(property, "mrgin_left") == 0)
+        entry_config->margins.start = atoi(value);
+
+    if (g_strcmp0(property, "mrgin_right") == 0)
+        entry_config->margins.end = atoi(value);
+
+    // Dimensions
+    if (g_strcmp0(property, "width") == 0)
+        entry_config->dimensions.width = atoi(value);
+
+    if (g_strcmp0(property, "height") == 0)
+        entry_config->dimensions.height = atoi(value);
+
+    // Colors
+    if (g_strcmp0(property, "bg_color") == 0)
+        strcpy(entry_config->bg_color, value);
+
+    if (g_strcmp0(property, "text_color") == 0)
+        strcpy(entry_config->text_color, value);
+
+    return 1;
+}
+
+gchar *init_entry(EntryConfig *entry_config, FILE *index)
+{
+    // Check if the window config and the index file is not null
+    if (!entry_config || !index)
+        return NULL;
+
+    // Store the property and value of the tag
+    gchar *property = NULL;
+    gchar *value = NULL;
+
+    // The view id of the tag
+    gchar *view_id = NULL;
+
+    // Read the tag character by character
+    gchar c;
+    while ((c = fgetc(index)) != '>')
+    {
+        /* If the character is a letter then go back one character
+            Because when the tag is readed the cursor will start with the first letter in the property and it will be lost */
+        if (is_character(c))
+            fseek(index, -1, SEEK_CUR);
+
+        int status = -1;
+
+        // Read the property of the tag
+        property = read_property(index, &status);
+
+        // If the all properties are readed then break the loop and return the view id and pass the properties to the window config
+        if (status == 2)
+            return view_id;
+
+        // If the property is readed then read the value of the property
+        else if (status == 1 && property)
+        {
+            // Read the value of the property
+            value = read_value(index, &status);
+            if (status == 1 && value)
+            {
+                if (g_strcmp0(property, "id") == 0) // Store the view id
+                {
+                    view_id = value;
+                    free(property);
+                }
+                else
+                {
+                    // Apply the property value to the window config
+                    configure_entry_property(entry_config, property, value);
+                    free(value);
+                    free(property);
+                }
+            }
+        }
+    }
+
+    return view_id;
+}
+
+GtkWidget *create_entry(EntryConfig entry_config)
+{
 
     GtkWidget *entry = gtk_entry_new();
 
-    gtk_entry_set_text(GTK_ENTRY(entry), entry_data->text);
-    gtk_entry_set_placeholder_text(GTK_ENTRY(entry), entry_data->placeholder_text);
-    gtk_entry_set_visibility(GTK_ENTRY(entry), entry_data->is_visible);
-    gtk_entry_set_input_purpose(GTK_ENTRY(entry), entry_data->purpose);
-    gtk_entry_set_max_length(GTK_ENTRY(entry), entry_data->max_length);
-    gtk_widget_set_size_request(entry, entry_data->dimension.width, entry_data->dimension.height);
-    gtk_widget_set_opacity(entry, entry_data->opacity);
-    gtk_entry_set_alignment(GTK_ENTRY(entry), entry_data->alignment);
-    gtk_entry_set_has_frame(GTK_ENTRY(entry), entry_data->has_frame);
-    gtk_entry_set_overwrite_mode(GTK_ENTRY(entry), entry_data->overwrite_mode);
-    if (entry_data->progress_fraction > 0)
-        gtk_entry_set_progress_fraction(GTK_ENTRY(entry), entry_data->progress_fraction);
-    gtk_entry_set_activates_default(GTK_ENTRY(entry), entry_data->activates_default);
-    if (entry_data->progress_pulse_step > 0)
-        gtk_entry_set_progress_pulse_step(GTK_ENTRY(entry), entry_data->progress_pulse_step);
-    if(entry_data->completion)
-        gtk_entry_set_completion(GTK_ENTRY(entry), entry_data->completion);
+    gtk_entry_set_text(GTK_ENTRY(entry), entry_config.text);
+    gtk_entry_set_placeholder_text(GTK_ENTRY(entry), entry_config.placeholder_text);
+    gtk_entry_set_visibility(GTK_ENTRY(entry), entry_config.is_visible);
+    gtk_entry_set_input_purpose(GTK_ENTRY(entry), entry_config.purpose);
+    gtk_entry_set_max_length(GTK_ENTRY(entry), entry_config.max_length);
+    gtk_widget_set_size_request(entry, entry_config.dimensions.width, entry_config.dimensions.height);
+    gtk_widget_set_opacity(entry, entry_config.opacity);
+    gtk_entry_set_alignment(GTK_ENTRY(entry), entry_config.alignment);
+    gtk_entry_set_has_frame(GTK_ENTRY(entry), entry_config.has_frame);
+    gtk_entry_set_overwrite_mode(GTK_ENTRY(entry), entry_config.overwrite_mode);
+    if (entry_config.progress_fraction > 0)
+        gtk_entry_set_progress_fraction(GTK_ENTRY(entry), entry_config.progress_fraction);
+    gtk_entry_set_activates_default(GTK_ENTRY(entry), entry_config.activates_default);
+    if (entry_config.progress_pulse_step > 0)
+        gtk_entry_set_progress_pulse_step(GTK_ENTRY(entry), entry_config.progress_pulse_step);
+    if (entry_config.completion)
+        gtk_entry_set_completion(GTK_ENTRY(entry), entry_config.completion);
 
-    widget_set_colors(GTK_WIDGET(entry), entry_data->bg_color, entry_data->text_color);
-    widget_set_margins(GTK_WIDGET(entry), entry_data->margins);
+    widget_set_colors(GTK_WIDGET(entry), entry_config.bg_color, entry_config.text_color);
+    widget_set_margins(GTK_WIDGET(entry), entry_config.margins);
 
-    //To look at later:
-    //gtk_entry_set_cursor_hadjustment(GTK_ENTRY(Myentry), hadjustment);
-    // GdkRGBA bg_color;
-    // gdk_rgba_parse(&bg_color, entry_data->bg_color);
-    // gtk_widget_override_background_color(GTK_WIDGET(entry), GTK_STATE_FLAG_NORMAL, &bg_color);
-    // GdkRGBA text_color;
-    // gdk_rgba_parse(&text_color, entry_data->text_color);
-    // gtk_widget_override_color(GTK_WIDGET(entry), GTK_STATE_FLAG_NORMAL, &text_color);
+    // To look at later:
+    // gtk_entry_set_cursor_hadjustment(GTK_ENTRY(Myentry), hadjustment);
+    //  GdkRGBA bg_color;
+    //  gdk_rgba_parse(&bg_color, entry_config.bg_color);
+    //  gtk_widget_override_background_color(GTK_WIDGET(entry), GTK_STATE_FLAG_NORMAL, &bg_color);
+    //  GdkRGBA text_color;
+    //  gdk_rgba_parse(&text_color, entry_config.text_color);
+    //  gtk_widget_override_color(GTK_WIDGET(entry), GTK_STATE_FLAG_NORMAL, &text_color);
     return entry;
 }
 

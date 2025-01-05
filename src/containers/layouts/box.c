@@ -95,11 +95,16 @@ gchar *init_box(BoxConfig *box_config, FILE *index)
             if (status == 1 && value)
             {
                 if (g_strcmp0(property, "id") == 0) // Store the view id
+                {
                     view_id = value;
+                    free(property);
+                }
                 else
                 {
                     // Apply the property value to the window config
                     configure_box_property(box_config, property, value);
+                    free(value);
+                    free(property);
                 }
             }
         }

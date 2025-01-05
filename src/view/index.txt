@@ -8,9 +8,23 @@
 	bg_image="programer.jpg" 
 >
 
+
+	<flow_box
+	>
+		<entry
+			order="1"
+			id="entry_1"
+			placeholder_text="Hi"
+		/>
+		<entry
+			order="1"
+			id="entry_1"
+			placeholder_text="Hi"
+		/>
+	</flow_box>
 	<box 
 		id="box_1"
-		orientation="horizantal"
+		orientation="horizontal"
 		bg_color="yellow"
 		box_expand="false"
 		box_fill="false"
@@ -25,6 +39,14 @@
 			box_fill="false"
 			box_padding="20"
 		>
+			<spin_button
+				min="0"
+				max="50"
+				step="1"
+				initial_value="20"
+				is_numeric="false"
+				is_digits="true"
+			/>
 			<entry
 				id="entry_1"
 				placeholder_text="Hi"

@@ -5,7 +5,7 @@ View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
     View *view = NULL;
     SAFE_ALLOC(view, View, 1);
     if (!view)
-        g_critical("Failed: create new view failed!\n");
+        g_printerr("Failed: create new view failed!\n");
 
     view->child = NULL;
     view->parent = NULL;
@@ -20,7 +20,6 @@ View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
 
 gchar *read_tag(FILE *index)
 {
-    printf("Reading tag\n");
     gchar *tag = NULL;
     SAFE_ALLOC(tag, gchar, MAX_TAG_SIZE);
 
@@ -92,6 +91,21 @@ int get_view_index(FILE *index, gchar *widget_tag)
     if (g_strcmp0(widget_tag, "image") == 0)
         return ImageTag;
 
+    if (g_strcmp0(widget_tag, "spin_button") == 0)
+        return SpinButtonTag;
+
+    if (g_strcmp0(widget_tag, "flow_box") == 0)
+        return FlowBoxTag;
+
+    if (g_strcmp0(widget_tag, "list_box") == 0)
+        return ListBoxTag;
+
+    if (g_strcmp0(widget_tag, "grid") == 0)
+        return GridTag;
+
+    if (g_strcmp0(widget_tag, "paned") == 0)
+        return PanedTag;
+        
     return -1;
 }
 
@@ -116,14 +130,38 @@ int link_with_fixed_container(GtkWidget *child, GtkWidget *parent, ViewConfig *v
     return 1;
 }
 
+int link_with_flow_box_container(GtkWidget *child, GtkWidget *parent, ViewConfig *view_config)
+{
+    if (!GTK_IS_FLOW_BOX(parent))
+        return 0;
+
+    // debug the view config not working
+    gtk_flow_box_insert(GTK_FLOW_BOX(parent), child, view_config->flow_box_order);
+    return 1;
+}
+
+int link_with_paned_container(GtkWidget *child, GtkWidget *parent, ViewConfig *view_config)
+{
+    if (!GTK_IS_PANED(parent))
+        return 0;
+
+    if (view_config->paned_position == 0)
+        gtk_paned_add1(GTK_PANED(parent), child);
+    else
+        gtk_paned_add2(GTK_PANED(parent), child);
+
+    return 1;
+}
+
 int link_with_container(GtkWidget *child, GtkWidget *parent, ViewConfig *view_config)
 {
-    if (link_with_box_container(parent, child, view_config))
-        return 1;
-    if (link_with_fixed_container(parent, child, view_config))
-        return 1;
-
-    return 0;
+    return ((link_with_box_container(parent, child, view_config) ||
+             link_with_fixed_container(parent, child, view_config) ||
+             link_with_flow_box_container(parent, child, view_config) ||
+             link_with_paned_container(parent, child, view_config))
+                ? 1
+                : 0);
+    ;
 }
 
 View *add_view(View *view, View *relative, gboolean is_relative_container)
@@ -137,7 +175,6 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
     // Group radio buttons
     if (GTK_IS_RADIO_BUTTON(view->widget))
     {
-        printf("This view is a RADIO BUTTON => %s\n", view->view_id);
 
         if (GTK_IS_RADIO_BUTTON(relative->widget) && !relative->view_config->group)
         {
@@ -159,7 +196,6 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
         // Window case
         if (GTK_IS_WINDOW(relative->widget))
         {
-            printf("The relative: %s ==> is a window\n", relative->view_id);
             gtk_container_add(GTK_CONTAINER(relative->widget), view->widget);
         }
 
@@ -240,11 +276,11 @@ View *build_app(GtkApplication *app, View *root_view)
     FILE *index = fopen("./src/view/index.txt", "r");
     if (!index)
     {
-        printf("Failed to open index file\n");
+        g_printerr("Failed to open index file\n");
         return NULL;
     }
 
-    printf("Index file opened\n");
+    g_print("Index file opened\n");
 
     View *parent_view = root_view;
     gboolean is_relative_container = TRUE;
@@ -269,7 +305,6 @@ View *build_app(GtkApplication *app, View *root_view)
 
                 // Read tag and check if exists
                 widget_tag = read_tag(index);
-                printf("Tag: %s\n", widget_tag);
 
                 // TODO: if the tag = NULL then ignore the tag and Display an error message
 
@@ -430,10 +465,52 @@ View *build_app(GtkApplication *app, View *root_view)
                 parent_view = image_view;
                 break;
 
+            case SpinButtonTag:
+                SpinButtonConfig spin_button_config = DEFAULT_SPIN_BUTTON;
+
+                view_id = init_spin_button_config(index, &spin_button_config, &view_config);
+
+                GtkWidget *spin_button_widget = create_spin_button(spin_button_config);
+
+                View *spin_button_view = create_view(view_id, spin_button_widget, &view_config);
+
+                // Add view to view model
+                add_view(spin_button_view, parent_view, is_relative_container);
+
+                // Update container flag
+                is_relative_container = is_container_view(index);
+
+                // Update parent view
+                parent_view = spin_button_view;
+                break;
+
+            case FlowBoxTag:
+                // initialize flow box config
+                FlowBoxConfig flow_box_config = DEFAULT_FLOW_BOX;
+
+                // Update flow box config and view config from index file 
+                view_id = init_flow_box(index, &flow_box_config, &view_config);
+
+                // Create flow box widget
+                GtkWidget *flow_box_widget = create_flow_box(flow_box_config);
+
+                View *flow_box_view = create_view(view_id, flow_box_widget, &view_config);
+
+                // Add view to view model
+                add_view(flow_box_view, parent_view, is_relative_container);
+
+                // Update container flag
+                is_relative_container = is_container_view(index);
+
+                // Update parent view
+                parent_view = flow_box_view;
+                break;
+
             // TODO : Complete other widgets
             default:
                 stop = TRUE;
                 fclose(index);
+
                 g_print("ERROR: => Widget not found\n");
                 //  exit(EXIT_FAILURE);
                 break;

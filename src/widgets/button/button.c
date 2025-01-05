@@ -45,6 +45,10 @@ int configure_button_property(ButtonConfig *button_config, ViewConfig *view_conf
     if (g_strcmp0(property, "text_color") == 0)
         strcpy(button_config->text_color, value);
 
+    if (g_strcmp0(property, "expand") == 0)
+        button_config->expand = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+    
+
     // Icon image and icon
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
@@ -69,7 +73,6 @@ gchar *init_button_config(FILE *index, ButtonConfig *button_config, ViewConfig *
     gchar c;
     while ((c = fgetc(index)) != '>')
     {
-        printf("INIT : C => %c\n", c);
         /* If the character is a letter then go back one character
             Because when the tag is readed the cursor will start with the first letter in the property and it will be lost */
         if (is_character(c))
@@ -106,8 +109,6 @@ gchar *init_button_config(FILE *index, ButtonConfig *button_config, ViewConfig *
             }
         }
     }
-    printf("END INIT C => %c\n", c);
-
     return view_id;
 }
 

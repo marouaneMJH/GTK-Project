@@ -51,7 +51,7 @@ typedef struct
 
 } MenuConfig;
 
-MenuConfig *init_menu_config(const gchar *label, gboolean is_group);
+gchar *init_menu_config(FILE *index, MenuConfig *menu_config, ViewConfig *view_config);
 
 GtkWidget *create_menu(MenuConfig menu_config);
 

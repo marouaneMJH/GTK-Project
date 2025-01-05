@@ -57,7 +57,6 @@ gchar *init_fixed_config(FILE *index, FixedConfig *fixed_config, ViewConfig *vie
     gchar c;
     while ((c = fgetc(index)) != '>')
     {
-        printf("INIT : C => %c\n", c);
         /* If the character is a letter then go back one character
             Because when the tag is readed the cursor will start with the first letter in the property and it will be lost */
         if (is_character(c))
@@ -94,7 +93,6 @@ gchar *init_fixed_config(FILE *index, FixedConfig *fixed_config, ViewConfig *vie
             }
         }
     }
-    printf("END INIT C => %c\n", c);
 
     return view_id;
 }

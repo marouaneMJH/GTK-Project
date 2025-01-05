@@ -151,6 +151,14 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
         }
     }
 
+    if (GTK_IS_MENU_ITEM(view->widget))
+    {
+        if (GTK_IS_MENU_BAR(relative->widget))
+            gtk_menu_shell_append(GTK_MENU_SHELL(relative->widget), view->widget);
+        else if (GTK_IS_MENU_BAR(relative->parent->widget))
+            gtk_menu_shell_append(GTK_MENU_SHELL(relative->parent->widget), view->widget);
+    }
+
     if (is_relative_container)
     {
         view->parent = relative;
@@ -357,8 +365,11 @@ View *build_app(GtkApplication *app, View *root_view)
             case RadioButtonTag:
                 RadioButtonConfig radio_button_config = DEFAULT_RADIO_BUTTON;
 
-                view_id = init_radio_button_config(index, &radio_button_config, &view_config);
+                view_config.box_padding = 15;
+                view_config.group = NULL;
 
+                view_id = init_radio_button_config(index, &radio_button_config, &view_config);
+                printf("BOX PADDING =>  %d\n", view_config.box_padding);
                 GtkWidget *radio_button_widget = create_radio_button(radio_button_config);
 
                 View *radio_button_view = create_view(view_id, radio_button_widget, &view_config);
@@ -429,7 +440,60 @@ View *build_app(GtkApplication *app, View *root_view)
                 // Update parent view
                 parent_view = image_view;
                 break;
+            case MenuBarTag:
+                MenuBarConfig menu_bar_config = DEFAULT_MENU_BAR;
 
+                view_id = init_menu_bar_config(index, &menu_bar_config, &view_config);
+
+                GtkWidget *menu_bar_widget = create_menu_bar(menu_bar_config);
+
+                View *menu_bar_view = create_view(view_id, menu_bar_widget, &view_config);
+
+                // Add view to view model
+                add_view(menu_bar_view, parent_view, is_relative_container);
+
+                // Update container flag
+                is_relative_container = is_container_view(index);
+
+                // Update parent view
+                parent_view = menu_bar_view;
+                break;
+            case MenuTag:
+                MenuConfig menu_config = DEFAULT_MENU;
+
+                view_id = init_menu_config(index, &menu_config, &view_config);
+
+                GtkWidget *menu_widget = create_menu(menu_config);
+
+                View *menu_view = create_view(view_id, menu_widget, &view_config);
+
+                // Add view to view model
+                add_view(menu_view, parent_view, is_relative_container);
+
+                // Update container flag
+                is_relative_container = is_container_view(index);
+
+                // Update parent view
+                parent_view = menu_view;
+                break;
+            case MenuItemTag:
+                MenuItemConfig menu_item_config = DEFAULT_MENU_ITEM;
+
+                view_id = init_menu_item_config(index, &menu_item_config, &view_config);
+
+                GtkWidget *menu_item_widget = create_menu_item(menu_item_config);
+
+                View *menu_item_view = create_view(view_id, menu_item_widget, &view_config);
+
+                // Add view to view model
+                add_view(menu_item_view, parent_view, is_relative_container);
+
+                // Update container flag
+                is_relative_container = is_container_view(index);
+
+                // Update parent view
+                parent_view = menu_item_view;
+                break;
             // TODO : Complete other widgets
             default:
                 stop = TRUE;

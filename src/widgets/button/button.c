@@ -69,7 +69,6 @@ gchar *init_button_config(FILE *index, ButtonConfig *button_config, ViewConfig *
     gchar c;
     while ((c = fgetc(index)) != '>')
     {
-        printf("INIT : C => %c\n", c);
         /* If the character is a letter then go back one character
             Because when the tag is readed the cursor will start with the first letter in the property and it will be lost */
         if (is_character(c))
@@ -106,7 +105,6 @@ gchar *init_button_config(FILE *index, ButtonConfig *button_config, ViewConfig *
             }
         }
     }
-    printf("END INIT C => %c\n", c);
 
     return view_id;
 }

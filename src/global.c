@@ -78,6 +78,15 @@ void widget_set_margins(GtkWidget *widget, Margins margins)
     gtk_widget_set_margin_end(widget, margins.end);
 }
 
+void widget_set_background_image_without_css(GtkWidget *widget, const gchar *bg_image)
+{
+    GtkWidget *event_box = gtk_event_box_new();
+    GString *image_path = g_string_new("./assets/images/");
+    GtkWidget *image = gtk_image_new_from_file(g_string_append(image_path, bg_image)->str);
+    gtk_container_add(GTK_CONTAINER(event_box), image);
+    gtk_container_add(GTK_CONTAINER(widget), event_box);
+
+}
 void widget_set_text_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)
 {
     GdkRGBA color_rgba;

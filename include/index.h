@@ -15,6 +15,8 @@
 #include "./containers/layouts/notebook.h"
 #include "./containers/layouts/paned.h"
 #include "./containers/layouts/stack.h"
+#include "./containers/layouts/frame.h"
+#include "./containers/layouts/combo_text_box.h"
 
 /*       widgets        */
 #include "./widgets/label.h"

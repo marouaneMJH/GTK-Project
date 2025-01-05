@@ -64,8 +64,8 @@ GtkWidget *create_button(ButtonConfig button_config)
     }
 
     // Set background and/or label colors
-    widget_set_colors(button, button_config.bg_color, button_config.text_color);
-
+   widget_set_colors(button, button_config.bg_color, button_config.text_color);
+   
     // Set margin
     widget_set_margins(button, button_config.margins);
 

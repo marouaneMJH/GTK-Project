@@ -63,6 +63,16 @@ void widget_set_colors(GtkWidget *widget, const gchar *bg_color, const gchar *co
  */
 void widget_set_background_image(GtkWidget *widget, const gchar *bg_image, const gchar *color);
 
+
+/**
+ * @brief This function gives a background image to a widget without using css
+ * @param widget Widget cible
+ * @param bg_image The background image name
+ * @return void
+ */
+void widget_set_background_image_without_css(GtkWidget *widget, const gchar *bg_image);
+
+
 /**
  * @brief This function add margins to a widget
  * @param widget Widget cible

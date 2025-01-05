@@ -55,4 +55,7 @@ dkms.conf
 .vscode/
  
 tmp
-.codegpt
+
+main.c
+
+.idea/

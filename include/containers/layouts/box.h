@@ -6,8 +6,13 @@
 /*  default values */
 #define DEFAULT_BOX_DIMENSIONS \
     {                          \
+<<<<<<< HEAD
         .height = 0,           \
         .width = 0}
+=======
+        .height = 100,           \
+        .width = 100}
+>>>>>>> main
 
 #define DEFAULT_BOX_MARGINS \
     {                       \
@@ -50,7 +55,7 @@ typedef struct
 
 } BoxConfig;
 
-BoxConfig *init_box();
+gchar *init_box_config(FILE *index, BoxConfig *box_config, ViewConfig *view_config);
 
 /**
  * @brief create box widget with default

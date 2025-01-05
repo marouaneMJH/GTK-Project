@@ -5,6 +5,86 @@
 
 #include "./constants.h"
 
+/* Global macros  */
+
+// check if the pointer is not null
+#define SAFE_ALLOC(ptr, type, length)                           \
+    do                                                          \
+    {                                                           \
+        ptr = (type *)g_malloc(length * sizeof(type));          \
+        if (!ptr)                                               \
+        {                                                       \
+            g_critical("Failed to allocate memory for " #type); \
+            return NULL;                                        \
+        }                                                       \
+    } while (0)
+
+#define IS_EXISTE(pointer)                      \
+    do                                          \
+    {                                           \
+        if (!pointer)                           \
+        {                                       \
+            g_critical(#pointer " not exist."); \
+            return NULL;                        \
+        }                                       \
+    } while (0)
+
+#define MAX_TAG_SIZE 50
+#define MAX_VIEW_ID_SIZE 50
+
+#define SET_VIEW_CONFIG_PROPERTY(property, value, view_config)                  \
+    if (g_strcmp0(property, "position_x") == 0)                                 \
+    {                                                                           \
+        view_config->position_x = atoi(value);                                  \
+    }                                                                           \
+    if (g_strcmp0(property, "position_y") == 0)                                 \
+    {                                                                           \
+        view_config->position_y = atoi(value);                                  \
+    }                                                                           \
+    if (g_strcmp0(property, "pack_direction") == 0)                             \
+    {                                                                           \
+        view_config->pack_direction = atoi(value);                              \
+    }                                                                           \
+    if (g_strcmp0(property, "box_expand") == 0)                                 \
+    {                                                                           \
+        view_config->box_expand = g_strcmp0(value, "true") == 0 ? TRUE : FALSE; \
+    }                                                                           \
+    if (g_strcmp0(property, "box_fill") == 0)                                   \
+    {                                                                           \
+        view_config->box_fill = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;   \
+    }                                                                           \
+    if (g_strcmp0(property, "box_padding") == 0)                                \
+    {                                                                           \
+        view_config->box_padding = atoi(value);                                 \
+    }
+
+typedef struct
+{
+    // Fixed container
+    int position_x;
+    int position_y;
+
+    // Box container
+    int pack_direction;
+    gboolean box_expand;
+    gboolean box_fill;
+    int box_padding;
+
+    // Ex: radio button
+    GtkWidget *group;
+
+} ViewConfig;
+
+typedef struct VIEW
+{
+    GtkWidget *widget;
+    struct VIEW *parent;
+    struct VIEW *child;
+    struct VIEW *next;
+    gchar view_id[MAX_VIEW_ID_SIZE];
+    ViewConfig *view_config;
+} View;
+
 // We should rename this from global to core wich means system libs and has more signification
 
 /**
@@ -74,28 +154,40 @@ void widget_set_background_image(GtkWidget *widget, const gchar *bg_image, const
  */
 void widget_set_margins(GtkWidget *widget, Margins margins);
 
-/* Global macros  */
+/**
+ * @brief This function set the text color of a widget
+ * @param widget Widget cible
+ * @param color The text color
+ * @param state The state of the widget (ex: GTK_STATE_FLAG_NORMAL, GTK_STATE_FLAG_ACTIVE, ...)
+ * @return void
+ */
+// void widget_set_background_color(GtkWidget *widget, const gchar *color, GtkStateFlags state);
 
-// check if the pointer is not null
-#define SAFE_ALLOC(ptr, type, length)                           \
-    do                                                          \
-    {                                                           \
-        ptr = (type *)g_malloc(length * sizeof(type));          \
-        if (!ptr)                                               \
-        {                                                       \
-            g_critical("Failed to allocate memory for " #type); \
-            return NULL;                                        \
-        }                                                       \
-    } while (0)
+/**
+ * @brief This function set the text color of a widget
+ * @param widget Widget cible
+ * @param color The text color
+ * @param state The state of the widget (ex: GTK_STATE_FLAG_NORMAL, GTK_STATE_FLAG_ACTIVE, ...)
+ * @return void
+ */
+// void widget_set_text_color(GtkWidget *widget, const gchar *color, GtkStateFlags state);
 
-#define IS_EXISTE(pointer)                      \
-    do                                          \
-    {                                           \
-        if (!pointer)                           \
-        {                                       \
-            g_critical(#pointer " not exist."); \
-            return NULL;                        \
-        }                                       \
-    } while (0)
+/**
+ * @brief This function set the font of a widget
+ * @param widget Widget cible
+ * @param font_name The font name or family (ex: "Arial, SansSerif")
+ * @param font_size The font size
+ * @return void
+ */
+// void widget_set_font(GtkWidget *widget, const gchar *font_name, gint font_size);
+
+// TODO: Should be not manipulate the end of tag ">" in the file
+// TODO: Should manipulate spaces and tabs and new lines
+gchar *read_property(FILE *index, int *status);
+
+// Ignore space within the value
+gchar *read_value(FILE *index, int *status);
+
+gboolean is_character(gchar c);
 
 #endif

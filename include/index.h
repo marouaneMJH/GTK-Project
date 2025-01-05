@@ -17,6 +17,8 @@
 #include "./containers/layouts/stack.h"
 
 // buttons
+#include "./widgets/button/check_button.h"
+#include "./widgets/button/link_button.h"
 #include "./widgets/button/button.h"
 #include "./widgets/button/radio_button.h"
 #include "./widgets/button/switch_button.h"
@@ -34,7 +36,7 @@
 #include "./widgets/dialogs/file_chooser_dialog.h"
 #include "./widgets/dialogs/font_choser_dialog.h"
 
-
+#include "./widgets/scroll.h"
 #include "./widgets/label.h"
 #include "./widgets/separator.h"
 #include "./widgets/entry.h"

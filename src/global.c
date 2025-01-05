@@ -157,7 +157,6 @@ gchar *read_value(FILE *index, int *status)
             {
                 value[i] = '\0';
                 g_critical("ERROR: while reading the value %s\n", value);
-                printf("ERROR: while reading the value %s\n", value);
                 exit(EXIT_FAILURE);
             }
         }

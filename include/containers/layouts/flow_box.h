@@ -54,6 +54,16 @@ typedef struct
 
 } FlowBoxConfig;
 
+/**
+ * @brief Applies configuration settings from a file to the specified properties.
+ *
+ * This function reads the provided configuration object and applies
+ * matching values to the target properties, as defined in the
+ * specified configuration file.
+ *
+ * @param config A configuration object containing the values to apply.
+ * @return An integer indicating success (-1) or failure (-1) of the operation.
+ */
 int configure_flow_box_property(FlowBoxConfig *flow_box_config,ViewConfig *view_config ,gchar *property, gchar *value);
 
 gchar *init_flow_box(FILE *index, FlowBoxConfig *flow_box_config, ViewConfig *view_config);

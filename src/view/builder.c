@@ -96,6 +96,16 @@ int get_view_index(FILE *index, gchar *widget_tag)
 
     if (g_strcmp0(widget_tag, "flow_box") == 0)
         return FlowBoxTag;
+
+    if (g_strcmp0(widget_tag, "list_box") == 0)
+        return ListBoxTag;
+
+    if (g_strcmp0(widget_tag, "grid") == 0)
+        return GridTag;
+
+    if (g_strcmp0(widget_tag, "paned") == 0)
+        return PanedTag;
+        
     return -1;
 }
 
@@ -130,11 +140,25 @@ int link_with_flow_box_container(GtkWidget *child, GtkWidget *parent, ViewConfig
     return 1;
 }
 
+int link_with_paned_container(GtkWidget *child, GtkWidget *parent, ViewConfig *view_config)
+{
+    if (!GTK_IS_PANED(parent))
+        return 0;
+
+    if (view_config->paned_position == 0)
+        gtk_paned_add1(GTK_PANED(parent), child);
+    else
+        gtk_paned_add2(GTK_PANED(parent), child);
+
+    return 1;
+}
+
 int link_with_container(GtkWidget *child, GtkWidget *parent, ViewConfig *view_config)
 {
     return ((link_with_box_container(parent, child, view_config) ||
              link_with_fixed_container(parent, child, view_config) ||
-             link_with_flow_box_container(parent, child, view_config))
+             link_with_flow_box_container(parent, child, view_config) ||
+             link_with_paned_container(parent, child, view_config))
                 ? 1
                 : 0);
     ;

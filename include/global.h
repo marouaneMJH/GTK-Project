@@ -33,8 +33,7 @@
 #define MAX_VIEW_ID_SIZE 50
 
 #define SET_VIEW_CONFIG_PROPERTY(property, value, view_config)                  \
-    printf("\n\nprintf property: %s\n", property);                              \
-    if (g_strcmp0(property, "position_x") == 0)                               \
+    if (g_strcmp0(property, "position_x") == 0)                                 \
     {                                                                           \
         view_config->position_x = atoi(value);                                  \
     }                                                                           \
@@ -61,6 +60,10 @@
     if (g_strcmp0(property, "flow_box_order") == 0)                             \
     {                                                                           \
         view_config->flow_box_order = atoi(value);                              \
+    }                                                                           \
+    if (g_strcmp0(property, "paned_position") == 0)                             \
+    {                                                                           \
+        view_config->paned_position = atoi(value);                              \
     }
 
 typedef struct
@@ -77,6 +80,10 @@ typedef struct
 
     // FlowBox container
     gint flow_box_order;
+
+    // Paned container
+    // add1: 0 or add2: 1
+    gint paned_position;
 
     // Ex: radio button
     GtkWidget *group;

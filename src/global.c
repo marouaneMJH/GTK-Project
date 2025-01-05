@@ -78,15 +78,7 @@ void widget_set_margins(GtkWidget *widget, Margins margins)
     gtk_widget_set_margin_end(widget, margins.end);
 }
 
-void widget_set_background_image_without_css(GtkWidget *widget, const gchar *bg_image)
-{
-    GtkWidget *event_box = gtk_event_box_new();
-    GString *image_path = g_string_new("./assets/images/");
-    GtkWidget *image = gtk_image_new_from_file(g_string_append(image_path, bg_image)->str);
-    gtk_container_add(GTK_CONTAINER(event_box), image);
-    gtk_container_add(GTK_CONTAINER(widget), event_box);
 
-}
 void widget_set_text_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)
 {
     GdkRGBA color_rgba;
@@ -108,4 +100,73 @@ void widget_set_font(GtkWidget *widget, const gchar *font_name, gint font_size)
     pango_font_description_set_size(font_desc, font_size * PANGO_SCALE);
     gtk_widget_override_font(widget, font_desc);
     pango_font_description_free(font_desc);
+}
+
+// TODO: Should be not manipulate the end of tag ">" in the file
+// TODO: Should manipulate spaces and tabs and new lines
+// ########################## "This function should stop reading after the greater then symbol " > " exactelly"
+gchar *read_property(FILE *index, int *status)
+{
+    gchar *property = NULL;
+    SAFE_ALLOC(property, gchar, MAX_PROPERTY_SIZE);
+
+    int i = 0;
+    gchar c;
+    while ((c = fgetc(index)) != '>')
+    {
+        if (c == '=')
+        {
+            *status = 1;
+            property[i] = '\0';
+            return property;
+        }
+        if (c != ' ' && c != '\n' && c != '\t')
+            property[i++] = c;
+    }
+    if (c == '>')
+        *status = 2;
+    return NULL;
+}
+
+gchar *read_value(FILE *index, int *status)
+{
+    gchar *value = NULL;
+    SAFE_ALLOC(value, gchar, MAX_VALUE_SIZE);
+
+    int i = 0;
+    gboolean reading_flag = FALSE;
+    gchar c;
+
+    while (((c = fgetc(index)) != '"' || !reading_flag) && c != EOF)
+    {
+        if (c != '"' && !reading_flag)
+        {
+            *status = -1;
+            return value;
+        }
+
+        if (c == '"' && !reading_flag)
+            reading_flag = !reading_flag;
+
+        else if (c != '\n')
+            value[i++] = c;
+        else
+        {
+            // Debugging part
+            if (c == '\n')
+            {
+                value[i] = '\0';
+                printf("ERROR: while reading the value %s\n", value);
+                exit(EXIT_FAILURE);
+            }
+        }
+    }
+    value[i] = '\0';
+    *status = 1;
+    return value;
+}
+
+gboolean is_character(gchar c)
+{
+    return (c > 'A' && c < 'Z') || (c > 'a' && c < 'z');
 }

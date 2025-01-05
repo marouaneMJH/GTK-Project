@@ -50,7 +50,7 @@ typedef struct
 
 } BoxConfig;
 
-BoxConfig *init_box();
+gchar *init_box_config(FILE *index, BoxConfig *box_config, ViewConfig *view_config);
 
 /**
  * @brief create box widget with default

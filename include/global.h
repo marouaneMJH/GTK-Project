@@ -33,7 +33,8 @@
 #define MAX_VIEW_ID_SIZE 50
 
 #define SET_VIEW_CONFIG_PROPERTY(property, value, view_config)                  \
-    if (g_strcmp0(property, "position_x") == 0)                                 \
+    printf("\n\nprintf property: %s\n", property);                              \
+    if (g_strcmp0(property, "position_x") == 0)                               \
     {                                                                           \
         view_config->position_x = atoi(value);                                  \
     }                                                                           \

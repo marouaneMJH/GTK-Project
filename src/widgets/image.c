@@ -1,9 +1,9 @@
 #include "../../include/widgets/image.h"
 
-int configure_image_property(ImageConfig *image_config, ViewConfig *view_config, gchar *property, gchar *value)
+ViewConfig *configure_image_property(ImageConfig *image_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
     if (!image_config || !property || !value)
-        return -1;
+        return NULL;
 
     if (g_strcmp0(property, "type") == 0)
     {
@@ -51,27 +51,28 @@ int configure_image_property(ImageConfig *image_config, ViewConfig *view_config,
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
-    return 1;
+    return view_config;
 }
 
-gchar *init_image_config(FILE *index, ImageConfig *image_config, ViewConfig *view_config)
+ViewConfig *init_image_config(FILE *index, ImageConfig *image_config)
 {
     // Check if the image config and the index file is not null
     if (!image_config || !index)
         return NULL;
 
+    // Create view config
+    ViewConfig *view_config = NULL;
+    SAFE_ALLOC(view_config, ViewConfig, 1);
+    DFEAULT_VIEW_CONFIG(view_config);
+
     // Store the property and value of the tag
     gchar *property = NULL;
     gchar *value = NULL;
-
-    // The view id of the tag
-    gchar *view_id = NULL;
 
     // Read the tag character by character
     gchar c;
     while ((c = fgetc(index)) != '>')
     {
-        printf("INIT : C => %c\n", c);
         /* If the character is a letter then go back one character
             Because when the tag is readed the cursor will start with the first letter in the property and it will be lost */
         if (is_character(c))
@@ -84,7 +85,7 @@ gchar *init_image_config(FILE *index, ImageConfig *image_config, ViewConfig *vie
 
         // If the all properties are readed then break the loop and return the view id and pass the properties to the image config
         if (status == 2)
-            return view_id;
+            return view_config;
 
         // If the property is readed then read the value of the property
         else if (status == 1 && property)
@@ -95,22 +96,21 @@ gchar *init_image_config(FILE *index, ImageConfig *image_config, ViewConfig *vie
             {
                 if (g_strcmp0(property, "id") == 0) // Store the view id
                 {
-                    view_id = value;
+                    strcpy(view_config->view_id, value);
                     free(property);
                 }
                 else
                 {
                     // Apply the property value to the image config
-                    configure_image_property(image_config, view_config, property, value);
+                    view_config = configure_image_property(image_config, view_config, property, value);
                     free(value);
                     free(property);
                 }
             }
         }
     }
-    printf("END INIT C => %c\n", c);
 
-    return view_id;
+    return view_config;
 }
 
 GtkWidget *create_image(ImageConfig image_config)

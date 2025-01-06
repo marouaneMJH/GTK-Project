@@ -2,36 +2,74 @@
 	id="window_1"
 	title=" Abdellah window "
 	icon_name="folder"
-	width="500"
-	height="400"
+	width="700"
+	height="600"
 	text_color=  "#FFFFFF"
 	bg_image="programer.jpg" 
 >
 
-	<scrolled_window
-		h_policy="never"
-		v_policy="nev="programer.jpg"
+
+
+
+	<box 
+		id="box_1"
+		orientation="horizontal"
+		bg_color="yellow"
 	>
-		<box >
-			<entry placeholder_text="Enter text here" />
-			<entry placeholder_text="Enter text here" />
-			<combo_text_box
-				
-				hello="option1"
-				hello="option1"
-				hello="option1"
-				hello="option4"
-				hello="option1"
-				hello="option3"
-				hello="option3"
-				hello="option3"
-				hello="option3"
-				hello="option3"
-				hello="option3"
-				hello="option3"
-				hello="option3"
+		<box
+		id="fb1"
+	>
+		<entry
+			order="1"
+			id="entry_1"
+			placeholder_text="Hi"
+		/>
+		<entry
+			order="1"
+			id="entry_1"
+			placeholder_text="Hi"
+		/>
+		</box>
+
+		<box
+			id="box_2"
+			orientation="vertical"
+			bg_color="blue"
+		>
+			<spin_button
+				min="0"
+				max="50"
+				step="1"
+				initial_value="20"
+				is_numeric="false"
+				is_digits="true"
+			/>
+
+			<entry
+				id="entry_1"
+				placeholder_text="Hi"
+		
+			/>
+
+			<radio_button
+				id="radiobutton_1"
+				label="Male"
+				is_group="true"
+		
+			/>
+
+			<radio_button
+				id="radiobutton_2"
+				label="Female"
+		
+			/>
+
+			<button
+				id="button_1"
+				label="Clicker ici"
 			/>
 
 		</box>
-	</flow_box>
+
+	</box>
 </window>

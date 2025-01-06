@@ -43,7 +43,7 @@ typedef struct
 
 } ImageConfig;
 
-gchar *init_image_config(FILE *index, ImageConfig *image_config, ViewConfig *view_config);
+ViewConfig *init_image_config(FILE *index, ImageConfig *image_config);
 
 /**
  * @brief Creates a new GtkWidget for displaying an image.

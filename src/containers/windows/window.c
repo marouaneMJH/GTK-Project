@@ -1,9 +1,12 @@
 #include "./../../../include/containers/windows/window.h"
 
-int configure_window_property(WindowConfig *window_config, ViewConfig *view_config, gchar *property, gchar *value)
+ViewConfig *configure_window_property(WindowConfig *window_config, ViewConfig *view_config, gchar *property, gchar *value, int *status)
 {
     if (!window_config || !property || !value)
-        return -1;
+    {
+        *status = 0;
+        return NULL;
+    }
 
     if (g_strcmp0(property, "title") == 0)
         strcpy(window_config->title, value);
@@ -108,21 +111,23 @@ int configure_window_property(WindowConfig *window_config, ViewConfig *view_conf
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
-    return 1;
+    return view_config;
 }
 
-gchar *init_window_config( FILE *index, WindowConfig *window_config, ViewConfig *view_config)
+ViewConfig *init_window_config(FILE *index, WindowConfig *window_config)
 {
     // Check if the window config and the index file is not null
     if (!window_config || !index)
         return NULL;
 
+    // Create view config
+    ViewConfig *view_config = NULL;
+    SAFE_ALLOC(view_config, ViewConfig, 1);
+    DFEAULT_VIEW_CONFIG(view_config);
+
     // Store the property and value of the tag
     gchar *property = NULL;
     gchar *value = NULL;
-
-    // The view id of the tag
-    gchar *view_id = NULL;
 
     // Read the tag character by character
     gchar c;
@@ -140,7 +145,7 @@ gchar *init_window_config( FILE *index, WindowConfig *window_config, ViewConfig 
 
         // If the all properties are readed then break the loop and return the view id and pass the properties to the window config
         if (status == 2)
-            return view_id;
+            return view_config;
 
         // If the property is readed then read the value of the property
         else if (status == 1 && property)
@@ -151,21 +156,26 @@ gchar *init_window_config( FILE *index, WindowConfig *window_config, ViewConfig 
             {
                 if (g_strcmp0(property, "id") == 0) // Store the view id
                 {
-                    view_id = value;
+                    strcpy(view_config->view_id, value);
                     free(property);
                 }
                 else
                 {
                     // Apply the property value to the window config
-                    configure_window_property(window_config, view_config, property, value);
+                    int config_status;
+                    view_config = configure_window_property(window_config, view_config, property, value, &config_status);
+                    if (!config_status)
+                    {
+                        printf("Error configuring the property %s\n", property);
+                    }
                     free(value);
                     free(property);
                 }
             }
         }
     }
-    
-    return view_id;
+
+    return view_config;
 }
 
 GtkWidget *create_window(GtkApplication *app, WindowConfig window_config)

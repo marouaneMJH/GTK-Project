@@ -8,19 +8,42 @@
 	bg_image="programer.jpg" 
 >
 
+
+
 	<box 
 		id="box_1"
 		orientation="horizontal"
 		bg_color="yellow"
 	>
+		<box
+		id="fb1"
+	>
+		<entry
+			order="1"
+			id="entry_1"
+			placeholder_text="Hi"
+		/>
+		<entry
+			order="1"
+			id="entry_1"
+			placeholder_text="Hi"
+		/>
+		</box>
 
-		
 		<box
 			id="box_2"
 			orientation="vertical"
 			bg_color="blue"
-			width="400"
 		>
+			<spin_button
+				min="0"
+				max="50"
+				step="1"
+				initial_value="20"
+				is_numeric="false"
+				is_digits="true"
+			/>
+
 			<entry
 				id="entry_1"
 				placeholder_text="Hi"
@@ -48,5 +71,4 @@
 		</box>
 
 	</box>
-	
 </window>

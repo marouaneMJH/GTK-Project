@@ -492,84 +492,110 @@ View *build_app(GtkApplication *app, View *root_view)
 
                 break;
 
-            // case SpinButtonTag:
-            //     SpinButtonConfig spin_button_config = DEFAULT_SPIN_BUTTON;
+            case SpinButtonTag:
+                SpinButtonConfig spin_button_config = DEFAULT_SPIN_BUTTON;
 
-            //     view = init_spin_button_config(index, &spin_button_config, &view_config);
+                view_config = init_spin_button_config(index, &spin_button_config);
 
-            //     GtkWidget *spin_button_widget = create_spin_button(spin_button_config);
+                GtkWidget *spin_button_widget = create_spin_button(spin_button_config);
 
-            //     View *spin_button_view = create_view(view_id, spin_button_widget, &view_config);
+                View *spin_button_view = create_view(view_config->view_id, spin_button_widget, view_config);
 
-            //     // Add view to view model
-            //     add_view(spin_button_view, parent_view, is_relative_container);
+                // Add view to view model
+                add_view(spin_button_view, parent_view, is_relative_container);
 
-            //     // Update container flag
-            //     is_relative_container = is_container_view(index);
+                // Update container flag
+                is_relative_container = is_container_view(index);
 
-            //     break;
-            // case MenuTag:
-            //     MenuConfig menu_config = DEFAULT_MENU;
+                parent_view = spin_button_view;
 
-            //     view_config = init_menu_config(index, &menu_config);
+                break;
+            case MenuTag:
+                MenuConfig menu_config = DEFAULT_MENU;
 
-            //     GtkWidget *menu_widget = create_menu(menu_config);
+                view_config = init_menu_config(index, &menu_config);
 
-            //     View *menu_view = create_view(view_config->view_id, menu_widget, view_config);
+                GtkWidget *menu_widget = create_menu(menu_config);
 
-            //     // Add view to view model
-            //     add_view(menu_view, parent_view, is_relative_container);
-            //     parent_view = spin_button_view;
-            //     break;
+                View *menu_view = create_view(view_config->view_id, menu_widget, view_config);
 
-            // case FlowBoxTag:
-            //     // initialize flow box config
-            //     FlowBoxConfig flow_box_config = DEFAULT_FLOW_BOX;
+                // Add view to view model
+                add_view(menu_view, parent_view, is_relative_container);
 
-            //     // Update flow box config and view config from index file
-            //     view_id = init_flow_box(index, &flow_box_config, &view_config);
+                // Update container flag
+                is_relative_container = is_container_view(index);
 
-            //     // Create flow box widget
-            //     GtkWidget *flow_box_widget = create_flow_box(flow_box_config);
+                parent_view = menu_view;
 
-            //     View *flow_box_view = create_view(view_id, flow_box_widget, &view_config);
+                break;
 
-            //     // Add view to view model
-            //     add_view(flow_box_view, parent_view, is_relative_container);
+            case FlowBoxTag:
+                // initialize flow box config
+                FlowBoxConfig flow_box_config = DEFAULT_FLOW_BOX;
 
-            //     // Update container flag
-            //     is_relative_container = is_container_view(index);
+                // Update flow box config and view config from index file
+                view_config = init_flow_box_config(index, &flow_box_config);
 
-            //     // Update parent view
-            //     parent_view = menu_view;
-            //     break;
-            // case MenuItemTag:
-            //     MenuItemConfig menu_item_config = DEFAULT_MENU_ITEM;
+                // Create flow box widget
+                GtkWidget *flow_box_widget = create_flow_box(flow_box_config);
 
-            //     view_config = init_menu_item_config(index, &menu_item_config);
+                View *flow_box_view = create_view(view_config->view_id, flow_box_widget, view_config);
 
-            //     GtkWidget *menu_item_widget = create_menu_item(menu_item_config);
+                // Add view to view model
+                add_view(flow_box_view, parent_view, is_relative_container);
 
-            //     View *menu_item_view = create_view(view_config->view_id, menu_item_widget, view_config);
+                // Update container flag
+                is_relative_container = is_container_view(index);
 
-            //     // Add view to view model
-            //     add_view(menu_item_view, parent_view, is_relative_container);
+                // Update parent view
+                parent_view = flow_box_view;
 
-            //     // Update container flag
-            //     is_relative_container = is_container_view(index);
+                break;
+            case MenuItemTag:
+                MenuItemConfig menu_item_config = DEFAULT_MENU_ITEM;
 
-            //     // Update parent view
-            //     parent_view = menu_item_view;
+                view_config = init_menu_item_config(index, &menu_item_config);
 
-            //     printf("MENU_BAR GROUP IS: %s\n", menu_bar_view->view_config->view_id);
-            //     gtk_menu_shell_append(GTK_MENU_SHELL(menu_bar_view->widget), menu_item_widget);
+                GtkWidget *menu_item_widget = create_menu_item(menu_item_config);
 
-            //     parent_view = flow_box_view;
-            //     break;
-            // case LabelTag:
-            //     //  TODO Complete label
-            //     continue;
-            //     break;
+                View *menu_item_view = create_view(view_config->view_id, menu_item_widget, view_config);
+
+                // Add view to view model
+                add_view(menu_item_view, parent_view, is_relative_container);
+
+                // Update container flag
+                is_relative_container = is_container_view(index);
+
+                // Update parent view
+                parent_view = menu_item_view;
+
+                printf("MENU_BAR GROUP IS: %s\n", menu_bar_view->view_config->view_id);
+                gtk_menu_shell_append(GTK_MENU_SHELL(menu_bar_view->widget), menu_item_widget);
+
+                break;
+            case PanedTag:
+                PanedConfig paned_config = DEFAULT_PANED;
+
+                view_config = init_paned_config(index, &paned_config);
+
+                GtkWidget *paned_widget = create_paned(paned_config);
+
+                View *paned_view = create_view(view_config->view_id, paned_widget, view_config);
+
+                // Add view to view model
+                add_view(paned_view, parent_view, is_relative_container);
+
+                // Update container flag
+                is_relative_container = is_container_view(index);
+
+                // Update parent view
+                parent_view = paned_view;
+
+                break;
+            case LabelTag:
+                //  TODO Complete label
+                continue;
+                break;
 
             // TODO : Complete other widgets
             default:

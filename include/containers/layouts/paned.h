@@ -47,9 +47,9 @@ typedef struct
 } PanedConfig;
 
 
-int configure_paned_property(PanedConfig *paned_config,ViewConfig *view_config ,gchar *property, gchar *value);
+ViewConfig *configure_paned_property(PanedConfig *paned_config,ViewConfig *view_config ,gchar *property, gchar *value);
 
-gchar *init_paned_config(FILE *index, PanedConfig *paned_box_config, ViewConfig *view_config);
+ViewConfig *init_paned_config(FILE *index, PanedConfig *paned_box_config);
 
 
 

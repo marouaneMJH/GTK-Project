@@ -2,6 +2,7 @@
 #define GLOBAL_H
 #include <gtk/gtk.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #include "./constants.h"
 
@@ -15,7 +16,6 @@
         if (!ptr)                                               \
         {                                                       \
             g_critical("Failed to allocate memory for " #type); \
-            return NULL;                                        \
         }                                                       \
     } while (0)
 
@@ -66,8 +66,23 @@
         view_config->paned_position = atoi(value);                              \
     }
 
+#define DFEAULT_VIEW_CONFIG(view_config) \
+    do                                   \
+    {                                    \
+        view_config->position_x = 0;     \
+        view_config->position_y = 0;     \
+        view_config->pack_direction = 1; \
+        view_config->box_expand = FALSE; \
+        view_config->box_fill = FALSE;   \
+        view_config->box_padding = 0;    \
+        view_config->group = NULL;       \
+        view_config->view_id[0] = '\0';  \
+    } while (0);
+
 typedef struct
 {
+    gchar view_id[MAX_VIEW_ID_SIZE];
+
     // Fixed container
     int position_x;
     int position_y;
@@ -96,7 +111,6 @@ typedef struct VIEW
     struct VIEW *parent;
     struct VIEW *child;
     struct VIEW *next;
-    gchar view_id[MAX_VIEW_ID_SIZE];
     ViewConfig *view_config;
 } View;
 

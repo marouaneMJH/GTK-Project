@@ -30,25 +30,7 @@ typedef struct
     // GtkWidget* adjustment;
 } SpinButtonConfig;
 
-/**
- * @brief edit the default value of SpinButton
- * @param min minimum value
- * @param max maximum value
- * @param step the increment step
- * @param initial_value
- * @param is_numeric  restricts input to numeric characters
- *
- */
-SpinButtonConfig edit_spin_button(
-    gdouble min,
-    gdouble max,
-    gdouble step,
-    gint decimal,
-    gdouble initial_value,
-    gboolean is_numeric,
-    gboolean is_digits
 
-);
 
 /**
  * @brief create spin button by spin_button structure
@@ -58,7 +40,7 @@ GtkWidget *create_spin_button(SpinButtonConfig spin_button);
 
 int configure_window_property(SpinButtonConfig *spin_button_config, ViewConfig *view_config, gchar *property, gchar *value);
 
-gchar *init_spin_button_config(FILE *index,SpinButtonConfig  *spin_button_config, ViewConfig *view_config);
+ViewConfig *init_spin_button_config(FILE *index, SpinButtonConfig  *spin_button_config);
 
 
 /* Signales */

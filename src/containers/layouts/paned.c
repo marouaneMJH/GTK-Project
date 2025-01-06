@@ -1,10 +1,10 @@
 #include "./../../../include/containers/layouts/paned.h"
 
 
-int configure_paned_property(PanedConfig *paned_config,ViewConfig *view_config ,gchar *property, gchar *value)
+ViewConfig *configure_paned_property(PanedConfig *paned_config,ViewConfig *view_config ,gchar *property, gchar *value)
 {
     if (!paned_config || !property || !value)
-        return -1;
+        return NULL;
 
     if (g_strcmp0(property, "orientation") == 0)
     {
@@ -39,45 +39,68 @@ int configure_paned_property(PanedConfig *paned_config,ViewConfig *view_config ,
         paned_config->dimensions.height = atoi(value);
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
-    return 1;
+    
+    return view_config;
 }
 
-gchar *init_paned_config(FILE *index, PanedConfig *paned_box_config, ViewConfig *view_config)
+ViewConfig *init_paned_config(FILE *index, PanedConfig *paned_config)
 {
-    gchar *view_id = NULL;
+    // Check if the flow box config and the index file is not null
+    if (!paned_config || !index)
+        return NULL;
+
+    // Create view config
+    ViewConfig *view_config = NULL;
+    SAFE_ALLOC(view_config, ViewConfig, 1);
+    DFEAULT_VIEW_CONFIG(view_config);
+
+    // Store the property and value of the tag
     gchar *property = NULL;
     gchar *value = NULL;
-    int status = 0;
 
-    while (status != -1)
+    // Read the tag character by character
+    gchar c;
+    while ((c = fgetc(index)) != '>')
     {
-        // Read the property
-        property = read_property(index, &status);
-        if (status == -1)
-            break;
+        /* If the character is a letter then go back one character
+            Because when the tag is readed the cursor will start with the first letter in the property and it will be lost */
+        if (is_character(c))
+            fseek(index, -1, SEEK_CUR);
 
-        // Read the value of the property
-        value = read_value(index, &status);
-        if (status == 1 && value)
+        int status = -1;
+
+        // Read the property of the tag
+        property = read_property(index, &status);
+
+        // If the all properties are readed then break the loop and return the view id and pass the properties to the flow box config
+        if (status == 2)
+            return view_config;
+
+        // If the property is readed then read the value of the property
+        else if (status == 1 && property)
         {
-            if (g_strcmp0(property, "id") == 0) // Store the view id
+            // Read the value of the property
+            value = read_value(index, &status);
+            if (status == 1 && value)
             {
-                view_id = value;
-                free(property);
-            }
-            else
-            {
-                // Apply the property value to the paned config
-                configure_paned_property(paned_box_config, view_config, property, value);
-                free(value);
-                free(property);
+                if (g_strcmp0(property, "id") == 0) // Store the view id
+                {
+                    strcpy(view_config->view_id, value);
+                    free(property);
+                }
+                else
+                {
+                    // Apply the property value to the flow box config
+                    view_config = configure_paned_property(paned_config, view_config, property, value);
+                    free(value);
+                    free(property);
+                }
             }
         }
     }
 
-    return view_id;
+    return view_config;
 }
-
 
 GtkWidget *create_paned(PanedConfig paned_config)
 {
@@ -89,7 +112,7 @@ GtkWidget *create_paned(PanedConfig paned_config)
     // Enable or disable wide handle
     gtk_paned_set_wide_handle(GTK_PANED(paned), paned_config.is_wide);
 
-    // Set paned position
+    // Set paned position of the separator
     gtk_paned_set_position(GTK_PANED(paned), paned_config.position);
 
     // Set dimensions

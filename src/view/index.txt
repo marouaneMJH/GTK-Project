@@ -2,42 +2,38 @@
 	id="window_1"
 	title=" Abdellah window "
 	icon_name="folder"
-	width="500"
-	height="400"
+	width="700"
+	height="600"
 	text_color=  "#FFFFFF"
 	bg_image="programer.jpg" 
 >
 
 
-	<flow_box
-	>
-		<entry
-			order="1"
-			id="entry_1"
-			placeholder_text="Hi"
-		/>
-		<entry
-			order="1"
-			id="entry_1"
-			placeholder_text="Hi"
-		/>
-	</flow_box>
+
 	<box 
 		id="box_1"
 		orientation="horizontal"
 		bg_color="yellow"
-		box_expand="false"
-		box_fill="false"
-		box_padding="5"
 	>
+		<box
+		id="fb1"
+	>
+		<entry
+			order="1"
+			id="entry_1"
+			placeholder_text="Hi"
+		/>
+		<entry
+			order="1"
+			id="entry_1"
+			placeholder_text="Hi"
+		/>
+		</box>
 
 		<box
 			id="box_2"
 			orientation="vertical"
 			bg_color="blue"
-			box_expand="false"
-			box_fill="false"
-			box_padding="20"
 		>
 			<spin_button
 				min="0"
@@ -47,55 +43,32 @@
 				is_numeric="false"
 				is_digits="true"
 			/>
+
 			<entry
 				id="entry_1"
 				placeholder_text="Hi"
+		
 			/>
+
 			<radio_button
 				id="radiobutton_1"
 				label="Male"
 				is_group="true"
+		
 			/>
+
 			<radio_button
 				id="radiobutton_2"
 				label="Female"
+		
 			/>
+
 			<button
 				id="button_1"
 				label="Clicker ici"
 			/>
+
 		</box>
-		<box
-			id="box_3"
-			orientation="vertical"
-		>
-			<label
-				id="label1"
-				text="Label"
-			/>
-			<fixed
-				id="fixed_1"
-				width="300"
-				height="300"
-			>
-				<image
-					id="img_1"
-					type="file"
-					path="./assets/images/programer.jpg"
-					position_x="120"
-					position_y="120"
-					width="100"
-					height="100"
-				/>
-				<button
-					id="button_2"
-					label="Ok"
-					width="120"
-					height="40"
-					position_x="150"
-					position_y="390"
-				/>
-			</fixed>
-		</box>
+
 	</box>
 </window>

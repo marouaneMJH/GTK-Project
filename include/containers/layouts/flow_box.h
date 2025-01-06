@@ -64,9 +64,9 @@ typedef struct
  * @param config A configuration object containing the values to apply.
  * @return An integer indicating success (-1) or failure (-1) of the operation.
  */
-int configure_flow_box_property(FlowBoxConfig *flow_box_config,ViewConfig *view_config ,gchar *property, gchar *value);
+ViewConfig *configure_flow_box_property(FlowBoxConfig *flow_box_config, ViewConfig *view_config, gchar *property, gchar *value);
 
-gchar *init_flow_box(FILE *index, FlowBoxConfig *flow_box_config, ViewConfig *view_config);
+ViewConfig *init_flow_box_config(FILE *index, FlowBoxConfig *flow_box_config);
 
 /**
  * @brief create flow_box widget with default

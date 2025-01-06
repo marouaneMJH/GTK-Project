@@ -35,7 +35,7 @@
         .placeholder_text = "",                 \
         .is_visible = TRUE,                     \
         .purpose = GTK_INPUT_PURPOSE_FREE_FORM, \
-        .dimensions = DEFAULT_ENTRY_DIMENSIONS,  \
+        .dimensions = DEFAULT_ENTRY_DIMENSIONS, \
         .margins = DEFAULT_ENTRY_MARGINS,       \
         .has_frame = TRUE,                      \
         .opacity = 1,                           \
@@ -63,7 +63,7 @@ typedef struct
 
     /* Dimensions and placement */
     Dimensions dimensions; // Dimensions of the entry
-    Margins margins;      // Margins around the entry
+    Margins margins;       // Margins around the entry
 
     /* Entry appearance */
     gboolean has_frame;               // Whether the entry has a frame
@@ -86,7 +86,7 @@ typedef struct
 
 } EntryConfig;
 
-gchar *init_entry_config(FILE *index, EntryConfig *entry_config, ViewConfig *view_config);
+ViewConfig *init_entry_config(FILE *index, EntryConfig *entry_config);
 
 /**
  * @brief Create an entry widget with the specified configuration

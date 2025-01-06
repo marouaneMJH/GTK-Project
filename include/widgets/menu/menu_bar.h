@@ -5,24 +5,24 @@
 
 /*  default values */
 #define DEFAULT_MENU_BAR_DIMENSIONS \
-    {                                   \
-        .height = 0,                    \
+    {                               \
+        .height = 0,                \
         .width = 0}
 
 #define DEFAULT_MENU_BAR_MARGIN \
-    {                               \
-        .bottom = 0,                \
-        .top = 0,                   \
-        .start = 0,                 \
+    {                           \
+        .bottom = 0,            \
+        .top = 0,               \
+        .start = 0,             \
         .end = 0}
 
 #define DEFAULT_MENU_BAR                           \
-    {                                                  \
-        .tooltip = "\0",                               \
-        .dimensions = DEFAULT_MENU_BAR_DIMENSIONS,     \
-        .margins = DEFAULT_MENU_BAR_MARGIN,            \
-        .pack_direction = GTK_PACK_DIRECTION_LTR,      \
-        .bg_color = "\0",                              \
+    {                                              \
+        .tooltip = "\0",                           \
+        .dimensions = DEFAULT_MENU_BAR_DIMENSIONS, \
+        .margins = DEFAULT_MENU_BAR_MARGIN,        \
+        .pack_direction = GTK_PACK_DIRECTION_LTR,  \
+        .bg_color = "\0",                          \
         .text_color = "\0"}
 // .margin = DEFAULT_MENU_BAR_MARGIN,
 
@@ -37,10 +37,8 @@ typedef struct
 
 } MenuBarConfig;
 
-MenuBarConfig *init_menu_bar_config(const gchar *label, gboolean is_group);
+ViewConfig *init_menu_bar_config(FILE *index, MenuBarConfig *menu_bar_config);
 
 GtkWidget *create_menu_bar(MenuBarConfig menu_bar_config);
-
-void menu_bar_set_group(GtkWidget *widget, GtkWidget *group);
 
 #endif

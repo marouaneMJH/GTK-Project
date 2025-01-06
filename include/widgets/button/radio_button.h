@@ -22,7 +22,7 @@
         .label = "\0",                                 \
         .icon_name = "\0",                             \
         .tooltip = "\0",                               \
-        .is_group = TRUE,                             \
+        .is_group = TRUE,                              \
         .group = NULL,                                 \
         .is_mnemonic = FALSE,                          \
         .is_selected = FALSE,                          \
@@ -32,7 +32,7 @@
         .icon_position = GTK_POS_LEFT,                 \
         .margins = DEFAULT_RADIO_BUTTON_MARGIN,        \
         .dimensions = DEFAULT_RADIO_BUTTON_DIMENSIONS, \
-        .bg_color = "\0",                         \
+        .bg_color = "\0",                              \
         .text_color = "\0"}
 // .margin = DEFAULT_RADIO_BUTTON_MARGIN,
 
@@ -56,8 +56,7 @@ typedef struct
 
 } RadioButtonConfig;
 
-
-gchar *init_radio_button_config(FILE *index, RadioButtonConfig *radio_button_config, ViewConfig *view_config);
+ViewConfig *init_radio_button_config(FILE *index, RadioButtonConfig *radio_button_config);
 
 GtkWidget *create_radio_button(RadioButtonConfig radio_button_config);
 

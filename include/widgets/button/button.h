@@ -56,7 +56,7 @@ typedef struct
 } ButtonConfig;
 
 
-gchar *init_button_config(FILE *index, ButtonConfig *button_config, ViewConfig *view_config);
+ViewConfig *init_button_config(FILE *index, ButtonConfig *button_config);
 
 /**
  * @brief create button widget with default

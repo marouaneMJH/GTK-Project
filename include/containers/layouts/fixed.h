@@ -34,7 +34,7 @@ typedef struct
 
 } FixedConfig;
 
-gchar *init_fixed_config(FILE *index, FixedConfig *fixed_config, ViewConfig *view_config);
+ViewConfig *init_fixed_config(FILE *index, FixedConfig *fixed_config);
 
 /**
  * @brief create fixed widget with default

@@ -91,18 +91,24 @@ typedef struct VIEW
  * @brief global structure for windget (window, button, label, ...)
  * Dimension of widget, the height and width of widget. for each widget have default value for this structure (macros value)
  */
+/**
+ * @brief Structure to hold the dimensions of a widget
+ */
 typedef struct
 {
-    gint width;
-    gint height;
+    gint width;  /**< Width of the widget */
+    gint height; /**< Height of the widget */
 } Dimensions;
 
+/**
+ * @brief Structure to hold the margins of a widget
+ */
 typedef struct
 {
-    gint top;    // Top margin
-    gint bottom; // Bottom margin
-    gint start;  // Start margin
-    gint end;    // End  margin
+    gint top;    /**< Top margin */
+    gint bottom; /**< Bottom margin */
+    gint start;  /**< Start margin */
+    gint end;    /**< End margin */
 } Margins;
 
 /* inline function */
@@ -144,13 +150,13 @@ void widget_set_colors(GtkWidget *widget, const gchar *bg_color, const gchar *co
 void widget_set_background_image(GtkWidget *widget, const gchar *bg_image, const gchar *color);
 
 
-/**
- * @brief This function gives a background image to a widget without using css
- * @param widget Widget cible
- * @param bg_image The background image name
- * @return void
- */
-void widget_set_background_image_without_css(GtkWidget *widget, const gchar *bg_image);
+// /**
+//  * @brief This function gives a background image to a widget without using css
+//  * @param widget Widget cible
+//  * @param bg_image The background image name
+//  * @return void
+//  */
+// void widget_set_background_image_without_css(GtkWidget *widget, const gchar *bg_image);
 
 
 /**

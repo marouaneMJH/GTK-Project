@@ -48,7 +48,7 @@ typedef struct
 
 } MenuItemConfig;
 
-gchar *init_menu_item_config(FILE *index, MenuItemConfig *menu_item_config, ViewConfig *view_config);
+ViewConfig *init_menu_item_config(FILE *index, MenuItemConfig *menu_item_config);
 
 GtkWidget *create_menu_item(MenuItemConfig menu_item_config);
 

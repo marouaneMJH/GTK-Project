@@ -71,10 +71,10 @@ typedef struct
     // maximized the window or not (use it for gtk_window_maximize and gtk_window_unmaximize functions)
     gboolean is_maximized;
     // if the window is modal or not (we can use other windows in same time )
-    gboolean is_modal; // debug to change the font color and apply the prop in dialog  should turn it off kep old code run without errors (button, box ..)
-    gboolean is_decorated;
+    gboolean is_modal;
     gboolean is_keep_above;
     gboolean is_keep_below;
+    gboolean is_decorated;
 
     // behavior of the window
     GdkWindowTypeHint hint_type;
@@ -104,7 +104,7 @@ typedef struct
  * @brief initial the window by default value
  * @return the default window structure
  */
-gchar *init_window_config(FILE *index, WindowConfig *window_config, ViewConfig *view_config);
+ViewConfig *init_window_config(FILE *index, WindowConfig *window_config);
 
 GtkWidget *create_window(GtkApplication *app, WindowConfig window_config);
 

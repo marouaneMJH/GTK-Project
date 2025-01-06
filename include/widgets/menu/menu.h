@@ -37,7 +37,7 @@
 typedef struct
 {
     // gchar title[MAX_TITLE_SIZE]; // Add title in case of tear-off menu
-    GtkAccelGroup *accel_group;  // Add accel path (keyboard shortcuts)
+    GtkAccelGroup *accel_group; // Add accel path (keyboard shortcuts)
     gchar accel_path[MAX_ACCEL_PATH_SIZE];
     guint active_index;           // Activate programatically a menu
     gboolean reserve_toggle_size; // Reserve the space for checkbox/radio button ...
@@ -51,7 +51,7 @@ typedef struct
 
 } MenuConfig;
 
-gchar *init_menu_config(FILE *index, MenuConfig *menu_config, ViewConfig *view_config);
+ViewConfig *init_menu_config(FILE *index, MenuConfig *menu_config);
 
 GtkWidget *create_menu(MenuConfig menu_config);
 

@@ -37,7 +37,7 @@ typedef struct
 
 } MenuBarConfig;
 
-gchar *init_menu_bar_config(FILE *index, MenuBarConfig *menu_bar_config, ViewConfig *view_config);
+ViewConfig *init_menu_bar_config(FILE *index, MenuBarConfig *menu_bar_config);
 
 GtkWidget *create_menu_bar(MenuBarConfig menu_bar_config);
 

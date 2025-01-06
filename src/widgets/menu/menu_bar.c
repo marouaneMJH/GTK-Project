@@ -1,9 +1,9 @@
 #include "./../../../include/widgets/menu/menu_bar.h"
 
-int configure_menu_bar_property(MenuBarConfig *menu_bar_config, ViewConfig *view_config, gchar *property, gchar *value)
+ViewConfig *configure_menu_bar_property(MenuBarConfig *menu_bar_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
     if (!menu_bar_config || !property || !value)
-        return -1;
+        return NULL;
 
     if (g_strcmp0(property, "pack_direction") == 0)
     {
@@ -52,21 +52,23 @@ int configure_menu_bar_property(MenuBarConfig *menu_bar_config, ViewConfig *view
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
-    return 1;
+    return view_config;
 }
 
-gchar *init_menu_bar_config(FILE *index, MenuBarConfig *menu_bar_config, ViewConfig *view_config)
+ViewConfig *init_menu_bar_config(FILE *index, MenuBarConfig *menu_bar_config)
 {
     // Check if the menu_bar config and the index file is not null
     if (!menu_bar_config || !index)
         return NULL;
 
+    // Create view config
+    ViewConfig *view_config = NULL;
+    SAFE_ALLOC(view_config, ViewConfig, 1);
+    DFEAULT_VIEW_CONFIG(view_config);
+
     // Store the property and value of the tag
     gchar *property = NULL;
     gchar *value = NULL;
-
-    // The view id of the tag
-    gchar *view_id = NULL;
 
     // Read the tag character by character
     gchar c;
@@ -84,7 +86,7 @@ gchar *init_menu_bar_config(FILE *index, MenuBarConfig *menu_bar_config, ViewCon
 
         // If the all properties are readed then break the loop and return the view id and pass the properties to the menu_bar config
         if (status == 2)
-            return view_id;
+            return view_config;
 
         // If the property is readed then read the value of the property
         else if (status == 1 && property)
@@ -95,13 +97,13 @@ gchar *init_menu_bar_config(FILE *index, MenuBarConfig *menu_bar_config, ViewCon
             {
                 if (g_strcmp0(property, "id") == 0) // Store the view id
                 {
-                    view_id = value;
+                    strcpy(view_config->view_id, value);
                     free(property);
                 }
                 else
                 {
                     // Apply the property value to the menu_bar config
-                    configure_menu_bar_property(menu_bar_config, view_config, property, value);
+                    view_config = configure_menu_bar_property(menu_bar_config, view_config, property, value);
                     free(value);
                     free(property);
                 }
@@ -109,7 +111,7 @@ gchar *init_menu_bar_config(FILE *index, MenuBarConfig *menu_bar_config, ViewCon
         }
     }
 
-    return view_id;
+    return view_config;
 }
 
 GtkWidget *create_menu_bar(MenuBarConfig menu_bar_config)

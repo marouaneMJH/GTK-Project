@@ -2,6 +2,7 @@
 #define GLOBAL_H
 #include <gtk/gtk.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #include "./constants.h"
 
@@ -15,7 +16,6 @@
         if (!ptr)                                               \
         {                                                       \
             g_critical("Failed to allocate memory for " #type); \
-            return NULL;                                        \
         }                                                       \
     } while (0)
 
@@ -56,10 +56,33 @@
     if (g_strcmp0(property, "box_padding") == 0)                                \
     {                                                                           \
         view_config->box_padding = atoi(value);                                 \
+    }                                                                           \
+    if (g_strcmp0(property, "flow_box_order") == 0)                             \
+    {                                                                           \
+        view_config->flow_box_order = atoi(value);                              \
+    }                                                                           \
+    if (g_strcmp0(property, "paned_position") == 0)                             \
+    {                                                                           \
+        view_config->paned_position = atoi(value);                              \
     }
+
+#define DFEAULT_VIEW_CONFIG(view_config) \
+    do                                   \
+    {                                    \
+        view_config->position_x = 0;     \
+        view_config->position_y = 0;     \
+        view_config->pack_direction = 1; \
+        view_config->box_expand = FALSE; \
+        view_config->box_fill = FALSE;   \
+        view_config->box_padding = 0;    \
+        view_config->group = NULL;       \
+        view_config->view_id[0] = '\0';  \
+    } while (0);
 
 typedef struct
 {
+    gchar view_id[MAX_VIEW_ID_SIZE];
+
     // Fixed container
     int position_x;
     int position_y;
@@ -69,6 +92,13 @@ typedef struct
     gboolean box_expand;
     gboolean box_fill;
     int box_padding;
+
+    // FlowBox container
+    gint flow_box_order;
+
+    // Paned container
+    // add1: 0 or add2: 1
+    gint paned_position;
 
     // Ex: radio button
     GtkWidget *group;
@@ -81,7 +111,6 @@ typedef struct VIEW
     struct VIEW *parent;
     struct VIEW *child;
     struct VIEW *next;
-    gchar view_id[MAX_VIEW_ID_SIZE];
     ViewConfig *view_config;
 } View;
 
@@ -142,6 +171,16 @@ void widget_set_colors(GtkWidget *widget, const gchar *bg_color, const gchar *co
  * @return void
  */
 void widget_set_background_image(GtkWidget *widget, const gchar *bg_image, const gchar *color);
+
+
+/**
+ * @brief This function gives a background image to a widget without using css
+ * @param widget Widget cible
+ * @param bg_image The background image name
+ * @return void
+ */
+void widget_set_background_image_without_css(GtkWidget *widget, const gchar *bg_image);
+
 
 /**
  * @brief This function add margins to a widget

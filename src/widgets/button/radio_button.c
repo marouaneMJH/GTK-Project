@@ -1,11 +1,13 @@
 #include "./../../../include/global.h"
 #include "./../../../include/widgets/button/radio_button.h"
 
-
-int configure_radio_button_property(RadioButtonConfig *radio_button_config, ViewConfig *view_config, gchar *property, gchar *value)
+ViewConfig *configure_radio_button_property(RadioButtonConfig *radio_button_config, ViewConfig *view_config, gchar *property, gchar *value, int *status)
 {
     if (!radio_button_config || !property || !value)
-        return -1;
+    {
+        *status = 0;
+        return NULL;
+    }
 
     if (g_strcmp0(property, "label") == 0)
         strcpy(radio_button_config->label, value);
@@ -78,57 +80,23 @@ int configure_radio_button_property(RadioButtonConfig *radio_button_config, View
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
-    // View config reading
-
-
-    /* if (g_strcmp0(property, "position_x") == 0)
-     {
-         view_config->position_x = atoi(value);
-     }
-
-     if (g_strcmp0(property, "position_y") == 0)
-     {
-         view_config->position_y = atoi(value);
-     }
-
-     if (g_strcmp0(property, "pack_direction") == 0)
-     {
-         view_config->pack_direction = atoi(value);
-     }
-
-     if (g_strcmp0(property, "box_expand") == 0)
-     {
-         view_config->box_expand = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
-     }
-
-     if (g_strcmp0(property, "box_fill") == 0)
-     {
-         view_config->box_fill = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
-     }
-     
-    if (g_strcmp0(property, "box_padding") == 0)
-    {
-        // view_config->box_padding = atoi(value);
-        printf("BOXVLAUE =====> \n");
-    }
-
-    printf("BOXPADDING: => %d\n", view_config->box_padding);*/
-
-    return 1;
+    return view_config;
 }
 
-gchar *init_radio_button_config(FILE *index, RadioButtonConfig *radio_button_config, ViewConfig *view_config)
+ViewConfig *init_radio_button_config(FILE *index, RadioButtonConfig *radio_button_config)
 {
     // Check if the radio_button config and the index file is not null
     if (!radio_button_config || !index)
         return NULL;
 
+    // Create view config
+    ViewConfig *view_config = NULL;
+    SAFE_ALLOC(view_config, ViewConfig, 1);
+    DFEAULT_VIEW_CONFIG(view_config);
+
     // Store the property and value of the tag
     gchar *property = NULL;
     gchar *value = NULL;
-
-    // The view id of the tag
-    gchar *view_id = NULL;
 
     // Read the tag character by character
     gchar c;
@@ -146,7 +114,7 @@ gchar *init_radio_button_config(FILE *index, RadioButtonConfig *radio_button_con
 
         // If the all properties are readed then break the loop and return the view id and pass the properties to the radio_button config
         if (status == 2)
-            return view_id;
+            return view_config;
 
         // If the property is readed then read the value of the property
         else if (status == 1 && property)
@@ -157,13 +125,18 @@ gchar *init_radio_button_config(FILE *index, RadioButtonConfig *radio_button_con
             {
                 if (g_strcmp0(property, "id") == 0) // Store the view id
                 {
-                    view_id = value;
+                    strcpy(view_config->view_id, value);
                     free(property);
                 }
                 else
                 {
                     // Apply the property value to the radio_button config
-                    configure_radio_button_property(radio_button_config, view_config, property, value);
+                    int config_status;
+                    view_config = configure_radio_button_property(radio_button_config, view_config, property, value, &config_status);
+                    if (!config_status)
+                    {
+                        printf("Error configuring the property %s\n", property);
+                    }
                     free(value);
                     free(property);
                 }
@@ -171,7 +144,7 @@ gchar *init_radio_button_config(FILE *index, RadioButtonConfig *radio_button_con
         }
     }
 
-    return view_id;
+    return view_config;
 }
 
 GtkWidget *create_radio_button(RadioButtonConfig radio_button_config)

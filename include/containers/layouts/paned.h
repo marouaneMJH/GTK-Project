@@ -31,7 +31,7 @@ typedef struct
     // Define orientation
     GtkOrientation orientation;
 
-    // Define paned position
+    // Set paned position of the separator
     gint position;
 
     // Enable or diable wide handle
@@ -46,7 +46,12 @@ typedef struct
 
 } PanedConfig;
 
-PanedConfig *init_paned();
+
+int configure_paned_property(PanedConfig *paned_config,ViewConfig *view_config ,gchar *property, gchar *value);
+
+gchar *init_paned_config(FILE *index, PanedConfig *paned_box_config, ViewConfig *view_config);
+
+
 
 /**
  * @brief create paned widget with default

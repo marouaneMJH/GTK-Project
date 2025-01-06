@@ -43,7 +43,7 @@ typedef struct
 
 } ImageConfig;
 
-gchar *init_image_config(FILE *index, ImageConfig *image_config, ViewConfig *view_config);
+ViewConfig *init_image_config(FILE *index, ImageConfig *image_config);
 
 /**
  * @brief Creates a new GtkWidget for displaying an image.
@@ -52,7 +52,7 @@ gchar *init_image_config(FILE *index, ImageConfig *image_config, ViewConfig *vie
  * data to configure the image and returns a pointer to a newly created
  * GtkWidget that displays the image.
  *
- * @param image_data A pointer to an ImageConfig structure containing
+ * @param image_config A pointer to an ImageConfig structure containing
  *                   the configuration data for the image.
  * @return GtkWidget* A pointer to the newly created GtkWidget for the image.
  */
@@ -66,7 +66,7 @@ GtkWidget *create_image(ImageConfig image_config);
  * data, and returns a pointer to a newly created GtkWidget that displays
  * the image.
  *
- * @param image_data A pointer to an ImageConfig structure containing
+ * @param image_config A pointer to an ImageConfig structure containing
  *                   the configuration data for the image.
  * @param icon A pointer to a GIcon structure containing the icon data.
  * @param size The size of the icon to display.
@@ -81,7 +81,7 @@ GtkWidget *create_image_from_Icon(ImageConfig image_config, GIcon *icon, GtkIcon
  * data to configure the image and an icon name, and returns a pointer to
  * a newly created GtkWidget that displays the image.
  *
- * @param image_data A pointer to an ImageConfig structure containing
+ * @param image_config A pointer to an ImageConfig structure containing
  *                   the configuration data for the image.
  * @param size The size of the icon to display.
  * @return GtkWidget* A pointer to the newly created GtkWidget for the image.
@@ -97,7 +97,7 @@ GtkWidget *create_image_from_icon_name(ImageConfig image_config, GtkIconSize siz
  *  displays the image.
  *
  *
- * @param image_data A pointer to an ImageConfig structure containing
+ * @param image_config A pointer to an ImageConfig structure containing
  *                   the configuration data for the image.
  * @param animation A pointer to a GdkPixbufAnimation structure containing the image data.
  * @return GtkWidget* A pointer to the newly created GtkWidget for the image.
@@ -112,7 +112,7 @@ GtkWidget *create_image_from_animation(ImageConfig image_config, GdkPixbufAnimat
  * image data, and returns a pointer to a newly created GtkWidget that
  * displays the image.
  *
- * @param image_data A pointer to an ImageConfig structure containing
+ * @param image_config A pointer to an ImageConfig structure containing
  *                   the configuration data for the image.
  * @param pixbuf A pointer to a GdkPixbuf structure containing the image data.
  * @return GtkWidget* A pointer to the newly created GtkWidget for the image.

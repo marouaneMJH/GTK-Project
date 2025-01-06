@@ -53,6 +53,7 @@ int main(int argc, char **argv) {
 
 //     BoxConfig box_config = DEFAULT_BOX;
 //     GtkWidget *box = create_box(box_config);
+//     GtkWidget *box1 = create_box(box_config);
 
 //     MenuBarConfig menu_bar_config = DEFAULT_MENU_BAR;
 //     GtkWidget *menu_bar = create_menu_bar(menu_bar_config);
@@ -63,10 +64,10 @@ int main(int argc, char **argv) {
 
 //     MenuItemConfig menu_item_config = DEFAULT_MENU_ITEM;
 
-//     g_strlcpy(menu_item_config.label, "File", MAX_LABEL_SIZE);
-//     GtkWidget *file_item = create_menu_item(menu_item_config);
+//     // g_strlcpy(menu_item_config.label, "File", MAX_LABEL_SIZE);
+//     // GtkWidget *file_item = create_menu_item(menu_item_config);
 
-//     menu_item_set_submenu(file_item, file_menu);
+//     // menu_item_set_submenu(file_item, file_menu);
 
 //     g_strlcpy(menu_item_config.label, "About", MAX_LABEL_SIZE);
 //     GtkWidget *about_item = create_menu_item(menu_item_config);
@@ -77,14 +78,25 @@ int main(int argc, char **argv) {
 //     g_strlcpy(menu_item_config.label, "Exit", MAX_LABEL_SIZE);
 //     GtkWidget *exit_menu_item = create_menu_item(menu_item_config);
 
-//     gtk_menu_shell_append(GTK_MENU_SHELL(file_menu), new_menu_item);
-//     gtk_menu_shell_append(GTK_MENU_SHELL(file_menu), exit_menu_item);
+//     ViewConfig *view_config = NULL;
+//     SAFE_ALLOC(view_config, ViewConfig, 1);
 
-//     gtk_menu_shell_append(GTK_MENU_SHELL(menu_bar), file_item);
-//     gtk_menu_shell_append(GTK_MENU_SHELL(menu_bar), about_item);
+//     // gtk_menu_shell_append(GTK_MENU_SHELL(file_menu), new_menu_item);
+//     // gtk_menu_shell_append(GTK_MENU_SHELL(file_menu), exit_menu_item);
+
+//     gtk_menu_shell_append(GTK_MENU_SHELL(menu_bar), new_menu_item);
+//     view_config->group = menu_bar;
+
+//     gtk_menu_shell_append(GTK_MENU_SHELL(view_config->group), exit_menu_item);
+//     gtk_menu_shell_append(GTK_MENU_SHELL(view_config->group), about_item);
+
+//     ButtonConfig btn_config = DEFAULT_BUTTON;
+//     GtkWidget *btn = create_button(btn_config);
 
 //     // Pack widgets into box and add to window
 //     gtk_box_pack_start(GTK_BOX(box), menu_bar, FALSE, FALSE, 0);
+//     gtk_box_pack_start(GTK_BOX(box), box1, FALSE, FALSE, 0);
+//     gtk_box_pack_start(GTK_BOX(box1), btn, FALSE, FALSE, 0);
 
 //     gtk_container_add(GTK_CONTAINER(window), box);
 

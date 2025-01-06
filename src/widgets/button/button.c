@@ -47,6 +47,10 @@ ViewConfig *configure_button_property(ButtonConfig *button_config, ViewConfig *v
         button_config->expand = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
     
 
+    if (g_strcmp0(property, "expand") == 0)
+        button_config->expand = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+    
+
     // Icon image and icon
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
@@ -109,12 +113,8 @@ ViewConfig *init_button_config(FILE *index, ButtonConfig *button_config)
             }
         }
     }
-<<<<<<< HEAD
 
     return view_config;
-=======
-    return view_id;
->>>>>>> main
 }
 
 GtkWidget *create_button(ButtonConfig button_config)
@@ -146,6 +146,8 @@ GtkWidget *create_button(ButtonConfig button_config)
     }
 
     // Set background and/or label colors
+   widget_set_colors(button, button_config.bg_color, button_config.text_color);
+   
    widget_set_colors(button, button_config.bg_color, button_config.text_color);
    
     // Set margin

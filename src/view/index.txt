@@ -21,14 +21,9 @@
 			id="entry_1"
 			placeholder_text="Hi"
 		/>
-	</flow_box>
 	<box 
 		id="box_1"
-<<<<<<< HEAD
-		orientation="vertical"
-=======
 		orientation="horizontal"
->>>>>>> main
 		bg_color="yellow"
 	>
 
@@ -50,9 +45,6 @@
 			orientation="vertical"
 			bg_color="blue"
 		>
-<<<<<<< HEAD
-
-=======
 			<spin_button
 				min="0"
 				max="50"
@@ -61,7 +53,7 @@
 				is_numeric="false"
 				is_digits="true"
 			/>
->>>>>>> main
+
 			<entry
 				id="entry_1"
 				placeholder_text="Hi"
@@ -89,4 +81,6 @@
 		</box>
 
 	</box>
+	
+	</flow_box>
 </window>

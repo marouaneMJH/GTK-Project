@@ -57,6 +57,7 @@ ViewConfig *configure_flow_box_property(FlowBoxConfig *flow_box_config, ViewConf
     return view_config;
 }
 
+
 ViewConfig *init_flow_box_config(FILE *index, FlowBoxConfig *flow_box_config)
 {
     // Check if the flow box config and the index file is not null

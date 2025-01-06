@@ -25,8 +25,8 @@ gchar *read_tag(FILE *index)
 
     int i = 0;
     char c;
-    fscanf(index, "%s", tag);
-    /*while ((c = fgetc(index)) != '>')
+    // fscanf(index, "%s", tag);
+    while ((c = fgetc(index)) != '>')
     {
         if (c == ' ' || c == '\n')
             break;
@@ -34,8 +34,7 @@ gchar *read_tag(FILE *index)
         tag[i++] = c;
     }
 
-    tag[i] = '\0';*/
-
+    tag[i] = '\0';
     return tag;
 }
 
@@ -106,6 +105,9 @@ int get_view_index(FILE *index, gchar *widget_tag)
     if (g_strcmp0(widget_tag, "paned") == 0)
         return PanedTag;
 
+    if (g_strcmp0(widget_tag, "combo_text_box") == 0)
+        return ComboTextBoxTag;
+
     return -1;
 }
 
@@ -159,12 +161,14 @@ int link_with_flow_box_container(GtkWidget *parent, GtkWidget *child, ViewConfig
     return 1;
 }
 
+
 int link_with_paned_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_config)
 {
     if (!GTK_IS_PANED(parent))
         return 0;
-
-    if (view_config->paned_position == 0)
+    //  todo from view config
+    gtk_paned_add1(GTK_PANED(parent), child);
+    if (view_config->paned_order == 0)
         gtk_paned_add1(GTK_PANED(parent), child);
     else
         gtk_paned_add2(GTK_PANED(parent), child);
@@ -177,9 +181,10 @@ int link_with_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_co
     return ((link_with_box_container(parent, child, view_config) ||
              link_with_fixed_container(parent, child, view_config) ||
              link_with_flow_box_container(parent, child, view_config) ||
-             link_with_paned_container(parent, child, view_config))
-                ? 1
-                : 0);
+             link_with_paned_container(parent, child, view_config) ||
+             link_with_schrolled_window_container(parent, child, view_config))
+            ? 1
+            : 0);
     ;
 }
 
@@ -365,6 +370,27 @@ View *build_app(GtkApplication *app, View *root_view)
 
                 break;
 
+            case ScrolledWindowTag:
+                // Initialize scrolled window config
+                ScrolledWindowConfig scrolled_window_config = DEFAULT_SCROLLED_WINDOW_CONFIG;
+
+                // Update scrolled window config and view config from index file
+                view_id = init_scrolled_window_config(index, &scrolled_window_config, &view_config);
+
+                // Create schrolled window widget
+                GtkWidget *scrolled_window_widget = create_scrolled_window(scrolled_window_config);
+
+                // Create view
+                View *scrolled_window_view = create_view(view_id, scrolled_window_widget, &view_config);
+
+                // Add view to view model
+                add_view(scrolled_window_view, parent_view, is_relative_container);
+
+                // Update container flag
+                is_relative_container = is_container_view(index);
+
+                parent_view = scrolled_window_view;
+
             case BoxTag:
 
                 // TODO: Fix this function to be work
@@ -471,6 +497,7 @@ View *build_app(GtkApplication *app, View *root_view)
                 // Update parent view
                 parent_view = image_view;
                 break;
+
             case MenuBarTag:
                 MenuBarConfig menu_bar_config = DEFAULT_MENU_BAR;
 
@@ -532,6 +559,7 @@ View *build_app(GtkApplication *app, View *root_view)
             case FlowBoxTag:
                 // initialize flow box config
                 FlowBoxConfig flow_box_config = DEFAULT_FLOW_BOX;
+
 
                 // Update flow box config and view config from index file
                 view_config = init_flow_box_config(index, &flow_box_config);
@@ -596,6 +624,46 @@ View *build_app(GtkApplication *app, View *root_view)
                 //  TODO Complete label
                 continue;
                 break;
+            case PanedTag:
+            PanedConfig paned_config = DEFAULT_PANED;
+
+            // Update flow box config and view config from index file
+            view_id = init_paned_config(index, &paned_config, &view_config);
+            
+            // Create paned widget
+            GtkWidget *paned_widget = create_paned(paned_config);
+
+            View *paned_view = create_view(view_id, paned_widget, &view_config);
+
+            // Add view to view model
+            add_view(paned_view, parent_view, is_relative_container);
+
+            // Update container flag
+            is_relative_container = is_container_view(index);
+
+            // Update parent view
+            parent_view = paned_view;
+            break;
+
+            case ComboTextBoxTag:
+                ComboTextBoxConfig combo_text_box_config = DEFAULT_COMBO_TEXT_BOX_CONFIG;
+
+                view_id = init_combo_text_box_config(index, &combo_text_box_config, &view_config);
+
+                GtkWidget *combo_text_box_widget = create_combo_text_box(combo_text_box_config);
+
+                View *combo_text_box_view = create_view(view_id, combo_text_box_widget, &view_config);
+
+                // Add view to view model
+                add_view(combo_text_box_view, parent_view, is_relative_container);
+
+                // Update container flag
+                is_relative_container = is_container_view(index);
+
+                // Update parent view
+                parent_view = combo_text_box_view;
+                break;
+
 
             // TODO : Complete other widgets
             default:

@@ -1,4 +1,3 @@
-#include "./../../../include/global.h"
 #include "./../../../include/containers/windows/window.h"
 
 ViewConfig *configure_window_property(WindowConfig *window_config, ViewConfig *view_config, gchar *property, gchar *value, int *status)

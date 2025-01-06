@@ -48,6 +48,9 @@ ViewConfig *configure_box_property(BoxConfig *box_config, ViewConfig *view_confi
 
     if (g_strcmp0(property, "text_color") == 0)
         strcpy(box_config->text_color, value);
+    
+    if(g_strcmp0(property, "bg_image") == 0)
+        strcpy(box_config->bg_image, value);
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
@@ -142,6 +145,10 @@ GtkWidget *create_box(BoxConfig box_config)
     // Set margins
     widget_set_margins(box, box_config.margins);
 
+    // Set background image
+    if(box_config.bg_image[0] != '\0'){
+        widget_set_background_image(box, box_config.bg_image, box_config.text_color);
+    }
     // Set spacing
     // gtk_box_set_spacing(GTK_BOX(box), box_config.spacing);
     // Set packing

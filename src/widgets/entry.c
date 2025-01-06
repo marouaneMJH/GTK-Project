@@ -18,34 +18,32 @@
 //     return entry;
 // }
 
-GtkWidget *create_entry(EntryConfig *entry_data)
-{
-    if (!entry_data)
-        exit(EXIT_FAILURE);
+GtkWidget *create_entry(EntryConfig entry_config){
+
 
 
     GtkWidget *entry = gtk_entry_new();
 
-    gtk_entry_set_text(GTK_ENTRY(entry), entry_data->text);
-    gtk_entry_set_placeholder_text(GTK_ENTRY(entry), entry_data->placeholder_text);
-    gtk_entry_set_visibility(GTK_ENTRY(entry), entry_data->is_visible);
-    gtk_entry_set_input_purpose(GTK_ENTRY(entry), entry_data->purpose);
-    gtk_entry_set_max_length(GTK_ENTRY(entry), entry_data->max_length);
-    gtk_widget_set_size_request(entry, entry_data->dimension.width, entry_data->dimension.height);
-    gtk_widget_set_opacity(entry, entry_data->opacity);
-    gtk_entry_set_alignment(GTK_ENTRY(entry), entry_data->alignment);
-    gtk_entry_set_has_frame(GTK_ENTRY(entry), entry_data->has_frame);
-    gtk_entry_set_overwrite_mode(GTK_ENTRY(entry), entry_data->overwrite_mode);
-    if (entry_data->progress_fraction > 0)
-        gtk_entry_set_progress_fraction(GTK_ENTRY(entry), entry_data->progress_fraction);
-    gtk_entry_set_activates_default(GTK_ENTRY(entry), entry_data->activates_default);
-    if (entry_data->progress_pulse_step > 0)
-        gtk_entry_set_progress_pulse_step(GTK_ENTRY(entry), entry_data->progress_pulse_step);
-    if(entry_data->completion)
-        gtk_entry_set_completion(GTK_ENTRY(entry), entry_data->completion);
+    gtk_entry_set_text(GTK_ENTRY(entry), entry_config.text);
+    gtk_entry_set_placeholder_text(GTK_ENTRY(entry), entry_config.placeholder_text);
+    gtk_entry_set_visibility(GTK_ENTRY(entry), entry_config.is_visible);
+    gtk_entry_set_input_purpose(GTK_ENTRY(entry), entry_config.purpose);
+    gtk_entry_set_max_length(GTK_ENTRY(entry), entry_config.max_length);
+    gtk_widget_set_size_request(entry, entry_config.dimension.width, entry_config.dimension.height);
+    gtk_widget_set_opacity(entry, entry_config.opacity);
+    gtk_entry_set_alignment(GTK_ENTRY(entry), entry_config.alignment);
+    gtk_entry_set_has_frame(GTK_ENTRY(entry), entry_config.has_frame);
+    gtk_entry_set_overwrite_mode(GTK_ENTRY(entry), entry_config.overwrite_mode);
+    if (entry_config.progress_fraction > 0)
+        gtk_entry_set_progress_fraction(GTK_ENTRY(entry), entry_config.progress_fraction);
+    gtk_entry_set_activates_default(GTK_ENTRY(entry), entry_config.activates_default);
+    if (entry_config.progress_pulse_step > 0)
+        gtk_entry_set_progress_pulse_step(GTK_ENTRY(entry), entry_config.progress_pulse_step);
+    if(entry_config.completion)
+        gtk_entry_set_completion(GTK_ENTRY(entry), entry_config.completion);
 
-    widget_set_colors(GTK_WIDGET(entry), entry_data->bg_color, entry_data->text_color);
-    widget_set_margins(GTK_WIDGET(entry), entry_data->margins);
+    widget_set_colors(GTK_WIDGET(entry), entry_config.bg_color, entry_config.text_color);
+    widget_set_margins(GTK_WIDGET(entry), entry_config.margins);
 
     //To look at later:
     //gtk_entry_set_cursor_hadjustment(GTK_ENTRY(Myentry), hadjustment);

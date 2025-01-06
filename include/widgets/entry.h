@@ -91,6 +91,6 @@ typedef struct
  * @param[in] entry_data Pointer to the entry configuration structure
  * @return GtkWidget* Pointer to the new entry widget
  */
-GtkWidget *create_entry(EntryConfig *entry_data);
+GtkWidget *create_entry(EntryConfig entry_config);
 
 #endif

@@ -1,14 +1,10 @@
 #include "../../include/widgets/image.h"
 
-GtkWidget *create_image(ImageConfig *image_data)
+GtkWidget *create_image(ImageConfig image_config)
 {
-    if (!image_data)
-    {
-        perror("Invalid image data");
-        exit(EXIT_FAILURE);
-    }
 
-    if (image_data->type != IMAGE_EMPTY && image_data->type != IMAGE_FILE && image_data->type != IMAGE_RESOURCE)
+
+    if (image_config.type != IMAGE_EMPTY && image_config.type != IMAGE_FILE && image_config.type != IMAGE_RESOURCE)
     {
         perror("Invalid image type");
         exit(EXIT_FAILURE);
@@ -16,88 +12,71 @@ GtkWidget *create_image(ImageConfig *image_data)
 
     GtkWidget *image = NULL;
 
-    switch (image_data->type)
+    switch (image_config.type)
     {
     case IMAGE_EMPTY:
         image = gtk_image_new();
         break;
     case IMAGE_FILE:
-        image = gtk_image_new_from_file(image_data->path);
+        image = gtk_image_new_from_file(image_config.path);
         break;
     case IMAGE_RESOURCE:
-        image = gtk_image_new_from_resource(image_data->path);
+        image = gtk_image_new_from_resource(image_config.path);
         break;
     default:
         break;
     }
 
-    gtk_widget_set_size_request(image, image_data->dimensions.width, image_data->dimensions.height);
-    gtk_widget_set_opacity(image, image_data->opacity);
-    widget_set_margins(image, image_data->margins);
+    gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
+    gtk_widget_set_opacity(image, image_config.opacity);
+    widget_set_margins(image, image_config.margins);
 
     return image;
 }
 
-GtkWidget *create_image_from_Icon(ImageConfig *image_data, GIcon *icon, GtkIconSize size)
+GtkWidget *create_image_from_Icon(ImageConfig image_config, GIcon *icon, GtkIconSize size)
 {
-    if (!image_data)
-    {
-        perror("Invalid image data");
-        exit(EXIT_FAILURE);
-    }
+  
 
     GtkWidget *image = gtk_image_new_from_gicon(icon, size);
 
-    gtk_widget_set_size_request(image, image_data->dimensions.width, image_data->dimensions.height);
-    gtk_widget_set_opacity(image, image_data->opacity);
-    widget_set_margins(image, image_data->margins);
+    gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
+    gtk_widget_set_opacity(image, image_config.opacity);
+    widget_set_margins(image, image_config.margins);
     return image;
 }
 
-GtkWidget *create_image_from_icon_name(ImageConfig *image_data, GtkIconSize size)
+GtkWidget *create_image_from_icon_name(ImageConfig image_config, GtkIconSize size)
 {
-    if (!image_data)
-    {
-        perror("Invalid image data");
-        exit(EXIT_FAILURE);
-    }
 
-    GtkWidget *image = gtk_image_new_from_icon_name(image_data->path, size);
 
-    gtk_widget_set_size_request(image, image_data->dimensions.width, image_data->dimensions.height);
-    gtk_widget_set_opacity(image, image_data->opacity);
-    widget_set_margins(image, image_data->margins);
+    GtkWidget *image = gtk_image_new_from_icon_name(image_config.path, size);
+
+    gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
+    gtk_widget_set_opacity(image, image_config.opacity);
+    widget_set_margins(image, image_config.margins);
     return image;
 }
 
-GtkWidget *create_image_from_animation(ImageConfig *image_data, GdkPixbufAnimation *animation)
+GtkWidget *create_image_from_animation(ImageConfig image_config, GdkPixbufAnimation *animation)
 {
-    if (!image_data)
-    {
-        perror("Invalid image data");
-        exit(EXIT_FAILURE);
-    }
 
     GtkWidget *image = gtk_image_new_from_animation(animation);
 
-    gtk_widget_set_size_request(image, image_data->dimensions.width, image_data->dimensions.height);
-    gtk_widget_set_opacity(image, image_data->opacity);
-    widget_set_margins(image, image_data->margins);
+    gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
+    gtk_widget_set_opacity(image, image_config.opacity);
+    widget_set_margins(image, image_config.margins);
     return image;
 }
 
-GtkWidget *create_image_from_pixbuf(ImageConfig *image_data, GdkPixbuf *pixbuf)
+GtkWidget *create_image_from_pixbuf(ImageConfig image_config, GdkPixbuf *pixbuf)
 {
-    if (!image_data)
-    {
-        perror("Invalid image data");
-        exit(EXIT_FAILURE);
-    }
+
 
     GtkWidget *image = gtk_image_new_from_pixbuf(pixbuf);
 
-    gtk_widget_set_size_request(image, image_data->dimensions.width, image_data->dimensions.height);
-    gtk_widget_set_opacity(image, image_data->opacity);
-    widget_set_margins(image, image_data->margins);
+    gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
+    gtk_widget_set_opacity(image, image_config.opacity);
+    widget_set_margins(image, image_config.margins);
     return image;
 }

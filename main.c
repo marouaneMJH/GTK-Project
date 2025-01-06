@@ -19,7 +19,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
 
     //entry.completion = create_completion_system();
 
-    GtkWidget *Myentry = create_entry(&entry);
+    GtkWidget *Myentry = create_entry(entry);
    // g_signal_connect(Myentry, "insert-text", G_CALLBACK(on_insert_textsss), NULL);
     widget_set_font(Myentry, "SansSerif", 20);
 
@@ -28,7 +28,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
     progress_bar_data.progress_fraction = 0.5;
     progress_bar_data.is_text_visible = TRUE;
 
-    GtkWidget *progress_bar = create_progress_bar(&progress_bar_data);
+    GtkWidget *progress_bar = create_progress_bar(progress_bar_data);
     gtk_progress_bar_set_pulse_step(GTK_PROGRESS_BAR(progress_bar), 0.8);
 
     /* Image Configuration  Error for animations*/

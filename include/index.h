@@ -7,6 +7,7 @@
 
 /* containers */
 #include "./containers/windows/window.h"
+#include "./containers/windows/scrolled_window.h"
 #include "./containers/layouts/box.h"
 #include "./containers/layouts/fixed.h"
 #include "./containers/layouts/flow_box.h"
@@ -38,7 +39,6 @@
 #include "./widgets/dialogs/file_chooser_dialog.h"
 #include "./widgets/dialogs/font_choser_dialog.h"
 
-#include "./widgets/scroll.h"
 #include "./widgets/label.h"
 #include "./widgets/separator.h"
 #include "./widgets/entry.h"

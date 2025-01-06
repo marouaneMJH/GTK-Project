@@ -57,7 +57,7 @@ int configure_flow_box_property(FlowBoxConfig *flow_box_config,ViewConfig *view_
     return 1;
 }
 
-gchar* init_flow_box(FILE *index, FlowBoxConfig *flow_box_config, ViewConfig *view_config)
+gchar* init_flow_box_config(FILE *index, FlowBoxConfig *flow_box_config, ViewConfig *view_config)
 {
     // Check if the flow box config and the index file is not null
     if (!flow_box_config || !index)

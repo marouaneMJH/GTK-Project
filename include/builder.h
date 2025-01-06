@@ -25,7 +25,8 @@ typedef enum
     ListBoxTag,
     GridTag,
     PanedTag,
-    ImageTag
+    ImageTag,
+    ComboTextBoxTag
 } Tags;
 
 // Global structure;

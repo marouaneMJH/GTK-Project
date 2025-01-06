@@ -48,7 +48,7 @@ typedef struct
     Margins margins;
 
     Dimensions dimensions;
-
+    
     gchar bg_color[MAX_COLOR_SIZE];
     gchar text_color[MAX_COLOR_SIZE];
 
@@ -66,7 +66,7 @@ typedef struct
  */
 int configure_flow_box_property(FlowBoxConfig *flow_box_config,ViewConfig *view_config ,gchar *property, gchar *value);
 
-gchar *init_flow_box(FILE *index, FlowBoxConfig *flow_box_config, ViewConfig *view_config);
+gchar *init_flow_box_config(FILE *index, FlowBoxConfig *flow_box_config, ViewConfig *view_config);
 
 /**
  * @brief create flow_box widget with default

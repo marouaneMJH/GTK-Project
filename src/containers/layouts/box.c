@@ -48,6 +48,9 @@ int configure_box_property(BoxConfig *box_config, gchar *property, gchar *value)
 
     if (g_strcmp0(property, "text_color") == 0)
         strcpy(box_config->text_color, value);
+    
+    if(g_strcmp0(property, "bg_image") == 0)
+        strcpy(box_config->bg_image, value);
 
     return 1;
 }
@@ -138,6 +141,10 @@ GtkWidget *create_box(BoxConfig box_config)
     // Set margins
     widget_set_margins(box, box_config.margins);
 
+    // Set background image
+    if(box_config.bg_image[0] != '\0'){
+        widget_set_background_image(box, box_config.bg_image, box_config.text_color);
+    }
     // Set spacing
     // gtk_box_set_spacing(GTK_BOX(box), box_config.spacing);
     // Set packing

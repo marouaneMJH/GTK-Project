@@ -55,8 +55,7 @@ SpinButtonConfig edit_spin_button(
  */
 GtkWidget *create_spin_button(SpinButtonConfig spin_button);
 
-
-int configure_window_property(SpinButtonConfig *spin_button_config, ViewConfig *view_config, gchar *property, gchar *value);
+int configure_spin_button_property(SpinButtonConfig *spin_button_config, ViewConfig *view_config, gchar *property, gchar *value);
 
 gchar *init_spin_button_config(FILE *index,SpinButtonConfig  *spin_button_config, ViewConfig *view_config);
 

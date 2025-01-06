@@ -14,10 +14,8 @@ int configure_paned_property(PanedConfig *paned_config,ViewConfig *view_config ,
             paned_config->orientation = GTK_ORIENTATION_VERTICAL;
     }
 
-    // Debug the position not working, view_config->paned_position config not working so initiliaze it with 2
     if (g_strcmp0(property, "position") == 0)
-        paned_config->position = 1;
-        // paned_config->position = atoi(value);
+        paned_config->position = atoi(value);
 
     if (g_strcmp0(property, "is_wide") == 0)
         paned_config->is_wide = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;

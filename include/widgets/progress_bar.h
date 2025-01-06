@@ -59,7 +59,7 @@ typedef struct
 
 /**
  * @brief Create a progress bar widget
- * @param progress_bar_data The configuration of the progress bar
+ * @param progress_bar_config The configuration of the progress bar
  * @return GtkWidget* The progress bar widget
  */
-GtkWidget *create_progress_bar(ProgressBarConfig *progress_bar_data);
+GtkWidget *create_progress_bar(ProgressBarConfig progress_bar_config);

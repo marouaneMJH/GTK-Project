@@ -78,28 +78,29 @@ void widget_set_margins(GtkWidget *widget, Margins margins)
 }
 
 
-void widget_set_text_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)
-{
-    GdkRGBA color_rgba;
-    gdk_rgba_parse(&color_rgba, color);
-    gtk_widget_override_color(widget, state, &color_rgba);
-}
+// These functions are just for comparing with CSS not for use because the most of them are deprecated
+// void widget_set_text_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)
+// {
+//     GdkRGBA color_rgba;
+//     gdk_rgba_parse(&color_rgba, color);
+//     gtk_widget_override_color(widget, state, &color_rgba);
+// }
 
-void widget_set_background_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)
-{
-    GdkRGBA color_rgba;
-    gdk_rgba_parse(&color_rgba, color);
-    gtk_widget_override_background_color(widget, state, &color_rgba);
-}
+// void widget_set_background_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)
+// {
+//     GdkRGBA color_rgba;
+//     gdk_rgba_parse(&color_rgba, color);
+//     gtk_widget_override_background_color(widget, state, &color_rgba);
+// }
 
-void widget_set_font(GtkWidget *widget, const gchar *font_name, gint font_size)
-{
-    PangoFontDescription *font_desc = pango_font_description_new();
-    pango_font_description_set_family(font_desc, font_name);
-    pango_font_description_set_size(font_desc, font_size * PANGO_SCALE);
-    gtk_widget_override_font(widget, font_desc);
-    pango_font_description_free(font_desc);
-}
+// void widget_set_font(GtkWidget *widget, const gchar *font_name, gint font_size)
+// {
+//     PangoFontDescription *font_desc = pango_font_description_new();
+//     pango_font_description_set_family(font_desc, font_name);
+//     pango_font_description_set_size(font_desc, font_size * PANGO_SCALE);
+//     gtk_widget_override_font(widget, font_desc);
+//     pango_font_description_free(font_desc);
+// }
 
 // TODO: Should be not manipulate the end of tag ">" in the file
 // TODO: Should manipulate spaces and tabs and new lines

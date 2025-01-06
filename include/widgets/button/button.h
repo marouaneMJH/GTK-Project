@@ -55,23 +55,8 @@ typedef struct
 
 } ButtonConfig;
 
-/**
- * @brief customize button structure
- * @param button structure field
- * @return[ou] pointer to new button structure
- */
-ButtonConfig edit_button(
-    gchar *label,
-    gboolean is_sensitive,
-    gboolean is_visible,
-    gchar *tooltip,
-    Dimensions dimensions,
-    Margins margins,
-    gboolean expand,
-    gchar *bg_color,
-    gchar *text_color
 
-);
+gchar *init_button_config(FILE *index, ButtonConfig *button_config, ViewConfig *view_config);
 
 /**
  * @brief create button widget with default

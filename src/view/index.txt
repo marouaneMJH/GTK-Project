@@ -139,7 +139,14 @@
 			show_text="true"
 			text="30% Done"
 		/>
-
+	<switch_button
+		id="switch2"
+		position_x="20"
+		position_y="510"
+		width="150"
+		height="25"
+		active="false"
+	/>
 	</fixed>
 </box>
 </scrolled_window>

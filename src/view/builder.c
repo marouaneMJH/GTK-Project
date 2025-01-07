@@ -734,16 +734,16 @@ View *build_app(GtkApplication *app, View *root_view)
                 parent_view = read_link_button_tag(index, parent_view, is_relative_container);
                 is_relative_container = is_container_view(index);
                 break;
-            case SwitchButtonTag:
-                // parent_view = read_switch_button_tag(index, parent_view, is_relative_container);
-                // is_relative_container = is_container_view(index);
-                break;
             case ScrolledWindowTag:
                 parent_view = read_scrolled_window_tag(index, parent_view, is_relative_container);
                 is_relative_container = is_container_view(index);
                 break;
             case ProgressBarTag:
                 // parent_view = read_progress_bar_tag(index, parent_view, is_relative_container);
+                // is_relative_container = is_container_view(index);
+                break;
+            case SwitchButtonTag:
+                // parent_view = read_switch_button_tag(index, parent_view, is_relative_container);
                 // is_relative_container = is_container_view(index);
                 break;
 

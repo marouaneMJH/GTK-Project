@@ -30,6 +30,7 @@
 #include "./widgets/menu/menu_item.h"
 
 // #include "./widgets/button/toggle_button.h"
+#include "./widgets/scrolled_window.h"
 
 // Dialogs
 #include "./widgets/dialogs/dialog.h"

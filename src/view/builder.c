@@ -23,8 +23,8 @@ gchar *read_tag(FILE *index)
 
     int i = 0;
     char c;
-    fscanf(index, "%s", tag);
-    /*while ((c = fgetc(index)) != '>')
+    // fscanf(index, "%s", tag);
+    while ((c = fgetc(index)) != '>')
     {
         if (c == ' ' || c == '\n')
             break;
@@ -32,8 +32,7 @@ gchar *read_tag(FILE *index)
         tag[i++] = c;
     }
 
-    tag[i] = '\0';*/
-
+    tag[i] = '\0';
     return tag;
 }
 
@@ -41,6 +40,7 @@ int get_view_index(FILE *index, gchar *widget_tag)
 {
     if (!widget_tag)
         return -1;
+
     if (g_strcmp0(widget_tag, "window") == 0)
         return WindowTag;
 
@@ -61,9 +61,6 @@ int get_view_index(FILE *index, gchar *widget_tag)
 
     if (g_strcmp0(widget_tag, "button") == 0)
         return ButtonTag;
-
-    if (g_strcmp0(widget_tag, "switch") == 0)
-        return SwitchButtonTag;
 
     if (g_strcmp0(widget_tag, "entry") == 0)
         return EntryTag;
@@ -107,6 +104,9 @@ int get_view_index(FILE *index, gchar *widget_tag)
     if (g_strcmp0(widget_tag, "link_button") == 0)
         return LinkButtonTag;
 
+    if (g_strcmp0(widget_tag, "switch_button") == 0)
+        return SwitchButtonTag;
+
     if (g_strcmp0(widget_tag, "check_button") == 0)
         return CheckButtonTag;
 
@@ -121,7 +121,6 @@ int link_with_box_container(GtkWidget *parent, GtkWidget *child, ViewConfig *vie
     if (!GTK_IS_BOX(parent))
         return 0;
 
-    printf("LINK %s to Box with direction %d \n", view_config->view_id, view_config->pack_direction);
     if (view_config->pack_direction == 0)
         gtk_box_pack_end(GTK_BOX(parent), child, view_config->box_expand, view_config->box_fill, view_config->box_padding);
     else
@@ -152,8 +151,9 @@ int link_with_paned_container(GtkWidget *parent, GtkWidget *child, ViewConfig *v
 {
     if (!GTK_IS_PANED(parent))
         return 0;
-
-    if (view_config->paned_position == 0)
+    //  todo from view config
+    gtk_paned_add1(GTK_PANED(parent), child);
+    if (view_config->paned_order == 0)
         gtk_paned_add1(GTK_PANED(parent), child);
     else
         gtk_paned_add2(GTK_PANED(parent), child);
@@ -639,7 +639,6 @@ View *build_app(GtkApplication *app, View *root_view)
                 is_relative_container = is_container_view(index);
 
                 break;
-
             case BoxTag:
 
                 parent_view = read_box_tag(index, parent_view, is_relative_container);
@@ -689,6 +688,7 @@ View *build_app(GtkApplication *app, View *root_view)
                 is_relative_container = is_container_view(index);
 
                 break;
+
             case MenuBarTag:
                 parent_view = read_menu_bar_tag(index, parent_view, is_relative_container);
                 is_relative_container = is_container_view(index);
@@ -735,12 +735,16 @@ View *build_app(GtkApplication *app, View *root_view)
                 is_relative_container = is_container_view(index);
                 break;
             case SwitchButtonTag:
-                parent_view = read_switch_button_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
+                // parent_view = read_switch_button_tag(index, parent_view, is_relative_container);
+                // is_relative_container = is_container_view(index);
                 break;
             case ScrolledWindowTag:
                 parent_view = read_scrolled_window_tag(index, parent_view, is_relative_container);
                 is_relative_container = is_container_view(index);
+                break;
+            case ProgressBarTag:
+                // parent_view = read_progress_bar_tag(index, parent_view, is_relative_container);
+                // is_relative_container = is_container_view(index);
                 break;
 
             // TODO : Complete other widgets
@@ -748,7 +752,7 @@ View *build_app(GtkApplication *app, View *root_view)
                 stop = TRUE;
                 fclose(index);
 
-                g_print("ERROR: => Widget not found\n");
+                g_print("ERROR: %d => Widget not found\n", widget_index);
                 //  exit(EXIT_FAILURE);
                 break;
             }

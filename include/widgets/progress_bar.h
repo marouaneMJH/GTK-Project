@@ -25,7 +25,7 @@
 /* Default progress bar configuration */
 #define DEFAULT_PROGRESS_BAR \
     {                        \
-        .text = "",          \
+        .text = "\0",          \
         .dimensions = DEFAULT_PROGRESS_BAR_DIMENSIONS, \
         .margins = DEFAULT_PROGRESS_BAR_MARGINS, \
         .progress_fraction = 0, \

@@ -2,28 +2,28 @@
 
 ViewConfig *configure_spin_button_property(SpinButtonConfig *spin_button_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
+
     if (!spin_button_config || !property || !value)
         return NULL;
 
     if (g_strcmp0(property, "min") == 0)
         spin_button_config->min = atof(value);
-
-    if (g_strcmp0(property, "max") == 0)
+    else if (g_strcmp0(property, "max") == 0)
         spin_button_config->max = atof(value);
 
-    if (g_strcmp0(property, "step") == 0)
+    else if (g_strcmp0(property, "step") == 0)
         spin_button_config->step = atof(value);
 
-    if (g_strcmp0(property, "initial_value") == 0)
+    else if (g_strcmp0(property, "initial_value") == 0)
         spin_button_config->initial_value = atof(value);
 
-    if (g_strcmp0(property, "decimal") == 0)
+    else if (g_strcmp0(property, "decimal") == 0)
         spin_button_config->decimal = atoi(value);
 
-    if (g_strcmp0(property, "is_numeric") == 0)
+    else if (g_strcmp0(property, "is_numeric") == 0)
         spin_button_config->is_numeric = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
 
-    if (g_strcmp0(property, "is_digits") == 0)
+    else if (g_strcmp0(property, "is_digits") == 0)
         spin_button_config->is_digits = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
@@ -86,7 +86,9 @@ ViewConfig *init_spin_button_config(FILE *index, SpinButtonConfig *spin_button_c
             }
         }
     }
+
     return view_config;
+
 }
 
 GtkWidget *create_spin_button(SpinButtonConfig spin_button)

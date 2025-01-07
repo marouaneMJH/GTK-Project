@@ -4,7 +4,7 @@
 	icon_name="folder"
 	width="500"
 	height="400"
-	text_color=  "#FFFFFF"
+	text_color="#FFFFFF"
 	bg_image="programer.jpg" 
 >
 

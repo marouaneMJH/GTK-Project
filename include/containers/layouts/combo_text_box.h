@@ -64,35 +64,35 @@ typedef struct
     gchar *deafault_value; // The default value of the combo box
 } ComboTextBoxConfig;
 
-/**
- * @brief Sets the specified property of a combo box to a given value, converting
- *        the value to the appropriate data type.
- *
- * This function retrieves the property indicated by the caller, adjusts the
- * data type if needed, and assigns it to the combo box control.
- *
- * @param property  The name or identifier of the combo box property to modify.
- * @param value  The new value to be assigned to the property. This value
- *                  is automatically converted to the data type required by the combo box.
- *
- * @return True if the property update succeeds, false otherwise.
- */
-int configure_combo_text_box_property(ComboTextBoxConfig *combo_text_box_config, ViewConfig *view_config, gchar *property, gchar *value);
 
 /**
- * @brief Initializes the combo text box configuration from the provided file.
+ * @brief Configures the combo text box property with the given value.
  *
- * This function reads properties and values for a combo box balise from the given
- * file stream. It modifies the provided combo box configuration and view configuration
- * structures, and returns a newly allocated string containing the view ID.
+ * This function configures the combo text box property with the given value. It modifies
+ * the provided combo text box configuration and view configuration structures and returns
+ * the modified view configuration.
  *
- * @param[in] index A pointer to the file stream containing the combo box properties.
- * @param[out] combo_text_box_config A pointer to the ComboTextBoxConfig structure to be modified.
- * @param[out] view_config A pointer to the ViewConfig structure to be modified.
+ * @param[in] combo_text_box_config A pointer to the ComboTextBoxConfig structure to be modified.
+ * @param[in] view_config A pointer to the ViewConfig structure to be modified.
+ * @param[in] property The property to configure.
+ * @param[in] value The value to set the property to.
  *
- * @return A dynamically allocated gchar pointer representing the view ID
+ * @return A pointer to the modified ViewConfig structure.
  */
-gchar *init_combo_text_box_config(FILE *index, ComboTextBoxConfig *combo_text_box_config, ViewConfig *view_config);
+ViewConfig* configure_combo_text_box_property(ComboTextBoxConfig *combo_text_box_config, ViewConfig *view_config, gchar *property, gchar *value);
+
+
+/**
+ * @brief Initializes a combo text box configuration structure with default values.
+ *
+ * This function initializes a ComboTextBoxConfig structure with default values.
+ *
+ * @param[in] index A pointer to the file to read the combo text box configuration from index.txt file.
+ * @param[out] combo_text_box_config A pointer to the ComboTextBoxConfig structure to initialize.
+ *
+ * @return A pointer to the initialized ComboTextBoxConfig structure.
+ */
+ViewConfig *init_combo_text_box_config(FILE *index, ComboTextBoxConfig *combo_text_box_config);
 
 /**
  * @brief Creates a new GtkWidget for displaying a combo text box.

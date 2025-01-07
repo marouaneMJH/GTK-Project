@@ -11,8 +11,8 @@
 /* Default dimensions for progress bar */
 #define DEFAULT_PROGRESS_BAR_DIMENSIONS \
     {                                   \
-        .height = 50,                   \
-        .width = 200}
+        .height = 20,                   \
+        .width = 20}   
 
 /* Default margins for progress bar */
 #define DEFAULT_PROGRESS_BAR_MARGINS \

@@ -112,6 +112,10 @@ int get_view_index(FILE *index, gchar *widget_tag)
 
     if (g_strcmp0(widget_tag, "progress_bar") == 0)
         return ProgressBarTag;
+    
+    if (g_strcmp0(widget_tag, "combo_text_box") == 0)
+        return ComboTextBoxTag;
+    
 
     return -1;
 }
@@ -142,7 +146,7 @@ int link_with_flow_box_container(GtkWidget *parent, GtkWidget *child, ViewConfig
     if (!GTK_IS_FLOW_BOX(parent))
         return 0;
 
-    // debug the view config not working
+
     gtk_flow_box_insert(GTK_FLOW_BOX(parent), child, view_config->flow_box_order);
     return 1;
 }
@@ -563,6 +567,23 @@ View *read_scrolled_window_tag(FILE *index, View *parent_view, gboolean is_relat
     return scrolled_window_view;
 }
 
+View *read_combo_text_box_tag(FILE *index, View *parent_view, gboolean is_relative_container)
+{
+    ViewConfig *view_config;
+    ComboTextBoxConfig combo_text_box_config = DEFAULT_COMBO_TEXT_BOX_CONFIG;
+
+    view_config = init_combo_text_box_config(index, &combo_text_box_config);
+
+    GtkWidget *combo_text_box_widget = create_combo_text_box(combo_text_box_config);
+
+    View *combo_text_box_view = create_view(view_config->view_id, combo_text_box_widget, view_config);
+
+    // Add view to view model
+    add_view(combo_text_box_view, parent_view, is_relative_container);
+
+    return combo_text_box_view;
+}
+
 View *read_progress_bar_tag(FILE *index, View *parent_view, gboolean is_relative_container)
 {
     ViewConfig *view_config;
@@ -579,6 +600,8 @@ View *read_progress_bar_tag(FILE *index, View *parent_view, gboolean is_relative
 
     return progress_bar_view;
 }
+
+
 
 View *build_app(GtkApplication *app, View *root_view)
 {
@@ -746,7 +769,10 @@ View *build_app(GtkApplication *app, View *root_view)
                 // parent_view = read_switch_button_tag(index, parent_view, is_relative_container);
                 // is_relative_container = is_container_view(index);
                 break;
-
+            case ComboTextBoxTag:
+                parent_view = read_combo_text_box_tag(index, parent_view, is_relative_container);
+                is_relative_container = is_container_view(index);
+                break;
             // TODO : Complete other widgets
             default:
                 stop = TRUE;

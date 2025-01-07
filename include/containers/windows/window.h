@@ -5,7 +5,6 @@
 
 /* Max size of element */
 #define MAX_WINDOW_TITLE_SIZE 50
-#define MAX_ICON_PATH_SIZE 50
 #define MAX_STARTUP_ID_SIZE 50
 #define MAX_PROPERTY_SIZE 50
 

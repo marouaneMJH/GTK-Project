@@ -61,9 +61,9 @@
     {                                                                           \
         view_config->flow_box_order = atoi(value);                              \
     }                                                                           \
-    if (g_strcmp0(property, "paned_position") == 0)                             \
+    if (g_strcmp0(property, "paned_order") == 0)                                \
     {                                                                           \
-        view_config->paned_position = atoi(value);                              \
+        view_config->paned_order = atoi(value);                                 \
     }
 
 #define DFEAULT_VIEW_CONFIG(view_config) \
@@ -98,7 +98,7 @@ typedef struct
 
     // Paned container
     // add1: 0 or add2: 1
-    gint paned_position;
+    gint paned_order;
 
     // Ex: radio button
     GtkWidget *group;
@@ -172,7 +172,6 @@ void widget_set_colors(GtkWidget *widget, const gchar *bg_color, const gchar *co
  */
 void widget_set_background_image(GtkWidget *widget, const gchar *bg_image, const gchar *color);
 
-
 /**
  * @brief This function gives a background image to a widget without using css
  * @param widget Widget cible
@@ -180,7 +179,6 @@ void widget_set_background_image(GtkWidget *widget, const gchar *bg_image, const
  * @return void
  */
 void widget_set_background_image_without_css(GtkWidget *widget, const gchar *bg_image);
-
 
 /**
  * @brief This function add margins to a widget

@@ -23,8 +23,8 @@ gchar *read_tag(FILE *index)
 
     int i = 0;
     char c;
-    fscanf(index, "%s", tag);
-    /*while ((c = fgetc(index)) != '>')
+    // fscanf(index, "%s", tag);
+    while ((c = fgetc(index)) != '>')
     {
         if (c == ' ' || c == '\n')
             break;
@@ -32,8 +32,7 @@ gchar *read_tag(FILE *index)
         tag[i++] = c;
     }
 
-    tag[i] = '\0';*/
-
+    tag[i] = '\0';
     return tag;
 }
 
@@ -104,6 +103,7 @@ int get_view_index(FILE *index, gchar *widget_tag)
     if (g_strcmp0(widget_tag, "paned") == 0)
         return PanedTag;
 
+<<<<<<< HEAD
     if (g_strcmp0(widget_tag, "link_button") == 0)
         return LinkButtonTag;
 
@@ -112,6 +112,10 @@ int get_view_index(FILE *index, gchar *widget_tag)
 
     if (g_strcmp0(widget_tag, "progress_bar") == 0)
         return ProgressBarTag;
+=======
+    if (g_strcmp0(widget_tag, "combo_text_box") == 0)
+        return ComboTextBoxTag;
+>>>>>>> main
 
     return -1;
 }
@@ -148,12 +152,14 @@ int link_with_flow_box_container(GtkWidget *parent, GtkWidget *child, ViewConfig
     return 1;
 }
 
+
 int link_with_paned_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_config)
 {
     if (!GTK_IS_PANED(parent))
         return 0;
-
-    if (view_config->paned_position == 0)
+    //  todo from view config
+    gtk_paned_add1(GTK_PANED(parent), child);
+    if (view_config->paned_order == 0)
         gtk_paned_add1(GTK_PANED(parent), child);
     else
         gtk_paned_add2(GTK_PANED(parent), child);
@@ -168,9 +174,10 @@ int link_with_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_co
     return ((link_with_box_container(parent, child, view_config) ||
              link_with_fixed_container(parent, child, view_config) ||
              link_with_flow_box_container(parent, child, view_config) ||
-             link_with_paned_container(parent, child, view_config))
-                ? 1
-                : 0);
+             link_with_paned_container(parent, child, view_config) ||
+             link_with_schrolled_window_container(parent, child, view_config))
+            ? 1
+            : 0);
     ;
 }
 
@@ -639,7 +646,6 @@ View *build_app(GtkApplication *app, View *root_view)
                 is_relative_container = is_container_view(index);
 
                 break;
-
             case BoxTag:
 
                 parent_view = read_box_tag(index, parent_view, is_relative_container);
@@ -689,6 +695,7 @@ View *build_app(GtkApplication *app, View *root_view)
                 is_relative_container = is_container_view(index);
 
                 break;
+
             case MenuBarTag:
                 parent_view = read_menu_bar_tag(index, parent_view, is_relative_container);
                 is_relative_container = is_container_view(index);

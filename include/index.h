@@ -38,7 +38,7 @@
 #include "./widgets/dialogs/file_chooser_dialog.h"
 #include "./widgets/dialogs/font_choser_dialog.h"
 
-#include "./widgets/scroll.h"
+#include "./widgets/scrolled_window.h"
 #include "./widgets/label.h"
 #include "./widgets/separator.h"
 #include "./widgets/entry.h"

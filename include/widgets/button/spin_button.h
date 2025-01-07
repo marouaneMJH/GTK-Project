@@ -38,7 +38,7 @@ typedef struct
 GtkWidget *create_spin_button(SpinButtonConfig spin_button);
 
 
-int configure_window_property(SpinButtonConfig *spin_button_config, ViewConfig *view_config, gchar *property, gchar *value);
+ViewConfig *configure_window_property(SpinButtonConfig *spin_button_config, ViewConfig *view_config, gchar *property, gchar *value);
 
 ViewConfig *init_spin_button_config(FILE *index, SpinButtonConfig  *spin_button_config);
 

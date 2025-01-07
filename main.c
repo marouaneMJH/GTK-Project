@@ -52,8 +52,16 @@ int main(int argc, char **argv) {
 //     GtkWidget *window = create_window(app, window_config);
 
 //     BoxConfig box_config = DEFAULT_BOX;
+//     g_strlcpy(box_config.bg_color, "#FF0000", MAX_COLOR_SIZE);
 //     GtkWidget *box = create_box(box_config);
+//     g_strlcpy(box_config.bg_color, "yellow", MAX_COLOR_SIZE);
 //     GtkWidget *box1 = create_box(box_config);
+
+//     FixedConfig fixed_config = DEFAULT_FIXED;
+//     // g_strlcpy(fixed_config.bg_color, "#FF0000", MAX_COLOR_SIZE);
+
+//     GtkWidget *fixed = create_fixed(fixed_config);
+
 
 //     MenuBarConfig menu_bar_config = DEFAULT_MENU_BAR;
 //     GtkWidget *menu_bar = create_menu_bar(menu_bar_config);
@@ -96,7 +104,16 @@ int main(int argc, char **argv) {
 //     // Pack widgets into box and add to window
 //     gtk_box_pack_start(GTK_BOX(box), menu_bar, FALSE, FALSE, 0);
 //     gtk_box_pack_start(GTK_BOX(box), box1, FALSE, FALSE, 0);
-//     gtk_box_pack_start(GTK_BOX(box1), btn, FALSE, FALSE, 0);
+
+//     gtk_fixed_put(GTK_FIXED(fixed), btn, 0, 0);
+//     gtk_box_pack_start(GTK_BOX(box), fixed, FALSE, FALSE, 0);
+
+//     ImageConfig image_config = DEFAULT_IMAGE;
+//     g_strlcpy(image_config.path, "./assets/images/programer.jpg", MAX_IMAGE_PATH_SIZE);
+//     image_config.type = IMAGE_FILE;
+//     GtkWidget *image = create_image(image_config);
+
+//     gtk_fixed_put(GTK_FIXED(fixed), image, 0, 0);
 
 //     gtk_container_add(GTK_CONTAINER(window), box);
 

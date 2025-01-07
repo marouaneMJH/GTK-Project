@@ -26,9 +26,7 @@ ViewConfig *configure_spin_button_property(SpinButtonConfig *spin_button_config,
     if (g_strcmp0(property, "is_digits") == 0)
         spin_button_config->is_digits = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
 
-    if (g_strcmp0(property, "box_padding") == 0)
-
-        SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
+    SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
 }

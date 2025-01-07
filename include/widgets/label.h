@@ -24,31 +24,18 @@ typedef struct
 
     /* Layout */
     gint padding; // Padding around the label
-} Label;
+} LabelConfig;
 
 /**
  * @brief to initialize the label structure
  * @param[in] label_text the label content of the label
  * @return[ou] pointer to new label
  */
-Label *init_label(const gchar *label_text);
+ViewConfig *init_label_config(FILE *index, LabelConfig *label_config);
 
-Label *edit_label(
-    gchar *label_text,
-    gboolean is_markup,
-    gboolean is_underline,
-    GtkJustification jtype,
-    PangoEllipsizeMode ellipsize,
-    gboolean is_wrap,
-    gboolean is_selectable,
-    gchar *text_color,
-    gchar *background_color);
+GtkWidget *create_label(LabelConfig *label);
 
-void apply_label_colors(GtkWidget *label_widget, Label *label);
-
-GtkWidget *create_label(Label *label);
-
-void free_label(Label *label);
+void free_label(LabelConfig *label);
 
 void free_widget_label(GtkWidget *label);
 

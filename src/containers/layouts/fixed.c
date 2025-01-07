@@ -111,6 +111,9 @@ GtkWidget *create_fixed(FixedConfig fixed_config)
     // Set colors
     widget_set_colors(fixed, fixed_config.bg_color, fixed_config.text_color);
 
+    
+    widget_set_colors(fixed, fixed_config.bg_color, fixed_config.text_color);
+
     // Set margins
     widget_set_margins(fixed, fixed_config.margins);
 

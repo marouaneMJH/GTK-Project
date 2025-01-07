@@ -1,89 +1,77 @@
 #include "./../../include/widgets/label.h"
 
 
-
-
-Label* init_label(const gchar *label_text) 
+ViewConfig *configure_label_property(LabelConfig *label_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
-    Label* label;
-    SAFE_ALLOC(label, Label, MAX_LABEL_TEXT_SIZE);
+    if (!label_config || !property || !value)
+        return NULL;
 
-    /* Text Content */
-    g_strlcpy(label->label_text, label_text ? label_text : "", MAX_LABEL_TEXT_SIZE - 1);
-    label->label_text[MAX_LABEL_TEXT_SIZE - 1] = '\0';
-    label->is_markup = FALSE;
-    label->is_underline = FALSE;
 
-    /* Appearance */
-    label->jtype = GTK_JUSTIFY_LEFT;
-    label->ellipsize = PANGO_ELLIPSIZE_NONE;
-    label->is_wrap = FALSE;
-    g_strlcpy(label->text_color, "#000000", MAX_COLOR_SIZE - 1);
-    label->text_color[MAX_COLOR_SIZE - 1] = '\0';
-    g_strlcpy(label->background_color, "\0", MAX_COLOR_SIZE - 1);
-    label->background_color[MAX_COLOR_SIZE - 1] = '\0';
+    SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
-    /* Behavior */
-    label->is_selectable = TRUE;
-
-    /* Layout */
-    label->padding = 0;
-
-    return label;
+    return view_config;
 }
 
-
-
-
-Label* edit_label(
-        gchar *label_text,
-        gboolean is_markup,
-        gboolean is_underline,
-        GtkJustification jtype,
-        PangoEllipsizeMode ellipsize,
-        gboolean is_wrap,
-        gboolean is_selectable,
-        gchar *text_color,
-        gchar *background_color
-    )   
+ViewConfig *init_label_config(FILE *index, LabelConfig *label_config)
 {
-    Label* label = init_label(label_text);
-    label->is_markup = is_markup;
-    label->is_underline = is_underline;
-    label->jtype = jtype;
-    label->ellipsize = ellipsize;
-    label->is_wrap = is_wrap;
-    label->is_selectable = is_selectable;
+    // Check if the label config and the index file is not null
+    if (!label_config || !index)
+        return NULL;
 
-    // Update colors
-    g_strlcpy(label->text_color, text_color ? text_color : "#000000", MAX_COLOR_SIZE - 1);
-    label->text_color[MAX_COLOR_SIZE - 1] = '\0';
-    g_strlcpy(label->background_color, background_color ? background_color : "\0", MAX_COLOR_SIZE - 1);
-    label->background_color[MAX_COLOR_SIZE - 1] = '\0';
+    // Create view config
+    ViewConfig *view_config = NULL;
+    SAFE_ALLOC(view_config, ViewConfig, 1);
+    DFEAULT_VIEW_CONFIG(view_config);
 
-    return label;
+    // Store the property and value of the tag
+    gchar *property = NULL;
+    gchar *value = NULL;
+
+    // Read the tag character by character
+    gchar c;
+    while ((c = fgetc(index)) != '>')
+    {
+        /* If the character is a letter then go back one character
+            Because when the tag is readed the cursor will start with the first letter in the property and it will be lost */
+        if (is_character(c))
+            fseek(index, -1, SEEK_CUR);
+
+        int status = -1;
+
+        // Read the property of the tag
+        property = read_property(index, &status);
+
+        // If the all properties are readed then break the loop and return the view id and pass the properties to the label config
+        if (status == 2)
+            return view_config;
+
+        // If the property is readed then read the value of the property
+        else if (status == 1 && property)
+        {
+            // Read the value of the property
+            value = read_value(index, &status);
+            if (status == 1 && value)
+            {
+                if (g_strcmp0(property, "id") == 0) // Store the view id
+                {
+                    strcpy(view_config->view_id, value);
+                    free(property);
+                }
+                else
+                {
+                    // Apply the property value to the label config
+                    view_config = configure_label_property(label_config, view_config, property, value);
+                    free(value);
+                    free(property);
+                }
+            }
+        }
+    }
+
+    return view_config;
 }
 
-
-
-// void apply_label_colors(GtkWidget *label_widget, Label *label) 
-// {
-//     GdkRGBA text_color, background_color;
-
-//     // Convert string colors to GdkRGBA format
-//     if (gdk_rgba_parse(&text_color, label->text_color))
-//     {
-//         gtk_widget_override_color(label_widget, GTK_STATE_FLAG_NORMAL, &text_color);
-//     }
-
-//     if (gdk_rgba_parse(&background_color, label->background_color))
-//     {
-//         gtk_widget_override_background_color(label_widget, GTK_STATE_FLAG_NORMAL, &background_color);
-//     }
-// }
-
-
-GtkWidget* create_label(Label* label) 
+GtkWidget* create_label(LabelConfig* label) 
 {
     IS_EXISTE(label);
     GtkWidget *label_widget = gtk_label_new(label->label_text);
@@ -109,34 +97,4 @@ GtkWidget* create_label(Label* label)
 
     return label_widget;
 }
-
-
-void free_label(Label* label)
-{
-    // todo: add info to stdout
-    if (label)
-    {
-        g_free(label);
-    }
-}
-
-void free_widget_label(GtkWidget *label)
-{
-    if (label)
-    {
-        g_free(label);
-    }
-}
-
-
-
-/* Signales  */
-
-void on_link_activated(GtkLabel *label, const gchar *uri, gpointer user_data)
-{
-    g_print("\nLink clicked: %s\n", uri);
-}
-
-
-
 

@@ -44,7 +44,7 @@ typedef struct
 
 } SwitchButtonConfig;
 
-SwitchButtonConfig *init_switch_button_config(const gchar *label);
+ViewConfig *init_switch_button_config(FILE *index, SwitchButtonConfig *switch_buttton_config);
 
 GtkWidget *create_switch_button(SwitchButtonConfig switch_button_config);
 

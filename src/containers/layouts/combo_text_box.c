@@ -1,9 +1,10 @@
 #include "../../../include/containers/layouts/combo_text_box.h"
 
-int configure_combo_text_box_property(ComboTextBoxConfig *combo_text_box_config, ViewConfig *view_config, gchar *property, gchar *value)
+ViewConfig *configure_combo_text_box_property(ComboTextBoxConfig *combo_text_box_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
     if (!combo_text_box_config || !property || !value)
-        return -1;
+        return NULL;
+
 
     // <Margins
 
@@ -39,49 +40,66 @@ int configure_combo_text_box_property(ComboTextBoxConfig *combo_text_box_config,
         g_ptr_array_add(combo_text_box_config->options, combo_text_box_option);
     }
 
-    return 1;
+    return view_config;
 }
 
-gchar *init_combo_text_box_config(FILE *index, ComboTextBoxConfig *combo_text_box_config, ViewConfig *view_config)
+ViewConfig *init_combo_text_box_config(FILE *index, ComboTextBoxConfig *combo_text_box_config)
 {
+    // Check if the combo text box config and the index file is not null
     if (!combo_text_box_config || !index)
         return NULL;
 
-    gchar *prop = NULL;
-    gchar *val = NULL;
-    gchar *view_id = NULL;
-    int status = -1;
-    gchar c;
+    // Create view config
+    ViewConfig *view_config = NULL;
+    SAFE_ALLOC(view_config, ViewConfig, 1);
+    DFEAULT_VIEW_CONFIG(view_config);
 
+    // Store the property and value of the tag
+    gchar *property = NULL;
+    gchar *value = NULL;
+
+    // Read the tag character by character
+    gchar c;
     while ((c = fgetc(index)) != '>')
     {
+        /* If the character is a letter then go back one character
+            Because when the tag is readed the cursor will start with the first letter in the property and it will be lost */
         if (is_character(c))
             fseek(index, -1, SEEK_CUR);
 
-        prop = read_property(index, &status);
+        int status = -1;
+
+        // Read the property of the tag
+        property = read_property(index, &status);
+
+        // If the all properties are readed then break the loop and return the view config
         if (status == 2)
-            return view_id;
-        else if (status == 1 && prop)
+            return view_config;
+
+        // If the property is readed then read the value of the property
+        else if (status == 1 && property)
         {
-            val = read_value(index, &status);
-            if (status == 1 && val)
+            // Read the value of the property
+            value = read_value(index, &status);
+            if (status == 1 && value)
             {
-                if (g_strcmp0(prop, "id") == 0)
+                if (g_strcmp0(property, "id") == 0) // Store the view id
                 {
-                    view_id = val;
-                    free(prop);
+                    strcpy(view_config->view_id, value);
+                    free(property);
                 }
                 else
                 {
-                    configure_combo_text_box_property(combo_text_box_config, view_config, prop, val);
-                    free(val);
-                    free(prop);
+                    // Apply the property value to the window config
+                    view_config = configure_combo_text_box_property(combo_text_box_config, view_config, property, value);
+                    free(value);
+                    free(property);
                 }
             }
         }
     }
 
-    return view_id;
+    return view_config;
 }
 
 GtkWidget *create_combo_text_box(ComboTextBoxConfig combo_text_box_config)
@@ -99,10 +117,13 @@ GtkWidget *create_combo_text_box(ComboTextBoxConfig combo_text_box_config)
     }
 
     // // Set options
-    for (int i = 0; i < combo_text_box_config.options->len; i++)
+    if (combo_text_box_config.options)
     {
-        ComboTextBoxOptions *option = g_ptr_array_index(combo_text_box_config.options, i);
-        gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo_text_box), option->key, option->value);
+        for (int i = 0; i < combo_text_box_config.options->len; i++)
+        {
+            ComboTextBoxOptions *option = g_ptr_array_index(combo_text_box_config.options, i);
+            gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo_text_box), option->key, option->value);
+        }
     }
 
     // Set dimensions

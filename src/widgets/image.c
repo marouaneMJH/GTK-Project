@@ -116,9 +116,9 @@ ViewConfig *init_image_config(FILE *index, ImageConfig *image_config)
 GtkWidget *create_image(ImageConfig image_config)
 {
 
-    if (image_config.type != IMAGE_EMPTY && image_config.type != IMAGE_FILE && image_config.type != IMAGE_RESOURCE)
+    if (image_config.type != IMAGE_EMPTY && image_config.type != IMAGE_FILE && image_config.type != IMAGE_RESOURCE && image_config.type != IMAGE_PIXBUF)
     {
-        perror("Invalid image type");
+        perror("ERROR => Invalid image type");
         exit(EXIT_FAILURE);
     }
 
@@ -135,11 +135,15 @@ GtkWidget *create_image(ImageConfig image_config)
     case IMAGE_RESOURCE:
         image = gtk_image_new_from_resource(image_config.path);
         break;
+    case IMAGE_PIXBUF:
+        image = create_image_from_pixbuf(image_config);
+        break;
     default:
         break;
     }
 
     gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
+
     gtk_widget_set_opacity(image, image_config.opacity);
     widget_set_margins(image, image_config.margins);
 
@@ -179,13 +183,26 @@ GtkWidget *create_image_from_animation(ImageConfig image_config, GdkPixbufAnimat
     return image;
 }
 
-GtkWidget *create_image_from_pixbuf(ImageConfig image_config, GdkPixbuf *pixbuf)
+GtkWidget *create_image_from_pixbuf(ImageConfig image_config)
 {
 
-    GtkWidget *image = gtk_image_new_from_pixbuf(pixbuf);
+    // Load the image into a GdkPixbuf
+    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(image_config.path, NULL);
+    if (!pixbuf)
+    {
+        g_printerr("Error loading image\n");
+        return NULL;
+    }
 
-    gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
-    gtk_widget_set_opacity(image, image_config.opacity);
-    widget_set_margins(image, image_config.margins);
+    // Resize the image
+    GdkPixbuf *scaled_pixbuf = gdk_pixbuf_scale_simple(pixbuf, image_config.dimensions.width, image_config.dimensions.height, GDK_INTERP_BILINEAR);
+
+    // Create a GtkImage widget and set the scaled image
+    GtkWidget *image = gtk_image_new_from_pixbuf(scaled_pixbuf);
+
+    // Clean up the original pixbuf (not needed anymore)
+    g_object_unref(pixbuf);
+
     return image;
+
 }

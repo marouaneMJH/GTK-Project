@@ -153,7 +153,7 @@ int link_with_paned_container(GtkWidget *parent, GtkWidget *child, ViewConfig *v
         return 0;
     //  todo from view config
     gtk_paned_add1(GTK_PANED(parent), child);
-    if (view_config->paned_order == 0)
+    if (view_config->paned_order == 1)
         gtk_paned_add1(GTK_PANED(parent), child);
     else
         gtk_paned_add2(GTK_PANED(parent), child);
@@ -198,8 +198,23 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
         }
     }
 
+    if (GTK_IS_MENU_ITEM(view->widget))
+    {
+        if (GTK_IS_MENU_BAR(relative->widget))
+        {
+            view->view_config->group = relative->widget;
+            gtk_menu_shell_append(GTK_MENU_SHELL(relative->widget), view->widget);
+        }
+        else if (relative->view_config->group)
+        {
+            view->view_config->group = relative->view_config->group;
+            gtk_menu_shell_append(GTK_MENU_SHELL(relative->view_config->group), view->widget);
+        }
+    }
+
     if (is_relative_container)
     {
+        printf("RELTIVE PARENT %s IS CONTAINER FOR: %s\n", relative->view_config->view_id, view->view_config->view_id);
         view->parent = relative;
         relative->child = view;
 
@@ -214,12 +229,14 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
     }
     else
     {
+        printf("RELTIVE PARENT %s IS NOT A CONTAINER FOR: %s\n", relative->view_config->view_id, view->view_config->view_id);
         view->parent = relative->parent;
         relative->next = view;
 
         link_with_container(relative->parent->widget, view->widget, view->view_config);
     }
 
+    printf("This widget %s is linked to container\n", view->view_config->view_id);
     return view;
 }
 
@@ -460,6 +477,7 @@ View *read_paned_tag(FILE *index, View *parent_view, gboolean is_relative_contai
 
     // Add view to view model
     add_view(paned_view, parent_view, is_relative_container);
+
     return paned_view;
 }
 
@@ -610,6 +628,7 @@ View *build_app(GtkApplication *app, View *root_view)
             if (fgetc(index) == '/')
             {
                 is_relative_container = FALSE;
+                parent_view = parent_view->parent;
                 continue;
             }
             else
@@ -703,14 +722,13 @@ View *build_app(GtkApplication *app, View *root_view)
                 break;
             case MenuItemTag:
 
-                View *menu_item_view;
-                menu_item_view = read_menu_item_tag(index, parent_view, is_relative_container);
+                parent_view = read_menu_item_tag(index, parent_view, is_relative_container);
                 is_relative_container = is_container_view(index);
 
                 // TODO: Check why it works
                 // parent_view = menu_item_view;
 
-                gtk_menu_shell_append(GTK_MENU_SHELL(root_menu_bar_view->widget), menu_item_view->widget);
+                // gtk_menu_shell_append(GTK_MENU_SHELL(root_menu_bar_view->widget), menu_item_view->widget);
 
                 break;
             case SpinButtonTag:
@@ -739,12 +757,14 @@ View *build_app(GtkApplication *app, View *root_view)
                 is_relative_container = is_container_view(index);
                 break;
             case ProgressBarTag:
-                // parent_view = read_progress_bar_tag(index, parent_view, is_relative_container);
-                // is_relative_container = is_container_view(index);
+
+                parent_view = read_progress_bar_tag(index, parent_view, is_relative_container);
+                is_relative_container = is_container_view(index);
+
                 break;
             case SwitchButtonTag:
-                // parent_view = read_switch_button_tag(index, parent_view, is_relative_container);
-                // is_relative_container = is_container_view(index);
+                parent_view = read_switch_button_tag(index, parent_view, is_relative_container);
+                is_relative_container = is_container_view(index);
                 break;
 
             // TODO : Complete other widgets

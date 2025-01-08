@@ -9,8 +9,8 @@
     {                                  \
         .h_adjustment = NULL,          \
         .v_adjustment = NULL,          \
-        .h_policy = GTK_POLICY_ALWAYS, \
-        .v_policy = GTK_POLICY_ALWAYS, \
+        .h_policy = GTK_POLICY_AUTOMATIC, \
+        .v_policy = GTK_POLICY_AUTOMATIC, \
     }
 
 // Structure de configuration pour la fenêtre à défilement

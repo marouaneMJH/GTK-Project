@@ -1,7 +1,8 @@
 #ifndef SCROLLED_WINDOW_H
 #define SCROLLED_WINDOW_H
 
-#include "./../global.h"
+#include "../../global.h"
+
 
 // Configuration par défaut pour la fenêtre à défilement
 

@@ -170,3 +170,51 @@ gboolean is_character(gchar c)
 {
     return (c > 'A' && c < 'Z') || (c > 'a' && c < 'z');
 }
+
+
+ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCallback configure_property_callback)
+{
+    if (!config || !index)
+        return NULL;
+
+    ViewConfig *view_config = NULL;
+    SAFE_ALLOC(view_config, ViewConfig, 1);
+    DFEAULT_VIEW_CONFIG(view_config);
+
+    gchar *property = NULL;
+    gchar *value = NULL;
+
+    gchar c;
+    while ((c = fgetc(index)) != '>')
+    {
+        if (is_character(c))
+            fseek(index, -1, SEEK_CUR);
+
+        int status = -1;
+        property = read_property(index, &status);
+
+        if (status == 2)
+            return view_config;
+
+        if (status == 1 && property)
+        {
+            value = read_value(index, &status);
+            if (status == 1 && value)
+            {
+                if (g_strcmp0(property, "id") == 0)
+                {
+                    strcpy(view_config->view_id, value);
+                    free(property);
+                }
+                else
+                {
+                    view_config = configure_property_callback(config, view_config, property, value);
+                    free(value);
+                    free(property);
+                }
+            }
+        }
+    }
+
+    return view_config;
+}

@@ -1,5 +1,8 @@
 #include "./../../include/builder.h"
 
+#define INDEX_TXT "./src/view/index.txt"
+#define MODE "r" 
+
 View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
 {
     View *view = NULL;
@@ -598,12 +601,16 @@ View *read_progress_bar_tag(FILE *index, View *parent_view, gboolean is_relative
     return progress_bar_view;
 }
 
+
+
+
 View *build_app(GtkApplication *app, View *root_view)
 {
     printf("Building app\n");
 
     // This file is read from the main.c path because this function is called/executed from main.c
-    FILE *index = fopen("./src/view/index.txt", "r");
+    FILE *index = fopen(INDEX_TXT, MODE);
+
     if (!index)
     {
         g_printerr("Failed to open index file\n");
@@ -616,6 +623,7 @@ View *build_app(GtkApplication *app, View *root_view)
     View *root_menu_bar_view = NULL;
     gboolean is_relative_container = TRUE;
     gchar *widget_tag = NULL;
+
     // gchar *view_id = NULL;
     int widget_index = -1;
     char c;
@@ -646,136 +654,136 @@ View *build_app(GtkApplication *app, View *root_view)
 
             switch (widget_index)
             {
+                case WindowTag:
+                    // Read window tag
+                    parent_view = read_window_tag(index, app, parent_view, is_relative_container);
 
-            case WindowTag:
-                // Read window tag
-                parent_view = read_window_tag(index, app, parent_view, is_relative_container);
+                    // Set window as root view
+                    root_view = parent_view;
 
-                // Set window as root view
-                root_view = parent_view;
+                    // Update container flag
+                    is_relative_container = is_container_view(index);
 
-                // Update container flag
-                is_relative_container = is_container_view(index);
+                    break;
+                case BoxTag:
 
-                break;
-            case BoxTag:
+                    parent_view = read_box_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
 
-                parent_view = read_box_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
+                    break;
+                case FixedTag:
 
-                break;
-            case FixedTag:
+                    parent_view = read_fixed_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
 
-                parent_view = read_fixed_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
+                    break;
+                case FlowBoxTag:
 
-                break;
-            case FlowBoxTag:
+                    parent_view = read_flow_box_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
 
-                parent_view = read_flow_box_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
+                    break;
+                case PanedTag:
+                    parent_view = read_paned_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
 
-                break;
-            case PanedTag:
-                parent_view = read_paned_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
+                    break;
+                case EntryTag:
 
-                break;
-            case EntryTag:
+                    parent_view = read_entry_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
 
-                parent_view = read_entry_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
+                    break;
 
-                break;
+                case RadioButtonTag:
 
-            case RadioButtonTag:
+                    parent_view = read_radio_button_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
 
-                parent_view = read_radio_button_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
+                    break;
 
-                break;
+                case ButtonTag:
 
-            case ButtonTag:
+                    parent_view = read_button_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
 
-                parent_view = read_button_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
+                    break;
 
-                break;
+                case ImageTag:
+                    parent_view = read_image_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
 
-            case ImageTag:
-                parent_view = read_image_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
+                    break;
 
-                break;
+                case MenuBarTag:
+                    parent_view = read_menu_bar_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
 
-            case MenuBarTag:
-                parent_view = read_menu_bar_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
+                    root_menu_bar_view = parent_view;
 
-                root_menu_bar_view = parent_view;
+                    break;
+                case MenuTag:
+                    parent_view = read_menu_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
 
-                break;
-            case MenuTag:
-                parent_view = read_menu_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
+                    break;
+                case MenuItemTag:
 
-                break;
-            case MenuItemTag:
+                    parent_view = read_menu_item_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
 
-                parent_view = read_menu_item_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
+                    // TODO: Check why it works
+                    // parent_view = menu_item_view;
 
-                // TODO: Check why it works
-                // parent_view = menu_item_view;
+                    // gtk_menu_shell_append(GTK_MENU_SHELL(root_menu_bar_view->widget), menu_item_view->widget);
 
-                // gtk_menu_shell_append(GTK_MENU_SHELL(root_menu_bar_view->widget), menu_item_view->widget);
+                    break;
+                case SpinButtonTag:
+                    parent_view = read_spin_button_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
 
-                break;
-            case SpinButtonTag:
-                parent_view = read_spin_button_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
+                    break;
+                case LabelTag:
+                    parent_view = read_label_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
+                    break;
+                case SeparatorTag:
+                    parent_view = read_separator_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
+                    break;
+                case CheckButtonTag:
+                    parent_view = read_check_button_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
+                    break;
+                case LinkButtonTag:
+                    parent_view = read_link_button_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
+                    break;
+                case ScrolledWindowTag:
+                    parent_view = read_scrolled_window_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
+                    break;
+                case ProgressBarTag:
 
-                break;
-            case LabelTag:
-                parent_view = read_label_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
-                break;
-            case SeparatorTag:
-                parent_view = read_separator_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
-                break;
-            case CheckButtonTag:
-                parent_view = read_check_button_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
-                break;
-            case LinkButtonTag:
-                parent_view = read_link_button_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
-                break;
-            case ScrolledWindowTag:
-                parent_view = read_scrolled_window_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
-                break;
-            case ProgressBarTag:
+                    parent_view = read_progress_bar_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
 
-                parent_view = read_progress_bar_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
+                    break;
+                case SwitchButtonTag:
+                    parent_view = read_switch_button_tag(index, parent_view, is_relative_container);
+                    is_relative_container = is_container_view(index);
+                    break;
 
-                break;
-            case SwitchButtonTag:
-                parent_view = read_switch_button_tag(index, parent_view, is_relative_container);
-                is_relative_container = is_container_view(index);
-                break;
+                // TODO : Complete other widgets
+                default:
+                    stop = TRUE;
+                    fclose(index);
 
-            // TODO : Complete other widgets
-            default:
-                stop = TRUE;
-                fclose(index);
-
-                g_print("ERROR: %d => Widget not found\n", widget_index);
-                //  exit(EXIT_FAILURE);
-                break;
-            }
+                    g_print("ERROR: %d => Widget not found\n", widget_index);
+                    //  exit(EXIT_FAILURE);
+                    break;
+            } // end of switch
+            
             free(widget_tag);
         }
     }

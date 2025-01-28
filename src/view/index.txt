@@ -93,6 +93,13 @@
 				position_y="0"
 				paned_order="2"
 			>
+			    	<button
+						id="btn2"
+						label="Click Me"
+          
+					/>
+			
+
 				<fixed
 					id="fixed2"
 					width="400"

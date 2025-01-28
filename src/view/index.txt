@@ -1,0 +1,226 @@
+<window 
+	id="window_2"
+	title="Second Window"
+	icon_name="folder"
+	width="800"
+	height="700"
+	bg_color="#333333"
+	text_color="white"
+>
+	<scrolled_window
+		id="sw2"
+	>
+		<box
+			id="box2"
+			orientation="vertical"
+		>
+			<menu_bar
+				id="menu_bar1"
+				bg_color="#999999"
+				text_color="#333333"
+			>
+				<menu_item
+					id="menu_item1"
+					label="File"
+				/>
+				<menu_item
+					id="menu_item1"
+					label="Edit"
+				/>
+				<menu_item
+					id="menu_item1"
+					label="Hello"
+				/>
+				<menu_item
+					id="menu_item1"
+					label="name of me"
+				/>
+			</menu_bar>
+
+			<paned
+				id="paned1"
+				orientation="horizontal"
+				position="350"
+				box_expand="true"
+				box_fill="true"
+			>
+				<paned
+					id="bx2"
+					orientation="vertical"
+					paned_order="1"
+					position="70"
+				>
+					<fixed
+						id="fx12"
+						width="100"
+						height="100"
+						paned_order="1"
+					>
+					
+					<button
+						id="btn2"
+						label="Click Me"
+						position_x="10"
+						position_y="50"
+					/>
+
+					</fixed>
+
+					<fixed
+						id="fx12"
+						width="350"
+						height="350"
+						paned_order="2"
+
+					>
+
+					<image
+						id="img1"
+						type="pixbuf"
+						paned_order="2"
+						path="./assets/images/programer.jpg"
+						width="300"
+						height="300"
+						position_x="10"
+						position_y="40"
+					/>
+
+					</fixed>
+				</paned>
+
+			<scrolled_window
+				id="sw2"
+				width="500"
+				height="500"
+				position_x="0"
+				position_y="0"
+				paned_order="2"
+			>
+			    	<button
+						id="btn2"
+						label="Click Me"
+          
+					/>
+			
+
+				<fixed
+					id="fixed2"
+					width="400"
+					height="400"
+				>
+
+
+					<spin_button
+						id="sbtn2"
+						min="1"
+						max="100"
+						position_x="30"
+						position_y="30"
+					/>
+
+					<entry
+						id="entry2"
+						position_x="30"
+						position_y="70"
+						width="150"
+						height="25"
+						placeholder_text="Enter text"
+					/>
+
+					<image
+						id="img2"
+						type="none"
+						width="150"
+						height="150"
+						path="./assets/images/team_working_on_xml.jpeg"
+						position_x="30"
+						position_y="110"
+					/>
+
+					<radio_button
+						id="rbtn3"
+						label="Option 1"
+						position_x="30"
+						position_y="270"
+						is_group="true"
+						width="150"
+						height="25"
+						tooltip="Hna tooltip"
+					/>
+
+					<radio_button
+						id="rbtn4"
+						label="Option 2"
+						position_x="30"
+						position_y="300"
+						width="150"
+						height="25"
+					/>
+
+					<link_button
+						id="linkbtn2"
+						label="Go to Link"
+						uri="https://www.fstm.ac.ma"
+						position_x="30"
+						position_y="330"
+						width="150"
+						height="25"
+					/>
+
+					<check_button
+						id="chkbtn2"
+						label="Accept Terms"
+						position_x="200"
+						position_y="30"
+						width="150"
+						height="25"
+					/>
+
+					<separator
+						id="sep2"
+						orientation="vertical"
+						position_x="200"
+						position_y="280"
+						width="150"
+						height="10"
+					/>
+
+					<separator
+						id="sep2"
+						orientation="vertical"
+						position_x="200"
+						position_y="270"
+						width="150"
+						height="10"
+					/>
+
+					<progress_bar
+						id="lbl2"
+						progress_fraction="0.7"
+						position_x="200"
+						position_y="110"
+						is_text_visible="true"
+						text_color="white"
+					/>
+
+					<switch_button
+						id="lbl2"
+						tooltip="Switch"
+						position_x="160"
+						position_y="200"
+					/>
+					<button
+						id="lbl2"
+						tooltip="Switch"
+						width="200"
+						height="50"
+						position_x="160"
+						position_y="250"
+						label="Clicker ici"
+					/>
+				</fixed>
+				</scrolled_window>
+			</paned>
+		</box>
+	</scrolled_window>
+</window>

@@ -227,4 +227,35 @@ gchar *read_value(FILE *index, int *status);
 
 gboolean is_character(gchar c);
 
+/* */
+/**
+ * @typedef ConfigurePropertyCallback
+ * @brief A callback function type for configuring properties.
+ *
+ * This callback function is used to configure specific properties
+ * for a given configuration type.
+ *
+ * @param config A pointer to the specific configuration structure.
+ * @param view_config A pointer to the ViewConfig structure.
+ * @param property The property name as a string.
+ * @param value The property value as a string.
+ * @return A pointer to the updated ViewConfig structure.
+ */
+typedef ViewConfig *(*ConfigurePropertyCallback)(void *config, ViewConfig *view_config, gchar *property, gchar *value);
+
+/**
+ * @brief Initialize a generic configuration using a callback function.
+ *
+ * This function reads properties and their values from the provided file index
+ * and uses the callback function to configure the specific properties for
+ * the given configuration.
+ *
+ * @param index The file pointer to the configuration index file.
+ * @param config A pointer to the specific configuration structure.
+ * @param configure_property_callback The callback function to configure properties.
+ * @return A pointer to the initialized ViewConfig structure, or NULL on failure.
+ */
+ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCallback configure_property_callback);
+
+
 #endif

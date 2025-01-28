@@ -14,6 +14,20 @@
 			id="box2"
 			orientation="vertical"
 		>
+			<menu_bar
+				id="menu_bar1"
+				bg_color="#999999"
+				text_color="#333333"
+			>
+				<menu_item
+					id="menu_item1"
+					label="File"
+				/>
+				<menu_item
+					id="menu_item1"
+					label="Edit"
+				/>
+			</menu_bar>
 
 			<paned
 				id="paned1"
@@ -63,25 +77,6 @@
 						position_y="40"
 					/>
 
-					<menu_bar
-						id="menu_bar1"
-						bg_color="#999999"
-						text_color="#333333"
-						position_x="10"
-						position_y="200"
-						width="300"
-						height="40"
-					>
-						<menu_item
-							id="menu_item1"
-							label="File"
-						/>
-						<menu_item
-							id="menu_item1"
-							label="Edit"
-						/>
-					</menu_bar>
-
 					</fixed>
 				</paned>
 
@@ -125,8 +120,6 @@
 						path="./assets/images/team_working_on_xml.jpeg"
 						position_x="30"
 						position_y="110"
-						margin_left="150"
-						margin_top="150"
 					/>
 
 					<radio_button

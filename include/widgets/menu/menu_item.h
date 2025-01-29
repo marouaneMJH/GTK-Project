@@ -3,7 +3,7 @@
 
 #include "./../../global.h"
 
-#define MAX_LABEL_SIZE 50
+// #define MAX_LABEL_SIZE 50
 #define MAX_ACCEL_PATH_SIZE 100
 
 /*  default values */

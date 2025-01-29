@@ -115,6 +115,9 @@ int get_view_index(FILE *index, gchar *widget_tag)
 
     if (g_strcmp0(widget_tag, "progress_bar") == 0)
         return ProgressBarTag;
+    
+    if (g_strcmp0(widget_tag, "frame") == 0)
+        return FrameTag;
 
     return -1;
 }
@@ -172,6 +175,13 @@ int link_with_stack_container(GtkWidget *parent, GtkWidget *child, ViewConfig *v
     return 1;
 }
 
+int link_with_frame_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_config)
+{
+    if (!GTK_IS_FRAME(parent))
+        return 0;
+    frame_add_child(parent, child);
+    return 1;
+}
 int link_with_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_config)
 {
     if (GTK_IS_MENU_ITEM(child))
@@ -179,8 +189,9 @@ int link_with_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_co
     return ((link_with_box_container(parent, child, view_config) ||
              link_with_fixed_container(parent, child, view_config) ||
              link_with_flow_box_container(parent, child, view_config) ||
-             link_with_paned_container(parent, child, view_config))  ||
-             link_with_stack_container(parent, child, view_config) 
+             link_with_paned_container(parent, child, view_config)) ||
+                    link_with_stack_container(parent, child, view_config) ||
+                    link_with_frame_container(parent, child, view_config)
                 ? 1
                 : 0);
     ;
@@ -300,6 +311,7 @@ View *read_box_tag(FILE *index, View *parent_view, gboolean is_relative_containe
 
     return box_view;
 }
+
 View *read_stack_tag(FILE *index, View *parent_view, gboolean is_relative_container)
 {
     ViewConfig *view_config;
@@ -315,6 +327,23 @@ View *read_stack_tag(FILE *index, View *parent_view, gboolean is_relative_contai
     parent_view = add_view(stack_view, parent_view, is_relative_container);
 
     return stack_view;
+}
+
+View *read_frame_tag(FILE *index, View *parent_view, gboolean is_relative_container)
+{
+    ViewConfig *view_config;
+    FrameConfig frame_config = DEFAULT_FRAME;
+
+    view_config = init_frame_config(index, &frame_config);
+
+    GtkWidget *frame_widget = create_frame(frame_config);
+
+    View *frame_view = create_view(view_config->view_id, frame_widget, view_config);
+
+    // Add view to view model
+    parent_view = add_view(frame_view, parent_view, is_relative_container);
+
+    return frame_view;
 }
 
 View *read_fixed_tag(FILE *index, View *parent_view, gboolean is_relative_container)
@@ -512,17 +541,17 @@ View *read_paned_tag(FILE *index, View *parent_view, gboolean is_relative_contai
 View *read_label_tag(FILE *index, View *parent_view, gboolean is_relative_container)
 {
     ViewConfig *view_config;
-    // LabelConfig label_config = DEFAULT_LABEL;
+    LabelConfig label_config = DEFAULT_LABEL;
 
-    // view_config = init_label_config(index, &label_config);
+    view_config = init_label_config(index, &label_config);
 
-    // GtkWidget *label_widget = create_paned(label_config);
+    GtkWidget *label_widget = create_label(label_config);
 
-    // View *label_view = create_view(view_config->view_id, label_widget, view_config);
+    View *label_view = create_view(view_config->view_id, label_widget, view_config);
 
-    // // Add view to view model
-    // add_view(label_view, parent_view, is_relative_container);
-    // return label_view;
+    // Add view to view model
+    add_view(label_view, parent_view, is_relative_container);
+    return label_view;
 }
 
 View *read_separator_tag(FILE *index, View *parent_view, gboolean is_relative_container)
@@ -799,12 +828,17 @@ View *build_app(GtkApplication *app, View *root_view)
                 parent_view = read_stack_tag(index, parent_view, is_relative_container);
                 is_relative_container = is_container_view(index);
                 break;
+            case FrameTag:
+
+                parent_view = read_frame_tag(index, parent_view, is_relative_container);
+                is_relative_container = is_container_view(index);
+                break;
+            
             // TODO : Complete other widgets
             default:
                 stop = TRUE;
                 fclose(index);
-
-                g_print("ERROR: %d => Widget not found\n", widget_index);
+                g_print("ERROR: %d => Widget << %s >> not found\n", widget_index,widget_tag);
                 //  exit(EXIT_FAILURE);
                 break;
             } // end of switch

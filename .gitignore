@@ -51,11 +51,15 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+Dockerfile
+
 # VS Code directory
 .vscode/
  
 tmp
+tmp.txt
 
 main.c
 
 .idea/
+

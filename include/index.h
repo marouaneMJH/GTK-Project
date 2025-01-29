@@ -30,6 +30,7 @@
 #include "./widgets/menu/menu_item.h"
 
 // #include "./widgets/button/toggle_button.h"
+#include "./containers/windows/scrolled_window.h"
 
 // Dialogs
 #include "./widgets/dialogs/dialog.h"
@@ -38,7 +39,6 @@
 #include "./widgets/dialogs/file_chooser_dialog.h"
 #include "./widgets/dialogs/font_choser_dialog.h"
 
-#include "./widgets/scroll.h"
 #include "./widgets/label.h"
 #include "./widgets/separator.h"
 #include "./widgets/entry.h"

@@ -9,8 +9,8 @@
 /* Default dimensions for image */
 #define DEFAULT_IMAGE_DIMENSIONS \
     {                            \
-        .height = 100,           \
-        .width = 100}
+        .height = 0,           \
+        .width = 0}
 
 /* Default margins for image */
 #define DEFAULT_IMAGE_MARGINS \
@@ -43,7 +43,7 @@ typedef struct
 
 } ImageConfig;
 
-gchar *init_image_config(FILE *index, ImageConfig *image_config, ViewConfig *view_config);
+ViewConfig *init_image_config(FILE *index, ImageConfig *image_config);
 
 /**
  * @brief Creates a new GtkWidget for displaying an image.
@@ -117,6 +117,6 @@ GtkWidget *create_image_from_animation(ImageConfig image_config, GdkPixbufAnimat
  * @param pixbuf A pointer to a GdkPixbuf structure containing the image data.
  * @return GtkWidget* A pointer to the newly created GtkWidget for the image.
  */
-GtkWidget *create_image_from_pixbuf(ImageConfig image_config, GdkPixbuf *pixbuf);
+GtkWidget *create_image_from_pixbuf(ImageConfig image_config);
 
 #endif

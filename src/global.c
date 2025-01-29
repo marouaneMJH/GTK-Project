@@ -43,8 +43,6 @@ GtkStyleContext *get_style_provider_context(GtkWidget *widget, const gchar *bg_c
         // Convert GString to gchar*
         css_style = g_string_free(css_builder, FALSE);
 
-        // Print the generated CSS style for debugging
-        g_print("CSS style: \n %s \n", css_style);
     }
     else
     {
@@ -104,28 +102,29 @@ void widget_set_margins(GtkWidget *widget, Margins margins)
 }
 
 
-void widget_set_text_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)
-{
-    GdkRGBA color_rgba;
-    gdk_rgba_parse(&color_rgba, color);
-    gtk_widget_override_color(widget, state, &color_rgba);
-}
+// These functions are just for comparing with CSS not for use because the most of them are deprecated
+// void widget_set_text_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)
+// {
+//     GdkRGBA color_rgba;
+//     gdk_rgba_parse(&color_rgba, color);
+//     gtk_widget_override_color(widget, state, &color_rgba);
+// }
 
-void widget_set_background_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)
-{
-    GdkRGBA color_rgba;
-    gdk_rgba_parse(&color_rgba, color);
-    gtk_widget_override_background_color(widget, state, &color_rgba);
-}
+// void widget_set_background_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)
+// {
+//     GdkRGBA color_rgba;
+//     gdk_rgba_parse(&color_rgba, color);
+//     gtk_widget_override_background_color(widget, state, &color_rgba);
+// }
 
-void widget_set_font(GtkWidget *widget, const gchar *font_name, gint font_size)
-{
-    PangoFontDescription *font_desc = pango_font_description_new();
-    pango_font_description_set_family(font_desc, font_name);
-    pango_font_description_set_size(font_desc, font_size * PANGO_SCALE);
-    gtk_widget_override_font(widget, font_desc);
-    pango_font_description_free(font_desc);
-}
+// void widget_set_font(GtkWidget *widget, const gchar *font_name, gint font_size)
+// {
+//     PangoFontDescription *font_desc = pango_font_description_new();
+//     pango_font_description_set_family(font_desc, font_name);
+//     pango_font_description_set_size(font_desc, font_size * PANGO_SCALE);
+//     gtk_widget_override_font(widget, font_desc);
+//     pango_font_description_free(font_desc);
+// }
 
 // TODO: Should be not manipulate the end of tag ">" in the file
 // TODO: Should manipulate spaces and tabs and new lines
@@ -181,7 +180,7 @@ gchar *read_value(FILE *index, int *status)
             if (c == '\n')
             {
                 value[i] = '\0';
-                printf("ERROR: while reading the value %s\n", value);
+                g_critical("ERROR: while reading the value %s\n", value);
                 exit(EXIT_FAILURE);
             }
         }
@@ -194,4 +193,52 @@ gchar *read_value(FILE *index, int *status)
 gboolean is_character(gchar c)
 {
     return (c > 'A' && c < 'Z') || (c > 'a' && c < 'z');
+}
+
+
+ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCallback configure_property_callback)
+{
+    if (!config || !index)
+        return NULL;
+
+    ViewConfig *view_config = NULL;
+    SAFE_ALLOC(view_config, ViewConfig, 1);
+    DFEAULT_VIEW_CONFIG(view_config);
+
+    gchar *property = NULL;
+    gchar *value = NULL;
+
+    gchar c;
+    while ((c = fgetc(index)) != '>')
+    {
+        if (is_character(c))
+            fseek(index, -1, SEEK_CUR);
+
+        int status = -1;
+        property = read_property(index, &status);
+
+        if (status == 2)
+            return view_config;
+
+        if (status == 1 && property)
+        {
+            value = read_value(index, &status);
+            if (status == 1 && value)
+            {
+                if (g_strcmp0(property, "id") == 0)
+                {
+                    strcpy(view_config->view_id, value);
+                    free(property);
+                }
+                else
+                {
+                    view_config = configure_property_callback(config, view_config, property, value);
+                    free(value);
+                    free(property);
+                }
+            }
+        }
+    }
+
+    return view_config;
 }

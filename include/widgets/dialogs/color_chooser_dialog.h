@@ -31,5 +31,12 @@ typedef struct {
 
 
 
-
+/**
+ * @brief Creates a color chooser dialog widget.
+ *
+ * This function takes a configuration and returns a GtkWidget that allows the user to choose a color.
+ *
+ * @param config The configuration for the color chooser dialog.
+ * @return GtkWidget* A pointer to the created color chooser dialog widget.
+ */
 GtkWidget* create_color_chooser_dialog(ColorChooserDialogConfig config);

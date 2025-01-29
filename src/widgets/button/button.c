@@ -1,17 +1,16 @@
 #include "./../../../include/widgets/button/button.h"
 
-
-int configure_button_property(ButtonConfig *button_config, ViewConfig *view_config, gchar *property, gchar *value)
+ViewConfig *configure_button_property(ButtonConfig *button_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
     if (!button_config || !property || !value)
-        return -1;
+        return NULL;
 
     if (g_strcmp0(property, "label") == 0)
         strcpy(button_config->label, value);
-    
+
     if (g_strcmp0(property, "tooltip") == 0)
         strcpy(button_config->tooltip, value);
-    
+
     if (g_strcmp0(property, "is_sensitive") == 0)
         button_config->is_sensitive = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
 
@@ -37,7 +36,6 @@ int configure_button_property(ButtonConfig *button_config, ViewConfig *view_conf
 
     if (g_strcmp0(property, "height") == 0)
         button_config->dimensions.height = atoi(value);
-        
 
     if (g_strcmp0(property, "bg_color") == 0)
         strcpy(button_config->bg_color, value);
@@ -45,70 +43,24 @@ int configure_button_property(ButtonConfig *button_config, ViewConfig *view_conf
     if (g_strcmp0(property, "text_color") == 0)
         strcpy(button_config->text_color, value);
 
+    if (g_strcmp0(property, "expand") == 0)
+        button_config->expand = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+    
+
+    if (g_strcmp0(property, "expand") == 0)
+        button_config->expand = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+    
+
     // Icon image and icon
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
-    return 1;
+    return view_config;
 }
 
-gchar *init_button_config(FILE *index, ButtonConfig *button_config, ViewConfig *view_config)
+ViewConfig *init_button_config(FILE *index, ButtonConfig *button_config)
 {
-    // Check if the button config and the index file is not null
-    if (!button_config || !index)
-        return NULL;
-
-    // Store the property and value of the tag
-    gchar *property = NULL;
-    gchar *value = NULL;
-
-    // The view id of the tag
-    gchar *view_id = NULL;
-
-    // Read the tag character by character
-    gchar c;
-    while ((c = fgetc(index)) != '>')
-    {
-        printf("INIT : C => %c\n", c);
-        /* If the character is a letter then go back one character
-            Because when the tag is readed the cursor will start with the first letter in the property and it will be lost */
-        if (is_character(c))
-            fseek(index, -1, SEEK_CUR);
-
-        int status = -1;
-
-        // Read the property of the tag
-        property = read_property(index, &status);
-
-        // If the all properties are readed then break the loop and return the view id and pass the properties to the button config
-        if (status == 2)
-            return view_id;
-
-        // If the property is readed then read the value of the property
-        else if (status == 1 && property)
-        {
-            // Read the value of the property
-            value = read_value(index, &status);
-            if (status == 1 && value)
-            {
-                if (g_strcmp0(property, "id") == 0) // Store the view id
-                {
-                    view_id = value;
-                    free(property);
-                }
-                else
-                {
-                    // Apply the property value to the button config
-                    configure_button_property(button_config, view_config, property, value);
-                    free(value);
-                    free(property);
-                }
-            }
-        }
-    }
-    printf("END INIT C => %c\n", c);
-
-    return view_id;
+    return init_generic_config(index,(void*)button_config,(ConfigurePropertyCallback)configure_button_property);
 }
 
 GtkWidget *create_button(ButtonConfig button_config)
@@ -140,6 +92,8 @@ GtkWidget *create_button(ButtonConfig button_config)
     }
 
     // Set background and/or label colors
+   widget_set_colors(button, button_config.bg_color, button_config.text_color);
+   
    widget_set_colors(button, button_config.bg_color, button_config.text_color);
    
     // Set margin

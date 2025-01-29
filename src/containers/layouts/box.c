@@ -1,9 +1,9 @@
 #include "./../../../include/containers/layouts/box.h"
 
-int configure_box_property(BoxConfig *box_config, gchar *property, gchar *value)
+ViewConfig *configure_box_property(BoxConfig *box_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
     if (!box_config || !property || !value)
-        return -1;
+        return NULL;
 
     // Orientation
     if (g_strcmp0(property, "orientation") == 0)
@@ -48,71 +48,19 @@ int configure_box_property(BoxConfig *box_config, gchar *property, gchar *value)
 
     if (g_strcmp0(property, "text_color") == 0)
         strcpy(box_config->text_color, value);
+    
+    if(g_strcmp0(property, "bg_image") == 0)
+        strcpy(box_config->bg_image, value);
 
-    return 1;
+    SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
+
+    return view_config;
 }
 
-gchar *init_box_config(FILE *index, BoxConfig *box_config, ViewConfig *view_config)
+ViewConfig *init_box_config(FILE *index, BoxConfig *box_config)
 {
-    // Check if the window config and the index file is not null
-    if (!box_config || !index)
-        return NULL;
-
-    // Store the property and value of the tag
-    gchar *property = NULL;
-    gchar *value = NULL;
-
-    // The view id of the tag
-    gchar *view_id = NULL;
-
-    // Read the tag character by character
-    gchar c;
-    while ((c = fgetc(index)) != '>')
-    {
-        /* If the character is a letter then go back one character
-            Because when the tag is readed the cursor will start with the first letter in the property and it will be lost */
-        if (is_character(c))
-            fseek(index, -1, SEEK_CUR);
-
-        int status = -1;
-
-        // Read the property of the tag
-        property = read_property(index, &status);
-
-        // If the all properties are readed then break the loop and return the view id and pass the properties to the window config
-        if (status == 2)
-            return view_id;
-
-        // If the property is readed then read the value of the property
-        else if (status == 1 && property)
-        {
-            // Read the value of the property
-            value = read_value(index, &status);
-
-            printf("Property %s\n", property);
-            printf("Value %s\n", value);
-
-            if (status == 1 && value)
-            {
-                if (g_strcmp0(property, "id") == 0) // Store the view id
-                {
-                    view_id = value;
-                    free(property);
-                }
-                else
-                {
-                    // Apply the property value to the window config
-                    configure_box_property(box_config, property, value);
-                    free(value);
-                    free(property);
-                }
-            }
-        }
-    }
-
-    return view_id;
+        return init_generic_config(index,(void*)box_config,(ConfigurePropertyCallback)configure_box_property);
 }
-
 GtkWidget *create_box(BoxConfig box_config)
 {
     GtkWidget *box = NULL;
@@ -140,6 +88,10 @@ GtkWidget *create_box(BoxConfig box_config)
     // Set margins
     widget_set_margins(box, box_config.margins);
 
+    // Set background image
+    if(box_config.bg_image[0] != '\0'){
+        widget_set_background_image(box, box_config.bg_image, box_config.text_color);
+    }
     // Set spacing
     // gtk_box_set_spacing(GTK_BOX(box), box_config.spacing);
     // Set packing

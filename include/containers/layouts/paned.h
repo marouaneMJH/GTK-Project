@@ -19,7 +19,7 @@
 #define DEFAULT_PANED                            \
     {                                            \
         .orientation = GTK_ORIENTATION_VERTICAL, \
-        .position = 0,                           \
+        .position = 200,                         \
         .is_wide = FALSE,                        \
         .margins = DEFAULT_PANED_MARGINS,        \
         .dimensions = DEFAULT_PANED_DIMENSIONS,  \
@@ -31,7 +31,7 @@ typedef struct
     // Define orientation
     GtkOrientation orientation;
 
-    // Define paned position
+    // Set paned position of the separator
     gint position;
 
     // Enable or diable wide handle
@@ -46,7 +46,10 @@ typedef struct
 
 } PanedConfig;
 
-PanedConfig *init_paned();
+
+ViewConfig *configure_paned_property(PanedConfig *paned_config,ViewConfig *view_config ,gchar *property, gchar *value);
+
+ViewConfig *init_paned_config(FILE *index, PanedConfig *paned_box_config);
 
 /**
  * @brief create paned widget with default

@@ -3,24 +3,62 @@
 
 
 
-
-LinkButtonConfig *init_link_button_config(const gchar *uri, const gchar *label)
+ViewConfig *configure_link_button_property(LinkButtonConfig *link_button_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
-    LinkButtonConfig *link_button_config;
-    SAFE_ALLOC(link_button_config, LinkButtonConfig, 1);
+    if (!link_button_config || !property || !value)
+        return NULL;
 
-    // copy URI and label to the configuration
-    g_strlcpy(link_button_config->uri, uri, MAX_URI_SIZE);
-    g_strlcpy(link_button_config->label, label, MAX_BUTTON_LABEL_SIZE);
+    // URI
+    if (g_strcmp0(property, "uri") == 0)
+        strcpy(link_button_config->uri, value);
 
-    // Initialize other fields with default values
-    g_strlcpy(link_button_config->tooltip, "", MAX_TOOLTIP_SIZE);
-    link_button_config->is_visited = FALSE;
-    //link_button_config->dimensions = DEFAULT_LINK_BUTTON_DIMENSIONS;
-    g_strlcpy(link_button_config->bg_color, "", MAX_COLOR_SIZE);
-    g_strlcpy(link_button_config->text_color, "", MAX_COLOR_SIZE);
+    // Label
+    if (g_strcmp0(property, "label") == 0)
+        strcpy(link_button_config->label, value);
 
-    return link_button_config;
+    // Tooltip
+    if (g_strcmp0(property, "tooltip") == 0)
+        strcpy(link_button_config->tooltip, value);
+
+    // Visited state
+    if (g_strcmp0(property, "is_visited") == 0)
+        link_button_config->is_visited = g_strcmp0(value, "true") == 0;
+
+        // Margins
+    if (g_strcmp0(property, "mrgin_top") == 0)
+        link_button_config->margins.top = atoi(value);
+
+    if (g_strcmp0(property, "mrgin_bottom") == 0)
+        link_button_config->margins.bottom = atoi(value);
+
+    if (g_strcmp0(property, "mrgin_left") == 0)
+        link_button_config->margins.start = atoi(value);
+
+    if (g_strcmp0(property, "mrgin_right") == 0)
+        link_button_config->margins.end = atoi(value);
+
+    // Dimensions
+    if (g_strcmp0(property, "width") == 0)
+        link_button_config->dimensions.width = atoi(value);
+
+    if (g_strcmp0(property, "height") == 0)
+        link_button_config->dimensions.height = atoi(value);
+
+    if (g_strcmp0(property, "bg_color") == 0)
+        strcpy(link_button_config->bg_color, value);
+
+    if (g_strcmp0(property, "text_color") == 0)
+        strcpy(link_button_config->text_color, value);
+
+
+    SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
+
+    return view_config;
+}
+
+ViewConfig *init_link_button_config(FILE *index, LinkButtonConfig *link_button_config)
+{
+    return init_generic_config(index,(void*)link_button_config,(ConfigurePropertyCallback)configure_link_button_property);
 }
 
 GtkWidget *create_link_button(LinkButtonConfig link_button_config)
@@ -41,6 +79,8 @@ GtkWidget *create_link_button(LinkButtonConfig link_button_config)
 
     // Set colors
     widget_set_colors(link_button, link_button_config.bg_color, link_button_config.text_color);
+
+    widget_set_margins(link_button, link_button_config.margins);
 
     return link_button;
 }

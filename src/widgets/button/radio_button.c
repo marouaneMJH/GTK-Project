@@ -1,10 +1,13 @@
 #include "./../../../include/global.h"
 #include "./../../../include/widgets/button/radio_button.h"
 
-int configure_radio_button_property(RadioButtonConfig *radio_button_config, ViewConfig *view_config, gchar *property, gchar *value)
+ViewConfig *configure_radio_button_property(RadioButtonConfig *radio_button_config, ViewConfig *view_config, gchar *property, gchar *value, int *status)
 {
     if (!radio_button_config || !property || !value)
-        return -1;
+    {
+        *status = 0;
+        return NULL;
+    }
 
     if (g_strcmp0(property, "label") == 0)
         strcpy(radio_button_config->label, value);
@@ -77,152 +80,97 @@ int configure_radio_button_property(RadioButtonConfig *radio_button_config, View
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
-    return 1;
+    return view_config;
 }
 
-gchar *init_radio_button_config(FILE *index, RadioButtonConfig *radio_button_config, ViewConfig *view_config)
+ViewConfig *init_radio_button_config(FILE *index, RadioButtonConfig *radio_button_config)
 {
-    // Check if the radio_button config and the index file is not null
-    if (!radio_button_config || !index)
-        return NULL;
-
-    // Store the property and value of the tag
-    gchar *property = NULL;
-    gchar *value = NULL;
-
-    // The view id of the tag
-    gchar *view_id = NULL;
-
-    // Read the tag character by character
-    gchar c;
-    while ((c = fgetc(index)) != '>')
-    {
-        printf("INIT : C => %c\n", c);
-        /* If the character is a letter then go back one character
-            Because when the tag is readed the cursor will start with the first letter in the property and it will be lost */
-        if (is_character(c))
-            fseek(index, -1, SEEK_CUR);
-
-        int status = -1;
-
-        // Read the property of the tag
-        property = read_property(index, &status);
-
-        // If the all properties are readed then break the loop and return the view id and pass the properties to the radio_button config
-        if (status == 2)
-            return view_id;
-
-        // If the property is readed then read the value of the property
-        else if (status == 1 && property)
-        {
-            // Read the value of the property
-            value = read_value(index, &status);
-            if (status == 1 && value)
-            {
-                if (g_strcmp0(property, "id") == 0) // Store the view id
-                {
-                    view_id = value;
-                    free(property);
-                }
-                else
-                {
-                    // Apply the property value to the radio_button config
-                    configure_radio_button_property(radio_button_config, view_config, property, value);
-                    free(value);
-                    free(property);
-                }
-            }
-        }
-    }
-
-    return view_id;
+    return init_generic_config(index,(void*)radio_button_config,(ConfigurePropertyCallback)configure_radio_button_property);
 }
-
 GtkWidget *create_radio_button(RadioButtonConfig radio_button_config)
 {
     GtkWidget *radio_button = NULL;
 
     // Creation
-     if (radio_button_config.is_group) // Create as group
-     {
-         if (radio_button_config.label && radio_button_config.label[0] != '\0') // Create with label
-         {
-             if (radio_button_config.is_mnemonic)
-             {
-                 // Create with mnemonic
-                 radio_button = gtk_radio_button_new_with_mnemonic(NULL, radio_button_config.label);
-             }
-             else
-             {
-                 // Create with simple label
-                 radio_button = gtk_radio_button_new_with_label(NULL, radio_button_config.label);
-             }
-         }
-         else
-         {
-             // Create empty radio button
-             radio_button = gtk_radio_button_new(NULL);
-         }
-     }
-     else if (radio_button_config.group) // Create as member of group
-     {
-         if (radio_button_config.label && radio_button_config.label[0] != '\0')
-         {
-             if (radio_button_config.is_mnemonic)
-             {
-                 // Create with mnemonic from a group
-                 radio_button = gtk_radio_button_new_with_mnemonic_from_widget(GTK_RADIO_BUTTON(radio_button_config.group), radio_button_config.label);
-             }
-             else
-             {
-                 // Create with mnemonic from a group
-                 radio_button = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(radio_button_config.group), radio_button_config.label);
-             }
-         }
-         else
-         {
-             // Create empty radio button from a group
-             radio_button = gtk_radio_button_new(gtk_radio_button_get_group(GTK_RADIO_BUTTON(radio_button_config.group)));
-         }
-     }
-     else
-     {
+    if (radio_button_config.is_group) // Create as group
+    {
+        if (radio_button_config.label && radio_button_config.label[0] != '\0') // Create with label
+        {
+            if (radio_button_config.is_mnemonic)
+            {
+                // Create with mnemonic
+                radio_button = gtk_radio_button_new_with_mnemonic(NULL, radio_button_config.label);
+            }
+            else
+            {
+                // Create with simple label
+                radio_button = gtk_radio_button_new_with_label(NULL, radio_button_config.label);
+            }
+        }
+        else
+        {
+            // Create empty radio button
+            radio_button = gtk_radio_button_new(NULL);
+        }
+    }
+    else if (radio_button_config.group) // Create as member of group
+    {
+        if (radio_button_config.label && radio_button_config.label[0] != '\0')
+        {
+            if (radio_button_config.is_mnemonic)
+            {
+                // Create with mnemonic from a group
+                radio_button = gtk_radio_button_new_with_mnemonic_from_widget(GTK_RADIO_BUTTON(radio_button_config.group), radio_button_config.label);
+            }
+            else
+            {
+                // Create with mnemonic from a group
+                radio_button = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(radio_button_config.group), radio_button_config.label);
+            }
+        }
+        else
+        {
+            // Create empty radio button from a group
+            radio_button = gtk_radio_button_new(gtk_radio_button_get_group(GTK_RADIO_BUTTON(radio_button_config.group)));
+        }
+    }
+    else
+    {
         g_print("Error while creating a radio button");
-     }
+    }
 
- 
-     // Enable or disable the radio button
-     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_button), radio_button_config.is_selected);
+    // Enable or disable the radio button
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_button), radio_button_config.is_selected);
 
-     // Set normal button mode
-     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(radio_button), !radio_button_config.is_button_mode);
+    // Set normal button mode
+    gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(radio_button), !radio_button_config.is_button_mode);
 
-     // Set inconsistent mode (ambiguity mode)
-     gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(radio_button), radio_button_config.is_inconsistent);
+    // Set inconsistent mode (ambiguity mode)
+    gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(radio_button), radio_button_config.is_inconsistent);
 
-     // Set underline mode
-     gtk_button_set_use_underline(GTK_BUTTON(radio_button), radio_button_config.use_underline);
+    // Set underline mode
+    gtk_button_set_use_underline(GTK_BUTTON(radio_button), radio_button_config.use_underline);
 
-     // Set the tooltip
-     gtk_widget_set_tooltip_text(radio_button, radio_button_config.tooltip);
+    // Set the tooltip
+    gtk_widget_set_tooltip_text(radio_button, radio_button_config.tooltip);
 
-     // Set icon
-     if (radio_button_config.icon_name && radio_button_config.icon_name[0] != '\0')
-     {
-         GtkWidget *radio_button_icon = gtk_image_new_from_icon_name(radio_button_config.icon_name, GTK_ICON_SIZE_BUTTON);
-         gtk_button_set_image(GTK_BUTTON(radio_button), radio_button_icon);
-         gtk_button_set_image_position(GTK_BUTTON(radio_button), radio_button_config.icon_position);
-     }
+    // Set icon
+    if (radio_button_config.icon_name && radio_button_config.icon_name[0] != '\0')
+    {
+        GtkWidget *radio_button_icon = gtk_image_new_from_icon_name(radio_button_config.icon_name, GTK_ICON_SIZE_BUTTON);
+        gtk_button_set_image(GTK_BUTTON(radio_button), radio_button_icon);
+        gtk_button_set_image_position(GTK_BUTTON(radio_button), radio_button_config.icon_position);
+    }
 
-     // Set margins
-     widget_set_margins(radio_button, radio_button_config.margins);
+    // Set margins
+    widget_set_margins(radio_button, radio_button_config.margins);
 
-     // Set dimensions
-     if (radio_button_config.dimensions.width > 0 && radio_button_config.dimensions.height > 0)
-     {
-         gtk_widget_set_size_request(radio_button, radio_button_config.dimensions.width, radio_button_config.dimensions.height);
-     }
- 
+    // Set dimensions
+    if (radio_button_config.dimensions.width > 0 && radio_button_config.dimensions.height > 0)
+    {
+        gtk_widget_set_size_request(radio_button, radio_button_config.dimensions.width, radio_button_config.dimensions.height);
+    }
+
     // Set colors
     widget_set_colors(radio_button, radio_button_config.bg_color, radio_button_config.text_color);
 

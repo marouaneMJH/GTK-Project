@@ -1,9 +1,9 @@
 #include "../../include/widgets/image.h"
 
-int configure_image_property(ImageConfig *image_config, ViewConfig *view_config, gchar *property, gchar *value)
+ViewConfig *configure_image_property(ImageConfig *image_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
     if (!image_config || !property || !value)
-        return -1;
+        return NULL;
 
     if (g_strcmp0(property, "type") == 0)
     {
@@ -51,74 +51,19 @@ int configure_image_property(ImageConfig *image_config, ViewConfig *view_config,
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
-    return 1;
+    return view_config;
 }
 
-gchar *init_image_config(FILE *index, ImageConfig *image_config, ViewConfig *view_config)
+ViewConfig *init_image_config(FILE *index, ImageConfig *image_config)
 {
-    // Check if the image config and the index file is not null
-    if (!image_config || !index)
-        return NULL;
-
-    // Store the property and value of the tag
-    gchar *property = NULL;
-    gchar *value = NULL;
-
-    // The view id of the tag
-    gchar *view_id = NULL;
-
-    // Read the tag character by character
-    gchar c;
-    while ((c = fgetc(index)) != '>')
-    {
-        printf("INIT : C => %c\n", c);
-        /* If the character is a letter then go back one character
-            Because when the tag is readed the cursor will start with the first letter in the property and it will be lost */
-        if (is_character(c))
-            fseek(index, -1, SEEK_CUR);
-
-        int status = -1;
-
-        // Read the property of the tag
-        property = read_property(index, &status);
-
-        // If the all properties are readed then break the loop and return the view id and pass the properties to the image config
-        if (status == 2)
-            return view_id;
-
-        // If the property is readed then read the value of the property
-        else if (status == 1 && property)
-        {
-            // Read the value of the property
-            value = read_value(index, &status);
-            if (status == 1 && value)
-            {
-                if (g_strcmp0(property, "id") == 0) // Store the view id
-                {
-                    view_id = value;
-                    free(property);
-                }
-                else
-                {
-                    // Apply the property value to the image config
-                    configure_image_property(image_config, view_config, property, value);
-                    free(value);
-                    free(property);
-                }
-            }
-        }
-    }
-    printf("END INIT C => %c\n", c);
-
-    return view_id;
+    return init_generic_config(index,(void*)image_config,(ConfigurePropertyCallback)configure_image_property);
 }
-
 GtkWidget *create_image(ImageConfig image_config)
 {
 
-    if (image_config.type != IMAGE_EMPTY && image_config.type != IMAGE_FILE && image_config.type != IMAGE_RESOURCE)
+    if (image_config.type != IMAGE_EMPTY && image_config.type != IMAGE_FILE && image_config.type != IMAGE_RESOURCE && image_config.type != IMAGE_PIXBUF)
     {
-        perror("Invalid image type");
+        perror("ERROR => Invalid image type");
         exit(EXIT_FAILURE);
     }
 
@@ -135,11 +80,15 @@ GtkWidget *create_image(ImageConfig image_config)
     case IMAGE_RESOURCE:
         image = gtk_image_new_from_resource(image_config.path);
         break;
+    case IMAGE_PIXBUF:
+        image = create_image_from_pixbuf(image_config);
+        break;
     default:
         break;
     }
 
     gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
+
     gtk_widget_set_opacity(image, image_config.opacity);
     widget_set_margins(image, image_config.margins);
 
@@ -179,13 +128,26 @@ GtkWidget *create_image_from_animation(ImageConfig image_config, GdkPixbufAnimat
     return image;
 }
 
-GtkWidget *create_image_from_pixbuf(ImageConfig image_config, GdkPixbuf *pixbuf)
+GtkWidget *create_image_from_pixbuf(ImageConfig image_config)
 {
 
-    GtkWidget *image = gtk_image_new_from_pixbuf(pixbuf);
+    // Load the image into a GdkPixbuf
+    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(image_config.path, NULL);
+    if (!pixbuf)
+    {
+        g_printerr("Error loading image\n");
+        return NULL;
+    }
 
-    gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
-    gtk_widget_set_opacity(image, image_config.opacity);
-    widget_set_margins(image, image_config.margins);
+    // Resize the image
+    GdkPixbuf *scaled_pixbuf = gdk_pixbuf_scale_simple(pixbuf, image_config.dimensions.width, image_config.dimensions.height, GDK_INTERP_BILINEAR);
+
+    // Create a GtkImage widget and set the scaled image
+    GtkWidget *image = gtk_image_new_from_pixbuf(scaled_pixbuf);
+
+    // Clean up the original pixbuf (not needed anymore)
+    g_object_unref(pixbuf);
+
     return image;
+
 }

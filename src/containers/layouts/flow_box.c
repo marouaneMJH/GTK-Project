@@ -1,11 +1,66 @@
 #include "./../../../include/containers/layouts/flow_box.h"
 
-FlowBoxConfig *init_flow_box()
+ViewConfig *configure_flow_box_property(FlowBoxConfig *flow_box_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
-    FlowBoxConfig *flow_box_config = NULL;
-    SAFE_ALLOC(flow_box_config, FlowBoxConfig, 1);
+    if (!flow_box_config || !property || !value)
+        return NULL;
 
-    return flow_box_config;
+    if (g_strcmp0(property, "min_childern_per_line") == 0)
+        flow_box_config->min_childern_per_line = atoi(value);
+
+    if (g_strcmp0(property, "max_childern_per_line") == 0)
+        flow_box_config->max_childern_per_line = atoi(value);
+
+    if (g_strcmp0(property, "column_spacing") == 0)
+        flow_box_config->column_spacing = atoi(value);
+
+    if (g_strcmp0(property, "row_spacing") == 0)
+        flow_box_config->row_spacing = atoi(value);
+
+    if (g_strcmp0(property, "homogeneous") == 0)
+        flow_box_config->is_homogeneous = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
+    if (g_strcmp0(property, "selection_mode") == 0)
+    {
+        if (g_strcmp0(value, "none") == 0)
+            flow_box_config->selection_mode = GTK_SELECTION_NONE;
+        else if (g_strcmp0(value, "single") == 0)
+            flow_box_config->selection_mode = GTK_SELECTION_SINGLE;
+        else if (g_strcmp0(value, "browse") == 0)
+            flow_box_config->selection_mode = GTK_SELECTION_BROWSE;
+        else if (g_strcmp0(value, "multiple") == 0)
+            flow_box_config->selection_mode = GTK_SELECTION_MULTIPLE;
+    }
+
+    // todo : add the adjustment
+    // if (g_strcmp0(property, "hadjustment") == 0)
+    //     flow_box_config->hadjustment = (GtkAdjustment *)value;
+
+    // Margins
+    if (g_strcmp0(property, "margin_top") == 0)
+        flow_box_config->margins.top = atoi(value);
+    if (g_strcmp0(property, "margin_bottom") == 0)
+        flow_box_config->margins.bottom = atoi(value);
+    if (g_strcmp0(property, "margin_left") == 0)
+        flow_box_config->margins.start = atoi(value);
+    if (g_strcmp0(property, "margin_right") == 0)
+        flow_box_config->margins.end = atoi(value);
+
+    // Dimensions
+    if (g_strcmp0(property, "width") == 0)
+        flow_box_config->dimensions.width = atoi(value);
+    if (g_strcmp0(property, "height") == 0)
+        flow_box_config->dimensions.height = atoi(value);
+
+    SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
+
+    return view_config;
+}
+
+
+ViewConfig *init_flow_box_config(FILE *index, FlowBoxConfig *flow_box_config)
+{
+    return init_generic_config(index,(void*)flow_box_config,(ConfigurePropertyCallback)configure_flow_box_property);
 }
 
 GtkWidget *create_flow_box(FlowBoxConfig flow_box_config)
@@ -14,7 +69,7 @@ GtkWidget *create_flow_box(FlowBoxConfig flow_box_config)
     flow_box = gtk_flow_box_new();
 
     // Enable or disable homogeneous mode
-    gtk_flow_box_set_homogeneous(GTK_FLOW_BOX(flow_box), flow_box_config.homogeneous);
+    gtk_flow_box_set_homogeneous(GTK_FLOW_BOX(flow_box), flow_box_config.is_homogeneous);
 
     // Set min children per line
     gtk_flow_box_set_min_children_per_line(GTK_FLOW_BOX(flow_box), flow_box_config.min_childern_per_line);

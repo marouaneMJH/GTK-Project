@@ -1,13 +1,75 @@
 
 #include "./../../../include/widgets/button/switch_button.h"
 
-SwitchButtonConfig *init_switch_button_config(const gchar *label)
-{
-    SwitchButtonConfig *switch_button_config;
-    SAFE_ALLOC(switch_button_config, SwitchButtonConfig, 1);
 
-    g_strlcpy(switch_button_config->label, label, MAX_BUTTON_LABEL_SIZE);
-    return switch_button_config;
+
+ViewConfig *configure_switch_button_property(SwitchButtonConfig *switch_button_config, ViewConfig *view_config, gchar *property, gchar *value)
+{
+    if (!switch_button_config || !property || !value)
+        return NULL;
+
+    // Tooltip
+    if (g_strcmp0(property, "tooltip") == 0)
+    {
+        strcpy(switch_button_config->tooltip, value);
+        return view_config;
+    }
+
+    // Visibility
+    if (g_strcmp0(property, "is_visible") == 0)
+    {
+        switch_button_config->is_visible = g_strcmp0(value, "true") == 0;
+        return view_config;
+    }
+
+    // Active state
+    if (g_strcmp0(property, "is_active") == 0)
+    {
+        switch_button_config->is_active = g_strcmp0(value, "true") == 0;
+        return view_config;
+    }
+
+    // State
+    if (g_strcmp0(property, "state") == 0)
+    {
+        switch_button_config->state = g_strcmp0(value, "true") == 0;
+        return view_config;
+    }
+
+        // Margins
+    if (g_strcmp0(property, "mrgin_top") == 0)
+        switch_button_config->margins.top = atoi(value);
+
+    if (g_strcmp0(property, "mrgin_bottom") == 0)
+        switch_button_config->margins.bottom = atoi(value);
+
+    if (g_strcmp0(property, "mrgin_left") == 0)
+        switch_button_config->margins.start = atoi(value);
+
+    if (g_strcmp0(property, "mrgin_right") == 0)
+        switch_button_config->margins.end = atoi(value);
+
+    // Dimensions
+    if (g_strcmp0(property, "width") == 0)
+        switch_button_config->dimensions.width = atoi(value);
+
+    if (g_strcmp0(property, "height") == 0)
+        switch_button_config->dimensions.height = atoi(value);
+
+    if (g_strcmp0(property, "bg_color") == 0)
+        strcpy(switch_button_config->bg_color, value);
+
+    if (g_strcmp0(property, "text_color") == 0)
+        strcpy(switch_button_config->text_color, value);
+
+    SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
+
+    return view_config;
+}
+
+ViewConfig *init_switch_button_config(FILE *index, SwitchButtonConfig *switch_button_config)
+{
+    return init_generic_config(index,(void*)switch_button_config,(ConfigurePropertyCallback)configure_switch_button_property);
 }
 
 GtkWidget *create_switch_button(SwitchButtonConfig switch_button_config)

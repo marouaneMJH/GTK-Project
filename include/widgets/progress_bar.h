@@ -25,8 +25,8 @@
 /* Default progress bar configuration */
 #define DEFAULT_PROGRESS_BAR \
     {                        \
-        .text = "",          \
-        .dimension = DEFAULT_PROGRESS_BAR_DIMENSIONS, \
+        .text = "\0",          \
+        .dimensions = DEFAULT_PROGRESS_BAR_DIMENSIONS, \
         .margins = DEFAULT_PROGRESS_BAR_MARGINS, \
         .progress_fraction = 0, \
         .progress_pulse_step = 0, \
@@ -44,7 +44,7 @@
 typedef struct
 {
     gchar text[MAX_PROGRESS_BAR_TEXT_SIZE];               ///< The text displayed in the progress bar
-    Dimensions dimension;                          ///< The dimensions of the progress bar
+    Dimensions dimensions;                          ///< The dimensions of the progress bar
     Margins margins;                               ///< The margins of the progress bar
     gdouble progress_fraction;                     ///< The fraction of the progress bar (0.0 to 1.0)
     gdouble progress_pulse_step;                   ///< The pulse step of the progress bar
@@ -55,7 +55,10 @@ typedef struct
     gchar bg_color[MAX_COLOR_SIZE];                ///< The background color of the progress bar
     gchar text_color[MAX_COLOR_SIZE];              ///< The text color of the progress bar
 } ProgressBarConfig;
-#endif
+
+
+ViewConfig *init_progress_bar_config(FILE *index, ProgressBarConfig *progress_bar_config);
+
 
 /**
  * @brief Create a progress bar widget
@@ -63,3 +66,6 @@ typedef struct
  * @return GtkWidget* The progress bar widget
  */
 GtkWidget *create_progress_bar(ProgressBarConfig progress_bar_config);
+
+
+#endif

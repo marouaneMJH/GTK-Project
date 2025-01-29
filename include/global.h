@@ -2,6 +2,7 @@
 #define GLOBAL_H
 #include <gtk/gtk.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #include "./constants.h"
 
@@ -15,7 +16,6 @@
         if (!ptr)                                               \
         {                                                       \
             g_critical("Failed to allocate memory for " #type); \
-            return NULL;                                        \
         }                                                       \
     } while (0)
 
@@ -56,10 +56,33 @@
     if (g_strcmp0(property, "box_padding") == 0)                                \
     {                                                                           \
         view_config->box_padding = atoi(value);                                 \
+    }                                                                           \
+    if (g_strcmp0(property, "flow_box_order") == 0)                             \
+    {                                                                           \
+        view_config->flow_box_order = atoi(value);                              \
+    }                                                                           \
+    if (g_strcmp0(property, "paned_order") == 0)                                \
+    {                                                                           \
+        view_config->paned_order = atoi(value);                                 \
     }
+
+#define DFEAULT_VIEW_CONFIG(view_config) \
+    do                                   \
+    {                                    \
+        view_config->position_x = 0;     \
+        view_config->position_y = 0;     \
+        view_config->pack_direction = 1; \
+        view_config->box_expand = FALSE; \
+        view_config->box_fill = FALSE;   \
+        view_config->box_padding = 0;    \
+        view_config->group = NULL;       \
+        view_config->view_id[0] = '\0';  \
+    } while (0);
 
 typedef struct
 {
+    gchar view_id[MAX_VIEW_ID_SIZE];
+
     // Fixed container
     int position_x;
     int position_y;
@@ -69,6 +92,13 @@ typedef struct
     gboolean box_expand;
     gboolean box_fill;
     int box_padding;
+
+    // FlowBox container
+    gint flow_box_order;
+
+    // Paned container
+    // add1: 0 or add2: 1
+    gint paned_order;
 
     // Ex: radio button
     GtkWidget *group;
@@ -81,7 +111,6 @@ typedef struct VIEW
     struct VIEW *parent;
     struct VIEW *child;
     struct VIEW *next;
-    gchar view_id[MAX_VIEW_ID_SIZE];
     ViewConfig *view_config;
 } View;
 
@@ -149,15 +178,13 @@ void widget_set_colors(GtkWidget *widget, const gchar *bg_color, const gchar *co
  */
 void widget_set_background_image(GtkWidget *widget, const gchar *bg_image, const gchar *color);
 
-
-// /**
-//  * @brief This function gives a background image to a widget without using css
-//  * @param widget Widget cible
-//  * @param bg_image The background image name
-//  * @return void
-//  */
-// void widget_set_background_image_without_css(GtkWidget *widget, const gchar *bg_image);
-
+/**
+ * @brief This function gives a background image to a widget without using css
+ * @param widget Widget cible
+ * @param bg_image The background image name
+ * @return void
+ */
+void widget_set_background_image_without_css(GtkWidget *widget, const gchar *bg_image);
 
 /**
  * @brief This function add margins to a widget
@@ -205,5 +232,36 @@ gchar *read_property(FILE *index, int *status);
 gchar *read_value(FILE *index, int *status);
 
 gboolean is_character(gchar c);
+
+/* */
+/**
+ * @typedef ConfigurePropertyCallback
+ * @brief A callback function type for configuring properties.
+ *
+ * This callback function is used to configure specific properties
+ * for a given configuration type.
+ *
+ * @param config A pointer to the specific configuration structure.
+ * @param view_config A pointer to the ViewConfig structure.
+ * @param property The property name as a string.
+ * @param value The property value as a string.
+ * @return A pointer to the updated ViewConfig structure.
+ */
+typedef ViewConfig *(*ConfigurePropertyCallback)(void *config, ViewConfig *view_config, gchar *property, gchar *value);
+
+/**
+ * @brief Initialize a generic configuration using a callback function.
+ *
+ * This function reads properties and their values from the provided file index
+ * and uses the callback function to configure the specific properties for
+ * the given configuration.
+ *
+ * @param index The file pointer to the configuration index file.
+ * @param config A pointer to the specific configuration structure.
+ * @param configure_property_callback The callback function to configure properties.
+ * @return A pointer to the initialized ViewConfig structure, or NULL on failure.
+ */
+ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCallback configure_property_callback);
+
 
 #endif

@@ -11,17 +11,24 @@
         .width = 0,                     \
         .height = 0}
 
-#define DEFAULT_CHECK_BUTTON                      \
-    {                                             \
-        .label = "\0",                            \
-        .tooltip = "\0",                          \
-        .is_active = FALSE,                       \
-        .is_inconsistent = FALSE,                 \
-        .use_underline = FALSE,                   \
+#define DEFAULT_CHECK_BUTTON_MARGIN \
+    {                              \
+        .bottom = 0,               \
+        .top = 0,                  \
+        .start = 0,                \
+        .end = 0}
+
+#define DEFAULT_CHECK_BUTTON                           \
+    {                                                  \
+        .label = "\0",                                 \
+        .tooltip = "\0",                               \
+        .is_active = FALSE,                            \
+        .is_inconsistent = FALSE,                      \
+        .use_underline = FALSE,                        \
         .dimensions = DEFAULT_CHECK_BUTTON_DIMENSIONS, \
-        .bg_color = "\0",                         \
-        .text_color = "\0"                        \
-    }
+        .margins = DEFAULT_CHECK_BUTTON_MARGIN, \
+        .bg_color = "\0",                              \
+        .text_color = "\0"}
 
 /**
  * @brief Structure de configuration pour un bouton check.
@@ -34,6 +41,7 @@ typedef struct
     gboolean is_inconsistent;
     gboolean use_underline;
     Dimensions dimensions;
+    Margins margins;
     gchar bg_color[MAX_COLOR_SIZE];
     gchar text_color[MAX_COLOR_SIZE];
 } CheckButtonConfig;
@@ -44,9 +52,7 @@ typedef struct
  * @param is_active État initial actif ou inactif.
  * @return Un pointeur vers la configuration initialisée.
  */
-CheckButtonConfig *init_check_button_config(const gchar *label, gboolean is_active);
-
-void NewFunction(CheckButtonConfig *check_button_config);
+ViewConfig *init_check_button_config(FILE *index, CheckButtonConfig *check_button_config);
 
 /**
  * @brief Crée un nouveau bouton check basé sur une configuration.
@@ -54,11 +60,5 @@ void NewFunction(CheckButtonConfig *check_button_config);
  * @return Un pointeur vers le GtkWidget représentant le bouton check.
  */
 GtkWidget *create_check_button(CheckButtonConfig check_button_config);
-
-/**
- * @brief Met à jour l'état actif d'un bouton check.
- * @param button Le GtkWidget représentant le bouton check.
- * @param new_state Le nouvel état (TRUE pour actif, FALSE pour inactif).
- */
 
 #endif // CHECK_BUTTON_H

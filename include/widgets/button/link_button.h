@@ -2,22 +2,20 @@
 #define LINK_BUTTON_H
 
 #include "./../../global.h"
-#include "./button.h"     
+#include "./button.h"
 
 /* default values  */
 #define DEFAULT_LINK_BUTTON_DIMENSIONS \
-    {                                   \
-        .height = 0,                    \
-        .width = 0                      \
-    }
+    {                                  \
+        .height = 0,                   \
+        .width = 0}
 
 #define DEFAULT_LINK_BUTTON_MARGIN \
-    {                               \
-        .bottom = 0,                \
-        .top = 0,                   \
-        .start = 0,                 \
-        .end = 0                    \
-    }
+    {                              \
+        .bottom = 0,               \
+        .top = 0,                  \
+        .start = 0,                \
+        .end = 0}
 
 #define DEFAULT_LINK_BUTTON                           \
     {                                                 \
@@ -26,9 +24,9 @@
         .tooltip = "\0",                              \
         .is_visited = FALSE,                          \
         .dimensions = DEFAULT_LINK_BUTTON_DIMENSIONS, \
+        .margins = DEFAULT_LINK_BUTTON_MARGIN, \
         .bg_color = "\0",                             \
-        .text_color = "\0"                            \
-    }
+        .text_color = "\0"}
 
 /* Struct definition */
 typedef struct
@@ -38,11 +36,10 @@ typedef struct
     gchar tooltip[MAX_TOOLTIP_SIZE];
     gboolean is_visited;
     Dimensions dimensions;
+    Margins margins;
     gchar bg_color[MAX_COLOR_SIZE];
     gchar text_color[MAX_COLOR_SIZE];
 } LinkButtonConfig;
-
-
 
 /**
  * @brief Initializes a LinkButtonConfig struct with given values.
@@ -50,7 +47,7 @@ typedef struct
  * @param label The label text to display on the button.
  * @return Pointer to the newly allocated and initialized LinkButtonConfig.
  */
-LinkButtonConfig *init_link_button_config(const gchar *uri, const gchar *label);
+ViewConfig *init_link_button_config(FILE *index, LinkButtonConfig *link_button_config);
 
 /**
  * @brief Creates a GtkWidget for a link button using a LinkButtonConfig.
@@ -58,18 +55,5 @@ LinkButtonConfig *init_link_button_config(const gchar *uri, const gchar *label);
  * @return Pointer to the newly created GtkWidget representing the link button.
  */
 GtkWidget *create_link_button(LinkButtonConfig config);
-
-// /**
-//  * @brief Updates an existing link button widget with new properties.
-//  * @param button The GtkWidget representing the link button to update.
-//  * @param config The new configuration for the link button.
-//  */
-// void update_link_button(GtkWidget *button, LinkButtonConfig config);
-
-// /**
-//  * @brief Frees resources associated with a link button configuration.
-//  * @param config The LinkButtonConfig to free.
-//  */
-// void free_link_button_config(LinkButtonConfig *config);
 
 #endif // LINK_BUTTON_H

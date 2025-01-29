@@ -6,7 +6,7 @@
 /*  default values */
 #define DEFAULT_BOX_DIMENSIONS \
     {                          \
-        .height = 100,           \
+        .height = 100,         \
         .width = 100}
 
 #define DEFAULT_BOX_MARGINS \
@@ -26,7 +26,8 @@
         .margins = DEFAULT_BOX_MARGINS,                    \
         .dimensions = DEFAULT_BOX_DIMENSIONS,              \
         .bg_color = "\0",                                  \
-        .text_color = "\0"}
+        .text_color = "\0",                                \
+        .bg_image = "\0"}
 
 typedef struct
 {
@@ -48,9 +49,12 @@ typedef struct
     gchar bg_color[MAX_COLOR_SIZE];
     gchar text_color[MAX_COLOR_SIZE];
 
+    // bg path image
+    gchar bg_image[MAX_ICON_PATH_SIZE];
+
 } BoxConfig;
 
-gchar *init_box_config(FILE *index, BoxConfig *box_config, ViewConfig *view_config);
+ViewConfig *init_box_config(FILE *index, BoxConfig *box_config);
 
 /**
  * @brief create box widget with default

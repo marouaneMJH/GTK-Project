@@ -45,13 +45,31 @@ typedef struct
     gchar text_color[MAX_COLOR_SIZE];   // Font color
 } DialogConfig;
 
-
-
+/**
+ * @brief Creates a dialog with the specified configuration.
+ *
+ * @param config The configuration for the dialog.
+ * @return GtkWidget* The created dialog widget.
+ */
 GtkWidget* create_dialog(DialogConfig config);
 
-
-
+/**
+ * @brief Displays all widgets inside this dialog and the dialog itself.
+ *
+ * This function iterates through all the widgets contained within the dialog
+ * and displays them. It also ensures that the dialog itself is displayed.
+ *
+ * @param dialog The dialog containing the widgets to be displayed.
+ */
 void show_dialog(GtkWidget* dialog);
 
 
+/**
+ * @brief Destroys the dialog and releases all associated resources.
+ *
+ * This function properly destroys the dialog window, freeing any allocated resources
+ * and performing necessary cleanup operations.
+ *
+ * @param dialog The dialog to destroy.
+ */
 void destroy_dialog(GtkWidget* dialog);

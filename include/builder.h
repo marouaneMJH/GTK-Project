@@ -12,7 +12,7 @@ typedef enum
     StackTag,
     NotebookTag,
     ButtonTag,
-    SwitchTag,
+    SwitchButtonTag,
     EntryTag,
     LabelTag,
     SeparatorTag,
@@ -25,7 +25,10 @@ typedef enum
     ListBoxTag,
     GridTag,
     PanedTag,
-    ImageTag
+    ImageTag,
+    ProgressBarTag,
+    CheckButtonTag,
+    LinkButtonTag
 } Tags;
 
 // Global structure;

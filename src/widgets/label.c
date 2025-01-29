@@ -1,89 +1,23 @@
 #include "./../../include/widgets/label.h"
 
 
-
-
-Label* init_label(const gchar *label_text) 
+ViewConfig *configure_label_property(LabelConfig *label_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
-    Label* label;
-    SAFE_ALLOC(label, Label, MAX_LABEL_TEXT_SIZE);
+    if (!label_config || !property || !value)
+        return NULL;
 
-    /* Text Content */
-    g_strlcpy(label->label_text, label_text ? label_text : "", MAX_LABEL_TEXT_SIZE - 1);
-    label->label_text[MAX_LABEL_TEXT_SIZE - 1] = '\0';
-    label->is_markup = FALSE;
-    label->is_underline = FALSE;
 
-    /* Appearance */
-    label->jtype = GTK_JUSTIFY_LEFT;
-    label->ellipsize = PANGO_ELLIPSIZE_NONE;
-    label->is_wrap = FALSE;
-    g_strlcpy(label->text_color, "#000000", MAX_COLOR_SIZE - 1);
-    label->text_color[MAX_COLOR_SIZE - 1] = '\0';
-    g_strlcpy(label->background_color, "\0", MAX_COLOR_SIZE - 1);
-    label->background_color[MAX_COLOR_SIZE - 1] = '\0';
+    SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
-    /* Behavior */
-    label->is_selectable = TRUE;
-
-    /* Layout */
-    label->padding = 0;
-
-    return label;
+    return view_config;
 }
 
-
-
-
-Label* edit_label(
-        gchar *label_text,
-        gboolean is_markup,
-        gboolean is_underline,
-        GtkJustification jtype,
-        PangoEllipsizeMode ellipsize,
-        gboolean is_wrap,
-        gboolean is_selectable,
-        gchar *text_color,
-        gchar *background_color
-    )   
+ViewConfig *init_label_config(FILE *index, LabelConfig *label_config)
 {
-    Label* label = init_label(label_text);
-    label->is_markup = is_markup;
-    label->is_underline = is_underline;
-    label->jtype = jtype;
-    label->ellipsize = ellipsize;
-    label->is_wrap = is_wrap;
-    label->is_selectable = is_selectable;
-
-    // Update colors
-    g_strlcpy(label->text_color, text_color ? text_color : "#000000", MAX_COLOR_SIZE - 1);
-    label->text_color[MAX_COLOR_SIZE - 1] = '\0';
-    g_strlcpy(label->background_color, background_color ? background_color : "\0", MAX_COLOR_SIZE - 1);
-    label->background_color[MAX_COLOR_SIZE - 1] = '\0';
-
-    return label;
+    return init_generic_config(index,(void*)label_config,(ConfigurePropertyCallback)configure_label_property);
 }
 
-
-
-// void apply_label_colors(GtkWidget *label_widget, Label *label) 
-// {
-//     GdkRGBA text_color, background_color;
-
-//     // Convert string colors to GdkRGBA format
-//     if (gdk_rgba_parse(&text_color, label->text_color))
-//     {
-//         gtk_widget_override_color(label_widget, GTK_STATE_FLAG_NORMAL, &text_color);
-//     }
-
-//     if (gdk_rgba_parse(&background_color, label->background_color))
-//     {
-//         gtk_widget_override_background_color(label_widget, GTK_STATE_FLAG_NORMAL, &background_color);
-//     }
-// }
-
-
-GtkWidget* create_label(Label* label) 
+GtkWidget* create_label(LabelConfig* label) 
 {
     IS_EXISTE(label);
     GtkWidget *label_widget = gtk_label_new(label->label_text);
@@ -109,34 +43,4 @@ GtkWidget* create_label(Label* label)
 
     return label_widget;
 }
-
-
-void free_label(Label* label)
-{
-    // todo: add info to stdout
-    if (label)
-    {
-        g_free(label);
-    }
-}
-
-void free_widget_label(GtkWidget *label)
-{
-    if (label)
-    {
-        g_free(label);
-    }
-}
-
-
-
-/* Signales  */
-
-void on_link_activated(GtkLabel *label, const gchar *uri, gpointer user_data)
-{
-    g_print("\nLink clicked: %s\n", uri);
-}
-
-
-
 

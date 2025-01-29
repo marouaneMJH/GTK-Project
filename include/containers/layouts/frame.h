@@ -19,12 +19,12 @@
         .start = 0,           \
         .end = 0}
 
-#define DEFAULT_FRAME_CONFIG \
-    {                        \
-        .label = "\0",         \
-        .margins = DEFAULT_FRAME_MARGINS, \
+#define DEFAULT_FRAME_CONFIG                    \
+    {                                           \
+        .label = "\0",                          \
+        .margins = DEFAULT_FRAME_MARGINS,       \
         .dimensions = DEFAULT_FRAME_DIMENSIONS, \
-        .bg_color = "\0",      \
+        .bg_color = "\0",                       \
         .text_color = "\0"}
 
 typedef struct
@@ -36,6 +36,8 @@ typedef struct
     gchar text_color[MAX_COLOR_SIZE];
 } FrameConfig;
 
-GtkWidget* create_frame(FrameConfig frame_config);
+
+
+GtkWidget *create_frame(FrameConfig frame_config);
 
 #endif

@@ -227,7 +227,6 @@ gchar *read_value(FILE *index, int *status);
 
 gboolean is_character(gchar c);
 
-/* */
 /**
  * @typedef ConfigurePropertyCallback
  * @brief A callback function type for configuring properties.

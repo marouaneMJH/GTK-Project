@@ -5,6 +5,8 @@
 
 #define MAX_LABEL_TEXT_SIZE 100
 
+
+
 typedef struct
 {
     /* Text Content */
@@ -33,7 +35,7 @@ typedef struct
  */
 ViewConfig *init_label_config(FILE *index, LabelConfig *label_config);
 
-GtkWidget *create_label(LabelConfig *label);
+GtkWidget *create_label(LabelConfig label);
 
 void free_label(LabelConfig *label);
 

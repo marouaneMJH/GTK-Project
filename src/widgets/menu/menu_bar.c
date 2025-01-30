@@ -57,7 +57,7 @@ ViewConfig *configure_menu_bar_property(MenuBarConfig *menu_bar_config, ViewConf
 
 ViewConfig *init_menu_bar_config(FILE *index, MenuBarConfig *menu_bar_config)
 {
-    return init_generic_config(index,(void*)menu_bar_config,(ConfigurePropertyCallback)configure_menu_bar_property);
+    return init_generic_config(index, (void *)menu_bar_config, (ConfigurePropertyCallback)configure_menu_bar_property);
 }
 
 GtkWidget *create_menu_bar(MenuBarConfig menu_bar_config)

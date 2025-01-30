@@ -1,11 +1,73 @@
 #include "./../../../include/containers/layouts/notebook.h"
 
-NotebookConfig *init_notebook()
+ViewConfig *configure_notebook_property(NotebookConfig *notebook_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
-    NotebookConfig *notebook_config = NULL;
-    SAFE_ALLOC(notebook_config, NotebookConfig, 1);
+    if (!notebook_config || !property || !value)
+        return NULL;
 
-    return notebook_config;
+    if (g_strcmp0(property, "group_name") == 0)
+        strcpy(notebook_config->group_name, value);
+
+    if (g_strcmp0(property, "is_scrollable") == 0)
+        notebook_config->is_scrollable = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
+    if (g_strcmp0(property, "show_border") == 0)
+        notebook_config->show_border = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
+    if (g_strcmp0(property, "show_tabs") == 0)
+        notebook_config->show_tabs = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
+    if (g_strcmp0(property, "current_page") == 0)
+        notebook_config->current_page = atoi(value);
+
+    if (g_strcmp0(property, "tab_position") == 0)
+    {
+        if (g_strcmp0(value, "top") == 0)
+            notebook_config->tab_position = GTK_POS_TOP;
+        else if (g_strcmp0(value, "bottom") == 0)
+            notebook_config->tab_position = GTK_POS_BOTTOM;
+        else if (g_strcmp0(value, "left") == 0)
+            notebook_config->tab_position = GTK_POS_LEFT;
+        else if (g_strcmp0(value, "right") == 0)
+            notebook_config->tab_position = GTK_POS_RIGHT;
+    }
+
+    // Margins
+    if (g_strcmp0(property, "mrgin_top") == 0)
+        notebook_config->margins.top = atoi(value);
+
+    if (g_strcmp0(property, "mrgin_bottom") == 0)
+        notebook_config->margins.bottom = atoi(value);
+
+    if (g_strcmp0(property, "mrgin_left") == 0)
+        notebook_config->margins.start = atoi(value);
+
+    if (g_strcmp0(property, "mrgin_right") == 0)
+        notebook_config->margins.end = atoi(value);
+
+    // Dimensions
+    if (g_strcmp0(property, "width") == 0)
+        notebook_config->dimensions.width = atoi(value);
+
+    if (g_strcmp0(property, "height") == 0)
+        notebook_config->dimensions.height = atoi(value);
+
+    if (g_strcmp0(property, "bg_color") == 0)
+        strcpy(notebook_config->bg_color, value);
+
+    if (g_strcmp0(property, "text_color") == 0)
+        strcpy(notebook_config->text_color, value);
+
+    // Icon image and icon
+
+    SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
+
+    return view_config;
+}
+
+ViewConfig *init_notebook_config(FILE *index, NotebookConfig *notebook_config)
+{
+    return init_generic_config(index, (void *)notebook_config, (ConfigurePropertyCallback)configure_notebook_property);
 }
 
 GtkWidget *create_notebook(NotebookConfig notebook_config)

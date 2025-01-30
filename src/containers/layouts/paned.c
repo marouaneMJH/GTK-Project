@@ -1,7 +1,6 @@
 #include "./../../../include/containers/layouts/paned.h"
 
-
-ViewConfig *configure_paned_property(PanedConfig *paned_config,ViewConfig *view_config ,gchar *property, gchar *value)
+ViewConfig *configure_paned_property(PanedConfig *paned_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
     if (!paned_config || !property || !value)
         return NULL;
@@ -30,6 +29,13 @@ ViewConfig *configure_paned_property(PanedConfig *paned_config,ViewConfig *view_
     if (g_strcmp0(property, "margin_right") == 0)
         paned_config->margins.end = atoi(value);
 
+    // Colors
+    if (g_strcmp0(property, "bg_color") == 0)
+        strcpy(paned_config->bg_color, value);
+
+    if (g_strcmp0(property, "text_color") == 0)
+        strcpy(paned_config->text_color, value);
+
     // Dimensions
     if (g_strcmp0(property, "width") == 0)
         paned_config->dimensions.width = atoi(value);
@@ -37,13 +43,13 @@ ViewConfig *configure_paned_property(PanedConfig *paned_config,ViewConfig *view_
         paned_config->dimensions.height = atoi(value);
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
-    
+
     return view_config;
 }
 
 ViewConfig *init_paned_config(FILE *index, PanedConfig *paned_config)
 {
-    return init_generic_config(index,(void*)paned_config,(ConfigurePropertyCallback)configure_paned_property);
+    return init_generic_config(index, (void *)paned_config, (ConfigurePropertyCallback)configure_paned_property);
 }
 
 GtkWidget *create_paned(PanedConfig paned_config)

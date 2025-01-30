@@ -5,8 +5,6 @@
 
 /*  default values */
 
-#define MAX_LABEL_SIZE 50
-
 #define DEFAULT_FRAME_DIMENSIONS \
     {                            \
         .height = 0,             \

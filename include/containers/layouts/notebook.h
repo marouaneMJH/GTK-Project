@@ -60,7 +60,7 @@ typedef struct
 
 } NotebookConfig;
 
-NotebookConfig *init_notebook();
+ViewConfig *init_notebook_config(FILE *index, NotebookConfig *notebook_config);
 
 /**
  * @brief create notebook widget with default

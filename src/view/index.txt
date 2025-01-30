@@ -57,11 +57,14 @@
 						paned_order="1"
 					>
 					
-					<button
-						id="btn2"
-						label="Click Me"
-						position_x="10"
-						position_y="50"
+					<entry
+						id="entry2"
+						position_x="30"
+						position_y="70"
+						text="ana entry"
+						width="150"
+						height="25"
+						placeholder_text="Enter text"
 					/>
 
 					</fixed>
@@ -120,6 +123,7 @@
 
 					<entry
 						id="entry2"
+						text="7ta ana entry"
 						position_x="30"
 						position_y="70"
 						width="150"

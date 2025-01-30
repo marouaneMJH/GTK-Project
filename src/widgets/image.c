@@ -69,6 +69,7 @@ GtkWidget *create_image(ImageConfig image_config)
 
     GtkWidget *image = NULL;
 
+
     switch (image_config.type)
     {
     case IMAGE_EMPTY:
@@ -80,15 +81,20 @@ GtkWidget *create_image(ImageConfig image_config)
     case IMAGE_RESOURCE:
         image = gtk_image_new_from_resource(image_config.path);
         break;
+    case IMAGE_ICON:
+        image = gtk_image_new_from_icon_name(image_config.path, GTK_ICON_SIZE_DIALOG);
+        break;
+    case IMAGE_ANIMATION:
+        image = gtk_image_new_from_animation(gdk_pixbuf_animation_new_from_file(image_config.path, NULL));
+        break;
     case IMAGE_PIXBUF:
         image = create_image_from_pixbuf(image_config);
         break;
     default:
         break;
     }
-
+    
     gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
-
     gtk_widget_set_opacity(image, image_config.opacity);
     widget_set_margins(image, image_config.margins);
 
@@ -99,10 +105,6 @@ GtkWidget *create_image_from_Icon(ImageConfig image_config, GIcon *icon, GtkIcon
 {
 
     GtkWidget *image = gtk_image_new_from_gicon(icon, size);
-
-    gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
-    gtk_widget_set_opacity(image, image_config.opacity);
-    widget_set_margins(image, image_config.margins);
     return image;
 }
 
@@ -111,9 +113,6 @@ GtkWidget *create_image_from_icon_name(ImageConfig image_config, GtkIconSize siz
 
     GtkWidget *image = gtk_image_new_from_icon_name(image_config.path, GTK_ICON_SIZE_DIALOG); // Should be dynamic
 
-    gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
-    gtk_widget_set_opacity(image, image_config.opacity);
-    widget_set_margins(image, image_config.margins);
     return image;
 }
 
@@ -121,10 +120,6 @@ GtkWidget *create_image_from_animation(ImageConfig image_config, GdkPixbufAnimat
 {
 
     GtkWidget *image = gtk_image_new_from_animation(animation);
-
-    gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
-    gtk_widget_set_opacity(image, image_config.opacity);
-    widget_set_margins(image, image_config.margins);
     return image;
 }
 
@@ -138,6 +133,7 @@ GtkWidget *create_image_from_pixbuf(ImageConfig image_config)
         g_printerr("Error loading image\n");
         return NULL;
     }
+    
 
     // Resize the image
     GdkPixbuf *scaled_pixbuf = gdk_pixbuf_scale_simple(pixbuf, image_config.dimensions.width, image_config.dimensions.height, GDK_INTERP_BILINEAR);

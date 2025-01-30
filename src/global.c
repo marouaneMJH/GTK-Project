@@ -128,7 +128,7 @@ void widget_set_margins(GtkWidget *widget, Margins margins)
 
 // TODO: Should be not manipulate the end of tag ">" in the file
 // TODO: Should manipulate spaces and tabs and new lines
-// ########################## "This function should stop reading after the greater then symbol " > " exactelly"
+// ########################## "This function should stop reading after the greater than symbol " > " exactelly"
 gchar *read_property(FILE *index, int *status)
 {
     gchar *property = NULL;

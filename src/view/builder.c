@@ -1,6 +1,7 @@
 #include "./../../include/builder.h"
 
 #define INDEX_TXT "./src/view/index.txt"
+#define CHARAF_TXT "./src/view/charaf.txt"
 #define MODE "r" 
 
 View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
@@ -39,7 +40,7 @@ gchar *read_tag(FILE *index)
     return tag;
 }
 
-int get_view_index(FILE *index, gchar *widget_tag)
+int get_view_index(FILE *index, gchar *widget_tag) //Why FILE *index
 {
     if (!widget_tag)
         return -1;
@@ -609,7 +610,7 @@ View *build_app(GtkApplication *app, View *root_view)
     printf("Building app\n");
 
     // This file is read from the main.c path because this function is called/executed from main.c
-    FILE *index = fopen(INDEX_TXT, MODE);
+    FILE *index = fopen(CHARAF_TXT, MODE);
 
     if (!index)
     {

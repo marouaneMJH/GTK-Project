@@ -13,7 +13,7 @@ static void activate(GtkApplication *app, gpointer user_data)
 
     View *root_view = build_app(app, root_view);
     GtkWidget *window = root_view->widget;
-
+    
     gtk_widget_show_all(window);
 }
 

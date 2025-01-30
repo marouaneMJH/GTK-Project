@@ -34,7 +34,7 @@ ViewConfig *configure_grid_property(GridConfig *grid_config, ViewConfig *view_co
             grid_config->valign = GTK_ALIGN_END;
         else if (g_strcmp0(value, "start") == 0)
             grid_config->valign = GTK_ALIGN_START;
-        else
+        else if (g_strcmp0(value, "fill") == 0)
             grid_config->valign = GTK_ALIGN_FILL;
     }
 
@@ -46,7 +46,7 @@ ViewConfig *configure_grid_property(GridConfig *grid_config, ViewConfig *view_co
             grid_config->halign = GTK_ALIGN_END;
         else if (g_strcmp0(value, "start") == 0)
             grid_config->halign = GTK_ALIGN_START;
-        else
+        else if (g_strcmp0(value, "fill") == 0)
             grid_config->halign = GTK_ALIGN_FILL;
     }
 

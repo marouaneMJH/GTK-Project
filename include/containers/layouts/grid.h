@@ -55,7 +55,7 @@ typedef struct
 
 } GridConfig;
 
-GridConfig *init_grid();
+ViewConfig *init_grid_config(FILE *index, GridConfig *grid_config);
 
 /**
  * @brief create grid widget with default

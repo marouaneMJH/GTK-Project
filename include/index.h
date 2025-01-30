@@ -42,6 +42,7 @@
 #include "./widgets/label.h"
 #include "./widgets/separator.h"
 #include "./widgets/entry.h"
+#include "./widgets/text_area.h"
 #include "./widgets/progress_bar.h"
 #include "./widgets/image.h"
 

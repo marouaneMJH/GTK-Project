@@ -18,29 +18,12 @@
 			text_color="black"
 			margin_top="100"
 		>
-				<fixed
-			width="100"
-			height="100"
-		>
-			<label
-				label_text="spacetoon"
-				bg_color="blue"
-				color="red"
-				font_size="20"
-				position_x="10"
-				position_y="10"
-			/>
-			<label
-				label_text="spacetoon"
-				padding="50"
-				bg_color="blue"
-				color="red"
-				font_size="30"
-				position_x="10"
-				position_y="30"
-			/>
 
-		</fixed>
+					<text_area
+				font_size="40"
+				height="100"
+				width="100"
+			/>
 		</frame>
 
 

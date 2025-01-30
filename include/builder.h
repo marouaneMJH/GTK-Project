@@ -29,7 +29,8 @@ typedef enum
     ProgressBarTag,
     CheckButtonTag,
     LinkButtonTag,
-    FrameTag
+    FrameTag,
+    TextAreaTag,
 } Tags;
 
 // Global structure;

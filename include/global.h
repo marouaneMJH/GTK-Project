@@ -256,4 +256,10 @@ typedef ViewConfig *(*ConfigurePropertyCallback)(void *config, ViewConfig *view_
  */
 ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCallback configure_property_callback);
 
+/**
+ * @brief Set the fixed size of a widget.
+ * @param widget The GtkWidget to resize.
+ * @param dimensions The dimensions structure containing width and height.
+ */
+void set_widget_size(GtkWidget *widget, Dimensions dimensions);
 #endif

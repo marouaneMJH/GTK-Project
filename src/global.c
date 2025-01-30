@@ -228,3 +228,12 @@ ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCall
 
     return view_config;
 }
+
+
+void set_widget_size(GtkWidget *widget, Dimensions dimensions)
+{
+    if (!widget)
+        return;
+
+    gtk_widget_set_size_request(widget, dimensions.width, dimensions.height);
+}

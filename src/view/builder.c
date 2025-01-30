@@ -119,6 +119,9 @@ int get_view_index(FILE *index, gchar *widget_tag)
     if (g_strcmp0(widget_tag, "frame") == 0)
         return FrameTag;
 
+    if (g_strcmp0(widget_tag, "text_area") == 0)
+        return TextAreaTag;
+    
     return -1;
 }
 
@@ -655,6 +658,24 @@ View *read_progress_bar_tag(FILE *index, View *parent_view, gboolean is_relative
     return progress_bar_view;
 }
 
+View *read_text_area_tag(FILE *index, View *parent_view, gboolean is_relative_container)
+{
+    ViewConfig *view_config;
+    TextAreaConfig text_area_config = DEFAULT_TEXT_AREA;
+
+    view_config = init_text_area_config(index, &text_area_config);
+
+    GtkWidget *text_area_widget = create_text_area(text_area_config);
+
+    View *text_area_view = create_view(view_config->view_id, text_area_widget, view_config);
+
+    // Add view to view model
+    add_view(text_area_view, parent_view, is_relative_container);
+
+    return text_area_view;
+}
+
+
 View *build_app(GtkApplication *app, View *root_view)
 {
     printf("Building app\n");
@@ -831,6 +852,12 @@ View *build_app(GtkApplication *app, View *root_view)
             case FrameTag:
 
                 parent_view = read_frame_tag(index, parent_view, is_relative_container);
+                is_relative_container = is_container_view(index);
+                break;
+
+            case TextAreaTag:
+
+                parent_view = read_text_area_tag(index, parent_view, is_relative_container);
                 is_relative_container = is_container_view(index);
                 break;
             

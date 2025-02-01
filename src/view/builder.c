@@ -115,12 +115,15 @@ int get_view_index(FILE *index, gchar *widget_tag)
 
     if (g_strcmp0(widget_tag, "progress_bar") == 0)
         return ProgressBarTag;
-    
+
     if (g_strcmp0(widget_tag, "frame") == 0)
         return FrameTag;
 
     if (g_strcmp0(widget_tag, "text_area") == 0)
         return TextAreaTag;
+    
+    if (g_strcmp0(widget_tag, "overlay") == 0)
+        return OverlayTag;
     
     return -1;
 }
@@ -178,6 +181,14 @@ int link_with_stack_container(GtkWidget *parent, GtkWidget *child, ViewConfig *v
     return 1;
 }
 
+int link_with_overlay_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_config)
+{
+    if (!GTK_IS_OVERLAY(parent))
+        return 0;
+    gtk_overlay_add_overlay(GTK_OVERLAY(parent), child);
+    return 1;
+}
+
 int link_with_frame_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_config)
 {
     if (!GTK_IS_FRAME(parent))
@@ -185,6 +196,7 @@ int link_with_frame_container(GtkWidget *parent, GtkWidget *child, ViewConfig *v
     frame_add_child(parent, child);
     return 1;
 }
+
 int link_with_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_config)
 {
     if (GTK_IS_MENU_ITEM(child))
@@ -194,7 +206,8 @@ int link_with_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_co
              link_with_flow_box_container(parent, child, view_config) ||
              link_with_paned_container(parent, child, view_config)) ||
                     link_with_stack_container(parent, child, view_config) ||
-                    link_with_frame_container(parent, child, view_config)
+                    link_with_frame_container(parent, child, view_config) ||
+                    link_with_overlay_container(parent, child, view_config)
                 ? 1
                 : 0);
     ;
@@ -347,6 +360,23 @@ View *read_frame_tag(FILE *index, View *parent_view, gboolean is_relative_contai
     parent_view = add_view(frame_view, parent_view, is_relative_container);
 
     return frame_view;
+}
+
+View *read_overlay_tag(FILE *index, View *parent_view, gboolean is_relative_container)
+{
+    ViewConfig *view_config;
+    OverlayConfig overlay_config = DEFAULT_OVERLAY;
+
+    view_config = init_overlay_config(index, &overlay_config);
+
+    GtkWidget *overlay_widget = create_overlay(overlay_config);
+
+    View *overlay_view = create_view(view_config->view_id, overlay_widget, view_config);
+
+    // Add view to view model
+    parent_view = add_view(overlay_view, parent_view, is_relative_container);
+
+    return overlay_view;
 }
 
 View *read_fixed_tag(FILE *index, View *parent_view, gboolean is_relative_container)
@@ -675,7 +705,6 @@ View *read_text_area_tag(FILE *index, View *parent_view, gboolean is_relative_co
     return text_area_view;
 }
 
-
 View *build_app(GtkApplication *app, View *root_view)
 {
     printf("Building app\n");
@@ -860,12 +889,18 @@ View *build_app(GtkApplication *app, View *root_view)
                 parent_view = read_text_area_tag(index, parent_view, is_relative_container);
                 is_relative_container = is_container_view(index);
                 break;
-            
+            case OverlayTag:
+
+                parent_view = read_overlay_tag(index, parent_view, is_relative_container);
+                printf("\n\nHERE\n\n\n");
+                is_relative_container = is_container_view(index);
+                break;
+
             // TODO : Complete other widgets
             default:
                 stop = TRUE;
                 fclose(index);
-                g_print("ERROR: %d => Widget << %s >> not found\n", widget_index,widget_tag);
+                g_print("ERROR: %d => Widget << %s >> not found\n", widget_index, widget_tag);
                 //  exit(EXIT_FAILURE);
                 break;
             } // end of switch

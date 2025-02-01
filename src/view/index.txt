@@ -4,28 +4,52 @@
 	icon_name="folder"
 	width="800"
 	height="700"
-	bg_color="green"
 	text_color="white"
->
 
+>
 	<scrolled_window
 		id="sw2"
 	>
-				<frame
-			id="frame1"
-			label="MBC3"
-			bg_color="red"
-			text_color="black"
-			margin_top="100"
+		<overlay
+			id="overlay1"
+			bg_image="programer.jpg"
+			margin_left="20"
 		>
-
-					<text_area
-				font_size="40"
+			<fixed
 				height="100"
-				width="100"
-			/>
-		</frame>
+				width="200"
+				bg_color="grey"
+				
+			>
+				<button
+					id="button1"
+					label="Click Me"
+					bg_color="blue"
+					text_color="white"
+					margin_top="1"
+					margin_left="2"
+					height="20"
+					width="80"
+					position_x="20"
+					position_y="40"
+				/>
 
+				
+				<button
+					id="button1"
+					label="Click Me"
+					bg_color="green"
+					text_color="white"
+					margin_top="12"
+					margin_left="12"
+					height="20"
+					width="40"
+					position_x="50"
+					position_y="70"
+				/>
+			</fixed>
 
+			
+		</overlay>
 	</scrolled_window>
 </window>

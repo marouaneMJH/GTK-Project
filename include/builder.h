@@ -31,6 +31,7 @@ typedef enum
     LinkButtonTag,
     FrameTag,
     TextAreaTag,
+    OverlayTag
 } Tags;
 
 // Global structure;

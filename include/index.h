@@ -17,6 +17,8 @@
 #include "./containers/layouts/stack.h"
 #include "./containers/layouts/frame.h"
 #include "./containers/layouts/combo_text_box.h"
+#include "./containers/layouts/overlay.h"
+
 
 // buttons
 #include "./widgets/button/check_button.h"

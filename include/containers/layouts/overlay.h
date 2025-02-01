@@ -26,7 +26,7 @@
         .opacity = 1,                     \
         .bg_color = "#ffffff",            \
         .border_radius = 0,               \
-        .margin = DEFAULT_OVERLAY_MARGINS, \
+        .margins = DEFAULT_OVERLAY_MARGINS, \
         .bg_image[0] = '\0',              \
         .dimensions = DEFAULT_OVERLAY_DIMENSIONS}
 

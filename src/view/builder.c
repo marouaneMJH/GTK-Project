@@ -163,12 +163,22 @@ int link_with_paned_container(GtkWidget *parent, GtkWidget *child, ViewConfig *v
 {
     if (!GTK_IS_PANED(parent))
         return 0;
-    //  todo from view config
+
     gtk_paned_add1(GTK_PANED(parent), child);
     if (view_config->paned_order == 1)
         gtk_paned_add1(GTK_PANED(parent), child);
     else
         gtk_paned_add2(GTK_PANED(parent), child);
+
+    return 1;
+}
+
+int link_with_grid_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_config)
+{
+    if (!GTK_IS_GRID(parent))
+        return 0;
+
+    gtk_grid_attach(GTK_GRID(parent), child, view_config->column, view_config->row, view_config->column_span, view_config->row_span);
 
     return 1;
 }
@@ -199,15 +209,16 @@ int link_with_frame_container(GtkWidget *parent, GtkWidget *child, ViewConfig *v
 
 int link_with_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_config)
 {
-    if (GTK_IS_MENU_ITEM(child))
+    if (GTK_IS_MENU_ITEM(child) || GTK_IS_MENU(child) || GTK_IS_NOTEBOOK(parent))
         return 0;
     return ((link_with_box_container(parent, child, view_config) ||
              link_with_fixed_container(parent, child, view_config) ||
              link_with_flow_box_container(parent, child, view_config) ||
-             link_with_paned_container(parent, child, view_config)) ||
+             link_with_paned_container(parent, child, view_config) ||
+             link_with_grid_container(parent, child, view_config) ||
                     link_with_stack_container(parent, child, view_config) ||
                     link_with_frame_container(parent, child, view_config) ||
-                    link_with_overlay_container(parent, child, view_config)
+                    link_with_overlay_container(parent, child, view_config))
                 ? 1
                 : 0);
     ;
@@ -237,9 +248,10 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
         }
     }
 
+    // Menu bar and menu items
     if (GTK_IS_MENU_ITEM(view->widget))
     {
-        if (GTK_IS_MENU_BAR(relative->widget))
+        if (GTK_IS_MENU_BAR(relative->widget) || GTK_IS_MENU(relative->widget))
         {
             view->view_config->group = relative->widget;
             gtk_menu_shell_append(GTK_MENU_SHELL(relative->widget), view->widget);
@@ -251,12 +263,38 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
         }
     }
 
+    if (GTK_IS_MENU(view->widget))
+    {
+        if (GTK_IS_MENU_ITEM(relative->widget))
+        {
+            gtk_menu_item_set_submenu(GTK_MENU_ITEM(relative->widget), view->widget);
+        }
+    }
+
+    // Notebook
+    if (view->view_config->tab_label[0] != '\0')
+    {
+        if (GTK_IS_NOTEBOOK(relative->widget))
+        {
+            gtk_notebook_append_page(GTK_NOTEBOOK(relative->widget), view->widget, gtk_label_new(view->view_config->tab_label));
+            gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(relative->widget), view->widget, view->view_config->is_reorderable);
+        }
+        else if (relative->parent)
+        {
+            if (GTK_IS_NOTEBOOK(relative->parent->widget))
+            {
+                gtk_notebook_append_page(GTK_NOTEBOOK(relative->parent->widget), view->widget, gtk_label_new(view->view_config->tab_label));
+                gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(relative->parent->widget), view->widget, view->view_config->is_reorderable);
+            }
+        }
+    }
+
     if (is_relative_container)
     {
-        printf("RELTIVE PARENT %s IS CONTAINER FOR: %s\n", relative->view_config->view_id, view->view_config->view_id);
         view->parent = relative;
         relative->child = view;
 
+        printf("RELATIVE PARENT %s IS A CONTAINER FOR: %s\n", relative->view_config->view_id, view->view_config->view_id);
         // Window case
         if (GTK_IS_WINDOW(relative->widget) || GTK_IS_SCROLLED_WINDOW(relative->widget))
         {
@@ -268,7 +306,7 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
     }
     else
     {
-        printf("RELTIVE PARENT %s IS NOT A CONTAINER FOR: %s\n", relative->view_config->view_id, view->view_config->view_id);
+        printf("RELATIVE PARENT %s IS NOT A CONTAINER FOR: %s\n", relative->view_config->view_id, view->view_config->view_id);
         view->parent = relative->parent;
         relative->next = view;
 
@@ -688,6 +726,39 @@ View *read_progress_bar_tag(FILE *index, View *parent_view, gboolean is_relative
     return progress_bar_view;
 }
 
+View *read_notebook_tag(FILE *index, View *parent_view, gboolean is_relative_container)
+{
+    ViewConfig *view_config;
+    NotebookConfig notebook_config = DEFAULT_NOTEBOOK;
+
+    view_config = init_notebook_config(index, &notebook_config);
+
+    GtkWidget *notebook_widget = create_notebook(notebook_config);
+
+    View *notebook_view = create_view(view_config->view_id, notebook_widget, view_config);
+
+    // Add view to view model
+    add_view(notebook_view, parent_view, is_relative_container);
+
+    return notebook_view;
+}
+
+View *read_grid_tag(FILE *index, View *parent_view, gboolean is_relative_container)
+{
+    ViewConfig *view_config;
+    GridConfig grid_config = DEFAULT_GRID;
+
+    view_config = init_grid_config(index, &grid_config);
+
+    GtkWidget *grid_widget = create_grid(grid_config);
+
+    View *grid_view = create_view(view_config->view_id, grid_widget, view_config);
+
+    // Add view to view model
+    add_view(grid_view, parent_view, is_relative_container);
+
+    return grid_view;
+}
 View *read_text_area_tag(FILE *index, View *parent_view, gboolean is_relative_container)
 {
     ViewConfig *view_config;
@@ -789,13 +860,22 @@ View *build_app(GtkApplication *app, View *root_view)
                 is_relative_container = is_container_view(index);
 
                 break;
+            case NotebookTag:
+                parent_view = read_notebook_tag(index, parent_view, is_relative_container);
+                is_relative_container = is_container_view(index);
+
+                break;
+            case GridTag:
+                parent_view = read_grid_tag(index, parent_view, is_relative_container);
+                is_relative_container = is_container_view(index);
+
+                break;
             case EntryTag:
 
                 parent_view = read_entry_tag(index, parent_view, is_relative_container);
                 is_relative_container = is_container_view(index);
 
                 break;
-
             case RadioButtonTag:
 
                 parent_view = read_radio_button_tag(index, parent_view, is_relative_container);

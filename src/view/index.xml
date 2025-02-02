@@ -1,6 +1,6 @@
 <window
 	id="window_2"
-	title="main window"
+	title="Second Window"
 	icon_name="folder"
 >
 	<scrolled_window
@@ -41,8 +41,6 @@
 							<menu
 								id="menu1"
 								label="File"
-								reserve_toggle_size="true"
-								active_index="0"
 							>
 								<menu_item
 									id="menu_item1"
@@ -74,7 +72,7 @@
 					>
 						<button id="btn1" label="Click 1" row="0" column="0" row_span="1"
 							column_span="1" />
-						<button id="btn1" label="Click 2" row="1" column="0" row_span="1"
+						<button id="btn1" label="Click 2" row="2" column="1" row_span="1"
 							column_span="1" />
 					</grid>
 

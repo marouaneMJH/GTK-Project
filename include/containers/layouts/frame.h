@@ -3,7 +3,8 @@
 
 #include "./../../global.h"
 
-/* default values */
+/*  default values */
+
 #define DEFAULT_FRAME_DIMENSIONS \
     {                           \
         .height = 0,            \

@@ -14,7 +14,20 @@ static void activate(GtkApplication *app, gpointer user_data)
     View *root_view = build_app(app, root_view);
     GtkWidget *window = root_view->widget;
 
-    gtk_widget_show_all(window);
+    // WindowConfig window_config = DEFAULT_WINDOW;
+    // GtkWidget *window = create_window(app,window_config);
+
+    // GtkWidget *button = gtk_button_new_with_label("Click me!");
+
+    // FrameConfig config_frame = DEFAULT_FRAME; 
+    // GtkWidget *frame = create_frame(config_frame);
+
+    // gtk_frame_set_label(GTK_FRAME(frame),"MBC3");
+
+    // gtk_container_add(GTK_CONTAINER(frame), button);
+    // gtk_container_add(GTK_CONTAINER(window), frame);
+
+    show_window(window);
 }
 
 // Main function

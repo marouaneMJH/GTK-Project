@@ -1,6 +1,6 @@
 <window
 	id="window_2"
-	title="Second Window"
+	title="main window"
 	icon_name="folder"
 >
 	<scrolled_window

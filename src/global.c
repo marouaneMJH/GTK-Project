@@ -77,6 +77,16 @@ void widget_set_margins(GtkWidget *widget, Margins margins)
     gtk_widget_set_margin_end(widget, margins.end);
 }
 
+// todo: Maroune (next version with font type ) 
+void widget_set_font_size(GtkWidget *widget, int size)
+{
+    PangoFontDescription *font_desc;
+    font_desc = pango_font_description_new();
+    pango_font_description_set_size(font_desc, size * PANGO_SCALE);  // Size in points
+
+    gtk_widget_override_font(widget, font_desc);  // Apply font to widget
+    pango_font_description_free(font_desc);
+}
 
 // These functions are just for comparing with CSS not for use because the most of them are deprecated
 // void widget_set_text_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)
@@ -217,4 +227,13 @@ ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCall
     }
 
     return view_config;
+}
+
+
+void set_widget_size(GtkWidget *widget, Dimensions dimensions)
+{
+    if (!widget)
+        return;
+
+    gtk_widget_set_size_request(widget, dimensions.width, dimensions.height);
 }

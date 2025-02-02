@@ -17,6 +17,8 @@
 #include "./containers/layouts/stack.h"
 #include "./containers/layouts/frame.h"
 #include "./containers/layouts/combo_text_box.h"
+#include "./containers/layouts/overlay.h"
+
 
 // buttons
 #include "./widgets/button/check_button.h"
@@ -42,6 +44,7 @@
 #include "./widgets/label.h"
 #include "./widgets/separator.h"
 #include "./widgets/entry.h"
+#include "./widgets/text_area.h"
 #include "./widgets/progress_bar.h"
 #include "./widgets/image.h"
 

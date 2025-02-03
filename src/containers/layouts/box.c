@@ -61,6 +61,7 @@ ViewConfig *init_box_config(FILE *index, BoxConfig *box_config)
 {
         return init_generic_config(index,(void*)box_config,(ConfigurePropertyCallback)configure_box_property);
 }
+
 GtkWidget *create_box(BoxConfig box_config)
 {
     GtkWidget *box = NULL;

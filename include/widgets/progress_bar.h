@@ -60,6 +60,7 @@ typedef struct
 ViewConfig *init_progress_bar_config(FILE *index, ProgressBarConfig *progress_bar_config);
 
 
+
 /**
  * @brief Create a progress bar widget
  * @param progress_bar_config The configuration of the progress bar

@@ -1,5 +1,6 @@
 #include "../../include/widgets/progress_bar.h"
 
+
 ViewConfig *configure_progress_bar_property(ProgressBarConfig *progress_bar_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
     if (!progress_bar_config || !property || !value)

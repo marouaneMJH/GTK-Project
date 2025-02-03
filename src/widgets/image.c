@@ -90,6 +90,9 @@ GtkWidget *create_image(ImageConfig image_config)
     case IMAGE_PIXBUF:
         image = create_image_from_pixbuf(image_config);
         break;
+    case IMAGE_ICON_NAME:
+        image = create_image_from_icon_name(image_config, GTK_ICON_SIZE_DIALOG);
+        break;
     default:
         break;
     }
@@ -108,10 +111,10 @@ GtkWidget *create_image_from_Icon(ImageConfig image_config, GIcon *icon, GtkIcon
     return image;
 }
 
-GtkWidget *create_image_from_icon_name(ImageConfig image_config, GtkIconSize size)
+GtkWidget *create_image_from_icon_name(ImageConfig image_config, GtkIconSize icon_size)
 {
 
-    GtkWidget *image = gtk_image_new_from_icon_name(image_config.path, GTK_ICON_SIZE_DIALOG); // Should be dynamic
+    GtkWidget *image = gtk_image_new_from_icon_name(image_config.path, icon_size);
 
     return image;
 }
@@ -145,5 +148,4 @@ GtkWidget *create_image_from_pixbuf(ImageConfig image_config)
     g_object_unref(pixbuf);
 
     return image;
-
 }

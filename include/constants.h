@@ -11,6 +11,7 @@
 #define MAX_PROPERTY_SIZE 50
 #define MAX_VALUE_SIZE 100
 #define MAX_ICON_PATH_SIZE 50
+#define MAX_LABEL_SIZE 100
 
 typedef enum 
 {

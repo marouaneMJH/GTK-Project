@@ -161,18 +161,24 @@ typedef struct VIEW
  * @brief global structure for windget (window, button, label, ...)
  * Dimension of widget, the height and width of widget. for each widget have default value for this structure (macros value)
  */
+/**
+ * @brief Structure to hold the dimensions of a widget
+ */
 typedef struct
 {
-    gint width;
-    gint height;
+    gint width;  /**< Width of the widget */
+    gint height; /**< Height of the widget */
 } Dimensions;
 
+/**
+ * @brief Structure to hold the margins of a widget
+ */
 typedef struct
 {
-    gint top;    // Top margin
-    gint bottom; // Bottom margin
-    gint start;  // Start margin
-    gint end;    // End  margin
+    gint top;    /**< Top margin */
+    gint bottom; /**< Bottom margin */
+    gint start;  /**< Start margin */
+    gint end;    /**< End margin */
 } Margins;
 
 /* inline function */

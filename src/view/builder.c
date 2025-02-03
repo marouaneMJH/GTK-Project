@@ -1,7 +1,8 @@
 #include "./../../include/builder.h"
 
 #define INDEX_TXT "./src/view/index.txt"
-#define MODE "r"
+#define CHARAF_TXT "./src/view/charaf.txt"
+#define MODE "r" 
 
 View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
 {
@@ -39,7 +40,7 @@ gchar *read_tag(FILE *index)
     return tag;
 }
 
-int get_view_index(FILE *index, gchar *widget_tag)
+int get_view_index(FILE *index, gchar *widget_tag) //Why FILE *index
 {
     if (!widget_tag)
         return -1;

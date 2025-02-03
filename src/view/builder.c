@@ -782,7 +782,7 @@ View *build_app(GtkApplication *app, View *root_view)
     printf("Building app\n");
 
     // This file is read from the main.c path because this function is called/executed from main.c
-    FILE *index = fopen(CHARAF_TXT, MODE);
+    FILE *index = fopen(INDEX_TXT, MODE);
 
     if (!index)
     {

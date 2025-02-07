@@ -122,3 +122,11 @@ GtkWidget *create_grid(GridConfig grid_config)
 
     return grid;
 }
+
+void add_grid(GtkWidget *widget, gint column, gint row, gint column_span, gint row_span)
+{
+    if (column_span == 0 && row_span == 0)
+        gtk_grid_attach(GTK_GRID(widget), widget, column, row, 1, 1);
+    else
+        gtk_grid_attach(GTK_GRID(widget), widget, column, row, column_span, row_span);
+}

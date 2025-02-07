@@ -86,7 +86,7 @@ GtkWidget *create_frame(FrameConfig frame_config)
 
     // Set widget size if specified
     if (frame_config.dimensions.width > 0 && frame_config.dimensions.height > 0)
-        gtk_widget_set_size_request(frame, frame_config.dimensions.width, frame_config.dimensions.height);
+        set_widget_size(frame, frame_config.dimensions);
 
     // Apply background and text colors if provided
     if(strcmp(frame_config.bg_color, "\0") != 0 && strcmp(frame_config.text_color, "\0") != 0)

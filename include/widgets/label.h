@@ -3,7 +3,8 @@
 
 #include "./../global.h"
 
-#define MAX_LABEL_TEXT_SIZE 100
+#define MAX_LABEL_TEXT_SIZE 1024
+#define MAX_FONT_FAMILY_SIZE 30
 /* Default values for label configuration */
 
 #define DEFAULT_LABEL_CONTENT \
@@ -39,6 +40,7 @@
         .is_wrap = FALSE,                  \
         .text_color = "\0",                \
         .bg_color = "\0",                  \
+        .font_family = "Courier New",               \
         .is_selectable = FALSE,            \
         .padding = 0}
 
@@ -51,11 +53,12 @@ typedef struct
     gboolean is_underline;                 // Mnemonic support for underline
 
     /* Appearance */
-    GtkJustification jtype;           // Text alignment (left, right, center)
-    PangoEllipsizeMode ellipsize;     // Ellipsization mode
-    gboolean is_wrap;                 // Enable word wrap
-    gchar text_color[MAX_COLOR_SIZE]; // Text color
-    gchar bg_color[MAX_COLOR_SIZE];   // Background color
+    GtkJustification jtype;                  // Text alignment (left, right, center)
+    PangoEllipsizeMode ellipsize;            // Ellipsization mode
+    gboolean is_wrap;                        // Enable word wrap
+    gchar text_color[MAX_COLOR_SIZE];        // Text color
+    gchar bg_color[MAX_COLOR_SIZE];          // Background color
+    gchar font_family[MAX_FONT_FAMILY_SIZE]; // font family style
 
     /* Behavior */
     gboolean is_selectable; // Text can be copied by user
@@ -63,6 +66,7 @@ typedef struct
     /* Layout */
     gint padding; // Padding around the label
 } LabelConfig;
+
 ViewConfig *configure_label_property(LabelConfig *label_config, ViewConfig *view_config, gchar *property, gchar *value);
 
 /**
@@ -72,10 +76,6 @@ ViewConfig *configure_label_property(LabelConfig *label_config, ViewConfig *view
  */
 ViewConfig *init_label_config(FILE *index, LabelConfig *label_config);
 
+// function to creat lable widget
 GtkWidget *create_label(LabelConfig label);
-
-// void free_label(LabelConfig *label);
-
-// void free_widget_label(GtkWidget *label);
-
 #endif

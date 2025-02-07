@@ -43,4 +43,7 @@ ViewConfig *init_fixed_config(FILE *index, FixedConfig *fixed_config);
  */
 GtkWidget *create_fixed(FixedConfig fixed_config);
 
+void add_fixed(GtkWidget *widget, gint x, gint y);
+
+
 #endif

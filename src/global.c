@@ -101,16 +101,47 @@ void widget_set_margins(GtkWidget *widget, Margins margins)
     gtk_widget_set_margin_end(widget, margins.end);
 }
 
-// todo: Maroune (next version with font type ) 
+
 void widget_set_font_size(GtkWidget *widget, int size)
 {
-    PangoFontDescription *font_desc;
-    font_desc = pango_font_description_new();
-    pango_font_description_set_size(font_desc, size * PANGO_SCALE);  // Size in points
+    GtkCssProvider *provider = gtk_css_provider_new();
+    GtkStyleContext *context = gtk_widget_get_style_context(widget);
 
-    gtk_widget_override_font(widget, font_desc);  // Apply font to widget
-    pango_font_description_free(font_desc);
+    // Create CSS string for font size
+    gchar *css = g_strdup_printf("* { font-size: %dpt; }", size);
+
+    // Load and apply CSS
+    gtk_css_provider_load_from_data(provider, css, -1, NULL);
+    gtk_style_context_add_provider(context, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+    // Cleanup
+    g_free(css);
+    g_object_unref(provider);
 }
+
+
+void widget_set_font_family(GtkWidget *widget, const char *font_family)
+{
+    // If font_family is NULL, do nothing
+    if (font_family == NULL) {
+        return;
+    }
+
+    GtkCssProvider *provider = gtk_css_provider_new();
+    GtkStyleContext *context = gtk_widget_get_style_context(widget);
+
+    // Create CSS string for font family
+    gchar *css = g_strdup_printf("* { font-family: '%s'; }", font_family);
+
+    // Load and apply CSS
+    gtk_css_provider_load_from_data(provider, css, -1, NULL);
+    gtk_style_context_add_provider(context, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+    // Cleanup
+    g_free(css);
+    g_object_unref(provider);
+}
+
 
 // These functions are just for comparing with CSS not for use because the most of them are deprecated
 // void widget_set_text_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)
@@ -253,11 +284,39 @@ ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCall
     return view_config;
 }
 
-
+// Function to force width and height using CSS for a widget
 void set_widget_size(GtkWidget *widget, Dimensions dimensions)
 {
-    if (!widget)
-        return;
+    // Create a CSS provider
+    GtkCssProvider *css_provider = gtk_css_provider_new();
+    GdkScreen *screen = gtk_widget_get_screen(widget);
 
-    gtk_widget_set_size_request(widget, dimensions.width, dimensions.height);
+    // Create the CSS rule as a string
+    gchar *css = g_strdup_printf(
+        ".fixed-size { "
+        "  min-width: %dpx; "
+        "  max-width: %dpx; "
+        "  width: %dpx; "
+        "  min-height: %dpx; "
+        "  max-height: %dpx; "
+        "  height: %dpx; "
+        "}", 
+        dimensions.width, dimensions.width, dimensions.width, dimensions.height, dimensions.height, dimensions.height);
+
+    // Load the CSS data into the provider
+    gtk_css_provider_load_from_data(css_provider, css, -1, NULL);
+
+    // Apply the CSS provider to the widget's style context
+    gtk_style_context_add_provider(
+        gtk_widget_get_style_context(widget), 
+        GTK_STYLE_PROVIDER(css_provider), 
+        GTK_STYLE_PROVIDER_PRIORITY_USER
+    );
+
+    // Add the 'fixed-size' class to the widget
+    gtk_style_context_add_class(gtk_widget_get_style_context(widget), "fixed-size");
+
+    // Clean up
+    g_free(css);
+    g_object_unref(css_provider);
 }

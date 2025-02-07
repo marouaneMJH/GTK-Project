@@ -308,4 +308,20 @@ ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCall
  * @param dimensions The dimensions structure containing width and height.
  */
 void set_widget_size(GtkWidget *widget, Dimensions dimensions);
+
+
+/**
+ * @brief function to constrole font family 
+ * @param widget The widget to change font 
+ * @param font_family a string indicate the font family
+ *  
+ * here a list of font family example:
+ * 1.   "Arial"
+ * 2.   "Courier New"
+ * 3.   "Times New Roman"
+ * 4.   "Comic Sans MS"
+ * 5.   "Verdana"
+ */
+void widget_set_font_family(GtkWidget *widget, const char *font_family);
+
 #endif

@@ -9,7 +9,7 @@ ViewConfig *configure_label_property(LabelConfig *label_config, ViewConfig *view
 
     if (strcmp(property, "label_text") == 0)
     {
-        strncpy(label_config->label_text, value, MAX_LABEL_TEXT_SIZE);
+        strcpy(label_config->label_text, value);
     }
     if (strcmp(property, "is_markup") == 0)
     {
@@ -81,6 +81,8 @@ ViewConfig *configure_label_property(LabelConfig *label_config, ViewConfig *view
     {
         label_config->padding = atoi(value);
     }
+    else if (!g_strcmp0(property,"font_family"))
+        strcpy(label_config->font_family ,value);
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
@@ -117,7 +119,12 @@ GtkWidget *create_label(LabelConfig label)
         gtk_widget_set_margin_top(label_widget, label.padding);
         gtk_widget_set_margin_bottom(label_widget, label.padding);
     }
+
+    // apply font color
     widget_set_colors(label_widget, label.bg_color, label.text_color);
 
+    // apply font family
+    if(label.font_family[0] != '\0')
+        widget_set_font_family(label_widget,label.font_family);
     return label_widget;
 }

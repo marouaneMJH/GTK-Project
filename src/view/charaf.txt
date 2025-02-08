@@ -7,7 +7,7 @@
 	bg_color="#333333"
 	text_color="white"
 >
-	<box id=vbox1 orientation=vertical >
+	<box id="box1" orientation="vertical" >
     <fixed
 			id="fx12"
 			width="100"

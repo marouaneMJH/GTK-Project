@@ -1,6 +1,7 @@
 #include "./../../include/builder.h"
 
 #define INDEX_TXT "./src/view/index.txt"
+#define DIALOG_TXT "./src/view/index.txt"
 #define MODE "r"
 
 View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
@@ -260,9 +261,15 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
 
         printf("RELATIVE PARENT %s IS A CONTAINER FOR: %s\n", relative->view_config->view_id, view->view_config->view_id);
         // Window case
-        if (GTK_IS_WINDOW(relative->widget) || GTK_IS_SCROLLED_WINDOW(relative->widget))
+        if (GTK_IS_WINDOW(relative->widget) || GTK_IS_SCROLLED_WINDOW(relative->widget) || GTK_IS_DIALOG(relative->widget))
         {
-            gtk_container_add(GTK_CONTAINER(relative->widget), view->widget);
+            if (GTK_IS_DIALOG(relative->widget))
+            {
+                GtkWidget *content_area = gtk_dialog_get_content_area(GTK_DIALOG(relative->widget));
+                gtk_container_add(GTK_CONTAINER(content_area), view->widget);
+            }
+            else
+                gtk_container_add(GTK_CONTAINER(relative->widget), view->widget);
             return view;
         }
 

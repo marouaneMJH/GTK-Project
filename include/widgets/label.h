@@ -4,30 +4,15 @@
 #include "./../global.h"
 
 #define MAX_LABEL_TEXT_SIZE 1024
-#define MAX_FONT_FAMILY_SIZE 30
 /* Default values for label configuration */
 
-#define DEFAULT_LABEL_CONTENT \
-    {                         \
-        .label_text = "\0",   \
-        .is_markup = FALSE,   \
-        .is_underline = FALSE}
 
-#define DEFAULT_LABEL_APPEARANCE           \
-    {                                      \
-        .jtype = GTK_JUSTIFICATION_LEFT,   \
-        .ellipsize = PANGO_ELLIPSIZE_NONE, \
-        .is_wrap = FALSE,                  \
-        .text_color = "\0",                \
-        .background_color = "\0"}
-
-#define DEFAULT_LABEL_BEHAVIOR \
-    {                          \
-        .is_selectable = FALSE}
-
-#define DEFAULT_LABEL_LAYOUT \
-    {                        \
-        .padding = 0}
+// Default Margins
+#define DEFAULT_LABEL_MARGINS { \
+    .top = 0,                  \
+    .bottom = 0,               \
+    .start = 0,                \
+    .end = 0}
 
 #define DEFAULT_LABEL                      \
     {                                      \
@@ -37,12 +22,14 @@
         .is_underline = FALSE,             \
         .jtype = GTK_JUSTIFY_CENTER,       \
         .ellipsize = PANGO_ELLIPSIZE_NONE, \
+        .margins = DEFAULT_LABEL_MARGINS,  \
         .is_wrap = FALSE,                  \
         .text_color = "\0",                \
         .bg_color = "\0",                  \
-        .font_family = "Courier New",               \
-        .is_selectable = FALSE,            \
-        .padding = 0}
+        .font_family = "\0",               \
+        .xalign = 0.0,                     \
+        .yalign = 0.0,                     \
+        .is_selectable = FALSE}
 
 typedef struct
 {
@@ -55,10 +42,14 @@ typedef struct
     /* Appearance */
     GtkJustification jtype;                  // Text alignment (left, right, center)
     PangoEllipsizeMode ellipsize;            // Ellipsization mode
+    Margins margins;                         // Margins
     gboolean is_wrap;                        // Enable word wrap
     gchar text_color[MAX_COLOR_SIZE];        // Text color
     gchar bg_color[MAX_COLOR_SIZE];          // Background color
     gchar font_family[MAX_FONT_FAMILY_SIZE]; // font family style
+
+    gfloat xalign; // aligne text to display on line start
+    gfloat yalign;
 
     /* Behavior */
     gboolean is_selectable; // Text can be copied by user

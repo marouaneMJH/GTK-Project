@@ -38,7 +38,7 @@ ViewConfig *configure_grid_property(GridConfig *grid_config, ViewConfig *view_co
             grid_config->valign = GTK_ALIGN_FILL;
     }
 
-    if (g_strcmp0(property, "halign") == 0)
+    if (g_strcmp0(property, "haliegn") == 0)
     {
         if (g_strcmp0(value, "center") == 0)
             grid_config->halign = GTK_ALIGN_CENTER;

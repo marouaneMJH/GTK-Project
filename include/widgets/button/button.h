@@ -43,7 +43,6 @@ typedef struct
     gboolean is_sensitive; // Whether the button is clickable or not
     gboolean is_visible;   // Whether the button is visible or hidden
     gchar tooltip[MAX_TOOLTIP_SIZE];        // Tooltip text shown when hovering over the button
-
     /* Dimensions and placement */
     Dimensions dimensions; // dimensions of the button
     Margins margins;         // margin of the button

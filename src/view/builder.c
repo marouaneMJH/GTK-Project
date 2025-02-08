@@ -126,6 +126,9 @@ int get_view_index(gchar *widget_tag) //Why FILE *index
     if (g_strcmp0(widget_tag, "overlay") == 0)
         return OverlayTag;
     
+    if (g_strcmp0(widget_tag, "combo_text_box") == 0)
+        return ComboTextBoxTag;
+    
     return -1;
 }
 
@@ -760,6 +763,7 @@ View *read_grid_tag(FILE *index, View *parent_view, gboolean is_relative_contain
 
     return grid_view;
 }
+
 View *read_text_area_tag(FILE *index, View *parent_view, gboolean is_relative_container)
 {
     ViewConfig *view_config;
@@ -775,6 +779,24 @@ View *read_text_area_tag(FILE *index, View *parent_view, gboolean is_relative_co
     add_view(text_area_view, parent_view, is_relative_container);
 
     return text_area_view;
+}
+
+View* read_combo_text_box_tag(FILE *index, View *parent_view, gboolean is_relative_container)
+{
+    ViewConfig *view_config;
+    ComboTextBoxConfig combo_text_box_config = DEFAULT_COMBO_TEXT_BOX_CONFIG;
+    
+
+    view_config = init_combo_text_box_config(index, &combo_text_box_config);
+
+    GtkWidget *combo_text_box_widget = create_combo_text_box(combo_text_box_config);
+
+    View *combo_text_box_view = create_view(view_config->view_id, combo_text_box_widget, view_config);
+
+    // Add view to view model
+    add_view(combo_text_box_view, parent_view, is_relative_container);
+
+    return combo_text_box_view;   
 }
 
 View *build_app(GtkApplication *app, View *root_view)
@@ -973,9 +995,17 @@ View *build_app(GtkApplication *app, View *root_view)
             case OverlayTag:
 
                 parent_view = read_overlay_tag(index, parent_view, is_relative_container);
-                printf("\n\nHERE\n\n\n");
                 is_relative_container = is_container_view(index);
                 break;
+                
+            case ComboTextBoxTag:
+                
+                parent_view = read_combo_text_box_tag(index, parent_view, is_relative_container);
+                is_relative_container = is_container_view(index);
+                break;
+                
+
+
 
             // TODO : Complete other widgets
             default:

@@ -298,4 +298,17 @@ typedef ViewConfig *(*ConfigurePropertyCallback)(void *config, ViewConfig *view_
  */
 ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCallback configure_property_callback);
 
+
+/**
+ * @brief Finds a view by its ID in a graph of views.
+ *
+ * This function searches for a view with the specified ID in a graph of views.
+ * Each node in the graph contains pointers to its child and next (sibling) views.
+ *
+ * @param view_id The ID of the view to find.
+ * @param root_view The root view of the graph to start the search from.
+ * @return A pointer to the view with the specified ID, or NULL if not found.
+ */
+View *find_view_by_id(char *view_id, View *root_view);
+
 #endif

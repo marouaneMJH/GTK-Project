@@ -1,9 +1,40 @@
 #include "./include/builder.h"
 
-// Callback function for button click
-static void on_button_clicked(GtkButton *button, gpointer user_data)
+gboolean clicked = FALSE;
+gboolean clicked1 = FALSE;
+
+static void click1(GtkWidget *widget, gpointer data)
 {
-    g_print("Button clicked!\n");
+    View *root_view = (View *)data;
+    g_print("Click1\n");
+
+    View *btn2 = find_view_by_id("bt2", root_view);
+    if (btn2)
+    {
+        if (clicked)
+            widget_set_colors(btn2->widget, "yellow", "white");
+        else
+            widget_set_colors(btn2->widget, "red", "white");
+
+        clicked = !clicked;
+    }
+}
+
+static void click2(GtkWidget *widget, gpointer data)
+{
+    View *root_view = (View *)data;
+    g_print("Click2\n");
+
+    View *btn1 = find_view_by_id("bt1", root_view);
+    if (btn1)
+    {
+        if (clicked1)
+            widget_set_colors(btn1->widget, "yellow", "white");
+        else
+            widget_set_colors(btn1->widget, "green", "white");
+
+        clicked1 = !clicked1;
+    }
 }
 
 // Activate callback for GtkApplication
@@ -11,10 +42,18 @@ static void activate(GtkApplication *app, gpointer user_data)
 {
     // Create a new window
 
-    View *root_view = build_app(app, root_view);
+    View *root_view = build_app(app, NULL);
     GtkWidget *window = root_view->widget;
 
     gtk_widget_show_all(window);
+
+    View *btn1 = find_view_by_id("bt1", root_view);
+    if (btn1)
+        g_signal_connect(G_OBJECT(btn1->widget), "clicked", G_CALLBACK(click1), root_view);
+
+    View *btn2 = find_view_by_id("bt2", root_view);
+    if (btn2)
+        g_signal_connect(G_OBJECT(btn2->widget), "clicked", G_CALLBACK(click2), root_view);
 }
 
 // Main function
@@ -35,9 +74,6 @@ int main(int argc, char **argv)
 
     return status;
 }
-
-
-
 
 // #include "./include/index.h"
 

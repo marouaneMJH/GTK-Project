@@ -21,9 +21,9 @@ static void activate(GtkApplication *app, gpointer user_data)
 
     // FrameConfig config_frame = DEFAULT_FRAME; 
     // GtkWidget *frame = create_frame(config_frame);
-
-    // gtk_frame_set_label(GTK_FRAME(frame),"MBC3");
-
+    // LabelConfig label_config = DEFAULT_LABEL;
+    // label_config.font_size=20;
+    // GtkWidget *label = create_label(label_config);
     // gtk_container_add(GTK_CONTAINER(frame), button);
     // gtk_container_add(GTK_CONTAINER(window), frame);
 

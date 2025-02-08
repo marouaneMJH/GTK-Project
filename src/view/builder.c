@@ -1,7 +1,7 @@
 #include "./../../include/builder.h"
 
 #define INDEX_TXT "./src/view/index.txt"
-#define CHARAF_TXT "./src/view/charaf.txt"
+// #define CHARAF_TXT "./src/view/charaf.txt"
 #define MODE "r" 
 
 View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
@@ -40,7 +40,7 @@ gchar *read_tag(FILE *index)
     return tag;
 }
 
-int get_view_index(FILE *index, gchar *widget_tag) //Why FILE *index
+int get_view_index(gchar *widget_tag) //Why FILE *index
 {
     if (!widget_tag)
         return -1;
@@ -822,7 +822,7 @@ View *build_app(GtkApplication *app, View *root_view)
                 // TODO: if the tag = NULL then ignore the tag and Display an error message
 
                 // Get the widget index
-                widget_index = get_view_index(index, widget_tag);
+                widget_index = get_view_index(widget_tag);
             }
 
             switch (widget_index)

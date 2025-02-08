@@ -42,7 +42,7 @@ View *add_view(View *view, View *relative, gboolean is_relative_container);
 
 gchar *read_tag(FILE *index);
 
-int get_view_index(FILE *index, gchar *widget_tag);
+int get_view_index(gchar *widget_tag);
 
 View *build_app(GtkApplication *app, View *root_view);
 

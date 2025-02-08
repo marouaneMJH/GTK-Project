@@ -64,3 +64,8 @@ GtkWidget *create_fixed(FixedConfig fixed_config)
 
     return fixed;
 }
+
+void add_fixed(GtkWidget *widget, gint x, gint y)
+{
+    gtk_fixed_put(GTK_FIXED(widget), widget, x, y);
+}

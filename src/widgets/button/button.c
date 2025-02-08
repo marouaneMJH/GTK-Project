@@ -66,7 +66,7 @@ ViewConfig *init_button_config(FILE *index, ButtonConfig *button_config)
 GtkWidget *create_button(ButtonConfig button_config)
 {
     // Create a new button with the given label
-    GtkWidget *button = gtk_button_new_with_label(button_config.label);
+    GtkWidget *button = gtk_button_new_with_mnemonic(button_config.label);
 
     // Set sensitivity
     gtk_widget_set_sensitive(button, button_config.is_sensitive);

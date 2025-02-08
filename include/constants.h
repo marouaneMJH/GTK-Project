@@ -12,6 +12,7 @@
 #define MAX_VALUE_SIZE 1024
 #define MAX_ICON_PATH_SIZE 50
 #define MAX_LABEL_SIZE 100
+#define MAX_FONT_FAMILY_SIZE 30 // Maximum characters in  font family name
 
 typedef enum 
 {

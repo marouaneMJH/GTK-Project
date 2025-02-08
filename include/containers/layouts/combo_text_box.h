@@ -3,67 +3,93 @@
 
 #include "./../../global.h"
 
-/*
-    <combo_text_box
-        dimensions=...
-        margins=...
-        has_entry="tue"
-        option1="value of option1"
-        option2="value of option2"
-        ...
+// Default style configuration
+#define DEFAULT_COMBO_TEXT_BOX_STYLE ((ComboTextBoxStyle){ \
+    .bg_color = "\0",                                      \
+    .color = "\0",                                         \
+    .font_family = "\0",                                   \
+    .font_size = 0,                                        \
+    .is_bold = FALSE,                                      \
+    .is_italic = FALSE})
 
-    />
-*/
+// Default dimensions
+#define DEFAULT_COMBO_TEXT_BOX_DIMENSION { \
+    .width = -1,                           \
+    .height = -1}
 
-#define DEFAULT_COMBO_TEXT_BOX_DIMENSIONS \
-    {                                     \
-        .height = 0,                      \
-        .width = 0}
+// Default Margins
+#define DEFAULT_COMBO_TEXT_BOX_MARGINS { \
+    .top = 0,                           \
+    .bottom = 0,                        \
+    .start = 0,                         \
+    .end = 0}
 
-#define DEFAULT_COMBO_TEXT_BOX_MARGINS \
-    {                                  \
-        .bottom = 0,                   \
-        .top = 0,                      \
-        .start = 0,                    \
-        .end = 0}
-
-#define DEFAULT_COMBO_TEXT_BOX_OPTIONS \
-    {                                  \
-        .key = "\0",                   \
-        .value = "\0"}
-
-#define DEFAULT_COMBO_TEXT_BOX_CONFIG                    \
-    {                                                    \
-        .options = NULL,                                 \
-        .dimensions = DEFAULT_COMBO_TEXT_BOX_DIMENSIONS, \
-        .margins = DEFAULT_COMBO_TEXT_BOX_MARGINS,       \
-        .has_entry = FALSE,                              \
-        .deafault_value = "\0"}
-
+// Default configuration including all new properties
+// Default configuration
+#define DEFAULT_COMBO_TEXT_BOX_CONFIG ((ComboTextBoxConfig){ \
+    .options = NULL,                                         \
+    .dimensions = DEFAULT_COMBO_TEXT_BOX_DIMENSION,          \
+    .margins = DEFAULT_COMBO_TEXT_BOX_MARGINS,                \
+    .has_entry = FALSE,                                      \
+    .placeholder_text = NULL,                                \
+    .wrap_width = 0,                                         \
+    .popup_fixed_width = FALSE,                               \
+    .popup_shown_rows = 10,                                  \
+    .style = DEFAULT_COMBO_TEXT_BOX_STYLE})
 /**
- * @brief Structure to hold the key-value pairs for the options in a combo text box
+ * @brief Structure to hold the key-value pairs for combo box options
  */
-
 typedef struct
 {
     gchar *key;
     gchar *value;
-} ComboTextBoxOptions;
+} ComboTextBoxOption;
 
 /**
- * @brief Structure to configure a combo text box widget
+ * @brief Visual style configuration for the combo box
  */
 typedef struct
 {
+    gchar bg_color[MAX_COLOR_SIZE];          // Background color in CSS format
+    gchar color[MAX_COLOR_SIZE];             // Text color in CSS format
+    gchar font_family[MAX_FONT_FAMILY_SIZE]; // Font family name
+    gint font_size;                          // Font size in points
+    gboolean is_bold;                        // Whether text should be bold
+    gboolean is_italic;                      // Whether text should be italic
+} ComboTextBoxStyle;
 
-    GPtrArray *options;    // The options to display in the combo box
-    Dimensions dimensions; // The dimensions of the combo box
-    Margins margins;       // The margins of the combo box
+/**
+ * @brief Configuration structure for the combo box widget
+ *
+ * Usage in XML:
+ * <combo_text_box
+ *     dimensions="width,height"
+ *     margins="top,bottom,start,end"
+ *     has_entry="true"
+ *     default_value="optional default"
+ *     popup_fixed_width="true"
+ *     placeholder_text="Select an option..."
+ *     ...
+ * />
+ */
 
-    gboolean has_entry;    // Whether the combo box should have an entry field
-    gchar *deafault_value; // The default value of the combo box
+typedef struct
+{
+    // Basic properties
+    GPtrArray *options;      // Array of ComboTextBoxOption (list of options)
+    Dimensions dimensions;   // Widget dimensions (width & height)
+    Margins margins;         // Widget margins
+    gboolean has_entry;      // Whether to allow text input
+    gchar *placeholder_text; // Placeholder text inside the entry
+    gint wrap_width;
+    // Behavior properties
+    gboolean popup_fixed_width; // Whether popup should match combo width
+    gint popup_shown_rows;      // Maximum number of visible rows in dropdown
+
+    // Style properties
+    ComboTextBoxStyle style; // Background, text color, font, etc.
+
 } ComboTextBoxConfig;
-
 
 /**
  * @brief Configures the combo text box property with the given value.
@@ -79,8 +105,11 @@ typedef struct
  *
  * @return A pointer to the modified ViewConfig structure.
  */
-ViewConfig* configure_combo_text_box_property(ComboTextBoxConfig *combo_text_box_config, ViewConfig *view_config, gchar *property, gchar *value);
-
+ViewConfig *configure_combo_text_box_property(
+    ComboTextBoxConfig *combo_text_box_config,
+    ViewConfig *view_config,
+    gchar *property,
+    gchar *value);
 
 /**
  * @brief Initializes a combo text box configuration structure with default values.
@@ -92,7 +121,8 @@ ViewConfig* configure_combo_text_box_property(ComboTextBoxConfig *combo_text_box
  *
  * @return A pointer to the initialized ComboTextBoxConfig structure.
  */
-ViewConfig *init_combo_text_box_config(FILE *index, ComboTextBoxConfig *combo_text_box_config);
+ViewConfig *init_combo_text_box_config(FILE *index,
+                                       ComboTextBoxConfig *combo_text_box_config);
 
 /**
  * @brief Creates a new GtkWidget for displaying a combo text box.
@@ -103,7 +133,7 @@ ViewConfig *init_combo_text_box_config(FILE *index, ComboTextBoxConfig *combo_te
  *
  * @param combo_text_box_config A pointer to a ComboTextBoxConfig structure containing
  *                              the configuration data for the combo text box.
- * @return GtkWidget* A pointer to the newly created GtkWidget for the combo text box.
+ * @return GtkW idget* A pointer to the newly created GtkWidget for the combo text box.
  */
 GtkWidget *create_combo_text_box(ComboTextBoxConfig combo_text_box_config);
 

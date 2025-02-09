@@ -22,7 +22,7 @@
 			>
 
 				<box
-					id="box1"
+					id="box1A"
 					orientation="vertical"
 					bg_color="blue"
 					tab_label="Box"
@@ -47,10 +47,12 @@
 								<menu_item
 									id="menu_item1"
 									label="New"
+									onclick="menu_onclick"
 								/>
 								<menu_item
 									id="menu_item1"
 									label="Open"
+									onclick="menu_onclick1"
 								/>
 								<menu_item
 									id="menu_item1"
@@ -73,9 +75,15 @@
 							id="btn1"
 							position_x="10"
 							position_y="10"
-							width="150"
+							width="200"
 							height="60"
 							label="TEST"
+							onclick="print"
+							always_show_image="true"
+							icon_path="./assets/images/programer.jpg"
+							icon_width="25"
+							icon_height="25"
+							icon_position="right"
 						>
 					</fixed>
 
@@ -87,9 +95,9 @@
 						row_homogeneous="true"
 						column_homogeneous="true"
 					>
-						<button id="btn1" label="Click 1" row="0" column="0" row_span="1"
+						<button id="bt1" onclick="click1" label="Click 1" row="0" column="0" row_span="1"
 							column_span="1" />
-						<button id="btn1" label="Click 2" row="1" column="0" row_span="1"
+						<button id="bt2" onclick="click2" label="Click 2" row="1" column="0" row_span="1"
 							column_span="1" />
 					</grid>
 
@@ -125,6 +133,9 @@
 								label="Click Me"
 								position_x="10"
 								position_y="50"
+								icon_path="./assets/images/programer.jpg"
+								always_show_image="true"
+								icon_position="top"
 								width="40"
 								height="60"
 							/>

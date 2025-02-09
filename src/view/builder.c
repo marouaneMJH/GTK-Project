@@ -4,6 +4,8 @@
 #define DIALOG_TXT "./src/view/index.txt"
 #define MODE "r"
 
+View *root_view = NULL;
+
 View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
 {
     View *view = NULL;
@@ -361,7 +363,7 @@ View *read_button_tag(FILE *index, View *parent_view, gboolean is_relative_conta
 
     view_config = init_button_config(index, &button_config);
 
-    GtkWidget *button_widget = create_button(button_config);
+    GtkWidget *button_widget = create_button(button_config, root_view);
 
     View *button_view = create_view(view_config->view_id, button_widget, view_config);
 
@@ -680,7 +682,7 @@ View *read_grid_tag(FILE *index, View *parent_view, gboolean is_relative_contain
     return grid_view;
 }
 
-View *build_app(GtkApplication *app, View *root_view)
+View *build_app(GtkApplication *app, View *root_parent_view)
 {
     printf("Building app\n");
 
@@ -695,7 +697,7 @@ View *build_app(GtkApplication *app, View *root_view)
 
     g_print("Index file opened\n");
 
-    View *parent_view = root_view;
+    View *parent_view = root_parent_view;
     View *root_menu_bar_view = NULL;
     gboolean is_relative_container = TRUE;
     gchar *widget_tag = NULL;
@@ -734,7 +736,9 @@ View *build_app(GtkApplication *app, View *root_view)
                 // Read window tag
                 parent_view = read_window_tag(index, app, parent_view, is_relative_container);
 
-                // Set window as root view
+                // Set window as root view parent to be returned
+                root_parent_view = parent_view;
+                // Set the window as root view to be used in signals
                 root_view = parent_view;
 
                 // Update container flag

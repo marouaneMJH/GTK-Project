@@ -28,24 +28,24 @@ static void click1(GtkWidget *widget, gpointer data)
     //     NULL
     // );
 
-    DialogConfig dc = DEFAULT_DIALOG_CONFIG;
-    GtkWidget *dialog = create_dialog(dc);
+    // DialogConfig dc = DEFAULT_DIALOG;
+    // GtkWidget *dialog = create_dialog(dc);
 
 
-    GtkWidget *dialog_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+    // GtkWidget *dialog_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 
-    ButtonConfig btn_config = DEFAULT_BUTTON;
-    GtkWidget *btn = create_button(btn_config);
+    // ButtonConfig btn_config = DEFAULT_BUTTON;
+    // GtkWidget *btn = create_button(btn_config);
 
-    BoxConfig box_config = DEFAULT_BOX;
-    GtkWidget *box = create_box(box_config);
+    // BoxConfig box_config = DEFAULT_BOX;
+    // GtkWidget *box = create_box(box_config);
 
-    gtk_box_pack_end(GTK_BOX(box), btn, FALSE, FALSE, 0);
-    gtk_widget_set_size_request(box, 400, 400);
+    // gtk_box_pack_end(GTK_BOX(box), btn, FALSE, FALSE, 0);
+    // gtk_widget_set_size_request(box, 400, 400);
 
-    gtk_container_add(GTK_CONTAINER(dialog_area), box);
+    // gtk_container_add(GTK_CONTAINER(dialog_area), box);
 
-    show_dialog(dialog);
+    // show_dialog(dialog);
 }
 
 static void click2(GtkWidget *widget, gpointer data)

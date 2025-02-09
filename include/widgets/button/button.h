@@ -91,9 +91,9 @@ ViewConfig *init_button_config(FILE *index, ButtonConfig *button_config);
 
 /**
  * @brief create button widget with default
- * @param[in] button button structure
+ * @param[in] button button structure root_view for signals
  * @return[ou] GtkWidget pointer to new button widget
  */
-GtkWidget *create_button(ButtonConfig button);
+GtkWidget *create_button(ButtonConfig button, View* root_view);
 
 #endif

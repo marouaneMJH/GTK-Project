@@ -130,8 +130,9 @@ static void print_hello(GtkWidget *widget, gpointer data)
 static void click1(GtkWidget *widget, gpointer data)
 {
     g_print("Click1\n");
+    View *root_view = (View *)data;
 
-    View *btn2 = find_view_by_id("bt2", NULL);
+    View *btn2 = find_view_by_id("bt2", root_view);
     if (btn2)
     {
         widget_set_colors(btn2->widget, "red", "white");
@@ -140,15 +141,16 @@ static void click1(GtkWidget *widget, gpointer data)
 
 static void click2(GtkWidget *widget, gpointer data)
 {
+    View *root_view = (View *)data;
     g_print("Click2\n");
-    View *btn1 = find_view_by_id("bt1", NULL);
+    View *btn1 = find_view_by_id("bt1", root_view);
     if (btn1)
     {
         widget_set_colors(btn1->widget, "green", "white");
     }
 }
 
-GtkWidget *create_button(ButtonConfig button_config)
+GtkWidget *create_button(ButtonConfig button_config, View *root_view)
 {
     // Create a new button with the given label
     GtkWidget *button = gtk_button_new_with_label(button_config.label);
@@ -204,10 +206,10 @@ GtkWidget *create_button(ButtonConfig button_config)
     {
         g_print("====> ONCLICK: %s\n", button_config.onclick);
 
-        // if (g_strcmp0(button_config.onclick, "click1") == 0)
-        //     g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(click1), NULL);
-        // else if (g_strcmp0(button_config.onclick, "click2") == 0)
-        //     g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(click2), NULL);
+        if (g_strcmp0(button_config.onclick, "click1") == 0)
+            g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(click1), root_view);
+        else if (g_strcmp0(button_config.onclick, "click2") == 0)
+            g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(click2), root_view);
     }
 
     return ((GtkWidget *)button);

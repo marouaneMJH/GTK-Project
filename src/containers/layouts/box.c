@@ -23,16 +23,16 @@ ViewConfig *configure_box_property(BoxConfig *box_config, ViewConfig *view_confi
                                                                                                                                    : GTK_BASELINE_POSITION_BOTTOM;
 
     // Margins
-    if (g_strcmp0(property, "mrgin_top") == 0)
+    if (g_strcmp0(property, "margin_top") == 0)
         box_config->margins.top = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_bottom") == 0)
+    if (g_strcmp0(property, "margin_bottom") == 0)
         box_config->margins.bottom = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_left") == 0)
+    if (g_strcmp0(property, "margin_left") == 0)
         box_config->margins.start = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_right") == 0)
+    if (g_strcmp0(property, "margin_right") == 0)
         box_config->margins.end = atoi(value);
 
     // Dimensions
@@ -80,7 +80,7 @@ GtkWidget *create_box(BoxConfig box_config)
     gtk_box_set_baseline_position(GTK_BOX(box), box_config.baseline_position);
 
     // Set dimensions
-    if (box_config.dimensions.width > 0 || box_config.dimensions.height)
+    if (box_config.dimensions.width > 0 || box_config.dimensions.height >0)
         gtk_widget_set_size_request(box, box_config.dimensions.width, box_config.dimensions.height);
 
     // Set colors

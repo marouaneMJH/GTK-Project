@@ -75,20 +75,6 @@ GtkWidget *create_image(ImageConfig image_config);
 GtkWidget *create_image_from_Icon(ImageConfig image_config, GIcon *icon, GtkIconSize size);
 
 /**
- * @brief Creates a new GtkWidget for displaying an image from an icon name.
- *
- * This function takes an ImageConfig structure containing the necessary
- * data to configure the image and an icon name, and returns a pointer to
- * a newly created GtkWidget that displays the image.
- *
- * @param image_config A pointer to an ImageConfig structure containing
- *                   the configuration data for the image.
- * @param size The size of the icon to display.
- * @return GtkWidget* A pointer to the newly created GtkWidget for the image.
- */
-GtkWidget *create_image_from_icon_name(ImageConfig image_config, GtkIconSize size);
-
-/**
  * @brief Creates a new GtkWidget for displaying an image from a GdkPixbufAnimation.
  *
  *  This function takes an ImageConfig structure containing the necessary
@@ -117,6 +103,6 @@ GtkWidget *create_image_from_animation(ImageConfig image_config, GdkPixbufAnimat
  * @param pixbuf A pointer to a GdkPixbuf structure containing the image data.
  * @return GtkWidget* A pointer to the newly created GtkWidget for the image.
  */
-GtkWidget *create_image_from_pixbuf(ImageConfig image_config);
+GtkWidget *create_image_from_pixbuf(char *path, Dimensions dimensions);
 
 #endif

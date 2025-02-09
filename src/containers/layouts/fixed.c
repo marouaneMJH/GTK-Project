@@ -6,16 +6,16 @@ ViewConfig *configure_fixed_property(FixedConfig *fixed_config, ViewConfig *view
         return NULL;
 
     // Margins
-    if (g_strcmp0(property, "mrgin_top") == 0)
+    if (g_strcmp0(property, "margin_top") == 0)
         fixed_config->margins.top = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_bottom") == 0)
+    if (g_strcmp0(property, "margin_bottom") == 0)
         fixed_config->margins.bottom = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_left") == 0)
+    if (g_strcmp0(property, "margin_left") == 0)
         fixed_config->margins.start = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_right") == 0)
+    if (g_strcmp0(property, "margin_right") == 0)
         fixed_config->margins.end = atoi(value);
 
     // Dimensions

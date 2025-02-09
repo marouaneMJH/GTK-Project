@@ -88,6 +88,10 @@
     if (g_strcmp0(property, "column_span") == 0)                                    \
     {                                                                               \
         view_config->column_span = atoi(value);                                     \
+    }                                                                               \
+    if (g_strcmp0(property, "onclick") == 0)                                        \
+    {                                                                               \
+        g_strlcpy(view_config->onclick, value, MAX_SIGNAL_NAME_SIZE);             \
     }
 
 #define DFEAULT_VIEW_CONFIG(view_config)    \
@@ -107,6 +111,7 @@
         view_config->column = 0;            \
         view_config->row_span = 1;          \
         view_config->column_span = 1;       \
+        view_config->onclick[0] = '\0';     \
     } while (0);
 
 typedef struct
@@ -144,6 +149,9 @@ typedef struct
     gint row_span;
     gint column_span;
 
+    // Signals
+    gchar onclick[MAX_SIGNAL_NAME_SIZE]; // Path to the icon image file
+
 } ViewConfig;
 
 typedef struct VIEW
@@ -154,6 +162,8 @@ typedef struct VIEW
     struct VIEW *next;
     ViewConfig *view_config;
 } View;
+
+extern View *root_view_gloabl;
 
 // We should rename this from global to core wich means system libs and has more signification
 
@@ -323,5 +333,17 @@ void set_widget_size(GtkWidget *widget, Dimensions dimensions);
  * 5.   "Verdana"
  */
 void widget_set_font_family(GtkWidget *widget, const char *font_family);
+
+/**
+ * @brief Finds a view by its ID in a graph of views.
+ *
+ * This function searches for a view with the specified ID in a graph of views.
+ * Each node in the graph contains pointers to its child and next (sibling) views.
+ *
+ * @param view_id The ID of the view to find.
+ * @param root_view The root view of the graph to start the search from.
+ * @return A pointer to the view with the specified ID, or NULL if not found.
+ */
+View *find_view_by_id(char *view_id, View *root_view);
 
 #endif

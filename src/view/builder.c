@@ -1127,6 +1127,7 @@ View *build_app(GtkApplication *app, View *root_view,const gchar *file_path)
             case DialogTag:
                 parent_view = read_dialog_tag(index, parent_view, is_relative_container);
                 root_view = parent_view;
+                root_dialog_view_global = parent_view;
                 g_print("Dialog view readed\n");
                 is_relative_container = is_container_view(index);
                 break;

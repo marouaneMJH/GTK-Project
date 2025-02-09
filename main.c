@@ -69,7 +69,7 @@ static void activate(GtkApplication *app, gpointer user_data)
 {
     // Create a new window
 
-    View *root_view = build_app(app, NULL);
+    View *root_view = build_app(app, root_view,INDEX_TXT);
     GtkWidget *window = root_view->widget;
 
     gtk_widget_show_all(window);

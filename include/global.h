@@ -164,6 +164,7 @@ typedef struct VIEW
 } View;
 
 extern View *root_view_gloabl;
+extern View *root_dialog_view_global;
 
 // We should rename this from global to core wich means system libs and has more signification
 

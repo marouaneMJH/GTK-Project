@@ -1,15 +1,17 @@
 <window
 	id="window_2"
-	title="main window"
+	title="Second Window"
 	icon_name="folder"
 >
 	<scrolled_window
 		id="sw2"
 	>
 		<box
-			id="box_1"
+			id="box2"
 			orientation="vertical"
-			spacing="10"
+			height="700"
+			width="800"
+			bg_color="red"
 		>
 
 			<notebook
@@ -39,70 +41,23 @@
 							<menu
 								id="menu1"
 								label="File"
+								reserve_toggle_size="true"
+								active_index="0"
 							>
 								<menu_item
 									id="menu_item1"
 									label="New"
+									onclick="menu_onclick"
 								/>
 								<menu_item
 									id="menu_item1"
 									label="Open"
-								>
-									<menu  tooltip="Open 12 " text_color="red" >
-										<menu_item
-											id="menu_item1"
-											label="Open File"
-
-											text_color="blue" 
-										/>
-										<menu_item
-											id="menu_item1"
-											label="Open Folder"
-											bg_color="green"
-										/>
-										<menu_item >
-											<button label="green" text_color="red" heigth="20" width="20" />
-										</menu_item>
-									</menu>
-								</menu_item>
+									onclick="menu_onclick1"
+								/>
 								<menu_item
 									id="menu_item1"
 									label="Save"
 								/>
-								<menu_item
-									id="menu_item1"
-									label="Save As"
-								/>
-								<menu_item
-									id="menu_item1"
-									label="Exit"
-								/>
-
-								<menu_item 
-									id="menu_item1"
-									label="Close"
-								/>
-								<menu
-									label="Recent Files"
-								>
-									
-								<menu_item 
-									id="menu_item1"
-									label="Close"
-								/>
-								<menu_item 
-									id="menu_item1"
-									label="Close"
-								/>
-								<menu_item 
-									id="menu_item1"
-									label="Close"
-								/>
-								<menu_item 
-									id="menu_item1"
-									label="Close"
-								/>
-								</menu>
 							</menu>
 						</menu_item>
 						<menu_item
@@ -341,39 +296,124 @@
 				box_expand="true"
 				box_fill="true"
 			>
-				<box
-					id="box_1" 
-					orientation="horizontal"
+				<fixed
+					id="fixed2"
+					width="400"
+					height="400"
 				>
-					<box id="box_inside" >
-						<label
-							label_text="helllo"
-							font_family=""
 
-						/>
-						<label
-							label_text="helllo"
-							font_family="Courier New"
-						/>
-					</box>
-						<radio_button 
-							is_group="true"
-							label="hello"
-						/>
-						<radio_button 
-							is_group="true"
-							label="hello"
-						/>
-						<radio_button 
-							is_group="true"
-							label="hello"
-						/>
-						<radio_button 
-							is_group="true"
-							label="hello"
-						/>
-				</box>
-			</frame>
+
+					<spin_button
+						id="sbtn2"
+						min="1"
+						max="100"
+						position_x="30"
+						position_y="30"
+					/>
+
+					<entry
+						id="entry2"
+						position_x="30"
+						position_y="70"
+						width="150"
+						height="25"
+						placeholder_text="Enter text"
+					/>
+
+					<image
+						id="img2"
+						type="none"
+						width="150"
+						height="150"
+						path="./assets/images/team_working_on_xml.jpeg"
+						position_x="30"
+						position_y="110"
+					/>
+
+					<radio_button
+						id="rbtn3"
+						label="Option 1"
+						position_x="30"
+						position_y="270"
+						is_group="true"
+						width="150"
+						height="25"
+						tooltip="Hna tooltip"
+					/>
+
+					<radio_button
+						id="rbtn4"
+						label="Option 2"
+						position_x="30"
+						position_y="300"
+						width="150"
+						height="25"
+					/>
+
+					<link_button
+						id="linkbtn2"
+						label="Go to Link"
+						uri="https://www.fstm.ac.ma"
+						position_x="30"
+						position_y="330"
+						width="150"
+						height="25"
+					/>
+
+					<check_button
+						id="chkbtn2"
+						label="Accept Terms"
+						position_x="200"
+						position_y="30"
+						width="150"
+						height="25"
+					/>
+
+					<separator
+						id="sep2"
+						orientation="vertical"
+						position_x="200"
+						position_y="280"
+						width="150"
+						height="10"
+					/>
+
+					<separator
+						id="sep2"
+						orientation="vertical"
+						position_x="200"
+						position_y="270"
+						width="150"
+						height="10"
+					/>
+
+					<progress_bar
+						id="lbl2"
+						progress_fraction="0.7"
+						position_x="200"
+						position_y="110"
+						is_text_visible="true"
+						text_color="white"
+					/>
+
+					<switch_button
+						id="lbl2"
+						tooltip="Switch"
+						position_x="160"
+						position_y="200"
+					/>
+					<button
+						id="lbl2"
+						tooltip="Switch"
+						width="200"
+						height="50"
+						position_x="160"
+						position_y="250"
+						label="Clicker ici"
+					/>
+				</fixed>
+			</scrolled_window>
+
 		</box>
 	</scrolled_window>
 </window>

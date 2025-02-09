@@ -47,7 +47,6 @@
         .use_underline = FALSE,                            \
         .use_stock = FALSE,                                \
         .icon_position = GTK_POS_LEFT,                     \
-        .onclick = "\0",                                   \
         .bg_color = "\0",                                  \
         .color = "\0"}
 
@@ -65,7 +64,6 @@ typedef struct
     gboolean hexpand;      // If the button expands in its container (horizontal)
     gboolean vexpand;      // If the button expands in its container (vertical)
 
-    gchar onclick[MAX_SIGNAL_NAME_SIZE]; // Path to the icon image file
     gchar icon_path[MAX_ICON_PATH_SIZE]; // Path to the icon image file
     Dimensions icon_dimensions;          // Dimensions of the icon image
 
@@ -91,7 +89,7 @@ ViewConfig *init_button_config(FILE *index, ButtonConfig *button_config);
 
 /**
  * @brief create button widget with default
- * @param[in] button button structure
+ * @param[in] button button structure root_view for signals
  * @return[ou] GtkWidget pointer to new button widget
  */
 GtkWidget *create_button(ButtonConfig button);

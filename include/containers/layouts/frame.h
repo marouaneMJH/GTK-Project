@@ -6,41 +6,38 @@
 /*  default values */
 
 #define DEFAULT_FRAME_DIMENSIONS \
-    {                           \
-        .height = 0,            \
-        .width = 0              \
-    }
+    {                            \
+        .height = 0,             \
+        .width = 0}
 
 #define DEFAULT_FRAME_MARGINS \
     {                         \
-        .bottom = 30,          \
-        .top = 30,             \
-        .start = 30,           \
-        .end = 30              \
-    }
+        .bottom = 30,         \
+        .top = 30,            \
+        .start = 30,          \
+        .end = 30}
 
-#define DEFAULT_FRAME                    \
-    {                                    \
-        .label = "\0",                   \
-        .label_align = 0.0,              \
-        .label_xalign = 0.0,             \
-        .shadow_type = GTK_SHADOW_IN, \
-        .bg_color = "\0",                \
-        .text_color = "\0",              \
+#define DEFAULT_FRAME                     \
+    {                                     \
+        .label = "\0",                    \
+        .label_align = 0.0,               \
+        .label_xalign = 0.0,              \
+        .shadow_type = GTK_SHADOW_IN,     \
+        .bg_color = "\0",                 \
+        .text_color = "\0",               \
         .margins = DEFAULT_FRAME_MARGINS, \
-        .dimensions = DEFAULT_FRAME_DIMENSIONS \
-    }
+        .dimensions = DEFAULT_FRAME_DIMENSIONS}
 
 typedef struct
 {
-    gchar label[MAX_LABEL_SIZE];        // Frame label text
-    gfloat label_align;                 // Label alignment (0.0 to 1.0)
-    gfloat label_xalign;                // Horizontal alignment of the label
-    GtkShadowType shadow_type;          // Type of shadow around the frame
-    gchar bg_color[MAX_COLOR_SIZE];     // Background color
-    gchar text_color[MAX_COLOR_SIZE];   // Text color
-    Margins margins;                    // Margins for spacing
-    Dimensions dimensions;              // Width and height of the frame
+    gchar label[MAX_LABEL_SIZE];      // Frame label text
+    gfloat label_align;               // Label alignment (0.0 to 1.0)
+    gfloat label_xalign;              // Horizontal alignment of the label
+    GtkShadowType shadow_type;        // Type of shadow around the frame
+    gchar bg_color[MAX_COLOR_SIZE];   // Background color
+    gchar text_color[MAX_COLOR_SIZE]; // Text color
+    Margins margins;                  // Margins for spacing
+    Dimensions dimensions;            // Width and height of the frame
 } FrameConfig;
 
 /**
@@ -67,7 +64,6 @@ ViewConfig *init_frame_config(FILE *index, FrameConfig *frame_config);
  * @return GtkWidget pointer to new frame widget
  */
 GtkWidget *create_frame(FrameConfig frame_config);
-
 
 void frame_add_child(GtkWidget *frame, GtkWidget *child);
 

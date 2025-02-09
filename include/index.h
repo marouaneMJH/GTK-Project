@@ -31,8 +31,7 @@
 #include "./widgets/menu/menu_bar.h"
 #include "./widgets/menu/menu.h"
 #include "./widgets/menu/menu_item.h"
-
-// #include "./widgets/button/toggle_button.h"
+#include "./widgets/button/toggle_button.h"
 #include "./containers/windows/scrolled_window.h"
 
 // Dialogs

@@ -1,5 +1,7 @@
 #include "./../include/global.h"
 
+View *root_view_gloabl;
+
 // inline void free_widget(GtkWidget *widget)
 // {
 //     if (widget != NULL)

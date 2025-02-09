@@ -47,10 +47,12 @@
 								<menu_item
 									id="menu_item1"
 									label="New"
+									onclick="menu_onclick"
 								/>
 								<menu_item
 									id="menu_item1"
 									label="Open"
+									onclick="menu_onclick1"
 								/>
 								<menu_item
 									id="menu_item1"

@@ -4,7 +4,51 @@
 #define DIALOG_TXT "./src/view/index.txt"
 #define MODE "r"
 
-View *root_view = NULL;
+// Signals
+static void print_hello(GtkWidget *widget, gpointer data)
+{
+    g_print("Hello World\n");
+    gtk_widget_set_tooltip_text(widget, "Hello World");
+}
+
+static void click1(GtkWidget *widget, gpointer data)
+{
+    g_print("Click1\n");
+    // View *root_view = (View *)data;
+
+    View *btn2 = find_view_by_id("bt2", root_view_gloabl);
+    if (btn2)
+    {
+        widget_set_colors(btn2->widget, "red", "white");
+    }
+}
+
+static void click2(GtkWidget *widget, gpointer data)
+{
+    // View *root_view_gloabl = (View *)data;
+
+    g_print("Click2\n");
+    View *btn1 = find_view_by_id("bt1", root_view_gloabl);
+    if (btn1)
+    {
+        widget_set_colors(btn1->widget, "green", "white");
+    }
+}
+
+static void menu_item_onclick(GtkWidget *widget, gpointer data)
+{
+    int *cible = (int*) data;
+
+    g_print("Menu item\n");
+    View *box1 = find_view_by_id("box1A", root_view_gloabl);
+    if (box1)
+    {
+        if (*cible == 1)
+            widget_set_colors(box1->widget, "green", "white");
+        else
+            widget_set_colors(box1->widget, "blue", "white");
+    }
+}
 
 View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
 {
@@ -363,7 +407,16 @@ View *read_button_tag(FILE *index, View *parent_view, gboolean is_relative_conta
 
     view_config = init_button_config(index, &button_config);
 
-    GtkWidget *button_widget = create_button(button_config, root_view);
+    GtkWidget *button_widget = create_button(button_config);
+
+    // Link signals
+    if (view_config->onclick[0] != '\0')
+    {
+        if (g_strcmp0(view_config->onclick, "click1") == 0)
+            g_signal_connect(G_OBJECT(button_widget), "clicked", G_CALLBACK(click1), NULL);
+        else if (g_strcmp0(view_config->onclick, "click2") == 0)
+            g_signal_connect(G_OBJECT(button_widget), "clicked", G_CALLBACK(click2), NULL);
+    }
 
     View *button_view = create_view(view_config->view_id, button_widget, view_config);
 
@@ -455,6 +508,18 @@ View *read_menu_item_tag(FILE *index, View *parent_view, gboolean is_relative_co
 
     // Add view to view model
     add_view(menu_item_view, parent_view, is_relative_container);
+
+    if (view_config->onclick[0] != '\0')
+    {
+        int cible = 1;
+        if (g_strcmp0(view_config->onclick, "menu_onclick") == 0)
+            g_signal_connect(G_OBJECT(menu_item_widget), "activate", G_CALLBACK(menu_item_onclick), &cible);
+        else if (g_strcmp0(view_config->onclick, "menu_onclick1") == 0)
+        {
+            cible = 2;
+            g_signal_connect(G_OBJECT(menu_item_widget), "activate", G_CALLBACK(menu_item_onclick), &cible);
+        }
+    }
 
     return menu_item_view;
 }
@@ -682,7 +747,7 @@ View *read_grid_tag(FILE *index, View *parent_view, gboolean is_relative_contain
     return grid_view;
 }
 
-View *build_app(GtkApplication *app, View *root_parent_view)
+View *build_app(GtkApplication *app, View *root_view)
 {
     printf("Building app\n");
 
@@ -697,7 +762,7 @@ View *build_app(GtkApplication *app, View *root_parent_view)
 
     g_print("Index file opened\n");
 
-    View *parent_view = root_parent_view;
+    View *parent_view = root_view;
     View *root_menu_bar_view = NULL;
     gboolean is_relative_container = TRUE;
     gchar *widget_tag = NULL;
@@ -737,9 +802,9 @@ View *build_app(GtkApplication *app, View *root_parent_view)
                 parent_view = read_window_tag(index, app, parent_view, is_relative_container);
 
                 // Set window as root view parent to be returned
-                root_parent_view = parent_view;
-                // Set the window as root view to be used in signals
                 root_view = parent_view;
+
+                root_view_gloabl = parent_view;
 
                 // Update container flag
                 is_relative_container = is_container_view(index);

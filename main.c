@@ -5,10 +5,10 @@ gboolean clicked1 = FALSE;
 
 static void click1(GtkWidget *widget, gpointer data)
 {
-    View *root_view = (View *)data;
+    View *root = (View *)data;
     g_print("Click1\n");
 
-    View *btn2 = find_view_by_id("bt2", root_view);
+    View *btn2 = find_view_by_id("bt2", root);
     if (btn2)
     {
         if (clicked)
@@ -31,7 +31,6 @@ static void click1(GtkWidget *widget, gpointer data)
     // DialogConfig dc = DEFAULT_DIALOG;
     // GtkWidget *dialog = create_dialog(dc);
 
-
     // GtkWidget *dialog_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 
     // ButtonConfig btn_config = DEFAULT_BUTTON;
@@ -50,10 +49,10 @@ static void click1(GtkWidget *widget, gpointer data)
 
 static void click2(GtkWidget *widget, gpointer data)
 {
-    View *root_view = (View *)data;
+    View *root = (View *)data;
     g_print("Click2\n");
 
-    View *btn1 = find_view_by_id("bt1", root_view);
+    View *btn1 = find_view_by_id("bt1", root);
     if (btn1)
     {
         if (clicked1)
@@ -75,13 +74,16 @@ static void activate(GtkApplication *app, gpointer user_data)
 
     gtk_widget_show_all(window);
 
-    View *btn1 = find_view_by_id("bt1", root_view);
-    if (btn1)
-        g_signal_connect(G_OBJECT(btn1->widget), "clicked", G_CALLBACK(click1), root_view);
+    // View *btn1 = find_view_by_id("bt1", root_view);
+    // if (btn1)
+    //     g_signal_connect(G_OBJECT(btn1->widget), "clicked", G_CALLBACK(click1), root_view);
 
-    View *btn2 = find_view_by_id("bt2", root_view);
-    if (btn2)
-        g_signal_connect(G_OBJECT(btn2->widget), "clicked", G_CALLBACK(click2), root_view);
+    // View *btn2 = find_view_by_id("bt2", root_view);
+    // if (btn2)
+    //     g_signal_connect(G_OBJECT(btn2->widget), "clicked", G_CALLBACK(click2), root_view);
+
+    g_print("ROOT=> %s\n", root_view->view_config->view_id);
+    // g_print("ROOT GLOBAL=> %s\n", root_view_gloabl->view_config->view_id);
 }
 
 // Main function

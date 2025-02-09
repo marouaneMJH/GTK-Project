@@ -59,6 +59,7 @@ ViewConfig *init_menu_item_config(FILE *index, MenuItemConfig *menu_item_config)
 {
     return init_generic_config(index,(void*)menu_item_config,(ConfigurePropertyCallback)configure_menu_item_property);
 }
+
 GtkWidget *create_menu_item(MenuItemConfig menu_item_config)
 {
     GtkWidget *menu_item = NULL;

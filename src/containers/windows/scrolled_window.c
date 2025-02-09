@@ -50,4 +50,5 @@ GtkWidget *create_scrolled_window(ScrolledWindowConfig scrolled_window_config)
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window), scrolled_window_config.h_policy, scrolled_window_config.v_policy);
 
     return scrolled_window;
+
 }

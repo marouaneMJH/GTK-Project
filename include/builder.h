@@ -2,6 +2,9 @@
 #define BUILDER_H
 
 #include "./index.h"
+#define INDEX_TXT "./src/view/index.txt"
+#define DIALOG_TXT "./src/view/dialog.txt"
+#define MODE "r"
 
 typedef enum
 {
@@ -32,7 +35,9 @@ typedef enum
     FrameTag,
     TextAreaTag,
     OverlayTag,
-    ComboTextBoxTag
+    DialogTag,
+    ComboTextBoxTag,
+    ToggleButtonTag
 } Tags;
 
 // Global structure;
@@ -45,6 +50,6 @@ gchar *read_tag(FILE *index);
 
 int get_view_index(gchar *widget_tag);
 
-View *build_app(GtkApplication *app, View *root_view);
+View *build_app(GtkApplication *app, View *root_view, const char *file_path);
 
 #endif

@@ -7,6 +7,7 @@
 
 /* containers */
 #include "./containers/windows/window.h"
+#include "./containers/windows/scrolled_window.h"
 #include "./containers/layouts/box.h"
 #include "./containers/layouts/fixed.h"
 #include "./containers/layouts/flow_box.h"
@@ -30,8 +31,7 @@
 #include "./widgets/menu/menu_bar.h"
 #include "./widgets/menu/menu.h"
 #include "./widgets/menu/menu_item.h"
-
-// #include "./widgets/button/toggle_button.h"
+#include "./widgets/button/toggle_button.h"
 #include "./containers/windows/scrolled_window.h"
 
 // Dialogs

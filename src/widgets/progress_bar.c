@@ -51,16 +51,16 @@ ViewConfig *configure_progress_bar_property(ProgressBarConfig *progress_bar_conf
         progress_bar_config->dimensions.height = atoi(value);
 
     // Margins
-    if (g_strcmp0(property, "mrgin_top") == 0)
+    if (g_strcmp0(property, "margin_top") == 0)
         progress_bar_config->margins.top = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_bottom") == 0)
+    if (g_strcmp0(property, "margin_bottom") == 0)
         progress_bar_config->margins.bottom = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_left") == 0)
+    if (g_strcmp0(property, "margin_left") == 0)
         progress_bar_config->margins.start = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_right") == 0)
+    if (g_strcmp0(property, "margin_right") == 0)
         progress_bar_config->margins.end = atoi(value);
 
     if (g_strcmp0(property, "bg_color") == 0)

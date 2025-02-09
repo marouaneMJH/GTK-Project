@@ -171,18 +171,24 @@ extern View *root_view_gloabl;
  * @brief global structure for windget (window, button, label, ...)
  * Dimension of widget, the height and width of widget. for each widget have default value for this structure (macros value)
  */
+/**
+ * @brief Structure to hold the dimensions of a widget
+ */
 typedef struct
 {
-    gint width;
-    gint height;
+    gint width;  /**< Width of the widget */
+    gint height; /**< Height of the widget */
 } Dimensions;
 
+/**
+ * @brief Structure to hold the margins of a widget
+ */
 typedef struct
 {
-    gint top;    // Top margin
-    gint bottom; // Bottom margin
-    gint start;  // Start margin
-    gint end;    // End  margin
+    gint top;    /**< Top margin */
+    gint bottom; /**< Bottom margin */
+    gint start;  /**< Start margin */
+    gint end;    /**< End margin */
 } Margins;
 
 /* inline function */
@@ -267,7 +273,7 @@ void widget_set_margins(GtkWidget *widget, Margins margins);
  * @param font_size The font size
  * @return void
  */
-// void widget_set_font(GtkWidget *widget, const gchar *font_name, gint font_size);
+void widget_set_font_size(GtkWidget *widget, int size);
 
 // TODO: Should be not manipulate the end of tag ">" in the file
 // TODO: Should manipulate spaces and tabs and new lines
@@ -278,7 +284,6 @@ gchar *read_value(FILE *index, int *status);
 
 gboolean is_character(gchar c);
 
-/* */
 /**
  * @typedef ConfigurePropertyCallback
  * @brief A callback function type for configuring properties.
@@ -307,6 +312,27 @@ typedef ViewConfig *(*ConfigurePropertyCallback)(void *config, ViewConfig *view_
  * @return A pointer to the initialized ViewConfig structure, or NULL on failure.
  */
 ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCallback configure_property_callback);
+/**
+ * @brief Set the fixed size of a widget.
+ * @param widget The GtkWidget to resize.
+ * @param dimensions The dimensions structure containing width and height.
+ */
+void set_widget_size(GtkWidget *widget, Dimensions dimensions);
+
+
+/**
+ * @brief function to constrole font family 
+ * @param widget The widget to change font 
+ * @param font_family a string indicate the font family
+ *  
+ * here a list of font family example:
+ * 1.   "Arial"
+ * 2.   "Courier New"
+ * 3.   "Times New Roman"
+ * 4.   "Comic Sans MS"
+ * 5.   "Verdana"
+ */
+void widget_set_font_family(GtkWidget *widget, const char *font_family);
 
 /**
  * @brief Finds a view by its ID in a graph of views.

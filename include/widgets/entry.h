@@ -37,7 +37,6 @@
         .purpose = GTK_INPUT_PURPOSE_FREE_FORM, \
         .dimensions = DEFAULT_ENTRY_DIMENSIONS, \
         .margins = DEFAULT_ENTRY_MARGINS,       \
-        .has_frame = TRUE,                      \
         .opacity = 1,                           \
         .bg_color = "\0",                       \
         .text_color = "\0",                     \
@@ -48,6 +47,7 @@
         .progress_fraction = 0,                 \
         .progress_pulse_step = 0,               \
         .activates_default = FALSE,             \
+        .has_frame = TRUE                       \
     }
 
 /**

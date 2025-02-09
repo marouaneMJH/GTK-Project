@@ -64,4 +64,16 @@ ViewConfig *init_grid_config(FILE *index, GridConfig *grid_config);
  */
 GtkWidget *create_grid(GridConfig grid_config);
 
+
+/**
+ * #brief add grid to parent widget
+ * @param[in] widget parent widget
+ * @param[in] column column position
+ * @param[in] row row position
+ * @param[in] column_span column span, the minimum size if it null by default will be 1
+ * @param[in] row_span row span
+ * @return[out] void
+ */
+void add_grid(GtkWidget *widget, gint column, gint row, gint column_span, gint row_span);
+
 #endif

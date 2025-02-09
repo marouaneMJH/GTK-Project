@@ -38,7 +38,7 @@ ViewConfig *configure_grid_property(GridConfig *grid_config, ViewConfig *view_co
             grid_config->valign = GTK_ALIGN_FILL;
     }
 
-    if (g_strcmp0(property, "halign") == 0)
+    if (g_strcmp0(property, "haliegn") == 0)
     {
         if (g_strcmp0(value, "center") == 0)
             grid_config->halign = GTK_ALIGN_CENTER;
@@ -121,4 +121,12 @@ GtkWidget *create_grid(GridConfig grid_config)
     // gtk_grid_set_row_baseline_position(GTK_GRID(grid), grid_config.row_index, grid_config.row_baseline_position);
 
     return grid;
+}
+
+void add_grid(GtkWidget *widget, gint column, gint row, gint column_span, gint row_span)
+{
+    if (column_span == 0 && row_span == 0)
+        gtk_grid_attach(GTK_GRID(widget), widget, column, row, 1, 1);
+    else
+        gtk_grid_attach(GTK_GRID(widget), widget, column, row, column_span, row_span);
 }

@@ -5,12 +5,15 @@ ViewConfig *configure_entry_property(EntryConfig *entry_config, ViewConfig *view
     if (!entry_config || !property || !value)
         return NULL;
 
+    if (g_strcmp0(property, "text") == 0)
+        strcpy(entry_config->text, value);
+
     if (g_strcmp0(property, "placeholder_text") == 0)
         strcpy(entry_config->placeholder_text, value);
 
-    if (g_strcmp0(property, "max_length") == 0)
-        entry_config->max_length, atoi(value);
-
+    if (g_strcmp0(property, "is_visible") == 0)
+        entry_config->is_visible = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+    
     // Margins
     if (g_strcmp0(property, "margin_top") == 0)
         entry_config->margins.top = atoi(value);
@@ -31,12 +34,50 @@ ViewConfig *configure_entry_property(EntryConfig *entry_config, ViewConfig *view
     if (g_strcmp0(property, "height") == 0)
         entry_config->dimensions.height = atoi(value);
 
-    // Colors
+    // Appearance
     if (g_strcmp0(property, "bg_color") == 0)
         strcpy(entry_config->bg_color, value);
 
     if (g_strcmp0(property, "text_color") == 0)
         strcpy(entry_config->text_color, value);
+
+    if (g_strcmp0(property, "opacity") == 0)
+        entry_config->opacity = atof(value);
+
+    if (g_strcmp0(property, "has_frame") == 0)
+        entry_config->has_frame = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
+    // Text handling
+    if (g_strcmp0(property, "overwrite_mode") == 0)
+        entry_config->overwrite_mode = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
+    if (g_strcmp0(property, "max_length") == 0)
+        entry_config->max_length = atoi(value);
+    
+    if (g_strcmp0(property, "alignment") == 0)
+        entry_config->alignment = atof(value);
+
+    if (g_strcmp0(property, "progress_fraction") == 0)
+        entry_config->progress_fraction = atof(value);
+    else if (g_strcmp0(property, "progress_pulse_step") == 0)
+        entry_config->progress_pulse_step = atof(value);
+
+    if (g_strcmp0(property, "activates_default") == 0)
+        entry_config->activates_default = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
+    if (g_strcmp0(property, "type") == 0)
+    {
+        if (g_strcmp0(value, "number") == 0)
+            entry_config->purpose = GTK_INPUT_PURPOSE_NUMBER;
+        else if (g_strcmp0(value, "email") == 0)
+            entry_config->purpose = GTK_INPUT_PURPOSE_EMAIL;
+        else if (g_strcmp0(value, "name") == 0)
+            entry_config->purpose = GTK_INPUT_PURPOSE_NAME;
+        else if (g_strcmp0(value, "password") == 0)
+            entry_config->purpose = GTK_INPUT_PURPOSE_PASSWORD;
+        else if (g_strcmp0(value, "pin") == 0)
+            entry_config->purpose = GTK_INPUT_PURPOSE_PIN;
+    }
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
@@ -45,20 +86,64 @@ ViewConfig *configure_entry_property(EntryConfig *entry_config, ViewConfig *view
 
 ViewConfig *init_entry_config(FILE *index, EntryConfig *entry_config)
 {
-    return init_generic_config(index,(void*)entry_config,(ConfigurePropertyCallback)configure_entry_property);
+    return init_generic_config(index, (void *)entry_config, (ConfigurePropertyCallback)configure_entry_property);
+}
+
+
+void numeric_field_handler(GtkEntry *entry, const gchar *text, gint length) {
+    // Allow only digits
+    for (int i = 0; i < length; i++) {
+        if (!g_ascii_isdigit(text[i])) {
+            g_signal_stop_emission_by_name(entry, "insert-text");
+            return;
+        }
+    }
+}
+
+void email_field_handler(GtkEntry *entry, const gchar *text, gint length) {
+    // Allow only email characters
+    for (int i = 0; i < length; i++) {
+        if (!g_ascii_isalnum(text[i]) && text[i] != '@' && text[i] != '.' && text[i] != '_') {
+            g_signal_stop_emission_by_name(entry, "insert-text");
+            return;
+        }
+    }
+}
+void on_icon_press(GtkEntry *entry,gpointer user_data)
+{
+    
+        gtk_entry_set_text(entry, "");
 }
 
 GtkWidget *create_entry(EntryConfig entry_config)
 {
 
+    
+    g_print("=============================================\n");
     GtkWidget *entry = gtk_entry_new();
-
+    gtk_entry_set_icon_from_icon_name(GTK_ENTRY(entry), GTK_ENTRY_ICON_SECONDARY, "edit-clear");
     gtk_entry_set_text(GTK_ENTRY(entry), entry_config.text);
     gtk_entry_set_placeholder_text(GTK_ENTRY(entry), entry_config.placeholder_text);
     gtk_entry_set_visibility(GTK_ENTRY(entry), entry_config.is_visible);
     gtk_entry_set_input_purpose(GTK_ENTRY(entry), entry_config.purpose);
+    //
+    if (entry_config.purpose == GTK_INPUT_PURPOSE_EMAIL)
+        g_signal_connect(entry, "insert-text", G_CALLBACK(email_field_handler), NULL);
+        
+    if ((entry_config.purpose == GTK_INPUT_PURPOSE_NUMBER) || (entry_config.purpose == GTK_INPUT_PURPOSE_PIN))
+        g_signal_connect(entry, "insert-text", G_CALLBACK(numeric_field_handler), NULL);
+    if( (entry_config.purpose == GTK_INPUT_PURPOSE_PASSWORD) || (entry_config.purpose == GTK_INPUT_PURPOSE_PIN) )
+        gtk_entry_set_visibility(GTK_ENTRY(entry), FALSE);
+
+    const gchar* icon=gtk_entry_get_icon_name(GTK_ENTRY(entry), GTK_ENTRY_ICON_SECONDARY);
+    if(icon)
+        g_signal_connect(entry, "icon-press", G_CALLBACK(on_icon_press), NULL);
+    
+    
     gtk_entry_set_max_length(GTK_ENTRY(entry), entry_config.max_length);
+    g_print("Entry max length: %d\n", entry_config.max_length);
     gtk_widget_set_size_request(entry, entry_config.dimensions.width, entry_config.dimensions.height);
+
     gtk_widget_set_opacity(entry, entry_config.opacity);
     gtk_entry_set_alignment(GTK_ENTRY(entry), entry_config.alignment);
     gtk_entry_set_has_frame(GTK_ENTRY(entry), entry_config.has_frame);
@@ -71,8 +156,10 @@ GtkWidget *create_entry(EntryConfig entry_config)
     if (entry_config.completion)
         gtk_entry_set_completion(GTK_ENTRY(entry), entry_config.completion);
 
+    g_print("Entry bg color: %s\n", entry_config.bg_color);
     widget_set_colors(GTK_WIDGET(entry), entry_config.bg_color, entry_config.text_color);
     widget_set_margins(GTK_WIDGET(entry), entry_config.margins);
+
 
     // To look at later:
     // gtk_entry_set_cursor_hadjustment(GTK_ENTRY(Myentry), hadjustment);
@@ -108,12 +195,3 @@ GtkWidget *create_entry(EntryConfig entry_config)
 //     return completion;
 // }
 
-// void on_insert_text(GtkEntry *entry, const gchar *text, gint length) {
-//     // Allow only digits
-//     for (int i = 0; i < length; i++) {
-//         if (!g_ascii_isdigit(text[i])) {
-//             g_signal_stop_emission_by_name(entry, "insert-text");
-//             return;
-//         }
-//     }
-// }

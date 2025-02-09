@@ -111,6 +111,7 @@ ViewConfig *configure_window_property(WindowConfig *window_config, ViewConfig *v
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
+    *status = 1;
     return view_config;
 }
 
@@ -162,9 +163,9 @@ ViewConfig *init_window_config(FILE *index, WindowConfig *window_config)
                 else
                 {
                     // Apply the property value to the window config
-                    int config_status;
+                    int config_status ;
                     view_config = configure_window_property(window_config, view_config, property, value, &config_status);
-                    if (!config_status)
+                    if (config_status == 0)
                     {
                         printf("Error configuring the property %s\n", property);
                     }

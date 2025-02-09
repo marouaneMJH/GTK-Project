@@ -14,60 +14,84 @@ View *root_view_gloabl;
 /////////// /_!_\ Untouchable please //////////////
 GtkStyleContext *get_style_provider_context(GtkWidget *widget, const gchar *bg_color, const gchar *color, const gchar *bg_image)
 {
+    // Create a new CSS provider
     GtkCssProvider *css_provider = gtk_css_provider_new();
     gchar *css_style = NULL;
 
+    // Initialize a GString to build the CSS style
     GString *css_builder = g_string_new(".style { ");
 
+    // Check if any of the color or background image parameters are provided
     if ((color && color[0] != '\0') || (bg_color && bg_color[0] != '\0') || (bg_image && bg_image[0] != '\0'))
     {
+        // Append background image to the CSS style if provided
         g_string_append_printf(css_builder, "background-image: url('./assets/images/%s'); ", (bg_image && bg_image[0] != '\0') ? bg_image : "none;");
+        
+        // Append background size to the CSS style if background image is provided
         if ((bg_image && bg_image[0] != '\0'))
             g_string_append_printf(css_builder, "background-size: cover; ");
+        
+        // Append background color to the CSS style if provided
         if ((bg_color && bg_color[0] != '\0'))
             g_string_append_printf(css_builder, "background-color: %s; ", bg_color);
+        
+        // Append text color to the CSS style if provided
         if ((color && color[0] != '\0'))
             g_string_append_printf(css_builder, "color: %s; ", color);
 
+        // Close the CSS style
         g_string_append(css_builder, "}");
 
+        // Convert GString to gchar*
         css_style = g_string_free(css_builder, FALSE);
 
     }
     else
     {
-        // Use a default stylesheet if all args are null
+        // Use a default stylesheet if all arguments are null
         gtk_css_provider_load_from_path(css_provider, "./assets/style.css", NULL);
     }
 
+    // Load the generated CSS style into the CSS provider
     if (css_style)
     {
         GError *error = NULL;
         gtk_css_provider_load_from_data(css_provider, css_style, -1, &error);
         if (error)
         {
+            // Print an error message if loading the CSS failed
             g_printerr("Failed to load CSS: %s\n", error->message);
             g_error_free(error);
         }
         g_free(css_style);
     }
 
+    // Get the style context of the widget
     GtkStyleContext *context = gtk_widget_get_style_context(widget);
+    
+    // Add the CSS provider to the widget's style context
     gtk_style_context_add_provider(context,
                                    GTK_STYLE_PROVIDER(css_provider),
                                    GTK_STYLE_PROVIDER_PRIORITY_USER);
-    g_object_unref(css_provider); // Free the CSS provider after use
+    
+    // Free the CSS provider after use
+    g_object_unref(css_provider);
 
+    // Return the style context
     return context;
 }
 
+// Function to set both background and text colors for a widget
 void widget_set_colors(GtkWidget *widget, const gchar *bg_color, const gchar *color)
 {
+    // Add a CSS class to the widget's style context with the specified colors
     gtk_style_context_add_class(get_style_provider_context(widget, bg_color, color, NULL), "style");
 }
 
+// Function to set a background image for a widget
 void widget_set_background_image(GtkWidget *widget, const gchar *bg_image, const gchar *color)
 {
+    // Add a CSS class to the widget's style context with the specified background image
     gtk_style_context_add_class(get_style_provider_context(widget, NULL, color, bg_image), "style");
 }
 
@@ -77,6 +101,47 @@ void widget_set_margins(GtkWidget *widget, Margins margins)
     gtk_widget_set_margin_bottom(widget, margins.bottom);
     gtk_widget_set_margin_start(widget, margins.start);
     gtk_widget_set_margin_end(widget, margins.end);
+}
+
+
+void widget_set_font_size(GtkWidget *widget, int size)
+{
+    GtkCssProvider *provider = gtk_css_provider_new();
+    GtkStyleContext *context = gtk_widget_get_style_context(widget);
+
+    // Create CSS string for font size
+    gchar *css = g_strdup_printf("* { font-size: %dpt; }", size);
+
+    // Load and apply CSS
+    gtk_css_provider_load_from_data(provider, css, -1, NULL);
+    gtk_style_context_add_provider(context, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+    // Cleanup
+    g_free(css);
+    g_object_unref(provider);
+}
+
+
+void widget_set_font_family(GtkWidget *widget, const char *font_family)
+{
+    // If font_family is NULL, do nothing
+    if (font_family == NULL) {
+        return;
+    }
+
+    GtkCssProvider *provider = gtk_css_provider_new();
+    GtkStyleContext *context = gtk_widget_get_style_context(widget);
+
+    // Create CSS string for font family
+    gchar *css = g_strdup_printf("* { font-family: '%s'; }", font_family);
+
+    // Load and apply CSS
+    gtk_css_provider_load_from_data(provider, css, -1, NULL);
+    gtk_style_context_add_provider(context, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+    // Cleanup
+    g_free(css);
+    g_object_unref(provider);
 }
 
 
@@ -106,7 +171,7 @@ void widget_set_margins(GtkWidget *widget, Margins margins)
 
 // TODO: Should be not manipulate the end of tag ">" in the file
 // TODO: Should manipulate spaces and tabs and new lines
-// ########################## "This function should stop reading after the greater then symbol " > " exactelly"
+// ########################## "This function should stop reading after the greater than symbol " > " exactelly"
 gchar *read_property(FILE *index, int *status)
 {
     gchar *property = NULL;
@@ -243,4 +308,41 @@ View *find_view_by_id(char *view_id, View *root_view)
     }
 
     return (View *)view;
+}
+
+// Function to force width and height using CSS for a widget
+void set_widget_size(GtkWidget *widget, Dimensions dimensions)
+{
+    // Create a CSS provider
+    GtkCssProvider *css_provider = gtk_css_provider_new();
+    GdkScreen *screen = gtk_widget_get_screen(widget);
+
+    // Create the CSS rule as a string
+    gchar *css = g_strdup_printf(
+        ".fixed-size { "
+        "  min-width: %dpx; "
+        "  max-width: %dpx; "
+        "  width: %dpx; "
+        "  min-height: %dpx; "
+        "  max-height: %dpx; "
+        "  height: %dpx; "
+        "}", 
+        dimensions.width, dimensions.width, dimensions.width, dimensions.height, dimensions.height, dimensions.height);
+
+    // Load the CSS data into the provider
+    gtk_css_provider_load_from_data(css_provider, css, -1, NULL);
+
+    // Apply the CSS provider to the widget's style context
+    gtk_style_context_add_provider(
+        gtk_widget_get_style_context(widget), 
+        GTK_STYLE_PROVIDER(css_provider), 
+        GTK_STYLE_PROVIDER_PRIORITY_USER
+    );
+
+    // Add the 'fixed-size' class to the widget
+    gtk_style_context_add_class(gtk_widget_get_style_context(widget), "fixed-size");
+
+    // Clean up
+    g_free(css);
+    g_object_unref(css_provider);
 }

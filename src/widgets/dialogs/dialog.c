@@ -9,6 +9,7 @@ GtkWidget* create_dialog(DialogConfig config)
         config.is_modal ? GTK_DIALOG_MODAL : 0,
         "_OK", GTK_RESPONSE_OK,
         "_Cancel", GTK_RESPONSE_CANCEL,
+        "_OK", GTK_RESPONSE_CLOSE,
         NULL
     );
 

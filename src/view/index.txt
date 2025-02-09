@@ -77,25 +77,31 @@
 			>
 			<toggle_button
             	id="btn_toggle"
-            	label="Activer"
+            	label="_Activer Charaf"
             	is_mnemonic="true"
             	is_active="false"
             	mode="false"
-            	is_inconsistent="false"
             	width="150"
-            	height="150"
+            	height="10"
        		/>
-
-
-				<switch_button
-					id="btn_switch"
-					label="Switch"
-					is_mnemonic="true"
-					is_active="false"
-					is_visible="false"
-					is_inconsistent="true"
-					text_color="black"
-				/>
+			<toggle_button
+            	id="btn_toggle2"
+            	label="_Activer Marwane"
+            	is_mnemonic="true"
+            	is_active="false"
+            	mode="false"
+            	width="150"
+            	height="10"
+       		/>
+			<toggle_button
+            	id="btn_toggle3"
+            	label="Activer redone"
+            	is_mnemonic="true"
+            	is_active="false"
+            	mode="false"
+            	width="150"
+            	height="10"
+       		/>
 			</box>
 
 			<box spacing="0">

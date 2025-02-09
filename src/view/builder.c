@@ -180,6 +180,10 @@ int get_view_index(gchar *widget_tag) //Why FILE *index
     
     if (g_strcmp0(widget_tag, "combo_text_box") == 0)
         return ComboTextBoxTag;
+
+    if (g_strcmp0(widget_tag, "toggle_button") == 0)
+        return ToggleButtonTag;
+    
     
     return -1;
 }
@@ -874,6 +878,24 @@ View* read_combo_text_box_tag(FILE *index, View *parent_view, gboolean is_relati
     return combo_text_box_view;   
 }
 
+View *read_toggle_button_tag(FILE *index, View *parent_view, gboolean is_relative_container)
+{
+    ViewConfig *view_config;
+    ToggleButtonConfig toggle_button_config = DEFAULT_TOGGLE_BUTTON;
+
+    view_config = init_toggle_button_config(index, &toggle_button_config);
+
+    GtkWidget *toggle_button_widget = create_toggle_button(toggle_button_config);
+
+    View *toggle_button_view = create_view(view_config->view_id, toggle_button_widget, view_config);
+
+    // Ajouter le toggle_button à la hiérarchie des vues
+    add_view(toggle_button_view, parent_view, is_relative_container);
+
+    return toggle_button_view;
+}
+
+
 View *build_app(GtkApplication *app, View *root_view)
 {
     printf("Building app\n");
@@ -1081,6 +1103,11 @@ View *build_app(GtkApplication *app, View *root_view)
                 is_relative_container = is_container_view(index);
                 break;
                 
+                case ToggleButtonTag:
+                parent_view = read_toggle_button_tag(index, parent_view, is_relative_container);
+                is_relative_container = is_container_view(index);
+                break;
+            
 
 
 

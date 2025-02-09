@@ -1,5 +1,5 @@
 #include "./include/builder.h"
-
+#define INDEX_TXT "./src/view/index.txt"
 // Callback function for button click
 static void on_button_clicked(GtkButton *button, gpointer user_data) {
     g_print("Button clicked!\n");
@@ -9,8 +9,9 @@ static void on_button_clicked(GtkButton *button, gpointer user_data) {
 static void activate(GtkApplication *app, gpointer user_data) {
     // Create a new window
 
-    View *root_view = build_app(app, root_view);
+    View *root_view = build_app(app, root_view,INDEX_TXT);
     GtkWidget *window = root_view->widget;
+    
 
     // Create a button
     // GtkWidget *button = gtk_button_new_with_label("Click Me");

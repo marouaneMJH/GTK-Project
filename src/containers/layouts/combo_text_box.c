@@ -41,6 +41,9 @@ ViewConfig *configure_combo_text_box_property(
     else if (g_strcmp0(property, "has_entry") == 0)
         combo_text_box_config->has_entry = (strcmp(value, "true") == 0);
 
+    else if (g_strcmp0(property, "is_editable") == 0)
+        combo_text_box_config->is_editable = (strcmp(value, "true") == 0);
+
     // Style properties
     else if (g_strcmp0(property, "bg_color") == 0)
         strcpy(combo_text_box_config->style.bg_color, value);
@@ -60,7 +63,6 @@ ViewConfig *configure_combo_text_box_property(
         combo_text_box_config->type.end = atoi(value);
     else if (g_strcmp0(property, "start") == 0)
         combo_text_box_config->type.start = atoi(value);
-
     else if (g_strcmp0(property, "type") == 0)
     {
         if (g_strcmp0(value, "month") == 0)
@@ -108,6 +110,19 @@ GtkWidget *create_combo_text_box(ComboTextBoxConfig combo_text_box_config)
     {
         combo_text_box = gtk_combo_box_text_new_with_entry();
         GtkWidget *entry = gtk_bin_get_child(GTK_BIN(combo_text_box));
+
+        // Set entry width
+        if (combo_text_box_config.dimensions.width > 5 &&
+            combo_text_box_config.dimensions.height > 5)
+            gtk_widget_set_size_request(entry,
+                                        combo_text_box_config.dimensions.width - 5,
+                                        combo_text_box_config.dimensions.height - 5);
+
+        // Set editable  permission
+        gtk_editable_set_editable(GTK_EDITABLE(entry),
+                                  combo_text_box_config.is_editable);
+
+        // this functio
 
         // Set default text if provided, else set placeholder
         if (combo_text_box_config.default_value && combo_text_box_config.default_value[0] != '\0')

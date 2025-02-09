@@ -41,8 +41,9 @@
     .default_value = NULL,                                   \
     .wrap_width = 1,                                         \
     .popup_fixed_width = FALSE,                              \
-    .popup_shown_rows = 3,                                  \
+    .popup_shown_rows = 3,                                   \
     .type = DEFAULT_COMBO_TEXT_BOX_TYPE,                     \
+    .is_editable = TRUE,                                     \
     .style = DEFAULT_COMBO_TEXT_BOX_STYLE})
 /**
  * @brief Structure to hold the key-value pairs for combo box options
@@ -113,6 +114,7 @@ typedef struct
     gboolean popup_fixed_width; // Whether popup should match combo width
     gint popup_shown_rows;      // Maximum number of visible rows in dropdown
     ComboTextBoxType type;      // a pre existed combo box like (YEAR ...)
+    gboolean is_editable;       // the permission of change entry content
 
     // Style properties
     ComboTextBoxStyle style; // Background, text color, font, etc.

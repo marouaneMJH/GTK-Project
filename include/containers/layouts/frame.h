@@ -12,10 +12,11 @@
 
 #define DEFAULT_FRAME_MARGINS \
     {                         \
-        .bottom = 30,         \
-        .top = 30,            \
-        .start = 30,          \
-        .end = 30}
+        .bottom = 0,          \
+        .top = 0,             \
+        .start = 0,           \
+        .end = 0}
+    
 
 #define DEFAULT_FRAME                     \
     {                                     \

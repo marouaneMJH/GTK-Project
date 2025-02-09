@@ -30,16 +30,16 @@ ViewConfig *configure_image_property(ImageConfig *image_config, ViewConfig *view
         image_config->opacity, atof(value);
 
     // Margins
-    if (g_strcmp0(property, "mrgin_top") == 0)
+    if (g_strcmp0(property, "margin_top") == 0)
         image_config->margins.top = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_bottom") == 0)
+    if (g_strcmp0(property, "margin_bottom") == 0)
         image_config->margins.bottom = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_left") == 0)
+    if (g_strcmp0(property, "margin_left") == 0)
         image_config->margins.start = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_right") == 0)
+    if (g_strcmp0(property, "margin_right") == 0)
         image_config->margins.end = atoi(value);
 
     // Dimensions
@@ -88,10 +88,10 @@ GtkWidget *create_image(ImageConfig image_config)
         image = gtk_image_new_from_animation(gdk_pixbuf_animation_new_from_file(image_config.path, NULL));
         break;
     case IMAGE_PIXBUF:
-        image = create_image_from_pixbuf(image_config);
+        image = create_image_from_pixbuf(image_config.path, image_config.dimensions);
         break;
     case IMAGE_ICON_NAME:
-        image = create_image_from_icon_name(image_config, GTK_ICON_SIZE_DIALOG);
+        image = gtk_image_new_from_icon_name(image_config.path, GTK_ICON_SIZE_DIALOG); // size should be configurable
         break;
     default:
         break;
@@ -111,26 +111,17 @@ GtkWidget *create_image_from_Icon(ImageConfig image_config, GIcon *icon, GtkIcon
     return image;
 }
 
-GtkWidget *create_image_from_icon_name(ImageConfig image_config, GtkIconSize icon_size)
-{
-
-    GtkWidget *image = gtk_image_new_from_icon_name(image_config.path, icon_size);
-
-    return image;
-}
-
 GtkWidget *create_image_from_animation(ImageConfig image_config, GdkPixbufAnimation *animation)
 {
-
     GtkWidget *image = gtk_image_new_from_animation(animation);
     return image;
 }
 
-GtkWidget *create_image_from_pixbuf(ImageConfig image_config)
+GtkWidget *create_image_from_pixbuf(char *path, Dimensions dimensions)
 {
 
     // Load the image into a GdkPixbuf
-    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(image_config.path, NULL);
+    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(path, NULL);
     if (!pixbuf)
     {
         g_printerr("Error loading image\n");
@@ -139,13 +130,14 @@ GtkWidget *create_image_from_pixbuf(ImageConfig image_config)
     
 
     // Resize the image
-    GdkPixbuf *scaled_pixbuf = gdk_pixbuf_scale_simple(pixbuf, image_config.dimensions.width, image_config.dimensions.height, GDK_INTERP_BILINEAR);
+    GdkPixbuf *scaled_pixbuf = gdk_pixbuf_scale_simple(pixbuf, dimensions.width, dimensions.height, GDK_INTERP_BILINEAR);
 
     // Create a GtkImage widget and set the scaled image
     GtkWidget *image = gtk_image_new_from_pixbuf(scaled_pixbuf);
 
     // Clean up the original pixbuf (not needed anymore)
     g_object_unref(pixbuf);
+    g_object_unref(scaled_pixbuf);
 
     return image;
 }

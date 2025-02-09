@@ -25,16 +25,16 @@ ViewConfig *configure_link_button_property(LinkButtonConfig *link_button_config,
         link_button_config->is_visited = g_strcmp0(value, "true") == 0;
 
         // Margins
-    if (g_strcmp0(property, "mrgin_top") == 0)
+    if (g_strcmp0(property, "margin_top") == 0)
         link_button_config->margins.top = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_bottom") == 0)
+    if (g_strcmp0(property, "margin_bottom") == 0)
         link_button_config->margins.bottom = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_left") == 0)
+    if (g_strcmp0(property, "margin_left") == 0)
         link_button_config->margins.start = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_right") == 0)
+    if (g_strcmp0(property, "margin_right") == 0)
         link_button_config->margins.end = atoi(value);
 
     // Dimensions

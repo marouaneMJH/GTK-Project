@@ -15,16 +15,16 @@ ViewConfig *configure_entry_property(EntryConfig *entry_config, ViewConfig *view
         entry_config->is_visible = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
     
     // Margins
-    if (g_strcmp0(property, "mrgin_top") == 0)
+    if (g_strcmp0(property, "margin_top") == 0)
         entry_config->margins.top = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_bottom") == 0)
+    if (g_strcmp0(property, "margin_bottom") == 0)
         entry_config->margins.bottom = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_left") == 0)
+    if (g_strcmp0(property, "margin_left") == 0)
         entry_config->margins.start = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_right") == 0)
+    if (g_strcmp0(property, "margin_right") == 0)
         entry_config->margins.end = atoi(value);
 
     // Dimensions

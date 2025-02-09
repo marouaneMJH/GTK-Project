@@ -1,10 +1,21 @@
 #include "./include/builder.h"
 
-// Callback function for button click
-static void on_button_clicked(GtkButton *button, gpointer user_data)
-{
-    g_print("Button clicked!\n");
-}
+// // Callback function for button click
+// static void on_button_clicked(GtkWidget *button, gpointer user_data)
+// {
+//     DialogConfig dialog_config = DEFAULT_DIALOG_CONFIG;
+//     GtkWidget *window_1 = create_dialog(dialog_config);
+
+//     ButtonConfig button_config = DEFAULT_BUTTON;
+//     GtkWidget *new_button = create_button(button_config);  // Rename the variable to avoid shadowing
+
+//     widget_set_background_image(window_1, "team_working_on_xml.jpeg", NULL);
+
+//     // Instead of connecting the same callback, use a different function or NULL if unnecessary
+//     g_signal_connect(G_OBJECT(new_button), "clicked", G_CALLBACK(some_other_function), NULL);
+
+//     show_dialog(window_1);
+// }
 
 // Activate callback for GtkApplication
 static void activate(GtkApplication *app, gpointer user_data)
@@ -15,21 +26,23 @@ static void activate(GtkApplication *app, gpointer user_data)
     GtkWidget *window = root_view->widget;
 
     // WindowConfig window_config = DEFAULT_WINDOW;
-    // GtkWidget *window = create_window(app,window_config);
-
-    // Gtk 
-
+    // GtkWidget *window = create_window(app, window_config);
 
     // GtkWidget *button = gtk_button_new_with_label("Click me!");
 
-    // FrameConfig config_frame = DEFAULT_FRAME; 
+    // FrameConfig config_frame = DEFAULT_FRAME;
+
     // GtkWidget *frame = create_frame(config_frame);
     // LabelConfig label_config = DEFAULT_LABEL;
-    // label_config.font_size=20;
-    // GtkWidget *label = create_label(label_config);
-    // gtk_container_add(GTK_CONTAINER(frame), button);
-    // gtk_container_add(GTK_CONTAINER(window), frame);
+    // label_config.font_size = 20;
 
+    // g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(on_button_clicked), NULL);
+
+
+    // GtkWidget *label = create_label(label_config);
+    // gtk_container_add(GTK_CONTAINER(frame), button);    
+    // gtk_container_add(GTK_CONTAINER(window), frame);
+    
     show_window(window);
 }
 
@@ -51,6 +64,3 @@ int main(int argc, char **argv)
 
     return status;
 }
-
-
-

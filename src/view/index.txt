@@ -1,6 +1,6 @@
 <window
 	id="window_2"
-	title="Test des fontions GTK+"
+	title="								Test des fontions GTK+"
 	icon_path="./assets/images/programer.jpg"
 >
 	<scrolled_window
@@ -91,7 +91,6 @@
 						id="box_frame_1"
 						orientation="horizontal"
 						bg_color="green"
-
 					>
 						<radio_button 
 							id="radio_1"
@@ -127,30 +126,41 @@
 							spacing="0"
 							position_x="0"
 							position_y="0"
-							
+							height="20"
+							width="200"
+								font_size="12"
+
 						>
-
+							<combo_text_box type="year" />
 							<combo_text_box 
-
-								option2="option2"
-								option3="option3"
-								option6="option5"
-								option7="option5"
-								
-
+								has_entry="true"
+								font_size="12"
+								type="counter"
+								start="10"
+								end="20"
 							/>
 
-							
 							<combo_text_box 
+
+								placeholder_text="Text..."
+								type="month"
+								has_entry="true"
+								font_size="12"
+
+								default_value="XX"
+								wrap_width="2"
 								option1="marouane el Moujahid"
+								option10="XX"
 								option2="train jay m3atal ogbila "
 								option4="i hate ur life"
 							/>
 							<combo_text_box 
-
+								wrap_width="1"
+								type="month"
 								option1="marouane el Moujahid"
 								option2="train jay m3atal ogbila"
 								option3="i hate ur life"
+								height="10"
 							/>
 
 							

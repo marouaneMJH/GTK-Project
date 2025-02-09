@@ -80,7 +80,7 @@ GtkWidget *create_box(BoxConfig box_config)
     gtk_box_set_baseline_position(GTK_BOX(box), box_config.baseline_position);
 
     // Set dimensions
-    if (box_config.dimensions.width > 0 || box_config.dimensions.height)
+    if (box_config.dimensions.width > 0 || box_config.dimensions.height >0)
         gtk_widget_set_size_request(box, box_config.dimensions.width, box_config.dimensions.height);
 
     // Set colors

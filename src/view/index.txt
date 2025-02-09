@@ -1,6 +1,6 @@
 <window
 	id="window_2"
-	title="Test des fontions GTK+"
+	title="Test des fonctions GTK+"
 	icon_path="./assets/images/programer.jpg"
 >
 	<scrolled_window
@@ -28,30 +28,30 @@
 					>
 						<menu_item
 							id="menu_item_2_1"
-							label="sous Choix1"
+							label="Sous Choix 1"
 						/>
 						<menu_item
 							id="menu_item_2_2"
-							label="sous Choix2"
+							label="Sous Choix 2"
 						>
 							<menu
 								id="menu_bar1_"
 							>
-				
 									<menu_item
-										id="menu_item_1"
-										label="Choix221"
+										id="menu_item_2_2_1"
+										label="Choix 2-2-1"
 									/>
 									<menu_item
-										id="menu_item_2"
-										label="Mon 222"
+										id="menu_item_2_2_2"
+										label="Choix 2-2-2"
 									/>
 									<menu_item
-										id="menu_item_2"
-										label="Mon 223"
+										id="menu_item_2_2_3"
+										label="Choix 2-2-3"
 									/>
 									<button 
-										label="hello"
+										id="button_1"
+										label="Hello"
 										bg_color="red"
 									/>
 							</menu>
@@ -59,7 +59,7 @@
 						</menu_item>
 						<menu_item
 							id="menu_item_2_3"
-							label="sous Choix3"
+							label="Sous Choix 3"
 						/>
 					</menu>
 				</menu_item>
@@ -68,15 +68,41 @@
 					id="menu_item_3"
 					label="Mon Choix"
 				/>
-
 			</menu_bar>
 
-			
+			<box
+				id="box_toggle_button"
+				orientation="horizontal"
+				
+			>
+			<toggle_button
+            	id="btn_toggle"
+            	label="Activer"
+            	is_mnemonic="true"
+            	is_active="false"
+            	mode="false"
+            	is_inconsistent="false"
+            	width="150"
+            	height="150"
+       		/>
+
+
+				<switch_button
+					id="btn_switch"
+					label="Switch"
+					is_mnemonic="true"
+					is_active="false"
+					is_visible="false"
+					is_inconsistent="true"
+					text_color="black"
+				/>
+			</box>
+
 			<box spacing="0">
 				
 				<label
 					id="name"
-					label_text="Vos connaissance de GTK+"
+					label_text="Vos connaissances de GTK+"
 					jtype="left"
 					bg_color="red"
 					width="100"
@@ -84,14 +110,12 @@
 					xalign="10"
 					yalign="10"
 				/>
-				<frame
-					id="frame_1"
-				>
+
+				<frame id="frame_1">
 					<box
 						id="box_frame_1"
 						orientation="horizontal"
 						bg_color="green"
-
 					>
 						<radio_button 
 							id="radio_1"
@@ -104,56 +128,39 @@
 							is_group="true"
 						/>
 						<radio_button 
-							id="radio_1"
+							id="radio_3"
 							label="Bien"
 							is_group="true"
 						/>
 						<radio_button 
-							id="radio_1"
-							label="Trés Bien"
+							id="radio_4"
+							label="Très Bien"
 							is_group="true"
 						/>
 					</box>
 				</frame>
 
-				<frame
-					id="frame_1"
-				>
-					<fixed
-
-					>
+				<frame id="frame_2">
+					<fixed>
 						<box
 							orientation="horizontal"
 							spacing="0"
 							position_x="0"
 							position_y="0"
-							
 						>
 
 							<combo_text_box 
-
-								option2="option2"
-								option3="option3"
-								option6="option5"
-								option7="option5"
-								
-
+								option1="Option 1"
+								option2="Option 2"
+								option3="Option 3"
 							/>
 
-							
 							<combo_text_box 
-								option1="marouane el Moujahid"
-								option2="train jay m3atal ogbila "
-								option4="i hate ur life"
-							/>
-							<combo_text_box 
-
-								option1="marouane el Moujahid"
-								option2="train jay m3atal ogbila"
-								option3="i hate ur life"
+								option1="Marouane El Moujahid"
+								option2="Train en retard"
+								option3="Je déteste ta vie"
 							/>
 
-							
 						</box>
 					</fixed>
 				</frame>

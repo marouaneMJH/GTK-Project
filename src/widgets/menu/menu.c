@@ -21,16 +21,16 @@ ViewConfig *configure_menu_property(MenuConfig *menu_config, ViewConfig *view_co
         menu_config->reserve_toggle_size = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
 
     // Margins
-    if (g_strcmp0(property, "mrgin_top") == 0)
+    if (g_strcmp0(property, "margin_top") == 0)
         menu_config->margins.top = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_bottom") == 0)
+    if (g_strcmp0(property, "margin_bottom") == 0)
         menu_config->margins.bottom = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_left") == 0)
+    if (g_strcmp0(property, "margin_left") == 0)
         menu_config->margins.start = atoi(value);
 
-    if (g_strcmp0(property, "mrgin_right") == 0)
+    if (g_strcmp0(property, "margin_right") == 0)
         menu_config->margins.end = atoi(value);
 
     // Dimensions

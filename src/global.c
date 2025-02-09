@@ -320,3 +320,26 @@ void set_widget_size(GtkWidget *widget, Dimensions dimensions)
     g_free(css);
     g_object_unref(css_provider);
 }
+
+View *find_view_by_id(char *view_id, View *root_view)
+{
+    g_print("PASSED WIDGETS WHILE SEARCHING: %s\n", root_view->view_config->view_id);
+    if (g_strcmp0(root_view->view_config->view_id, view_id) == 0)
+        return (View *)root_view;
+
+    View *view = NULL;
+    if (root_view->next)
+    {
+        view = find_view_by_id(view_id, root_view->next);
+        if (view)
+            return view;
+    }
+    if (root_view->child)
+    {
+        view = find_view_by_id(view_id, root_view->child);
+        if (view)
+            return view;
+    }
+
+    return (View *)view;
+}

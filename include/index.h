@@ -7,6 +7,7 @@
 
 /* containers */
 #include "./containers/windows/window.h"
+#include "./containers/windows/scrolled_window.h"
 #include "./containers/layouts/box.h"
 #include "./containers/layouts/fixed.h"
 #include "./containers/layouts/flow_box.h"

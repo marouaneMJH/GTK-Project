@@ -1,9 +1,68 @@
 #include "./include/builder.h"
 
-// Callback function for button click
-static void on_button_clicked(GtkButton *button, gpointer user_data)
+gboolean clicked = FALSE;
+gboolean clicked1 = FALSE;
+
+static void click1(GtkWidget *widget, gpointer data)
 {
-    g_print("Button clicked!\n");
+    View *root_view = (View *)data;
+    g_print("Click1\n");
+
+    View *btn2 = find_view_by_id("bt2", root_view);
+    if (btn2)
+    {
+        if (clicked)
+            widget_set_colors(btn2->widget, "yellow", "white");
+        else
+            widget_set_colors(btn2->widget, "red", "white");
+
+        clicked = !clicked;
+    }
+
+    // GtkWidget *dialog = gtk_dialog_new_with_buttons(
+    //     "Standalone Dialog",   // Title
+    //     NULL,                  // No parent (NULL)
+    //     GTK_DIALOG_MODAL,      // Make it modal
+    //     "_OK", GTK_RESPONSE_OK,
+    //     "_Cancel", GTK_RESPONSE_CANCEL,
+    //     NULL
+    // );
+
+    DialogConfig dc = DEFAULT_DIALOG;
+    GtkWidget *dialog = create_dialog(dc);
+
+
+    GtkWidget *dialog_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+
+    ButtonConfig btn_config = DEFAULT_BUTTON;
+    GtkWidget *btn = create_button(btn_config);
+
+    BoxConfig box_config = DEFAULT_BOX;
+    GtkWidget *box = create_box(box_config);
+
+    gtk_box_pack_end(GTK_BOX(box), btn, FALSE, FALSE, 0);
+    gtk_widget_set_size_request(box, 400, 400);
+
+    gtk_container_add(GTK_CONTAINER(dialog_area), box);
+
+    show_dialog(dialog);
+}
+
+static void click2(GtkWidget *widget, gpointer data)
+{
+    View *root_view = (View *)data;
+    g_print("Click2\n");
+
+    View *btn1 = find_view_by_id("bt1", root_view);
+    if (btn1)
+    {
+        if (clicked1)
+            widget_set_colors(btn1->widget, "yellow", "white");
+        else
+            widget_set_colors(btn1->widget, "green", "white");
+
+        clicked1 = !clicked1;
+    }
 }
 
 // Activate callback for GtkApplication
@@ -11,23 +70,48 @@ static void activate(GtkApplication *app, gpointer user_data)
 {
     // Create a new window
 
-    View *root_view = build_app(app, root_view);
+    View *root_view = build_app(app, root_view,INDEX_TXT);
     GtkWidget *window = root_view->widget;
 
-    // WindowConfig window_config = DEFAULT_WINDOW;
-    // GtkWidget *window = create_window(app,window_config);
+   gtk_widget_show_all(window);
+   // gtk_widget_show_all(dialog);
+   //g_print("Window shown\n");
+     View *root_view2 = NULL;
+     root_view2 = build_app(app, root_view2,DIALOG_TXT);
+     if (!root_view2)
+     {
+         g_printerr("Failed to build the dialog\n");
+         return;
+     }
+     g_print("Dialog built\n");
 
-    // GtkWidget *button = gtk_button_new_with_label("Click me!");
+    GtkWidget *dialog = root_view2->widget;
+    show_dialog(dialog);
+    
+    // DialogConfig dc = DEFAULT_DIALOG;
+    // GtkWidget *dialog = create_dialog(dc);
 
-    // FrameConfig config_frame = DEFAULT_FRAME; 
-    // GtkWidget *frame = create_frame(config_frame);
-    // LabelConfig label_config = DEFAULT_LABEL;
-    // label_config.font_size=20;
-    // GtkWidget *label = create_label(label_config);
-    // gtk_container_add(GTK_CONTAINER(frame), button);
-    // gtk_container_add(GTK_CONTAINER(window), frame);
+    // GtkWidget *dialog_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 
-    show_window(window);
+    //ButtonConfig btn_config1 = DEFAULT_BUTTON;
+    // GtkWidget *btn = create_button(btn_config);
+
+    // BoxConfig box_config = DEFAULT_BOX;
+    // GtkWidget *box = create_box(box_config);
+
+    // gtk_box_pack_end(GTK_BOX(box), btn, FALSE, FALSE, 0);
+    // gtk_widget_set_size_request(box, 400, 400);
+    // gtk_container_add(GTK_CONTAINER(dialog_area), box);
+    // g_print("Dialog shown\n");
+     //show_dialog(dialog);
+
+    View *btn1 = find_view_by_id("bt1", root_view);
+    if (btn1)
+        g_signal_connect(G_OBJECT(btn1->widget), "clicked", G_CALLBACK(click1), root_view);
+
+    View *btn2 = find_view_by_id("bt2", root_view);
+    if (btn2)
+        g_signal_connect(G_OBJECT(btn2->widget), "clicked", G_CALLBACK(click2), root_view);
 }
 
 // Main function
@@ -48,9 +132,6 @@ int main(int argc, char **argv)
 
     return status;
 }
-
-
-
 
 // #include "./include/index.h"
 

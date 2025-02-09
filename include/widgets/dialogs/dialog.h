@@ -19,14 +19,18 @@
         .height = 500}
 
 /* Default configuration for general dialog */
-#define DEFAULT_DIALOG                           \
-    {                                            \
-        .title = "General Dialog",               \
-        .is_modal = TRUE,                        \
-        .dimensions = DEFAULT_DIALOG_DIMENSIONS, \
-        .parent = NULL,                          \
-        .bg_color = "\0",                        \
-        .text_color = "\0"}
+#define DEFAULT_DIALOG                                 \
+    {                                                  \
+        .title = "General Dialog",                     \
+        .is_modal = TRUE,                              \
+        .dimensions = DEFAULT_DIALOG_DIMENSIONS,       \
+        .parent = NULL,                                \
+        .bg_color = "\0",                              \
+        .text_color = "\0"                             \
+    }
+
+
+
 
 typedef struct
 {
@@ -37,6 +41,9 @@ typedef struct
     gchar bg_color[MAX_COLOR_SIZE];     // Background color
     gchar text_color[MAX_COLOR_SIZE];   // Font color
 } DialogConfig;
+
+
+ViewConfig *init_dialog_config(FILE *index, DialogConfig *dialog_config);
 
 /**
  * @brief Creates a dialog with the specified configuration.
@@ -64,7 +71,6 @@ void show_dialog(GtkWidget *dialog);
  *
  * @param dialog The dialog to destroy.
  */
-void destroy_dialog(GtkWidget *dialog);
-
+void destroy_dialog(GtkWidget* dialog);
 
 #endif

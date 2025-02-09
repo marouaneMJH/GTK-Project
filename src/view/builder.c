@@ -1,8 +1,6 @@
 #include "./../../include/builder.h"
 
-#define INDEX_TXT "./src/view/index.txt"
-#define DIALOG_TXT "./src/view/dialog.txt"
-#define MODE "r"
+
 
 // Signals
 static void print_hello(GtkWidget *widget, gpointer data)
@@ -168,6 +166,11 @@ int get_view_index(gchar *widget_tag) //Why FILE *index
 
     if (g_strcmp0(widget_tag, "progress_bar") == 0)
         return ProgressBarTag;
+    if (g_strcmp0(widget_tag, "combo_text_box") == 0)
+        return ComboTextBoxTag;
+
+    if (g_strcmp0(widget_tag, "dialog") == 0)
+        return DialogTag;
 
     if (g_strcmp0(widget_tag, "frame") == 0)
         return FrameTag;
@@ -288,10 +291,13 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
 {
     if (!view)
         return NULL;
-
-    if (!relative)
+    g_print("Adding view %s\n", view->view_config->view_id);
+    if (!relative){
+        g_print("Relative view is null\n");
         return view;
-
+    }
+    g_print("Relative view %p \n", relative);
+    
     // Group radio buttons
     if (GTK_IS_RADIO_BUTTON(view->widget))
     {
@@ -351,17 +357,21 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
 
     if (is_relative_container)
     {
+        g_print("Relative container\n");
         view->parent = relative;
         relative->child = view;
 
-        printf("RELATIVE PARENT %s IS A CONTAINER FOR: %s\n", relative->view_config->view_id, view->view_config->view_id);
+       // printf("RELATIVE PARENT %s IS A CONTAINER FOR: %s\n", relative->view_config->view_id, view->view_config->view_id);
         // Window case
         if (GTK_IS_WINDOW(relative->widget) || GTK_IS_SCROLLED_WINDOW(relative->widget) || GTK_IS_DIALOG(relative->widget))
         {
+            
             if (GTK_IS_DIALOG(relative->widget))
             {
+                g_print("Dialog container\n");
                 GtkWidget *content_area = gtk_dialog_get_content_area(GTK_DIALOG(relative->widget));
                 gtk_container_add(GTK_CONTAINER(content_area), view->widget);
+                g_print("Dialog container added\n");
             }
             else
                 gtk_container_add(GTK_CONTAINER(relative->widget), view->widget);
@@ -369,17 +379,18 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
         }
 
         link_with_container(relative->widget, view->widget, view->view_config);
+        g_print("Linked with container\n");
     }
     else
     {
-        printf("RELATIVE PARENT %s IS NOT A CONTAINER FOR: %s\n", relative->view_config->view_id, view->view_config->view_id);
+        //printf("RELATIVE PARENT %s IS NOT A CONTAINER FOR: %s\n", relative->view_config->view_id, view->view_config->view_id);
         view->parent = relative->parent;
         relative->next = view;
 
         link_with_container(relative->parent->widget, view->widget, view->view_config);
     }
 
-    printf("This widget %s is linked to container\n", view->view_config->view_id);
+   // printf("This widget %s is linked to container\n", view->view_config->view_id);
     return view;
 }
 
@@ -413,6 +424,23 @@ View *read_window_tag(FILE *index, GtkApplication *app, View *parent_view, gbool
 
     // Update parent view
     return window_view;
+}
+
+View *read_dialog_tag(FILE *index, View *parent_view, gboolean is_relative_container)
+{
+    ViewConfig *view_config;
+    DialogConfig dialog_config = DEFAULT_DIALOG;
+
+    view_config = init_dialog_config(index, &dialog_config);
+
+    GtkWidget *dialog_widget = create_dialog(dialog_config);
+
+    View *dialog_view = create_view(view_config->view_id, dialog_widget, view_config);
+    g_print("Dialog view created\n");
+    // Add view to view model
+    parent_view = add_view(dialog_view, parent_view, is_relative_container);
+    g_print("Dialog view added\n");
+    return dialog_view;
 }
 
 View *read_box_tag(FILE *index, View *parent_view, gboolean is_relative_container)
@@ -896,13 +924,12 @@ View *read_toggle_button_tag(FILE *index, View *parent_view, gboolean is_relativ
 }
 
 
-View *build_app(GtkApplication *app, View *root_view)
+View *build_app(GtkApplication *app, View *root_view,const gchar *file_path)
 {
     printf("Building app\n");
 
     // This file is read from the main.c path because this function is called/executed from main.c
-    FILE *index = fopen(INDEX_TXT, MODE);
-
+    FILE *index = fopen(file_path, MODE);
     if (!index)
     {
         g_printerr("Failed to open index file\n");
@@ -927,8 +954,10 @@ View *build_app(GtkApplication *app, View *root_view)
         {
             if (fgetc(index) == '/')
             {
+
                 is_relative_container = FALSE;
                 parent_view = parent_view->parent;
+                g_print("Parent view changed\n");
                 continue;
             }
             else
@@ -1094,6 +1123,12 @@ View *build_app(GtkApplication *app, View *root_view)
             case OverlayTag:
 
                 parent_view = read_overlay_tag(index, parent_view, is_relative_container);
+                printf("\n\nHERE\n\n\n");
+            case DialogTag:
+                parent_view = read_dialog_tag(index, parent_view, is_relative_container);
+                root_view = parent_view;
+                root_dialog_view_global = parent_view;
+                g_print("Dialog view readed\n");
                 is_relative_container = is_container_view(index);
                 break;
                 
@@ -1125,6 +1160,8 @@ View *build_app(GtkApplication *app, View *root_view)
     }
 
     fclose(index);
-
+    g_print("Index file closed\n");
+    if(root_view)
+        g_print("Root view created\n");
     return root_view;
 }

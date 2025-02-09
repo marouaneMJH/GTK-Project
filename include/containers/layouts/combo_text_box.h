@@ -19,22 +19,30 @@
 
 // Default Margins
 #define DEFAULT_COMBO_TEXT_BOX_MARGINS { \
-    .top = 0,                           \
-    .bottom = 0,                        \
-    .start = 0,                         \
+    .top = 0,                            \
+    .bottom = 0,                         \
+    .start = 0,                          \
     .end = 0}
+
+// Default type
+#define DEFAULT_COMBO_TEXT_BOX_TYPE ((ComboTextBoxType){ \
+    .type_counter = NONE,                                \
+    .start = 0,                                          \
+    .end = 0})
 
 // Default configuration including all new properties
 // Default configuration
 #define DEFAULT_COMBO_TEXT_BOX_CONFIG ((ComboTextBoxConfig){ \
     .options = NULL,                                         \
     .dimensions = DEFAULT_COMBO_TEXT_BOX_DIMENSION,          \
-    .margins = DEFAULT_COMBO_TEXT_BOX_MARGINS,                \
+    .margins = DEFAULT_COMBO_TEXT_BOX_MARGINS,               \
     .has_entry = FALSE,                                      \
     .placeholder_text = NULL,                                \
-    .wrap_width = 0,                                         \
-    .popup_fixed_width = FALSE,                               \
-    .popup_shown_rows = 10,                                  \
+    .default_value = NULL,                                   \
+    .wrap_width = 1,                                         \
+    .popup_fixed_width = FALSE,                              \
+    .popup_shown_rows = 3,                                  \
+    .type = DEFAULT_COMBO_TEXT_BOX_TYPE,                     \
     .style = DEFAULT_COMBO_TEXT_BOX_STYLE})
 /**
  * @brief Structure to hold the key-value pairs for combo box options
@@ -57,6 +65,23 @@ typedef struct
     gboolean is_bold;                        // Whether text should be bold
     gboolean is_italic;                      // Whether text should be italic
 } ComboTextBoxStyle;
+
+typedef enum
+{
+    NONE,
+    COUNTER, //  should specify the type_start and type_end to make interval counter
+    YEAR,    // counter between 1998 and 2025
+    MONTH,   // 1-12
+    DAY      // 1-31
+} ComboTextBoxCounterType;
+
+//   structure to save pre existed lists
+typedef struct
+{
+    ComboTextBoxCounterType type_counter; // the type of the counter
+    gint start;                           // the start position of the counter
+    gint end;                             // the start position of the counter
+} ComboTextBoxType;
 
 /**
  * @brief Configuration structure for the combo box widget
@@ -81,10 +106,13 @@ typedef struct
     Margins margins;         // Widget margins
     gboolean has_entry;      // Whether to allow text input
     gchar *placeholder_text; // Placeholder text inside the entry
-    gint wrap_width;
+    gchar *default_value;    // Default value inside the entry if exist
+    gint wrap_width;         //  how many column shown
+
     // Behavior properties
     gboolean popup_fixed_width; // Whether popup should match combo width
     gint popup_shown_rows;      // Maximum number of visible rows in dropdown
+    ComboTextBoxType type;      // a pre existed combo box like (YEAR ...)
 
     // Style properties
     ComboTextBoxStyle style; // Background, text color, font, etc.
@@ -124,16 +152,20 @@ ViewConfig *configure_combo_text_box_property(
 ViewConfig *init_combo_text_box_config(FILE *index,
                                        ComboTextBoxConfig *combo_text_box_config);
 
+void combo_box_make_interval(GtkWidget *combo_text_box, int start, int end);
+
 /**
  * @brief Creates a new GtkWidget for displaying a combo text box.
  *
  * This function takes a ComboTextBoxConfig structure containing the necessary
  * data to configure the combo text box and returns a pointer to a newly created
- * GtkWidget that displays the combo text box.
+ * GtkWidget that displays the combo text box. Show two version of function
+ * version width has_entry=true when the combo box support an entry, when the user
+ * can enter a line of data
  *
  * @param combo_text_box_config A pointer to a ComboTextBoxConfig structure containing
  *                              the configuration data for the combo text box.
- * @return GtkW idget* A pointer to the newly created GtkWidget for the combo text box.
+ * @return GtkWidget* A pointer to the newly created GtkWidget for the combo text box.
  */
 GtkWidget *create_combo_text_box(ComboTextBoxConfig combo_text_box_config);
 

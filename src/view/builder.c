@@ -116,6 +116,11 @@ int get_view_index(FILE *index, gchar *widget_tag)
 
     if (g_strcmp0(widget_tag, "progress_bar") == 0)
         return ProgressBarTag;
+    if (g_strcmp0(widget_tag, "combo_text_box") == 0)
+        return ComboTextBoxTag;
+
+    if (g_strcmp0(widget_tag, "dialog") == 0)
+        return DialogTag;
 
     return -1;
 }
@@ -318,6 +323,23 @@ View *read_window_tag(FILE *index, GtkApplication *app, View *parent_view, gbool
 
     // Update parent view
     return window_view;
+}
+
+View *read_dialog_tag(FILE *index, View *parent_view, gboolean is_relative_container)
+{
+    ViewConfig *view_config;
+    DialogConfig dialog_config = DEFAULT_DIALOG;
+
+    view_config = init_dialog_config(index, &dialog_config);
+
+    GtkWidget *dialog_widget = create_dialog(dialog_config);
+
+    View *dialog_view = create_view(view_config->view_id, dialog_widget, view_config);
+
+    // Add view to view model
+    parent_view = add_view(dialog_view, parent_view, is_relative_container);
+
+    return dialog_view;
 }
 
 View *read_box_tag(FILE *index, View *parent_view, gboolean is_relative_container)
@@ -680,13 +702,12 @@ View *read_grid_tag(FILE *index, View *parent_view, gboolean is_relative_contain
     return grid_view;
 }
 
-View *build_app(GtkApplication *app, View *root_view)
+View *build_app(GtkApplication *app, View *root_view,const gchar *file_path)
 {
     printf("Building app\n");
 
     // This file is read from the main.c path because this function is called/executed from main.c
-    FILE *index = fopen(INDEX_TXT, MODE);
-
+    FILE *index = fopen(file_path, MODE);
     if (!index)
     {
         g_printerr("Failed to open index file\n");

@@ -22,7 +22,7 @@
     }
 
 /* Default configuration for general dialog */
-#define DEFAULT_DIALOG_CONFIG                          \
+#define DEFAULT_DIALOG                                 \
     {                                                  \
         .title = "General Dialog",                     \
         .is_modal = TRUE,                              \
@@ -44,6 +44,9 @@ typedef struct
     gchar bg_color[MAX_COLOR_SIZE];     // Background color 
     gchar text_color[MAX_COLOR_SIZE];   // Font color
 } DialogConfig;
+
+
+ViewConfig *init_dialog_config(FILE *index, DialogConfig *dialog_config);
 
 /**
  * @brief Creates a dialog with the specified configuration.

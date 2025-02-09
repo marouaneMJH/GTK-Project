@@ -28,7 +28,8 @@ typedef enum
     ImageTag,
     ProgressBarTag,
     CheckButtonTag,
-    LinkButtonTag
+    LinkButtonTag,
+    DialogTag,
 } Tags;
 
 // Global structure;
@@ -41,6 +42,6 @@ gchar *read_tag(FILE *index);
 
 int get_view_index(FILE *index, gchar *widget_tag);
 
-View *build_app(GtkApplication *app, View *root_view);
+View *build_app(GtkApplication *app, View *root_view, const char *file_path);
 
 #endif

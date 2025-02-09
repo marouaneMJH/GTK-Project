@@ -37,16 +37,22 @@ static void click2(GtkWidget *widget, gpointer data)
 
 static void menu_item_onclick(GtkWidget *widget, gpointer data)
 {
-    int *cible = (int*) data;
+    static int cible = 1;
 
     g_print("Menu item\n");
     View *box1 = find_view_by_id("box1A", root_view_gloabl);
     if (box1)
     {
-        if (*cible == 1)
+        if (cible == 1)
+        {
+            cible = 2;
             widget_set_colors(box1->widget, "green", "white");
+        }
         else
+        {
+            cible = 1;
             widget_set_colors(box1->widget, "blue", "white");
+        }
     }
 }
 
@@ -511,15 +517,11 @@ View *read_menu_item_tag(FILE *index, View *parent_view, gboolean is_relative_co
 
     if (view_config->onclick[0] != '\0')
     {
-        int cible = 1;
         if (g_strcmp0(view_config->onclick, "menu_onclick") == 0)
-            g_signal_connect(G_OBJECT(menu_item_widget), "activate", G_CALLBACK(menu_item_onclick), &cible);
+            g_signal_connect(G_OBJECT(menu_item_widget), "activate", G_CALLBACK(menu_item_onclick), NULL);
         else if (g_strcmp0(view_config->onclick, "menu_onclick1") == 0)
-        {
-            cible = 2;
-            g_signal_connect(G_OBJECT(menu_item_widget), "activate", G_CALLBACK(menu_item_onclick), &cible);
+            g_signal_connect(G_OBJECT(menu_item_widget), "activate", G_CALLBACK(menu_item_onclick), NULL);
         }
-    }
 
     return menu_item_view;
 }

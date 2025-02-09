@@ -34,7 +34,7 @@ typedef enum
     LinkButtonTag,
     FrameTag,
     TextAreaTag,
-    OverlayTag
+    OverlayTag,
     DialogTag,
     ComboTextBoxTag,
 } Tags;

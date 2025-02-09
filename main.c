@@ -28,7 +28,7 @@ static void click1(GtkWidget *widget, gpointer data)
     //     NULL
     // );
 
-    DialogConfig dc = DEFAULT_DIALOG_CONFIG;
+    DialogConfig dc = DEFAULT_DIALOG;
     GtkWidget *dialog = create_dialog(dc);
 
 
@@ -72,9 +72,38 @@ static void activate(GtkApplication *app, gpointer user_data)
 
     View *root_view = build_app(app, root_view,INDEX_TXT);
     GtkWidget *window = root_view->widget;
-    
 
-    gtk_widget_show_all(window);
+   gtk_widget_show_all(window);
+   // gtk_widget_show_all(dialog);
+   //g_print("Window shown\n");
+     View *root_view2 = NULL;
+     root_view2 = build_app(app, root_view2,DIALOG_TXT);
+     if (!root_view2)
+     {
+         g_printerr("Failed to build the dialog\n");
+         return;
+     }
+     g_print("Dialog built\n");
+
+    GtkWidget *dialog = root_view2->widget;
+    show_dialog(dialog);
+    
+    // DialogConfig dc = DEFAULT_DIALOG;
+    // GtkWidget *dialog = create_dialog(dc);
+
+    // GtkWidget *dialog_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+
+    //ButtonConfig btn_config1 = DEFAULT_BUTTON;
+    // GtkWidget *btn = create_button(btn_config);
+
+    // BoxConfig box_config = DEFAULT_BOX;
+    // GtkWidget *box = create_box(box_config);
+
+    // gtk_box_pack_end(GTK_BOX(box), btn, FALSE, FALSE, 0);
+    // gtk_widget_set_size_request(box, 400, 400);
+    // gtk_container_add(GTK_CONTAINER(dialog_area), box);
+    // g_print("Dialog shown\n");
+     //show_dialog(dialog);
 
     View *btn1 = find_view_by_id("bt1", root_view);
     if (btn1)

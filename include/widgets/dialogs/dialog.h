@@ -32,7 +32,7 @@
         .text_color = "\0"                             \
     }
 
-#endif
+
 
 
 typedef struct
@@ -76,3 +76,5 @@ void show_dialog(GtkWidget* dialog);
  * @param dialog The dialog to destroy.
  */
 void destroy_dialog(GtkWidget* dialog);
+
+#endif

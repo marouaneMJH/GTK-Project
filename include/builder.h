@@ -2,6 +2,9 @@
 #define BUILDER_H
 
 #include "./index.h"
+#define INDEX_TXT "./src/view/index.txt"
+#define DIALOG_TXT "./src/view/dialog.txt"
+#define MODE "r"
 
 typedef enum
 {
@@ -30,6 +33,7 @@ typedef enum
     CheckButtonTag,
     LinkButtonTag,
     DialogTag,
+    ComboTextBoxTag,
 } Tags;
 
 // Global structure;

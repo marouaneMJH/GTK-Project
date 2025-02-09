@@ -64,20 +64,6 @@ typedef struct
     gchar *deafault_value; // The default value of the combo box
 } ComboTextBoxConfig;
 
-/**
- * @brief Sets the specified property of a combo box to a given value, converting
- *        the value to the appropriate data type.
- *
- * This function retrieves the property indicated by the caller, adjusts the
- * data type if needed, and assigns it to the combo box control.
- *
- * @param property  The name or identifier of the combo box property to modify.
- * @param value  The new value to be assigned to the property. This value
- *                  is automatically converted to the data type required by the combo box.
- *
- * @return True if the property update succeeds, false otherwise.
- */
-int configure_combo_text_box_property(ComboTextBoxConfig *combo_text_box_config, ViewConfig *view_config, gchar *property, gchar *value);
 
 /**
  * @brief Configures the combo text box property with the given value.

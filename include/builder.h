@@ -52,4 +52,6 @@ int get_view_index(gchar *widget_tag);
 
 View *build_app(GtkApplication *app, View *root_view, const char *file_path);
 
+void connect_signales(View* view);
+
 #endif

@@ -84,7 +84,7 @@
 							icon_width="25"
 							icon_height="25"
 							icon_position="right"
-						>
+						/>
 					</fixed>
 
 					<grid

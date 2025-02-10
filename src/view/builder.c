@@ -643,7 +643,6 @@ View *read_menu_item_tag(FILE *index, View *parent_view, gboolean is_relative_co
     // Add view to view model
     add_view(menu_item_view, parent_view, is_relative_container);
 
-
     return menu_item_view;
 }
 
@@ -658,6 +657,7 @@ View *read_menu_bar_tag(FILE *index, View *parent_view, gboolean is_relative_con
 
     View *menu_bar_view = create_view(view_config->view_id, menu_bar_widget, view_config);
 
+    
     // Add view to view model
     add_view(menu_bar_view, parent_view, is_relative_container);
 
@@ -916,13 +916,9 @@ View *read_toggle_button_tag(FILE *index, View *parent_view, gboolean is_relativ
     View *toggle_button_view = create_view(view_config->view_id, toggle_button_widget, view_config);
 
     // Ajouter le toggle_button à la hiérarchie des vues
+
     add_view(toggle_button_view, parent_view, is_relative_container);
 
-    if (view_config->onclick[0] != '\0')
-    {
-        if (g_strcmp0(view_config->onclick, "display_dialog") == 0)
-            g_signal_connect(G_OBJECT(toggle_button_widget), "clicked", G_CALLBACK(display_dialog), NULL);
-    }
 
     return toggle_button_view;
 }

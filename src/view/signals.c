@@ -59,13 +59,20 @@ static void sig_destroy(GtkWidget *widget, gpointer data)
     gtk_widget_destroy(window);
 }
 
+static void sig_dialog(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *dialog = root_dialog_view_global->widget;
+
+    show_dialog(dialog);
+}
+
 void connect_signales(View *view)
 {
     void *callback_function = NULL;
 
     // Extract the event name once to avoid repetition
     const char *event_name = NULL;
-    if (view->view_config->onclick[0] != '\0' )
+    if (view->view_config->onclick[0] != '\0')
     {
         event_name = view->view_config->onclick;
     }
@@ -91,6 +98,9 @@ void connect_signales(View *view)
 
         else if (strcmp(event_name, "sig_destroy") == 0)
             callback_function = sig_destroy;
+
+        else if (strcmp(event_name, "sig_dialog") == 0)
+            callback_function = sig_dialog;
     }
 
     // Connect the callback function

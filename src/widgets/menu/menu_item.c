@@ -57,7 +57,7 @@ ViewConfig *configure_menu_item_property(MenuItemConfig *menu_item_config, ViewC
 
 ViewConfig *init_menu_item_config(FILE *index, MenuItemConfig *menu_item_config)
 {
-    return init_generic_config(index,(void*)menu_item_config,(ConfigurePropertyCallback)configure_menu_item_property);
+    return init_generic_config(index, (void *)menu_item_config, (ConfigurePropertyCallback)configure_menu_item_property);
 }
 
 GtkWidget *create_menu_item(MenuItemConfig menu_item_config)
@@ -65,20 +65,26 @@ GtkWidget *create_menu_item(MenuItemConfig menu_item_config)
     GtkWidget *menu_item = NULL;
 
     // Creation
-    menu_item = gtk_menu_item_new();
-
-    if (menu_item_config.is_memonic && menu_item_config.label && menu_item_config.label[0] != '\0')
+    if (menu_item_config.is_memonic && menu_item_config.label[0] != '\0') {
+        // Create with mnemonic
         menu_item = gtk_menu_item_new_with_mnemonic(menu_item_config.label);
-
-    else if (menu_item_config.label && menu_item_config.label[0] != '\0')
+    } 
+    else if (menu_item_config.label[0] != '\0') {
+        // Create with label
         menu_item = gtk_menu_item_new_with_label(menu_item_config.label);
+        // Only set underline if explicitly requested
+        gtk_menu_item_set_use_underline(GTK_MENU_ITEM(menu_item), menu_item_config.use_underline);
+    } 
+    else {
+        // Create empty menu item
+        menu_item = gtk_menu_item_new();
+    }
 
+    // Accelerator path setup
     if (menu_item_config.accel_path && menu_item_config.accel_path[0] != '\0')
         gtk_menu_item_set_accel_path(GTK_MENU_ITEM(menu_item), menu_item_config.accel_path);
 
     gtk_menu_item_set_reserve_indicator(GTK_MENU_ITEM(menu_item), menu_item_config.reserve_indicator);
-    gtk_menu_item_set_use_underline(GTK_MENU_ITEM(menu_item), menu_item_config.use_underline);
-    // gtk_menu_item_set_right_justified(GTK_MENU_ITEM(menu_item), menu_item_config.right_justified); => Deprecated
 
     // Set the tooltip
     if (menu_item_config.tooltip && menu_item_config.tooltip[0] != '\0')

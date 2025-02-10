@@ -1,7 +1,5 @@
 #include "./../../include/builder.h"
 
-
-
 // Signals
 static void print_hello(GtkWidget *widget, gpointer data)
 {
@@ -54,6 +52,20 @@ static void menu_item_onclick(GtkWidget *widget, gpointer data)
     }
 }
 
+static void exit_func(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *window = root_view_gloabl->widget;
+
+    gtk_widget_destroy(window);
+}
+
+static void display_dialog(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *dialog = root_dialog_view_global->widget;
+
+    show_dialog(dialog);
+}
+
 View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
 {
     View *view = NULL;
@@ -90,7 +102,7 @@ gchar *read_tag(FILE *index)
     return tag;
 }
 
-int get_view_index(gchar *widget_tag) //Why FILE *index
+int get_view_index(gchar *widget_tag) // Why FILE *index
 {
     if (!widget_tag)
         return -1;
@@ -177,17 +189,16 @@ int get_view_index(gchar *widget_tag) //Why FILE *index
 
     if (g_strcmp0(widget_tag, "text_area") == 0)
         return TextAreaTag;
-    
+
     if (g_strcmp0(widget_tag, "overlay") == 0)
         return OverlayTag;
-    
+
     if (g_strcmp0(widget_tag, "combo_text_box") == 0)
         return ComboTextBoxTag;
 
     if (g_strcmp0(widget_tag, "toggle_button") == 0)
         return ToggleButtonTag;
-    
-    
+
     return -1;
 }
 
@@ -279,9 +290,9 @@ int link_with_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_co
              link_with_flow_box_container(parent, child, view_config) ||
              link_with_paned_container(parent, child, view_config) ||
              link_with_grid_container(parent, child, view_config) ||
-                    link_with_stack_container(parent, child, view_config) ||
-                    link_with_frame_container(parent, child, view_config) ||
-                    link_with_overlay_container(parent, child, view_config))
+             link_with_stack_container(parent, child, view_config) ||
+             link_with_frame_container(parent, child, view_config) ||
+             link_with_overlay_container(parent, child, view_config))
                 ? 1
                 : 0);
     ;
@@ -292,12 +303,13 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
     if (!view)
         return NULL;
     g_print("Adding view %s\n", view->view_config->view_id);
-    if (!relative){
+    if (!relative)
+    {
         g_print("Relative view is null\n");
         return view;
     }
     g_print("Relative view %p \n", relative);
-    
+
     // Group radio buttons
     if (GTK_IS_RADIO_BUTTON(view->widget))
     {
@@ -361,11 +373,11 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
         view->parent = relative;
         relative->child = view;
 
-       // printf("RELATIVE PARENT %s IS A CONTAINER FOR: %s\n", relative->view_config->view_id, view->view_config->view_id);
+        // printf("RELATIVE PARENT %s IS A CONTAINER FOR: %s\n", relative->view_config->view_id, view->view_config->view_id);
         // Window case
         if (GTK_IS_WINDOW(relative->widget) || GTK_IS_SCROLLED_WINDOW(relative->widget) || GTK_IS_DIALOG(relative->widget))
         {
-            
+
             if (GTK_IS_DIALOG(relative->widget))
             {
                 g_print("Dialog container\n");
@@ -383,14 +395,14 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
     }
     else
     {
-        //printf("RELATIVE PARENT %s IS NOT A CONTAINER FOR: %s\n", relative->view_config->view_id, view->view_config->view_id);
+        // printf("RELATIVE PARENT %s IS NOT A CONTAINER FOR: %s\n", relative->view_config->view_id, view->view_config->view_id);
         view->parent = relative->parent;
         relative->next = view;
 
         link_with_container(relative->parent->widget, view->widget, view->view_config);
     }
 
-   // printf("This widget %s is linked to container\n", view->view_config->view_id);
+    // printf("This widget %s is linked to container\n", view->view_config->view_id);
     return view;
 }
 
@@ -544,6 +556,8 @@ View *read_button_tag(FILE *index, View *parent_view, gboolean is_relative_conta
             g_signal_connect(G_OBJECT(button_widget), "clicked", G_CALLBACK(click1), NULL);
         else if (g_strcmp0(view_config->onclick, "click2") == 0)
             g_signal_connect(G_OBJECT(button_widget), "clicked", G_CALLBACK(click2), NULL);
+        else if (g_strcmp0(view_config->onclick, "exit") == 0)
+            g_signal_connect(G_OBJECT(button_widget), "clicked", G_CALLBACK(exit_func), NULL);
     }
 
     View *button_view = create_view(view_config->view_id, button_widget, view_config);
@@ -643,7 +657,7 @@ View *read_menu_item_tag(FILE *index, View *parent_view, gboolean is_relative_co
             g_signal_connect(G_OBJECT(menu_item_widget), "activate", G_CALLBACK(menu_item_onclick), NULL);
         else if (g_strcmp0(view_config->onclick, "menu_onclick1") == 0)
             g_signal_connect(G_OBJECT(menu_item_widget), "activate", G_CALLBACK(menu_item_onclick), NULL);
-        }
+    }
 
     return menu_item_view;
 }
@@ -888,11 +902,10 @@ View *read_text_area_tag(FILE *index, View *parent_view, gboolean is_relative_co
     return text_area_view;
 }
 
-View* read_combo_text_box_tag(FILE *index, View *parent_view, gboolean is_relative_container)
+View *read_combo_text_box_tag(FILE *index, View *parent_view, gboolean is_relative_container)
 {
     ViewConfig *view_config;
     ComboTextBoxConfig combo_text_box_config = DEFAULT_COMBO_TEXT_BOX_CONFIG;
-    
 
     view_config = init_combo_text_box_config(index, &combo_text_box_config);
 
@@ -903,7 +916,7 @@ View* read_combo_text_box_tag(FILE *index, View *parent_view, gboolean is_relati
     // Add view to view model
     add_view(combo_text_box_view, parent_view, is_relative_container);
 
-    return combo_text_box_view;   
+    return combo_text_box_view;
 }
 
 View *read_toggle_button_tag(FILE *index, View *parent_view, gboolean is_relative_container)
@@ -920,11 +933,16 @@ View *read_toggle_button_tag(FILE *index, View *parent_view, gboolean is_relativ
     // Ajouter le toggle_button à la hiérarchie des vues
     add_view(toggle_button_view, parent_view, is_relative_container);
 
+    if (view_config->onclick[0] != '\0')
+    {
+        if (g_strcmp0(view_config->onclick, "display_dialog") == 0)
+            g_signal_connect(G_OBJECT(toggle_button_widget), "clicked", G_CALLBACK(display_dialog), NULL);
+    }
+
     return toggle_button_view;
 }
 
-
-View *build_app(GtkApplication *app, View *root_view,const gchar *file_path)
+View *build_app(GtkApplication *app, View *root_view, const gchar *file_path)
 {
     printf("Building app\n");
 
@@ -1131,20 +1149,17 @@ View *build_app(GtkApplication *app, View *root_view,const gchar *file_path)
                 g_print("Dialog view readed\n");
                 is_relative_container = is_container_view(index);
                 break;
-                
+
             case ComboTextBoxTag:
-                
+
                 parent_view = read_combo_text_box_tag(index, parent_view, is_relative_container);
                 is_relative_container = is_container_view(index);
                 break;
-                
-                case ToggleButtonTag:
+
+            case ToggleButtonTag:
                 parent_view = read_toggle_button_tag(index, parent_view, is_relative_container);
                 is_relative_container = is_container_view(index);
                 break;
-            
-
-
 
             // TODO : Complete other widgets
             default:
@@ -1161,7 +1176,7 @@ View *build_app(GtkApplication *app, View *root_view,const gchar *file_path)
 
     fclose(index);
     g_print("Index file closed\n");
-    if(root_view)
+    if (root_view)
         g_print("Root view created\n");
     return root_view;
 }

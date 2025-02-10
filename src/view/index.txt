@@ -9,35 +9,39 @@
 		<box >
 			<button 
 				id="btn1"
-				onclick="change_self_bg_color"
-
+				onclick="sig_change_self_bg_color"
 				param_1="green"
-				label="_btn1"
-				
 			/>
 
 			<button 
 				onclick="change_self_color"
 				param_1="red"
+
 				id="btn2"
 			/>
 
 			<button 
 				onclick="change_self_color"
+
+
+
 				param_1="yellow"
 				id="btn2"
 			/>
 
 			<button 
-				onclick="change_self_color"
-				param_1="orange"
+				onclick="sig_dialog_message"
+				param_1="Impodooddjdjdj Hello world djdjd djdjd djdjdj djdj"
 				id="btn2"
 			/>
 
 			<button 
 				id="btn2"
-				onclick="click1"
-				param_1="green"
+				onclick="sig_change_friend_bg_color"
+
+				param_1="btn1"
+				param_2="orange"
+				param_3="blue"
 				
 			/>
 		</box>

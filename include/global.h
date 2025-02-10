@@ -100,6 +100,7 @@
     }                                                                               \
     if (g_strcmp0(property, "param_2") == 0)                                        \
     {                                                                               \
+        g_print("r\n\nead param_2:%s", value);                                      \
         g_strlcpy(view_config->param[1], value, MAX_SIGNAL_NAME_SIZE);              \
     }                                                                               \
     if (g_strcmp0(property, "param_3") == 0)                                        \
@@ -129,7 +130,7 @@
         view_config->row_span = 1;                                          \
         view_config->column_span = 1;                                       \
         view_config->onclick[0] = '\0';                                     \
-        for (int i = 0; i < PARAM_COUNT; view_config->param[i++][0] = '\0') \
+        for (int i = 0; i < PARAM_COUNT; view_config->param[i++][0] = '\0'); \
     } while (0);
 
 typedef struct

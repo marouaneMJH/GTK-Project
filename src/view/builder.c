@@ -68,6 +68,7 @@ View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
     view->widget = widget;
 
     connect_signales(view);
+    
 
     return view;
 }

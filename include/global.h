@@ -31,6 +31,7 @@
 
 #define MAX_TAG_SIZE 50
 #define MAX_VIEW_ID_SIZE 50
+#define PARAM_COUNT 4
 
 #define SET_VIEW_CONFIG_PROPERTY(property, value, view_config)                      \
     if (g_strcmp0(property, "position_x") == 0)                                     \
@@ -91,27 +92,44 @@
     }                                                                               \
     if (g_strcmp0(property, "onclick") == 0)                                        \
     {                                                                               \
-        g_strlcpy(view_config->onclick, value, MAX_SIGNAL_NAME_SIZE);             \
+        g_strlcpy(view_config->onclick, value, MAX_SIGNAL_NAME_SIZE);               \
+    }                                                                               \
+    if (g_strcmp0(property, "param_1") == 0)                                        \
+    {                                                                               \
+        g_strlcpy(view_config->param[0], value, MAX_SIGNAL_NAME_SIZE);              \
+    }                                                                               \
+    if (g_strcmp0(property, "param_2") == 0)                                        \
+    {                                                                               \
+        g_strlcpy(view_config->param[1], value, MAX_SIGNAL_NAME_SIZE);              \
+    }                                                                               \
+    if (g_strcmp0(property, "param_3") == 0)                                        \
+    {                                                                               \
+        g_strlcpy(view_config->param[2], value, MAX_SIGNAL_NAME_SIZE);              \
+    }                                                                               \
+    if (g_strcmp0(property, "param_4") == 0)                                        \
+    {                                                                               \
+        g_strlcpy(view_config->param[3], value, MAX_SIGNAL_NAME_SIZE);              \
     }
 
-#define DFEAULT_VIEW_CONFIG(view_config)    \
-    do                                      \
-    {                                       \
-        view_config->position_x = 0;        \
-        view_config->position_y = 0;        \
-        view_config->pack_direction = 1;    \
-        view_config->box_expand = FALSE;    \
-        view_config->box_fill = FALSE;      \
-        view_config->box_padding = 0;       \
-        view_config->group = NULL;          \
-        view_config->view_id[0] = '\0';     \
-        view_config->tab_label[0] = '\0';   \
-        view_config->is_reorderable = TRUE; \
-        view_config->row = 0;               \
-        view_config->column = 0;            \
-        view_config->row_span = 1;          \
-        view_config->column_span = 1;       \
-        view_config->onclick[0] = '\0';     \
+#define DFEAULT_VIEW_CONFIG(view_config)                                    \
+    do                                                                      \
+    {                                                                       \
+        view_config->position_x = 0;                                        \
+        view_config->position_y = 0;                                        \
+        view_config->pack_direction = 1;                                    \
+        view_config->box_expand = FALSE;                                    \
+        view_config->box_fill = FALSE;                                      \
+        view_config->box_padding = 0;                                       \
+        view_config->group = NULL;                                          \
+        view_config->view_id[0] = '\0';                                     \
+        view_config->tab_label[0] = '\0';                                   \
+        view_config->is_reorderable = TRUE;                                 \
+        view_config->row = 0;                                               \
+        view_config->column = 0;                                            \
+        view_config->row_span = 1;                                          \
+        view_config->column_span = 1;                                       \
+        view_config->onclick[0] = '\0';                                     \
+        for (int i = 0; i < PARAM_COUNT; view_config->param[i++][0] = '\0') \
     } while (0);
 
 typedef struct
@@ -152,6 +170,8 @@ typedef struct
     // Signals
     gchar onclick[MAX_SIGNAL_NAME_SIZE]; // Path to the icon image file
 
+    // Params of Signals
+    gchar param[PARAM_COUNT][MAX_SIGNAL_NAME_SIZE]; // First function parameter
 } ViewConfig;
 
 typedef struct VIEW
@@ -320,12 +340,11 @@ ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCall
  */
 void set_widget_size(GtkWidget *widget, Dimensions dimensions);
 
-
 /**
- * @brief function to constrole font family 
- * @param widget The widget to change font 
+ * @brief function to constrole font family
+ * @param widget The widget to change font
  * @param font_family a string indicate the font family
- *  
+ *
  * here a list of font family example:
  * 1.   "Arial"
  * 2.   "Courier New"

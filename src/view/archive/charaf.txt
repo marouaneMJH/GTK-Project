@@ -1,0 +1,58 @@
+<window 
+	id="window_2"
+	title="Second Window"
+	icon_name="folder"
+	width="800"
+	height="700"
+	bg_color="#333333"
+	text_color="white"
+>
+	<box id="box1" orientation="vertical" >
+    <fixed
+			id="fx12"
+			width="100"
+			height="100"
+			paned_order="1"
+    >
+		<entry
+			id="entry2"
+			position_x="0"
+			position_y="0"
+			width="100"
+			height="50"
+			placeholder_text="Enter text"
+			alignment="0"
+			max_length="10"
+			progress_fraction="0.5"
+			type="email"
+			opacity="1"
+			/>
+	</fixed>
+	<separator mrgin_top="5" mrgin_bottom="5" />
+	    <entry
+		id="entry2"
+		position_x="30"
+		position_y="70"
+		width="150"
+		height="25"
+		placeholder_text="Enter text"
+		alignment="1"
+		max_length="30"
+		progress_fraction="0.5"
+		type="email"
+		opacity="1"
+		/>
+	<progress_bar progress_fraction="0.72"  text_color="red"/>
+	<image
+		id="img1"
+		type="file"
+		
+		path="./assets/images/programer.jpg"
+		width="300"
+		height="300"
+		position_x="10"
+		position_y="40"
+					/> 
+
+	</box>
+</window>

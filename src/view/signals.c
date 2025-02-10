@@ -33,6 +33,7 @@ static void sig_change_friend_bg_color(GtkWidget *widget, gpointer data)
     View *friend = find_view_by_id(param_array->params[0], root_view_gloabl);
     widget_set_colors(friend->widget, param_array->params[1], param_array->params[2]);
 }
+
 static void sig_dialog_message(GtkWidget *widget, gpointer data)
 {
     ParamNode *param_array = (ParamNode *)data;
@@ -43,8 +44,14 @@ static void sig_dialog_message(GtkWidget *widget, gpointer data)
     show_dialog(dialog_widget);
 }
 
+static void sig_change_font_size(GtkWidget *widget, gpointer data)
+{
+    ParamNode *param_array = (ParamNode *)data;
 
+    View *label_view = find_view_by_id(param_array->params[0], root_view_gloabl);
 
+    widget_set_font_size(label_view->widget, atoi(param_array->params[1]));
+}
 
 void connect_signales(View *view)
 {
@@ -52,7 +59,6 @@ void connect_signales(View *view)
 
     if (view->view_config->onclick[0] != '\0')
     {
-
         // apply name of function
         if (strcmp(view->view_config->onclick, "sig_change_self_bg_color") == 0)
             callback_fuction = sig_change_self_bg_color;
@@ -61,17 +67,16 @@ void connect_signales(View *view)
 
         else if (strcmp(view->view_config->onclick, "sig_change_friend_bg_color") == 0)
             callback_fuction = sig_change_friend_bg_color;
-
-        
+        else if (strcmp(view->view_config->onclick, "sig_change_font_size") == 0)
+            callback_fuction = sig_change_font_size;
 
         // Connect the callback function
         if (callback_fuction)
             g_signal_connect(G_OBJECT(view->widget), "clicked", G_CALLBACK(callback_fuction), (ParamNode *)view->view_config->param);
-        
-            return; // exit the function
+
+        return; // exit the function
     }
 }
-
 
 // Link signals
 // if (view_config->onclick[0] != '\0')

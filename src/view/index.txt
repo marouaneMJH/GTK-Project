@@ -21,20 +21,25 @@
 			/>
 
 			<button 
-				onclick="change_self_color"
+				onclick="sig_change_self_bg_color"	
+				label="Text"
 
-
-
-				param_1="yellow"
+				param_1="orange"
+				param_2="green"
 				id="btn2"
 			/>
 
 			<button 
-				onclick="sig_dialog_message"
-				param_1="Impodooddjdjdj Hello world djdjd djdjd djdjdj djdj"
-				id="btn2"
+				id="btn10"
+				onclick="sig_change_font_size"
+				param_1="label_1"
+				param_2="20"
+		
 			/>
-
+			<label 
+				label_text="font size chnage"
+				id="label_1"
+			/>
 			<button 
 				id="btn2"
 				onclick="sig_change_friend_bg_color"
@@ -42,6 +47,7 @@
 				param_1="btn1"
 				param_2="orange"
 				param_3="blue"
+				
 				
 			/>
 		</box>

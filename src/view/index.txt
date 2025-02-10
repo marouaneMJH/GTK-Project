@@ -20,6 +20,11 @@
                 <menu_item
                     id="menu_item1"
                     label="_MonChoix"
+                    on_active="sig_change_self_bg_color"
+                    param_1="green"
+                    param_2="green"
+                    bg_color="yellow"
+                    
                 />
 
                 <menu_item
@@ -33,6 +38,9 @@
                         <menu_item
                             id="menu_item21"
                             label="SousChoix1"
+                            on_active="sig_dialog_message"
+                            param_1="green"
+                            bg_color="red"
                         />
                         <menu_item
                             id="menu_item22"
@@ -75,32 +83,33 @@
                                 menu_orientation="horizontal"
                             >
                                 <menu_item
+
                                     id="menu_item3"
-                                    label="_LeurChoix"
+                                    label="_LeurChoix1"
                                     menu_left="0"
                                     menu_right="1"
                                 />
                                 <menu_item
                                     id="menu_item3"
-                                    label="_LeurChoix"
+                                    label="_LeurChoix2"
                                     menu_left="1"
                                     menu_right="2"
                                 />
                                 <menu_item
                                     id="menu_item3"
-                                    label="_LeurChoix"
-                                    menu_left="0"
-                                    menu_right="1"
-                                    menu_top="1"
-                                    menu_bottom="2"
+                                    label="_LeurChoix3"
+                                    menu_left="2"
+                                    menu_right="3"
+                                    on_active="sig_change_self_bg_color"
+                                    param_1="red"
+                                    param_2="red"
+                                    bg_color="green"
                                 />
                                 <menu_item
                                     id="menu_item3"
-                                    label="_LeurChoix"
-                                    menu_left="1"
-                                    menu_right="2"
-                                    menu_top="1"
-                                    menu_bottom="2"
+                                    label="_LeurChoix4"
+                                    menu_left="3"
+                                    menu_right="4"
                                 />
 
                             </menu>
@@ -378,15 +387,17 @@
                                 height="40"
                                 margin_right="5"
                                 is_mnemonic="true"
-
+                                param_1="btn_1_1"
+                                param_2="red"
+                                onclick="sig_destroy"
                                 
                             />
 
                             <button
-                                id="btn1"
+                                id="btn_1_1"
                                 label="_Quitter"
-                                onclick="sig_change_self_bg_color"
-                                param_1="green"
+                                onclick="sig_dialog_message"
+                                param_1="orange"
                             />
 
 

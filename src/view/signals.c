@@ -10,7 +10,6 @@ typedef struct
 
 static void sig_change_self_bg_color(GtkWidget *widget, gpointer data)
 {
-
     ParamNode *param_array = (ParamNode *)data;
     if (!param_array)
     {
@@ -53,29 +52,54 @@ static void sig_change_font_size(GtkWidget *widget, gpointer data)
     widget_set_font_size(label_view->widget, atoi(param_array->params[1]));
 }
 
+static void sig_destroy(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *window = root_view_gloabl->widget;
+
+    gtk_widget_destroy(window);
+}
+
 void connect_signales(View *view)
 {
-    void *callback_fuction = NULL;
+    void *callback_function = NULL;
 
-    if (view->view_config->onclick[0] != '\0')
+    // Extract the event name once to avoid repetition
+    const char *event_name = NULL;
+    if (view->view_config->onclick[0] != '\0' )
     {
-        // apply name of function
-        if (strcmp(view->view_config->onclick, "sig_change_self_bg_color") == 0)
-            callback_fuction = sig_change_self_bg_color;
-        else if (strcmp(view->view_config->onclick, "sig_dialog_message") == 0)
-            callback_fuction = sig_dialog_message;
-
-        else if (strcmp(view->view_config->onclick, "sig_change_friend_bg_color") == 0)
-            callback_fuction = sig_change_friend_bg_color;
-        else if (strcmp(view->view_config->onclick, "sig_change_font_size") == 0)
-            callback_fuction = sig_change_font_size;
-
-        // Connect the callback function
-        if (callback_fuction)
-            g_signal_connect(G_OBJECT(view->widget), "clicked", G_CALLBACK(callback_fuction), (ParamNode *)view->view_config->param);
-
-        return; // exit the function
+        event_name = view->view_config->onclick;
     }
+    else if (view->view_config->on_active[0] != '\0')
+    {
+        event_name = view->view_config->on_active;
+    }
+
+    // Map event names to their corresponding callback functions
+    if (event_name)
+    {
+        if (strcmp(event_name, "sig_change_self_bg_color") == 0)
+            callback_function = sig_change_self_bg_color;
+
+        else if (strcmp(event_name, "sig_dialog_message") == 0)
+            callback_function = sig_dialog_message;
+
+        else if (strcmp(event_name, "sig_change_friend_bg_color") == 0)
+            callback_function = sig_change_friend_bg_color;
+
+        else if (strcmp(event_name, "sig_change_font_size") == 0)
+            callback_function = sig_change_font_size;
+
+        else if (strcmp(event_name, "sig_destroy") == 0)
+            callback_function = sig_destroy;
+    }
+
+    // Connect the callback function
+    if (callback_function)
+        if (view->view_config->onclick[0] != '\0')
+            g_signal_connect(G_OBJECT(view->widget), "clicked", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+
+        else if (view->view_config->on_active[0] != '\0')
+            g_signal_connect(G_OBJECT(view->widget), "activate", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
 }
 
 // Link signals

@@ -24,7 +24,7 @@
         .accel_path = "\0",                         \
         .reserve_indicator = FALSE,                 \
         .use_underline = FALSE,                     \
-        .is_memonic = FALSE,                        \
+        .is_memonic = TRUE,                        \
         .tooltip = "\0",                            \
         .dimensions = DEFAULT_MENU_ITEM_DIMENSIONS, \
         .margins = DEFAULT_MENU_ITEM_MARGIN,        \

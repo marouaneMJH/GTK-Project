@@ -1,9 +1,6 @@
-<window
-	id="window_2"
-	title="Second Window"
-	icon_name="folder"
->
-	<scrolled_window
+<dialog id="dialog" title="Dialog Title">
+   
+    <scrolled_window
 		id="sw2"
 	>
 		<box
@@ -47,12 +44,10 @@
 								<menu_item
 									id="menu_item1"
 									label="New"
-									onclick="menu_onclick"
 								/>
 								<menu_item
 									id="menu_item1"
 									label="Open"
-									onclick="menu_onclick1"
 								/>
 								<menu_item
 									id="menu_item1"
@@ -84,7 +79,7 @@
 							icon_width="25"
 							icon_height="25"
 							icon_position="right"
-						>
+						/>
 					</fixed>
 
 					<grid
@@ -416,4 +411,5 @@
 
 		</box>
 	</scrolled_window>
-</window>
+   
+</dialog>

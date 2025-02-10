@@ -308,7 +308,7 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
         g_print("Relative view is null\n");
         return view;
     }
-    g_print("Relative view %p \n", relative);
+    //g_print("Relative view %p \n", relative);
 
     // Group radio buttons
     if (GTK_IS_RADIO_BUTTON(view->widget))
@@ -332,12 +332,24 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
         if (GTK_IS_MENU_BAR(relative->widget) || GTK_IS_MENU(relative->widget))
         {
             view->view_config->group = relative->widget;
-            gtk_menu_shell_append(GTK_MENU_SHELL(relative->widget), view->widget);
+            if (relative->view_config->menu_orientation[0] != '\0')
+            {
+                if (g_strcmp0(relative->view_config->menu_orientation, "vertical") == 0)
+                    gtk_menu_shell_append(GTK_MENU_SHELL(relative->widget), view->widget);
+                else
+                    gtk_menu_attach(GTK_MENU(relative->widget), view->widget, view->view_config->menu_left, view->view_config->menu_right, view->view_config->menu_top, view->view_config->menu_bottom);
+            }
         }
         else if (relative->view_config->group)
         {
             view->view_config->group = relative->view_config->group;
-            gtk_menu_shell_append(GTK_MENU_SHELL(relative->view_config->group), view->widget);
+            if (relative->parent->view_config->menu_orientation[0] != '\0')
+            {
+                if (g_strcmp0(relative->parent->view_config->menu_orientation, "vertical") == 0)
+                    gtk_menu_shell_append(GTK_MENU_SHELL(relative->view_config->group), view->widget);
+                else
+                    gtk_menu_attach(GTK_MENU(relative->view_config->group), view->widget, view->view_config->menu_left, view->view_config->menu_right, view->view_config->menu_top, view->view_config->menu_bottom);
+            }
         }
     }
 

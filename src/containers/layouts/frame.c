@@ -10,8 +10,8 @@ ViewConfig *configure_frame_property(FrameConfig *frame_config, ViewConfig *view
         strcpy(frame_config->label, value);
 
     // Set label alignment (0.0 to 1.0)
-    else if (g_strcmp0(property, "label_align") == 0)
-        frame_config->label_align = atof(value);
+    else if (g_strcmp0(property, "label_yalign") == 0)
+        frame_config->label_yalign = atof(value);
 
     // Set label horizontal alignment
     else if (g_strcmp0(property, "label_xalign") == 0)
@@ -77,8 +77,8 @@ GtkWidget *create_frame(FrameConfig frame_config)
     GtkWidget *frame = gtk_frame_new(frame_config.label);
 
     // Set label alignment
-    if(frame_config.label_xalign > 0.0 && frame_config.label_align > 0.0)
-        gtk_frame_set_label_align(GTK_FRAME(frame), frame_config.label_xalign, frame_config.label_align);
+    if(frame_config.label_xalign > 0.0 && frame_config.label_yalign > 0.0)
+        gtk_frame_set_label_align(GTK_FRAME(frame), frame_config.label_xalign, frame_config.label_yalign);
     else
         gtk_frame_set_label(GTK_FRAME(frame), frame_config.label);
     // Set shadow type

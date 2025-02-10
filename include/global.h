@@ -92,7 +92,7 @@
     }                                                                               \
     if (g_strcmp0(property, "onclick") == 0)                                        \
     {                                                                               \
-        g_strlcpy(view_config->onclick, value, MAX_SIGNAL_NAME_SIZE);               \
+        g_strlcpy(view_config->onclick, value, MAX_SIGNAL_NAME_SIZE);                 \
     }                                                                               \
     if (g_strcmp0(property, "param_1") == 0)                                        \
     {                                                                               \
@@ -110,26 +110,51 @@
     if (g_strcmp0(property, "param_4") == 0)                                        \
     {                                                                               \
         g_strlcpy(view_config->param[3], value, MAX_SIGNAL_NAME_SIZE);              \
+    }                                                                               \
+    if (g_strcmp0(property, "menu_orientation") == 0)                               \
+    {                                                                               \
+        g_strlcpy(view_config->menu_orientation, value, MAX_SIGNAL_NAME_SIZE);      \
+    }                                                                               \
+    if (g_strcmp0(property, "menu_top") == 0)                                       \
+    {                                                                               \
+        view_config->menu_top = atoi(value);                                        \
+    }                                                                               \
+    if (g_strcmp0(property, "menu_bottom") == 0)                                    \
+    {                                                                               \
+        view_config->menu_bottom = atoi(value);                                     \
+    }                                                                               \
+    if (g_strcmp0(property, "menu_left") == 0)                                      \
+    {                                                                               \
+        view_config->menu_left = atoi(value);                                       \
+    }                                                                               \
+    if (g_strcmp0(property, "menu_right") == 0)                                     \
+    {                                                                               \
+        view_config->menu_right = atoi(value);                                      \
     }
 
-#define DFEAULT_VIEW_CONFIG(view_config)                                    \
-    do                                                                      \
-    {                                                                       \
-        view_config->position_x = 0;                                        \
-        view_config->position_y = 0;                                        \
-        view_config->pack_direction = 1;                                    \
-        view_config->box_expand = FALSE;                                    \
-        view_config->box_fill = FALSE;                                      \
-        view_config->box_padding = 0;                                       \
-        view_config->group = NULL;                                          \
-        view_config->view_id[0] = '\0';                                     \
-        view_config->tab_label[0] = '\0';                                   \
-        view_config->is_reorderable = TRUE;                                 \
-        view_config->row = 0;                                               \
-        view_config->column = 0;                                            \
-        view_config->row_span = 1;                                          \
-        view_config->column_span = 1;                                       \
-        view_config->onclick[0] = '\0';                                     \
+#define DFEAULT_VIEW_CONFIG(view_config)                   \
+    do                                                     \
+    {                                                      \
+        view_config->position_x = 0;                       \
+        view_config->position_y = 0;                       \
+        view_config->pack_direction = 1;                   \
+        view_config->box_expand = FALSE;                   \
+        view_config->box_fill = FALSE;                     \
+        view_config->box_padding = 0;                      \
+        view_config->group = NULL;                         \
+        view_config->view_id[0] = '\0';                    \
+        view_config->tab_label[0] = '\0';                  \
+        view_config->is_reorderable = TRUE;                \
+        view_config->row = 0;                              \
+        view_config->column = 0;                           \
+        view_config->row_span = 1;                         \
+        view_config->column_span = 1;                      \
+        view_config->onclick[0] = '\0';                    \
+        strcpy(view_config->menu_orientation, "vertical"); \
+        view_config->menu_top = 0;                         \
+        view_config->menu_bottom = 1;                      \
+        view_config->menu_left = 0;                        \
+        view_config->menu_right = 0;                       \
         for (int i = 0; i < PARAM_COUNT; view_config->param[i++][0] = '\0'); \
     } while (0);
 
@@ -170,9 +195,15 @@ typedef struct
 
     // Signals
     gchar onclick[MAX_SIGNAL_NAME_SIZE]; // Path to the icon image file
-
     // Params of Signals
     gchar param[PARAM_COUNT][MAX_SIGNAL_NAME_SIZE]; // First function parameter
+
+    gchar menu_orientation[MAX_LABEL_SIZE];
+    gint menu_top;
+    gint menu_bottom;
+    gint menu_left;
+    gint menu_right;
+
 } ViewConfig;
 
 typedef struct VIEW

@@ -69,10 +69,13 @@ static void activate(GtkApplication *app, gpointer user_data)
 {
     // Create a new window
 
-    View *root_view = build_app(app, root_view,INDEX_TXT);
+    View *root_view = build_app(app, root_view, INDEX_TXT);
     GtkWidget *window = root_view->widget;
-
+    
     gtk_widget_show_all(window);
+    
+    build_app(app, NULL, DIALOG_TXT);
+
 
     // View *btn1 = find_view_by_id("bt1", root_view);
     // if (btn1)

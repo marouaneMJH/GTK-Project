@@ -12,16 +12,15 @@
 
 #define DEFAULT_FRAME_MARGINS \
     {                         \
-        .bottom = 0,          \
-        .top = 0,             \
-        .start = 0,           \
+        .bottom = 0,         \
+        .top = 0,            \
+        .start = 0,          \
         .end = 0}
-    
 
 #define DEFAULT_FRAME                     \
     {                                     \
         .label = "\0",                    \
-        .label_align = 0.0,               \
+        .label_yalign = 0.0,               \
         .label_xalign = 0.0,              \
         .shadow_type = GTK_SHADOW_IN,     \
         .bg_color = "\0",                 \
@@ -32,7 +31,7 @@
 typedef struct
 {
     gchar label[MAX_LABEL_SIZE];      // Frame label text
-    gfloat label_align;               // Label alignment (0.0 to 1.0)
+    gfloat label_yalign;               // Label alignment (0.0 to 1.0)
     gfloat label_xalign;              // Horizontal alignment of the label
     GtkShadowType shadow_type;        // Type of shadow around the frame
     gchar bg_color[MAX_COLOR_SIZE];   // Background color

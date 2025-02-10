@@ -1,0 +1,212 @@
+<window
+	id="window_2"
+	title="Test des Fonctions GTK+"
+	icon_path="assets/images/programer.jpg"
+	width="800"
+	height="700"
+	bg_color="white"
+>
+	<scrolled_window
+		id="scrolled_window1"
+		width="800" height="700"
+		hscrollbar-policy="always"
+		vscrollbar-policy="always" 
+		
+		>
+		<box id="box1" orientation="vertical" margin_left="10" >
+			<menu_bar id="menu_bar1">
+				<menu_item id="menu_item1" label="MonChoix" />
+				<menu_item id="menu_item2" label="VotreChoix">
+					<menu id="menu1">
+						<menu_item id="menu_item4" label="Sous Choix1" />
+						<menu_item id="menu_item5" label="Sous Choix2">
+							<menu id="menu2">
+								<menu_item id="menu_item7" label="Choix221" />
+								<menu_item id="menu_item8" label="Choix222" />
+								<menu_item id="menu_item9" label="Choix223" />
+							</menu>
+						</menu_item>
+						<menu_item id="menu_item6" label="Sous Choix3" />
+					</menu>
+				</menu_item>
+				<menu_item id="menu_item3" label="LeurChoix" />
+			</menu_bar>
+			<box id="box2" orientation="horizontal" >
+				<box id="box3" orientation="vertical" >
+					<box id="box7" orientation="vertical" >
+						<label
+							id="label1"
+							label_text="Vos connaissances de GTK+"
+							font_size="10"
+						/>
+						<frame 
+							id="frame1"
+							margin_top="0"
+							margin_bottom="0"
+							margin_left="0"
+							margin_right="0"
+						>
+							<box
+								id="box4"
+								orientation="horizontal"
+								height="30"
+
+							>
+
+								<radio_button id="radio_button1" label="Débutant" />
+								<radio_button id="radio_button2" label="	Intermédiaire" />
+								<radio_button id="radio_button3" label="	Expert" />
+								<radio_button id="radio_button4" label="	Bien" />
+							</box>
+			
+						</frame>
+					</box>
+					<box id="box6" orientation="vertical" >
+						<label
+							id="label2"
+							label_text="Vos langages de programmation"
+							font_size="10"
+						/>
+						<frame
+							id="frame2"
+							margin_top="0.0"
+							margin_bottom="0"
+							margin_left="0"
+							margin_right="0"
+						>
+							<box
+								id="box5"
+								orientation="horizontal"
+								height="30"
+								
+							>
+
+								<check_button id="check_button1" label="C" />
+								<check_button id="check_button2" label="C++" />
+								<check_button id="check_button3" label="Java" />
+								<check_button id="check_button4" label="Python" />
+								<check_button id="check_button5" label="PHP" />
+
+							</box>
+						</frame>
+					</box>
+
+
+
+					<box id="corona" orientation="vertical" >
+						<label
+							id="label2"
+							label_text=" Le CoronaVirus"
+							font_size="10"
+						/>
+						<frame
+							id="frame2"
+							margin_top="0.0"
+							margin_bottom="0"
+							margin_left="0"
+							margin_right="0"
+						>
+							<box
+								id="box5"
+								orientation="horizontal"
+								height="30"
+								
+							>
+								<radio_button  id="radio_button1" label="Malade" />
+								<radio_button  id="radio_button2" label="Suspect" />
+								<radio_button  id="check_button3" label="Guéri" />
+								<radio_button  id="check_button4" label="Sain" />
+
+				
+							</box>
+						</frame>
+					</box>
+
+					<box id="date" orientation="vertical" >
+						<label
+							id="label2"
+							label_text="choisi date"
+							font_size="10"
+						/>
+						<frame
+							id="frame2"
+
+						>
+							<box
+								id="box5"
+								orientation="horizontal"
+								margin_bottom="10"
+							>
+								<box orientation="horizontal"   width="10" >
+									<label label_text="  Jour" />
+									<combo_text_box type="day" has_entry="true" default_value="1" />
+								</box>
+
+								<box orientation="horizontal" >
+									<label label_text="	Mois" />
+									<combo_text_box 
+										type="month" 
+										has_entry="true"
+										default_value="0"
+									/>
+								</box>
+
+								<box orientation="horizontal" >
+									<label label_text="	Annee" />
+									<combo_text_box type="year"  has_entry="true" default_value="0"  />
+								</box>
+							</box>
+						</frame>
+
+					</box>
+
+					<box id="choix" orientation="horizontal" width="10" margin_top="20" margin_left="20"> 
+						<combo_text_box 
+
+							has_entry="true"
+							default_value="faire une choix"
+							option1="on choix1"
+							option2="on choix2"
+							option3="on choix3"
+							option5="on choix5"
+							option6="on choix6"
+
+							is_editable="false"
+							popup_shown_rows="3"
+						/>
+					</box>
+				</box>
+			</box>
+
+			<fixed id="fixed1" box_expand="true" box_fill="true" >
+
+				<box id="box8" orientation="vertical" 
+				position_x="300" 
+				position_y="100" 
+				baseline_position="bottom"
+				box_expand="true"
+				box_fill="true"
+				
+				>
+					<label id="label7" />
+					<frame id="frame3">
+						<box
+							id="box44"
+							orientation="horizontal"
+							height="30"
+						>
+
+							<radio_button id="radio_button11" label="Débutant" />
+							<radio_button id="radio_button22" label="Intermédiaire" />
+							<radio_button id="radio_button33" label="Expert" />
+							<radio_button id="radio_button44" label="Bien" />
+							
+
+						</box>
+						<button id="button1" label="Valider"  />
+					</frame>
+				</box>
+			</fixed>
+		</box>
+	</scrolled_window>
+</window>

@@ -1,4 +1,4 @@
-#include "./../../../include/widgets/dialogs/dialog.h" 
+#include "./../../../include/widgets/dialogs/dialog.h"
 
 ViewConfig *configure_dialog_property(DialogConfig *dialog_config, ViewConfig *view_config, gchar *property, gchar *value, int *status)
 {
@@ -31,9 +31,9 @@ ViewConfig *configure_dialog_property(DialogConfig *dialog_config, ViewConfig *v
 
 ViewConfig *init_dialog_config(FILE *index, DialogConfig *dialog_config)
 {
-    if(!index || !dialog_config)
+    if (!index || !dialog_config)
         return NULL;
-    
+
     // Allocate memory for the view config
     ViewConfig *view_config = NULL;
     SAFE_ALLOC(view_config, ViewConfig, 1);
@@ -92,37 +92,34 @@ ViewConfig *init_dialog_config(FILE *index, DialogConfig *dialog_config)
     return view_config;
 }
 
-GtkWidget* create_dialog(DialogConfig config)
+GtkWidget *create_dialog(DialogConfig config)
 {
-    GtkWidget* dialog = gtk_dialog_new_with_buttons(
+    GtkWidget *dialog = gtk_dialog_new_with_buttons(
         config.title,
-        config.parent,
+        GTK_WINDOW(root_view_gloabl->widget),
         config.is_modal ? GTK_DIALOG_MODAL : 0,
         "_OK", GTK_RESPONSE_OK,
         "_Cancel", GTK_RESPONSE_CANCEL,
         "_OK", GTK_RESPONSE_CLOSE,
-        NULL
-    );
+        NULL);
 
     // Set dimensions
     gtk_window_set_default_size(GTK_WINDOW(dialog), config.dimensions.width, config.dimensions.height);
 
     // Set background color if provided
-    widget_set_colors(dialog,config.bg_color,config.text_color);
+    widget_set_colors(dialog, config.bg_color, config.text_color);
 
     return dialog;
 }
 
-
-
-void show_dialog(GtkWidget* dialog)
+void show_dialog(GtkWidget *dialog)
 {
-        /* Run the dialog */
+    /* Run the dialog */
     gtk_widget_show_all(dialog);
     gtk_dialog_run(GTK_DIALOG(dialog));
 }
 
-void destroy_dialog(GtkWidget* dialog)
+void destroy_dialog(GtkWidget *dialog)
 {
     gtk_widget_destroy(dialog);
 }

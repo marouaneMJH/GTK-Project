@@ -2,7 +2,7 @@
     id="win1"
     width="900"
     height="900"
-    title="            GTK controle"
+    title=".            GTK+"
     icon_name="folder"
 >
 
@@ -249,6 +249,8 @@
                             id="box3"
                             orientation="horizontal"
                             spacing="5"
+                            margin_bottom="10"
+                            margin_left="10"
                         >
                             <box
                                 id="boc4"
@@ -260,9 +262,12 @@
                                 />
                                 <combo_text_box
                                     id="combo1"
-                                    has_entry="true"
                                     default_value="1"
+                                    default_index="10"
                                     type="day"
+
+
+
                                 />
                             </box>
                             <box
@@ -288,19 +293,34 @@
                                     id="label1combo1"
                                     label_text="Annee"
                                 />
-                                <combo_text_box
-                                    id="combo1"
-                                    has_entry="true"
-                                    default_value="1"
-                                    type="year"
-                                />
+                                <fixed 
+                                    position_x="0"
+                                    position_y="0"
+                                    width="20"
+                                >
+                                    <combo_text_box
+                                    position_x="0"
+                                    position_y="0"
+                                        id="combo1"
+                                        has_entry="true"
+                                        default_value="1"
+                                        type="year"
+                                        width="10"
+                                        height="20"
+                                    />
+                                </fixed>
                             </box>
                         </box>
                     </frame>
 
+                    <fixed
+                    
+                    >
                     <combo_text_box
                         id="combo1"
                         margin_top="10"
+                        position_x="0"
+                        position_y="0"
                         has_entry="true"
                         default_value="Faire un choix"
                         option1="Option1"
@@ -311,6 +331,8 @@
                         box_fill="false"
                         box_padding="0"
                     />
+                    
+                    </fixed>
 
 
                     <fixed

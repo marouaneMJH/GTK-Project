@@ -169,7 +169,6 @@ GtkWidget *create_combo_text_box(ComboTextBoxConfig combo_text_box_config)
     gtk_widget_set_size_request(combo_text_box,
                                 combo_text_box_config.dimensions.width,
                                 combo_text_box_config.dimensions.height);
-
     widget_set_margins(combo_text_box, combo_text_box_config.margins);
 
     // Set popup width and wrap width if specified

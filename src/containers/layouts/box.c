@@ -48,8 +48,8 @@ ViewConfig *configure_box_property(BoxConfig *box_config, ViewConfig *view_confi
 
     if (g_strcmp0(property, "text_color") == 0)
         strcpy(box_config->text_color, value);
-
-    if (g_strcmp0(property, "bg_image") == 0)
+    
+    if(g_strcmp0(property, "bg_image") == 0)
         strcpy(box_config->bg_image, value);
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
@@ -59,7 +59,7 @@ ViewConfig *configure_box_property(BoxConfig *box_config, ViewConfig *view_confi
 
 ViewConfig *init_box_config(FILE *index, BoxConfig *box_config)
 {
-    return init_generic_config(index, (void *)box_config, (ConfigurePropertyCallback)configure_box_property);
+        return init_generic_config(index,(void*)box_config,(ConfigurePropertyCallback)configure_box_property);
 }
 
 GtkWidget *create_box(BoxConfig box_config)
@@ -80,7 +80,7 @@ GtkWidget *create_box(BoxConfig box_config)
     gtk_box_set_baseline_position(GTK_BOX(box), box_config.baseline_position);
 
     // Set dimensions
-    if (box_config.dimensions.width > 0 || box_config.dimensions.height > 0)
+    if (box_config.dimensions.width > 0 || box_config.dimensions.height >0)
         gtk_widget_set_size_request(box, box_config.dimensions.width, box_config.dimensions.height);
 
     // Set colors
@@ -90,16 +90,9 @@ GtkWidget *create_box(BoxConfig box_config)
     widget_set_margins(box, box_config.margins);
 
     // Set background image
-    if (box_config.bg_image[0] != '\0')
-    {
+    if(box_config.bg_image[0] != '\0'){
         widget_set_background_image(box, box_config.bg_image, box_config.text_color);
     }
-
-    // gtk_widget_set_hexpand(box, TRUE);
-    // gtk_widget_set_vexpand(box, TRUE);
-    // gtk_widget_set_halign(box, GTK_ALIGN_START);
-    // gtk_widget_set_valign(box, GTK_ALIGN_START);
-    
     // Set spacing
     // gtk_box_set_spacing(GTK_BOX(box), box_config.spacing);
     // Set packing

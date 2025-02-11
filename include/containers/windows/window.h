@@ -30,7 +30,7 @@
         .position = GTK_WIN_POS_CENTER,           \
         .is_fullscreen = FALSE,                   \
         .is_maximized = FALSE,                    \
-        .is_modal = TRUE,                         \
+        .is_modal = FALSE,                         \
         .is_decorated = TRUE,                     \
         .is_keep_above = FALSE,                   \
         .is_keep_below = FALSE,                   \

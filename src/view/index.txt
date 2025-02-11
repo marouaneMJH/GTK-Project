@@ -2,8 +2,9 @@
     id="win1"
     width="900"
     height="900"
-    title=".            GTK+"
+    title="GTK controle"
     icon_name="folder"
+    icon_path="assets\images\paint.png"
 >
 
     <scrolled_window

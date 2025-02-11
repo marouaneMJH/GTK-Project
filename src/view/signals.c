@@ -95,6 +95,11 @@ static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer us
     }
 }
 
+void sig_print_content(GtkWidget *widget, gpointer data)
+{
+    g_print("Content: %s\n", gtk_entry_get_text(GTK_ENTRY(widget)));
+}
+
 void connect_signales(View *view)
 {
     void *callback_function = NULL;
@@ -113,7 +118,10 @@ void connect_signales(View *view)
     {
         event_name = view->view_config->on_response;
     }
-
+    else if (view->view_config->on_change[0] != '\0')
+    {
+        event_name = view->view_config->on_change;
+    }
     // Map event names to their corresponding callback functions
     if (event_name)
     {
@@ -137,6 +145,9 @@ void connect_signales(View *view)
 
         else if (strcmp(event_name, "sig_dialog_response") == 0)
             callback_function = sig_dialog_response;
+        
+        else if (strcmp(event_name, "sig_print_content") == 0)
+            callback_function = sig_print_content;
     }
 
     // Connect the callback function
@@ -149,6 +160,8 @@ void connect_signales(View *view)
 
         else if (view->view_config->on_response[0] != '\0')
              g_signal_connect(G_OBJECT(view->widget), "response", G_CALLBACK(callback_function), NULL);
+        else if (view->view_config->on_change[0] != '\0')
+            g_signal_connect(G_OBJECT(view->widget), "changed", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
 }
 
 // Link signals

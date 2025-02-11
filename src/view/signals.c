@@ -255,6 +255,8 @@ static void sig_show_image(GtkWidget *widget, gpointer data)
 
     // Show the dialog
     show_dialog(dialog);
+}
+
 void sig_print_content(GtkWidget *widget, gpointer data)
 {
     g_print("Content: %s\n", gtk_entry_get_text(GTK_ENTRY(widget)));

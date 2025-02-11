@@ -136,7 +136,7 @@
                 box_expand="true"
                 box_fill="true"
             >
-                <entry id="entry1" margin_top="10" margin_left="10" margin_right="10" has_delete_icon="true"  />
+                <entry id="entry1" margin_top="10" margin_left="10" margin_right="10" has_delete_icon="true" on_change="sig_print_content"  />
 
                 <label
                     id="label1c"

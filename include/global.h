@@ -405,4 +405,15 @@ void widget_set_font_family(GtkWidget *widget, const char *font_family);
  */
 View *find_view_by_id(char *view_id, View *root_view);
 
+/**
+ * @brief Set the header bar of a window.
+ *
+ * This function sets the title and icon of the header bar of a window.
+ *
+ * @param window The window to set the header bar for.
+ * @param title The title of the header bar.
+ * @param icon_path The path to the icon image file.
+ */
+void set_header_bar(GtkWidget *window, const gchar *title, const gchar *icon_path);
+
 #endif

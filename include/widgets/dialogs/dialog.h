@@ -25,6 +25,7 @@
         .is_modal = TRUE,                              \
         .dimensions = DEFAULT_DIALOG_DIMENSIONS,       \
         .parent = NULL,                                \
+        .icon_path = '\0',                             \
         .bg_color = "\0",                              \
         .text_color = "\0"                             \
     }
@@ -38,6 +39,7 @@ typedef struct
     gboolean is_modal;                  // Whether the dialog is modal
     Dimensions dimensions;              // initial dimensions
     GtkWindow *parent;                  // Parent window (can be NULL)
+    gchar icon_path[MAX_ICON_PATH_SIZE];
     gchar bg_color[MAX_COLOR_SIZE];     // Background color
     gchar text_color[MAX_COLOR_SIZE];   // Font color
 } DialogConfig;

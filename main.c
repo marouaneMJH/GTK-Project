@@ -70,31 +70,10 @@ static void activate(GtkApplication *app, gpointer user_data)
     // Create a new window
 
    View *root_view = build_app(app, root_view, INDEX_TXT);
-
-    GtkWidget *window = root_view->widget;
-    // WindowConfig window_config = DEFAULT_WINDOW;
-    // GtkWidget *window = create_window(app, window_config);
+   GtkWidget *window = root_view->widget;
     
-   // gtk_window_set_decorated(GTK_WINDOW(window), FALSE);
-
-    // GtkWidget *window = gtk_application_window_new(app);
-    // gtk_window_set_title(GTK_WINDOW(window), "Window");
-    // gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
-    // gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-
-    // Create a header bar
-
-
-
-    // Set the custom header bar as the title bar
-   // gtk_window_set_titlebar(GTK_WINDOW(window), header_bar);
-
-    gtk_widget_show_all(window);
-
     
     build_app(app, NULL, DIALOG_TXT);
-
-
     // View *btn1 = find_view_by_id("bt1", root_view);
     // if (btn1)
     //     g_signal_connect(G_OBJECT(btn1->widget), "clicked", G_CALLBACK(click1), root_view);
@@ -105,6 +84,9 @@ static void activate(GtkApplication *app, gpointer user_data)
 
    // g_print("ROOT=> %s\n", root_view->view_config->view_id);
     // g_print("ROOT GLOBAL=> %s\n", root_view_gloabl->view_config->view_id);
+
+
+    gtk_widget_show_all(window);
 }
 
 // Main function

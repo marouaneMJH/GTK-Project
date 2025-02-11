@@ -1,6 +1,7 @@
 <dialog
 	id="dialog"
 	title="Dialog Title"
+	icon_path="assets/images/programer.jpg"
 	width="450"
 	height="300"
 	icon_name="folder"

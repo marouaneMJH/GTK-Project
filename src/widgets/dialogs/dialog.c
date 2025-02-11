@@ -10,6 +10,9 @@ ViewConfig *configure_dialog_property(DialogConfig *dialog_config, ViewConfig *v
 
     if (g_strcmp0(property, "title") == 0)
         strcpy(dialog_config->title, value);
+    
+    if (g_strcmp0(property, "icon_path") == 0)
+        strcpy(dialog_config->icon_path, value);
 
     if (g_strcmp0(property, "bg_color") == 0)
         strcpy(dialog_config->bg_color, value);
@@ -102,8 +105,10 @@ GtkWidget *create_dialog(DialogConfig config)
         "_Cancel", GTK_RESPONSE_CANCEL,
         "_OK", GTK_RESPONSE_CLOSE,
         NULL);
-
+        g_print(" image  ===== %s  ====",config.icon_path);
+        set_header_bar(dialog, config.title,config.icon_path);
     // Set dimensions
+
     gtk_window_set_default_size(GTK_WINDOW(dialog), config.dimensions.width, config.dimensions.height);
 
     // Set background color if provided

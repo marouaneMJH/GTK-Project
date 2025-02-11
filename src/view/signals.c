@@ -61,37 +61,44 @@ static void sig_destroy(GtkWidget *widget, gpointer data)
 
 static void sig_dialog(GtkWidget *widget, gpointer data)
 {
+    build_app(root_app, NULL, DIALOG_TXT);
     GtkWidget *dialog = root_dialog_view_global->widget;
 
     show_dialog(dialog);
 }
 
-static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data) {
-    switch (response_id) {
-        case GTK_RESPONSE_OK:
-            g_print("User clicked OK.\n");
-            break;
+static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data)
+{
+    switch (response_id)
+    {
+    case GTK_RESPONSE_OK:
+        g_print("User clicked OK.\n");
+        break;
 
-        case GTK_RESPONSE_CANCEL:
-            g_print("User clicked Cancel.\n");
-            gtk_widget_destroy(GTK_WIDGET(dialog)); // Close the dialog
-            break;
+    case GTK_RESPONSE_CANCEL:
+        g_print("User clicked Cancel.\n");
+        gtk_widget_destroy(GTK_WIDGET(dialog)); // Close the dialog
+        break;
 
-        case GTK_RESPONSE_YES:
-            g_print("User clicked Yes.\n");
-            break;
+    case GTK_RESPONSE_YES:
+        g_print("User clicked Yes.\n");
+        break;
 
-        case GTK_RESPONSE_NO:
-            g_print("User clicked No.\n");
-            break;
+    case GTK_RESPONSE_NO:
+        g_print("User clicked No.\n");
+        break;
 
-        case 100: // Custom response
-            g_print("Custom response 100 triggered.\n");
-            break;
+    case 100: // Custom response
+        g_print("Custom response 100 triggered.\n");
+        break;
 
-        default:
-            g_print("Unknown response ID: %d\n", response_id);
-            break;
+    case GTK_RESPONSE_DELETE_EVENT: 
+        gtk_widget_destroy(GTK_WIDGET(dialog));
+        break;
+
+    default:
+        g_print("Unknown response ID: %d\n", response_id);
+        break;
     }
 }
 
@@ -148,7 +155,7 @@ void connect_signales(View *view)
             g_signal_connect(G_OBJECT(view->widget), "activate", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
 
         else if (view->view_config->on_response[0] != '\0')
-             g_signal_connect(G_OBJECT(view->widget), "response", G_CALLBACK(callback_function), NULL);
+            g_signal_connect(G_OBJECT(view->widget), "response", G_CALLBACK(callback_function), NULL);
 }
 
 // Link signals

@@ -230,6 +230,7 @@ typedef struct VIEW
 
 extern View *root_view_global;
 extern View *root_dialog_view_global;
+extern GtkApplication *root_app;
 
 // We should rename this from global to core wich means system libs and has more signification
 

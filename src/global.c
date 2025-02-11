@@ -2,6 +2,7 @@
 
 View *root_view_global;
 View *root_dialog_view_global;
+GtkApplication *root_app;
 
 // inline void free_widget(GtkWidget *widget)
 // {

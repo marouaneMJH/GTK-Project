@@ -62,8 +62,6 @@ GtkWidget *create_fixed(FixedConfig fixed_config)
     // Set margins
     widget_set_margins(fixed, fixed_config.margins);
 
-    gtk_widget_set_hexpand(fixed, TRUE);
-
     return fixed;
 }
 

@@ -146,8 +146,8 @@ GtkWidget *create_button(ButtonConfig button_config)
 
     if (button_config.icon_path[0] != '\0')
     {
-        // Dimensions dimensions = {32, 32};
-        GtkWidget *image = create_image_from_pixbuf(button_config.icon_path, button_config.icon_dimensions);
+        Dimensions dimensions = {32, 32};
+        GtkWidget *image = create_image_from_pixbuf(button_config.icon_path, dimensions);
         gtk_button_set_image(GTK_BUTTON(button), image);
         gtk_button_set_image_position(GTK_BUTTON(button), button_config.icon_position);
     }

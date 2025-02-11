@@ -2,8 +2,8 @@
     id="win1"
     width="900"
     height="900"
-    title="`            GTK controle"
-    icon_path="./assets/images/programer.jpg"
+    title="`            GTK controle`"
+    icon_name="folder"
 >
 
     <scrolled_window
@@ -14,9 +14,7 @@
         >
             <menu_bar
                 id="menu_bar1"
-                bg_color="grey"
-                box_expand="true"
-                box_fill="true"
+                bg_color="white"
             >
 
                 <menu_item
@@ -122,165 +120,160 @@
 
             </menu_bar>
 
-
-            <box
-                id="bs"
-                bg_color="green"
-                box_expand="true"
-                box_fill="true"
+            <fixed
+                id="fxs"
+                width="80"
             >
 
-                <label
-                    id="label1"
-                    label_text="Vos connaissances de GTK+"
-                    xalign="0.05"
-                    margin_top="70"
-                />
-                <frame
-                    id="frame1"
-                    margin_top="1"
-                    margin_left="10"
-                    margin_right="10"
+                <box
+                    id="bs"
+                    width="70"
                 >
-                    <box
-                        id="box2"
-                        orientation="horizontal"
+
+                    <label
+                        id="label1"
+                        label_text="Vos connaissances de GTK+"
+                        xalign="0.05"
+                        margin_top="70"
+                    />
+                    <frame
+                        id="frame1"
+                        margin_top="1"
+                        margin_left="10"
+                        margin_right="10"
                     >
+                        <box
+                            id="box2"
+                            orientation="horizontal"
+                        >
 
-                        <radio_button
-                            id="rbtn1"
-                            is_group="true"
-                            is_mnemonic="true"
-                            label="_Faible"
-                            icon_name="folder"
-                            is_button_mode="true"
-                        />
+                            <radio_button
+                                id="rbtn1"
+                                is_group="true"
+                                is_mnemonic="true"
+                                label="_Faible"
+                                icon_name="folder"
+                                is_button_mode="true"
+                            />
 
-                        <radio_button
-                            id="rbtn2"
-                            is_mnemonic="true"
-                            label="_Moyen"
-                        />
+                            <radio_button
+                                id="rbtn2"
+                                is_mnemonic="true"
+                                label="_Moyen"
+                            />
 
-                        <radio_button
-                            id="rbtn3"
-                            is_mnemonic="true"
-                            label="_Bien"
-                        />
+                            <radio_button
+                                id="rbtn3"
+                                is_mnemonic="true"
+                                label="_Bien"
+                            />
 
-                        <radio_button
-                            id="rbtn4"
-                            is_selected="true"
-                            is_mnemonic="true"
-                            label="_Tres bien"
-                        />
+                            <radio_button
+                                id="rbtn4"
+                                is_selected="true"
+                                is_mnemonic="true"
+                                label="_Tres bien"
+                            />
 
-                    </box>
-                </frame>
+                        </box>
+                    </frame>
 
-                <label
-                    id="label1"
-                    label_text="Vos commentaires sur GTK+"
-                    xalign="0.05"
-                    margin_top="20"
-                />
-                <frame
-                    id="frame1"
-                    margin_top="1"
-                    margin_left="10"
-                    margin_right="10"
-                    width="50"
-                >
-                    <box
-                        id="box2"
-                        orientation="horizontal"
+                    <label
+                        id="label1"
+                        label_text="Vos commentaires sur GTK+"
+                        xalign="0.05"
+                        margin_top="20"
+                    />
+                    <frame
+                        id="frame1"
+                        margin_top="1"
+                        margin_left="10"
+                        margin_right="10"
+                    >
+                        <box
+                            id="box2"
+                            orientation="horizontal"
+                        >
+
+                            <check_button
+                                id="rbtn1"
+                                label="Convivial"
+                            />
+
+                            <check_button
+                                id="rbtn2"
+                                label="Interessant"
+                                is_active="true"
+                            />
+
+                            <check_button
+                                id="rbtn3"
+                                label="Facile à utiliser"
+                            />
+
+                            <check_button
+                                id="rbtn4"
+                                label="Optimiser le travail"
+                            />
+
+                        </box>
+                    </frame>
+
+                    <label
+                        id="label3"
+                        label_text="Choix de date"
+                        xalign="0.05"
+                        margin_top="20"
+                    />
+
+                    <frame
+                        id="frame2"
+                        margin_top="1"
+                        margin_left="10"
+                        margin_right="10"
                         width="50"
+                        position_x="0"
+                        position_y="0"
                     >
 
-                        <check_button
-                            id="rbtn1"
-                            label="Convivial"
-                        />
-
-                        <check_button
-                            id="rbtn2"
-                            label="Interessant"
-                            is_active="true"
-                        />
-
-                        <check_button
-                            id="rbtn3"
-                            label="Facile à utiliser"
-                        />
-
-                        <check_button
-                            id="rbtn4"
-                            label="Optimiser le travail"
-                        />
-
-                    </box>
-                </frame>
-
-                <label
-                    id="label3"
-                    label_text="Choix de date"
-                    xalign="0.05"
-                    margin_top="20"
-                />
-
-                <frame
-                    id="frame2"
-                    margin_top="1"
-                    margin_left="10"
-                    margin_right="10"
-                    position_x="0"
-                    position_y="0"
-                >
-
-                    <box
-                        id="box3"
-                        orientation="horizontal"
-                        spacing="5"
-                    >
                         <box
-                            id="boc4"
+                            id="box3"
                             orientation="horizontal"
+                            spacing="5"
                         >
-                            <label
-                                id="label1combo1"
-                                label_text="Jour"
-                            />
-                            <combo_text_box
-                                id="combo1"
-                                has_entry="true"
-                                default_value="1"
-                                type="day"
-                            />
-                        </box>
-                        <box
-                            id="boc4"
-                            orientation="horizontal"
-                        >
-                            <label
-                                id="label1combo1"
-                                label_text="Mois"
-                            />
-                            <combo_text_box
-                                id="combo1"
-                                has_entry="true"
-                                default_value="1"
-                                type="month"
-                            />
-                        </box>
-                        <fixed
-                            id="jkf"
-                        >
+                            <box
+                                id="boc4"
+                                orientation="horizontal"
+                            >
+                                <label
+                                    id="label1combo1"
+                                    label_text="Jour"
+                                />
+                                <combo_text_box
+                                    id="combo1"
+                                    has_entry="true"
+                                    default_value="1"
+                                    type="day"
+                                />
+                            </box>
+                            <box
+                                id="boc4"
+                                orientation="horizontal"
+                            >
+                                <label
+                                    id="label1combo1"
+                                    label_text="Mois"
+                                />
+                                <combo_text_box
+                                    id="combo1"
+                                    has_entry="true"
+                                    default_value="1"
+                                    type="month"
+                                />
+                            </box>
                             <box
                                 id="box41"
                                 orientation="horizontal"
-                                position_x="0"
-                                position_y="0"
-                                width="50"
                             >
                                 <label
                                     id="label1combo1"
@@ -288,18 +281,14 @@
                                 />
                                 <combo_text_box
                                     id="combo1"
+                                    has_entry="true"
                                     default_value="1"
                                     type="year"
-                                    width="5"
                                 />
                             </box>
-                        </fixed>
-                    </box>
-                </frame>
+                        </box>
+                    </frame>
 
-                <fixed
-                    id="hjd"
-                >
                     <combo_text_box
                         id="combo1"
                         margin_top="10"
@@ -309,88 +298,39 @@
                         option2="Option2"
                         option3="Option3"
                         option4="Option4"
-                        position_x="50"
-                        position_y="50"
-                        width="20"
-                        height="30"
+                        box_expand="false"
+                        box_fill="false"
+                        box_padding="0"
                     />
-                </fixed>
 
 
-                <fixed
-                    id="fixed1"
-                    height="300"
-                >
-
-                    <box
-                        id="box11"
-                        position_x="400"
-                        position_y="150"
+                    <fixed
+                        id="fixed1"
+                        width="800"
+                        height="300"
                     >
-                        <label
-                            id="label1"
-                            label_text="Vos connaissances de GTK+"
-                            xalign="0.05"
-                            margin_top="70"
-                        />
-                        <frame
-                            id="frame1"
-                            margin_top="1"
-                            margin_left="10"
-                            margin_right="10"
+
+                        <box
+                            id="box11"
+                            position_x="400"
+                            position_y="150"
                         >
-                            <box
-                                id="box2"
-                                orientation="horizontal"
+                            <label
+                                id="label1"
+                                label_text="Vos connaissances de GTK+"
+                                xalign="0.05"
+                                margin_top="70"
+                            />
+                            <frame
+                                id="frame1"
+                                margin_top="1"
+                                margin_left="10"
+                                margin_right="10"
                             >
-
-                                <radio_button
-                                    id="rbtn1"
-                                    is_group="true"
-                                    is_mnemonic="true"
-                                    label="_Faible"
-                                    icon_name="folder"
-                                    is_button_mode="true"
-                                />
-
-                                <radio_button
-                                    id="rbtn2"
-                                    is_mnemonic="true"
-                                    label="_Moyen"
-                                />
-
-                                <radio_button
-                                    id="rbtn3"
-                                    is_mnemonic="true"
-                                    label="_Bien"
-                                />
-
-                                <radio_button
-                                    id="rbtn4"
-                                    is_selected="true"
-                                    is_mnemonic="true"
-                                    label="_Tres bien"
-                                />
-
-                            </box>
-                        </frame>
-                    </box>
-
-                    <box
-                        id="box12"
-                        orientation="horizontal"
-                        position_x="400"
-                        position_y="350"
-                    >
-
-                        <toggle_button
-                            id="btn1"
-                            label="_OK"
-                            height="40"
-                            margin_right="5"
-                            is_mnemonic="true"
-                            onclick="display_dialog"
-                        />
+                                <box
+                                    id="box2"
+                                    orientation="horizontal"
+                                >
 
                                     <radio_button
                                         id="rbtn1"
@@ -450,9 +390,10 @@
                             />
 
 
-                    </box>
-                </fixed>
-            </box>
+                        </box>
+                    </fixed>
+                </box>
+            </fixed>
         </box>
     </scrolled_window>
 </window>

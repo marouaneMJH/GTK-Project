@@ -31,6 +31,7 @@
 
 #define MAX_TAG_SIZE 50
 #define MAX_VIEW_ID_SIZE 50
+#define PARAM_COUNT 4
 
 #define SET_VIEW_CONFIG_PROPERTY(property, value, view_config)                      \
     if (g_strcmp0(property, "position_x") == 0)                                     \
@@ -91,7 +92,24 @@
     }                                                                               \
     if (g_strcmp0(property, "onclick") == 0)                                        \
     {                                                                               \
-        g_strlcpy(view_config->onclick, value, MAX_SIGNAL_NAME_SIZE);               \
+        g_strlcpy(view_config->onclick, value, MAX_SIGNAL_NAME_SIZE);                 \
+    }                                                                               \
+    if (g_strcmp0(property, "param_1") == 0)                                        \
+    {                                                                               \
+        g_strlcpy(view_config->param[0], value, MAX_SIGNAL_NAME_SIZE);              \
+    }                                                                               \
+    if (g_strcmp0(property, "param_2") == 0)                                        \
+    {                                                                               \
+        g_print("r\n\nead param_2:%s", value);                                      \
+        g_strlcpy(view_config->param[1], value, MAX_SIGNAL_NAME_SIZE);              \
+    }                                                                               \
+    if (g_strcmp0(property, "param_3") == 0)                                        \
+    {                                                                               \
+        g_strlcpy(view_config->param[2], value, MAX_SIGNAL_NAME_SIZE);              \
+    }                                                                               \
+    if (g_strcmp0(property, "param_4") == 0)                                        \
+    {                                                                               \
+        g_strlcpy(view_config->param[3], value, MAX_SIGNAL_NAME_SIZE);              \
     }                                                                               \
     if (g_strcmp0(property, "menu_orientation") == 0)                               \
     {                                                                               \
@@ -137,6 +155,7 @@
         view_config->menu_bottom = 1;                      \
         view_config->menu_left = 0;                        \
         view_config->menu_right = 0;                       \
+        for (int i = 0; i < PARAM_COUNT; view_config->param[i++][0] = '\0'); \
     } while (0);
 
 typedef struct
@@ -176,6 +195,8 @@ typedef struct
 
     // Signals
     gchar onclick[MAX_SIGNAL_NAME_SIZE]; // Path to the icon image file
+    // Params of Signals
+    gchar param[PARAM_COUNT][MAX_SIGNAL_NAME_SIZE]; // First function parameter
 
     gchar menu_orientation[MAX_LABEL_SIZE];
     gint menu_top;

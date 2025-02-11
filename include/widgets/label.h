@@ -16,7 +16,7 @@
 
 #define DEFAULT_LABEL                      \
     {                                      \
-        .font_size = 12,                   \
+        .font_size = 10,                   \
         .label_text = "\0",                \
         .is_markup = FALSE,                \
         .is_underline = FALSE,             \

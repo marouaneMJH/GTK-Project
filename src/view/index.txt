@@ -392,13 +392,62 @@
                             onclick="display_dialog"
                         />
 
-                        <button
-                            id="btn1"
-                            label="_Quitter"
-                            height="40"
-                            margin_left="5"
-                            onclick="exit"
-                        />
+                                    <radio_button
+                                        id="rbtn1"
+                                        is_group="true"
+                                        is_mnemonic="true"
+                                        label="_Faible"
+                                        icon_name="folder"
+                                        is_button_mode="true"
+                                    />
+
+                                    <radio_button
+                                        id="rbtn2"
+                                        is_mnemonic="true"
+                                        label="_Moyen"
+                                    />
+
+                                    <radio_button
+                                        id="rbtn3"
+                                        is_mnemonic="true"
+                                        label="_Bien"
+                                    />
+
+                                    <radio_button
+                                        id="rbtn4"
+                                        is_selected="true"
+                                        is_mnemonic="true"
+                                        label="_Tres bien"
+                                    />
+
+                                </box>
+                            </frame>
+                        </box>
+
+                        <box
+                            id="box12"
+                            orientation="horizontal"
+                            position_x="400"
+                            position_y="350"
+                        >
+
+                            <toggle_button
+                                id="btn1"
+                                label="_OK"
+                                width="100"
+                                height="40"
+                                margin_right="5"
+                                is_mnemonic="true"
+
+                                
+                            />
+
+                            <button
+                                id="btn1"
+                                label="_Quitter"
+                                onclick="sig_change_self_bg_color"
+                                param_1="green"
+                            />
 
 
                     </box>

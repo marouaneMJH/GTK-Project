@@ -130,7 +130,6 @@
 
             <box
                 id="bs"
-                bg_color="blue"
                 vexpand="true"
                 valign="fill"
                 box_expand="true"
@@ -138,11 +137,28 @@
             >
 
                 <label
-                    id="label1"
+                    id="label1c"
                     label_text="Vos connaissances de GTK+"
                     xalign="0.05"
                     margin_top="70"
                 />
+
+                <fixed
+                    id="fx12"
+                    halign="center"
+                    width="200"
+                >
+                    <entry
+                        id="entry"
+                        placeholder_text="Enter"
+                        onclick="sig_type"
+                        valign="start"
+                        halign="start"
+                        width="150"
+                        height="40"
+                    />
+
+                </fixed>
                 <frame
                     id="frame1"
                     margin_top="1"

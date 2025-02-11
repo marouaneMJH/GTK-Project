@@ -13,7 +13,7 @@ ViewConfig *configure_entry_property(EntryConfig *entry_config, ViewConfig *view
 
     if (g_strcmp0(property, "is_visible") == 0)
         entry_config->is_visible = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
-    
+
     // Margins
     if (g_strcmp0(property, "margin_top") == 0)
         entry_config->margins.top = atoi(value);
@@ -53,7 +53,7 @@ ViewConfig *configure_entry_property(EntryConfig *entry_config, ViewConfig *view
 
     if (g_strcmp0(property, "max_length") == 0)
         entry_config->max_length = atoi(value);
-    
+
     if (g_strcmp0(property, "alignment") == 0)
         entry_config->alignment = atof(value);
 
@@ -89,36 +89,40 @@ ViewConfig *init_entry_config(FILE *index, EntryConfig *entry_config)
     return init_generic_config(index, (void *)entry_config, (ConfigurePropertyCallback)configure_entry_property);
 }
 
-
-void numeric_field_handler(GtkEntry *entry, const gchar *text, gint length) {
-    // Allow only digits
-    for (int i = 0; i < length; i++) {
-        if (!g_ascii_isdigit(text[i])) {
-            g_signal_stop_emission_by_name(entry, "insert-text");
-            return;
-        }
-    }
-}
-
-void email_field_handler(GtkEntry *entry, const gchar *text, gint length) {
-    // Allow only email characters
-    for (int i = 0; i < length; i++) {
-        if (!g_ascii_isalnum(text[i]) && text[i] != '@' && text[i] != '.' && text[i] != '_') {
-            g_signal_stop_emission_by_name(entry, "insert-text");
-            return;
-        }
-    }
-}
-void on_icon_press(GtkEntry *entry,gpointer user_data)
+void numeric_field_handler(GtkEntry *entry, const gchar *text, gint length)
 {
-    
-        gtk_entry_set_text(entry, "");
+    // Allow only digits
+    for (int i = 0; i < length; i++)
+    {
+        if (!g_ascii_isdigit(text[i]))
+        {
+            g_signal_stop_emission_by_name(entry, "insert-text");
+            return;
+        }
+    }
+}
+
+void email_field_handler(GtkEntry *entry, const gchar *text, gint length)
+{
+    // Allow only email characters
+    for (int i = 0; i < length; i++)
+    {
+        if (!g_ascii_isalnum(text[i]) && text[i] != '@' && text[i] != '.' && text[i] != '_')
+        {
+            g_signal_stop_emission_by_name(entry, "insert-text");
+            return;
+        }
+    }
+}
+void on_icon_press(GtkEntry *entry, gpointer user_data)
+{
+
+    gtk_entry_set_text(entry, "");
 }
 
 GtkWidget *create_entry(EntryConfig entry_config)
 {
 
-    
     g_print("=============================================\n");
     GtkWidget *entry = gtk_entry_new();
     gtk_entry_set_icon_from_icon_name(GTK_ENTRY(entry), GTK_ENTRY_ICON_SECONDARY, "edit-clear");
@@ -129,17 +133,16 @@ GtkWidget *create_entry(EntryConfig entry_config)
     //
     if (entry_config.purpose == GTK_INPUT_PURPOSE_EMAIL)
         g_signal_connect(entry, "insert-text", G_CALLBACK(email_field_handler), NULL);
-        
+
     if ((entry_config.purpose == GTK_INPUT_PURPOSE_NUMBER) || (entry_config.purpose == GTK_INPUT_PURPOSE_PIN))
         g_signal_connect(entry, "insert-text", G_CALLBACK(numeric_field_handler), NULL);
-    if( (entry_config.purpose == GTK_INPUT_PURPOSE_PASSWORD) || (entry_config.purpose == GTK_INPUT_PURPOSE_PIN) )
+    if ((entry_config.purpose == GTK_INPUT_PURPOSE_PASSWORD) || (entry_config.purpose == GTK_INPUT_PURPOSE_PIN))
         gtk_entry_set_visibility(GTK_ENTRY(entry), FALSE);
 
-    const gchar* icon=gtk_entry_get_icon_name(GTK_ENTRY(entry), GTK_ENTRY_ICON_SECONDARY);
-    if(icon)
+    const gchar *icon = gtk_entry_get_icon_name(GTK_ENTRY(entry), GTK_ENTRY_ICON_SECONDARY);
+    if (icon)
         g_signal_connect(entry, "icon-press", G_CALLBACK(on_icon_press), NULL);
-    
-    
+
     gtk_entry_set_max_length(GTK_ENTRY(entry), entry_config.max_length);
     g_print("Entry max length: %d\n", entry_config.max_length);
     gtk_widget_set_size_request(entry, entry_config.dimensions.width, entry_config.dimensions.height);
@@ -150,7 +153,9 @@ GtkWidget *create_entry(EntryConfig entry_config)
     gtk_entry_set_overwrite_mode(GTK_ENTRY(entry), entry_config.overwrite_mode);
     if (entry_config.progress_fraction > 0)
         gtk_entry_set_progress_fraction(GTK_ENTRY(entry), entry_config.progress_fraction);
+
     gtk_entry_set_activates_default(GTK_ENTRY(entry), entry_config.activates_default);
+
     if (entry_config.progress_pulse_step > 0)
         gtk_entry_set_progress_pulse_step(GTK_ENTRY(entry), entry_config.progress_pulse_step);
     if (entry_config.completion)
@@ -159,7 +164,6 @@ GtkWidget *create_entry(EntryConfig entry_config)
     g_print("Entry bg color: %s\n", entry_config.bg_color);
     widget_set_colors(GTK_WIDGET(entry), entry_config.bg_color, entry_config.text_color);
     widget_set_margins(GTK_WIDGET(entry), entry_config.margins);
-
 
     // To look at later:
     // gtk_entry_set_cursor_hadjustment(GTK_ENTRY(Myentry), hadjustment);
@@ -194,4 +198,3 @@ GtkWidget *create_entry(EntryConfig entry_config)
 
 //     return completion;
 // }
-

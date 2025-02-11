@@ -1,5 +1,12 @@
 #include "./../../include/builder.h"
 
+
+static void sig_entry_activate(GtkWidget *entry, gpointer data)
+{
+    g_print("Hellow entry");
+}
+
+
 View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
 {
     View *view = NULL;
@@ -517,6 +524,15 @@ View *read_entry_tag(FILE *index, View *parent_view, gboolean is_relative_contai
 
     // Add view to view model
     parent_view = add_view(entry_view, parent_view, is_relative_container);
+
+
+    if (view_config->onclick[0] != '\0')
+    {
+        if (g_strcmp0(view_config->onclick, "sig_type") == 0)
+        {
+            g_signal_connect(G_OBJECT(entry_widget), "changed", G_CALLBACK(sig_entry_activate), NULL);
+        }
+    }
 
     return entry_view;
 }

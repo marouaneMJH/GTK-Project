@@ -38,6 +38,9 @@ ViewConfig *configure_combo_text_box_property(
     else if (g_strcmp0(property, "default_value") == 0)
         combo_text_box_config->default_value = g_strdup(value);
 
+    else if (g_strcmp0(property, "default_index") == 0)
+        combo_text_box_config->default_index = atoi(value);
+
     else if (g_strcmp0(property, "has_entry") == 0)
         combo_text_box_config->has_entry = (strcmp(value, "true") == 0);
 
@@ -137,6 +140,7 @@ GtkWidget *create_combo_text_box(ComboTextBoxConfig combo_text_box_config)
     else
     {
         combo_text_box = gtk_combo_box_text_new();
+        g_print("label: %d ", combo_text_box_config.default_index);
     }
 
     /* Verify the type of counter */
@@ -222,6 +226,8 @@ GtkWidget *create_combo_text_box(ComboTextBoxConfig combo_text_box_config)
         pango_attr_list_unref(attrs);
     }
 
+    if (combo_text_box_config.default_index != -1 && !combo_text_box_config.has_entry)
+        gtk_combo_box_set_active(GTK_COMBO_BOX(combo_text_box), combo_text_box_config.default_index);
     return combo_text_box;
 }
 

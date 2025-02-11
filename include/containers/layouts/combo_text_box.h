@@ -39,6 +39,7 @@
     .has_entry = FALSE,                                      \
     .placeholder_text = NULL,                                \
     .default_value = NULL,                                   \
+    .default_index = -1,                                     \
     .wrap_width = 1,                                         \
     .popup_fixed_width = FALSE,                              \
     .popup_shown_rows = 3,                                   \
@@ -108,6 +109,7 @@ typedef struct
     gboolean has_entry;      // Whether to allow text input
     gchar *placeholder_text; // Placeholder text inside the entry
     gchar *default_value;    // Default value inside the entry if exist
+    gint default_index;      // default index
     gint wrap_width;         //  how many column shown
 
     // Behavior properties

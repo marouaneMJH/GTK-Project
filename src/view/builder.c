@@ -1,57 +1,5 @@
 #include "./../../include/builder.h"
 
-// Signals
-// static void print_hello(GtkWidget *widget, gpointer data)
-// {
-//     g_print("Hello World\n");
-//     gtk_widget_set_tooltip_text(widget, "Hello World");
-// }
-
-// static void click1(GtkWidget *widget, gpointer data)
-// {
-//     g_print("Click1\n");
-//     // View *root_view = (View *)data;
-
-//     View *btn2 = find_view_by_id("bt2", root_view_gloabl);
-//     if (btn2)
-//     {
-//         widget_set_colors(btn2->widget, "red", "white");
-//     }
-// }
-
-// static void click2(GtkWidget *widget, gpointer data)
-// {
-//     // View *root_view_gloabl = (View *)data;
-
-//     g_print("Click2\n");
-//     View *btn1 = find_view_by_id("bt1", root_view_gloabl);
-//     if (btn1)
-//     {
-//         widget_set_colors(btn1->widget, "green", "white");
-//     }
-// }
-
-// static void menu_item_onclick(GtkWidget *widget, gpointer data)
-// {
-//     static int cible = 1;
-
-//     g_print("Menu item\n");
-//     View *box1 = find_view_by_id("box1A", root_view_gloabl);
-//     if (box1)
-//     {
-//         if (cible == 1)
-//         {
-//             cible = 2;
-//             widget_set_colors(box1->widget, "green", "white");
-//         }
-//         else
-//         {
-//             cible = 1;
-//             widget_set_colors(box1->widget, "blue", "white");
-//         }
-//     }
-// }
-
 View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
 {
     View *view = NULL;
@@ -66,7 +14,6 @@ View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
     view->widget = widget;
 
     connect_signales(view);
-    
 
     return view;
 }
@@ -298,7 +245,6 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
         return view;
     }
 
-    
     // Group radio buttons
     if (GTK_IS_RADIO_BUTTON(view->widget))
     {
@@ -550,8 +496,6 @@ View *read_button_tag(FILE *index, View *parent_view, gboolean is_relative_conta
 
     GtkWidget *button_widget = create_button(button_config);
 
-
-
     View *button_view = create_view(view_config->view_id, button_widget, view_config);
 
     // Add view to view model
@@ -657,7 +601,6 @@ View *read_menu_bar_tag(FILE *index, View *parent_view, gboolean is_relative_con
 
     View *menu_bar_view = create_view(view_config->view_id, menu_bar_widget, view_config);
 
-    
     // Add view to view model
     add_view(menu_bar_view, parent_view, is_relative_container);
 
@@ -918,7 +861,6 @@ View *read_toggle_button_tag(FILE *index, View *parent_view, gboolean is_relativ
     // Ajouter le toggle_button à la hiérarchie des vues
 
     add_view(toggle_button_view, parent_view, is_relative_container);
-
 
     return toggle_button_view;
 }

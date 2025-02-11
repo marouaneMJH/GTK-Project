@@ -121,8 +121,11 @@ ViewConfig *init_button_config(FILE *index, ButtonConfig *button_config)
 
 GtkWidget *create_button(ButtonConfig button_config)
 {
-    // Create a new button with the given label
-    GtkWidget *button = gtk_button_new_with_mnemonic(button_config.label);
+    GtkWidget *button;
+
+    // Create button with or without mnemonic based on use_underline flag
+    button = gtk_button_new_with_mnemonic(button_config.label);
+
 
     // Set sensitivity
     gtk_widget_set_sensitive(button, button_config.is_sensitive);
@@ -135,7 +138,6 @@ GtkWidget *create_button(ButtonConfig button_config)
     if (button_config.tooltip) // Ensure tooltip is not empty
         gtk_widget_set_tooltip_text(button, button_config.tooltip);
 
-    // todo dimensions validate function
     // Set dimensions (width and height)
     if (button_config.dimensions.width > 0 && button_config.dimensions.height > 0)
         gtk_widget_set_size_request(button, button_config.dimensions.width, button_config.dimensions.height);
@@ -144,6 +146,7 @@ GtkWidget *create_button(ButtonConfig button_config)
     gtk_widget_set_hexpand(button, button_config.hexpand);
     gtk_widget_set_vexpand(button, button_config.vexpand);
 
+    // Set icon if provided
     if (button_config.icon_path[0] != '\0')
     {
         Dimensions dimensions = {32, 32};
@@ -152,24 +155,18 @@ GtkWidget *create_button(ButtonConfig button_config)
         gtk_button_set_image_position(GTK_BUTTON(button), button_config.icon_position);
     }
 
-    // gtk_button_set_alignment(GTK_BUTTON(button), button_config.alignment_x, button_config.alignment_y); // deprecated
-
+    // Set alignment
     gtk_widget_set_halign(button, button_config.halign);
     gtk_widget_set_valign(button, button_config.valign);
 
+    // Control whether to always show the image
     gtk_button_set_always_show_image(GTK_BUTTON(button), button_config.always_show_image);
 
-    gtk_button_set_use_underline(GTK_BUTTON(button), button_config.use_underline);
-
-    // gtk_button_set_focus_on_click(GTK_BUTTON(button), button_config.focus_on_click); // deprecated
-
-    // gtk_button_set_use_stock(GTK_BUTTON(button), button_config.use_stock); // deprecated
-
-    // Set background and/or label colors
+    // Set background and label colors
     widget_set_colors(button, button_config.bg_color, button_config.color);
 
-    // Set margin
+    // Set margins
     widget_set_margins(button, button_config.margins);
 
-    return ((GtkWidget *)button);
+    return button;
 }

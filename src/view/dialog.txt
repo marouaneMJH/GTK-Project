@@ -8,6 +8,7 @@
 	hint_type="dialog"
 	is_modal="true"
 	on_response="sig_dialog_response"
+	
 >
 
 	<box
@@ -15,22 +16,44 @@
 	>
 		<box
 			id="box1"
-			orientation="horizontal"
+			orientation="vertical"
 		>
+			<box
+				orientation="horizontal"
 
-			<image
-				id="img1"
-				type="pixbuf"
-				path="./assets/images/warning_icon.jpeg"
-				width="30"
-				height="30"
-				margin_right="10"
-			/>
+			>
+				<image
+					id="img1"
+					type="pixbuf"
+					path="./assets/images/warning_icon.jpeg"
+					width="30"
+					height="30"
+					margin_right="10"
+				/>
 
-			<label
-				id="label11"
-				label_text="Vous voulez afficher une image?"
-			/>
+				<label
+					id="label11"
+					label_text="Vous voulez afficher une image?"
+
+				/>
+			</box>
+
+			<box
+				orientation="horizontal"
+				width="40"
+			>
+				<button 
+					label="Click to color chooser"
+					onclick="sig_dialog_color"
+				
+				/>
+				<button 
+					label="Click yo font chooser"
+					onclick="sig_dialog_font"
+					width="10"
+					height="10"
+				/>
+			</box>
 
 		</box>
 	</box>

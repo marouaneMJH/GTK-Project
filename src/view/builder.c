@@ -395,10 +395,10 @@ View *read_dialog_tag(FILE *index, View *parent_view, gboolean is_relative_conta
     GtkWidget *dialog_widget = create_dialog(dialog_config);
 
     View *dialog_view = create_view(view_config->view_id, dialog_widget, view_config);
-    g_print("Dialog view created\n");
+    
     // Add view to view model
     parent_view = add_view(dialog_view, parent_view, is_relative_container);
-    g_print("Dialog view added\n");
+    
     return dialog_view;
 }
 

@@ -133,12 +133,14 @@ GtkWidget *create_dialog(DialogConfig config)
         config.title,
         GTK_WINDOW(root_view_global->widget),
         config.is_modal ? GTK_DIALOG_MODAL : 0,
-        "_Yes", GTK_RESPONSE_YES,
-        "_No", GTK_RESPONSE_NO,
-        "_Cancel", GTK_RESPONSE_CANCEL,
+        /**
+         * // review why we use this, we can personnlise the dialog as possible as we can so we can use our function 
+         */
+        // "_Yes", GTK_RESPONSE_YES,
+        // "_No", GTK_RESPONSE_NO,
+        // "_Cancel", GTK_RESPONSE_CANCEL, 
         NULL);
-        g_print(" image  ===== %s  ====",config.icon_path);
-        set_header_bar(dialog, config.title,config.icon_path);
+        // set_header_bar(dialog, config.title,config.icon_path);
     // Set dimensions
 
     gtk_window_set_default_size(GTK_WINDOW(dialog), config.dimensions.width, config.dimensions.height);

@@ -95,10 +95,10 @@ GtkWidget *create_frame(FrameConfig frame_config)
     // Set margins
     widget_set_margins(frame, frame_config.margins);
 
-    gtk_widget_set_hexpand(box, TRUE);
-    // gtk_widget_set_vexpand(box, TRUE);
-    // gtk_widget_set_halign(box, GTK_ALIGN_START);
-    // gtk_widget_set_valign(box, GTK_ALIGN_START);
+    // gtk_widget_set_hexpand(frame, TRUE);
+    // gtk_widget_set_vexpand(frame, TRUE);
+    // gtk_widget_set_halign(frame, GTK_ALIGN_START);
+    // gtk_widget_set_valign(frame, GTK_ALIGN_START);
 
     return frame;
 }

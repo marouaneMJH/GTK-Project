@@ -22,10 +22,10 @@
         .column_spacing = 0,                   \
         .column_homogeneous = FALSE,           \
         .row_homogeneous = FALSE,              \
-        .hexpand = TRUE,                       \
-        .vexpand = TRUE,                       \
-        .halign = GTK_ALIGN_CENTER,            \
-        .valign = GTK_ALIGN_CENTER,            \
+        .hexpand = FALSE,                       \
+        .vexpand = FALSE,                       \
+        .halign = GTK_ALIGN_FILL,            \
+        .valign = GTK_ALIGN_FILL,            \
         .margins = DEFAULT_GRID_MARGINS,       \
         .dimensions = DEFAULT_GRID_DIMENSIONS, \
         .bg_color = "\0",                      \
@@ -40,6 +40,7 @@ typedef struct
     // Give the same size to all children
     gboolean column_homogeneous;
     gboolean row_homogeneous;
+    
     gboolean hexpand;
     gboolean vexpand;
 

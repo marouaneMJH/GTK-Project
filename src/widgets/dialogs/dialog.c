@@ -29,6 +29,9 @@ ViewConfig *configure_dialog_property(DialogConfig *dialog_config, ViewConfig *v
     if (g_strcmp0(property, "height") == 0)
         dialog_config->dimensions.height = atoi(value);
 
+
+    SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
+
     return view_config;
 }
 
@@ -95,15 +98,44 @@ ViewConfig *init_dialog_config(FILE *index, DialogConfig *dialog_config)
     return view_config;
 }
 
+static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data) {
+    switch (response_id) {
+        case GTK_RESPONSE_OK:
+            g_print("User clicked OK.\n");
+            break;
+
+        case GTK_RESPONSE_CANCEL:
+            g_print("User clicked Cancel.\n");
+            gtk_widget_destroy(GTK_WIDGET(dialog)); // Close the dialog
+            break;
+
+        case GTK_RESPONSE_YES:
+            g_print("User clicked Yes.\n");
+            break;
+
+        case GTK_RESPONSE_NO:
+            g_print("User clicked No.\n");
+            break;
+
+        case 100: // Custom response
+            g_print("Custom response 100 triggered.\n");
+            break;
+
+        default:
+            g_print("Unknown response ID: %d\n", response_id);
+            break;
+    }
+}
+
 GtkWidget *create_dialog(DialogConfig config)
 {
     GtkWidget *dialog = gtk_dialog_new_with_buttons(
         config.title,
-        GTK_WINDOW(root_view_gloabl->widget),
+        GTK_WINDOW(root_view_global->widget),
         config.is_modal ? GTK_DIALOG_MODAL : 0,
-        "_OK", GTK_RESPONSE_OK,
+        "_Yes", GTK_RESPONSE_YES,
+        "_No", GTK_RESPONSE_NO,
         "_Cancel", GTK_RESPONSE_CANCEL,
-        "_OK", GTK_RESPONSE_CLOSE,
         NULL);
         g_print(" image  ===== %s  ====",config.icon_path);
         set_header_bar(dialog, config.title,config.icon_path);
@@ -113,6 +145,8 @@ GtkWidget *create_dialog(DialogConfig config)
 
     // Set background color if provided
     widget_set_colors(dialog, config.bg_color, config.text_color);
+
+    // g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(sig_dialog_response), NULL);
 
     return dialog;
 }

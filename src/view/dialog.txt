@@ -1,12 +1,13 @@
 <dialog
 	id="dialog"
 	title="Dialog Title"
+	width="300"
+	height="100"
 	icon_path="assets/images/programer.jpg"
-	width="450"
-	height="300"
 	icon_name="folder"
 	hint_type="dialog"
 	is_modal="true"
+	on_response="sig_dialog_response"
 >
 
 	<box
@@ -31,40 +32,6 @@
 				label_text="Vous voulez afficher une image?"
 			/>
 
-		</box>
-
-		<box
-			id="bnx"
-			orientation="horizontal"
-			width="400"
-		>
-			<button
-				id="btn1"
-				label="_Oui"
-				width="100"
-				height="40"
-				margin_left="5"
-				onclick="sig_destroy"
-			/>
-		
-			<button
-				id="btn1"
-				label="_No"
-				width="100"
-				height="40"
-				margin_left="5"
-				margin_right="5"
-
-			/>
-
-			<button
-				id="btn1"
-				label="_Annuler"
-				width="100"
-				height="40"
-				margin_left="5"
-				onclick="exit"
-			/>
 		</box>
 	</box>
 </dialog>

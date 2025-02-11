@@ -43,6 +43,10 @@
     .wrap_width = 1,                                         \
     .popup_fixed_width = FALSE,                              \
     .popup_shown_rows = 3,                                   \
+    .hexpand = FALSE,                                        \
+    .vexpand = FALSE,                                        \
+    .halign = GTK_ALIGN_FILL,                                \
+    .valign = GTK_ALIGN_FILL,                                \
     .type = DEFAULT_COMBO_TEXT_BOX_TYPE,                     \
     .is_editable = TRUE,                                     \
     .style = DEFAULT_COMBO_TEXT_BOX_STYLE})
@@ -117,6 +121,12 @@ typedef struct
     gint popup_shown_rows;      // Maximum number of visible rows in dropdown
     ComboTextBoxType type;      // a pre existed combo box like (YEAR ...)
     gboolean is_editable;       // the permission of change entry content
+
+    gboolean hexpand;
+    gboolean vexpand;
+
+    GtkAlign halign;
+    GtkAlign valign;
 
     // Style properties
     ComboTextBoxStyle style; // Background, text color, font, etc.

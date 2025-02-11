@@ -20,6 +20,10 @@
     {                                           \
         .margins = DEFAULT_FIXED_MARGINS,       \
         .dimensions = DEFAULT_FIXED_DIMENSIONS, \
+        .hexpand = FALSE,                       \
+        .vexpand = FALSE,                       \
+        .halign = GTK_ALIGN_FILL,               \
+        .valign = GTK_ALIGN_FILL,               \
         .bg_color = "\0",                       \
         .text_color = "\0"}
 
@@ -28,7 +32,10 @@ typedef struct
     Margins margins;
 
     Dimensions dimensions;
-
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
     gchar bg_color[MAX_COLOR_SIZE];
     gchar text_color[MAX_COLOR_SIZE];
 
@@ -44,6 +51,5 @@ ViewConfig *init_fixed_config(FILE *index, FixedConfig *fixed_config);
 GtkWidget *create_fixed(FixedConfig fixed_config);
 
 void add_fixed(GtkWidget *widget, gint x, gint y);
-
 
 #endif

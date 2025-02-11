@@ -60,6 +60,30 @@ ViewConfig *configure_frame_property(FrameConfig *frame_config, ViewConfig *view
     else if (g_strcmp0(property, "margin_right") == 0)
         frame_config->margins.end = atoi(value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            frame_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            frame_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            frame_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            frame_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            frame_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            frame_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            frame_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            frame_config->halign = GTK_ALIGN_FILL;
+    }
+
     // Store additional properties in view_config (if needed)
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
@@ -68,7 +92,7 @@ ViewConfig *configure_frame_property(FrameConfig *frame_config, ViewConfig *view
 
 ViewConfig *init_frame_config(FILE *index, FrameConfig *frame_config)
 {
-    return init_generic_config(index, (void*)frame_config, (ConfigurePropertyCallback)configure_frame_property);
+    return init_generic_config(index, (void *)frame_config, (ConfigurePropertyCallback)configure_frame_property);
 }
 
 GtkWidget *create_frame(FrameConfig frame_config)
@@ -77,7 +101,7 @@ GtkWidget *create_frame(FrameConfig frame_config)
     GtkWidget *frame = gtk_frame_new(frame_config.label);
 
     // Set label alignment
-    if(frame_config.label_xalign > 0.0 && frame_config.label_yalign > 0.0)
+    if (frame_config.label_xalign > 0.0 && frame_config.label_yalign > 0.0)
         gtk_frame_set_label_align(GTK_FRAME(frame), frame_config.label_xalign, frame_config.label_yalign);
     else
         gtk_frame_set_label(GTK_FRAME(frame), frame_config.label);
@@ -89,11 +113,25 @@ GtkWidget *create_frame(FrameConfig frame_config)
         set_widget_size(frame, frame_config.dimensions);
 
     // Apply background and text colors if provided
-    if(strcmp(frame_config.bg_color, "\0") != 0 && strcmp(frame_config.text_color, "\0") != 0)
+    if (strcmp(frame_config.bg_color, "\0") != 0 && strcmp(frame_config.text_color, "\0") != 0)
         widget_set_colors(frame, frame_config.bg_color, frame_config.text_color);
 
     // Set margins
     widget_set_margins(frame, frame_config.margins);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(frame, frame_config.hexpand);
+    gtk_widget_set_vexpand(frame, frame_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(frame, frame_config.halign);
+    gtk_widget_set_valign(frame, frame_config.valign);
+
+    // gtk_widget_set_halign(frame, GTK_ALIGN_START);
+    // gtk_widget_set_valign(frame, GTK_ALIGN_START);
+
+    // gtk_widget_set_hexpand(frame, TRUE);
+    // gtk_widget_set_vexpand(frame, TRUE);
 
     return frame;
 }

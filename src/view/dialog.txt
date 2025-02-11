@@ -1,6 +1,6 @@
 <dialog
 	id="dialog"
-	title="Dialog Title"
+	title="Message "
 	width="300"
 	height="100"
 	icon_path="assets/images/programer.jpg"
@@ -43,7 +43,6 @@
 			<box
 				orientation="horizontal"
 				width="200"
-				bg_color="green"
 				halign="start"
 				valign="start"
 				box_expand="true"
@@ -51,20 +50,20 @@
 			>
 				<button 
 					label="_Oui"
-					width="20"
+					width="90"
 					onclick="sig_show_image"
 
 				/>
-				<button 
+				<button
 					label="_Non"
-					onclick="sig_destroy_self"
-					width="200"
+					onclick="sig_destroy_dialog"
+					width="90"
 					margin_left="20"
 				/>
 				<button 
 					label="_Anuler"
-					onclick="sig_destroy_self"
-					width="20"
+					onclick="sig_self_destroy_"
+					width="90"
 					margin_left="20"
 				/>
 			</box>

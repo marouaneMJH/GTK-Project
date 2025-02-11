@@ -1,6 +1,6 @@
 #include "./../include/global.h"
 
-View *root_view_gloabl;
+View *root_view_global;
 View *root_dialog_view_global;
 
 // inline void free_widget(GtkWidget *widget)

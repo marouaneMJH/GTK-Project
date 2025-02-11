@@ -98,6 +98,10 @@
     {                                                                               \
         g_strlcpy(view_config->on_active, value, MAX_SIGNAL_NAME_SIZE);             \
     }                                                                               \
+    if (g_strcmp0(property, "on_response") == 0)                                    \
+    {                                                                               \
+        g_strlcpy(view_config->on_response, value, MAX_SIGNAL_NAME_SIZE);           \
+    }                                                                               \
     if (g_strcmp0(property, "param_1") == 0)                                        \
     {                                                                               \
         g_strlcpy(view_config->param[0], value, MAX_SIGNAL_NAME_SIZE);              \
@@ -155,6 +159,7 @@
         view_config->column_span = 1;                                       \
         view_config->onclick[0] = '\0';                                     \
         view_config->on_active[0] = '\0';                                   \
+        view_config->on_response[0] = '\0';                                 \
         strcpy(view_config->menu_orientation, "vertical");                  \
         view_config->menu_top = 0;                                          \
         view_config->menu_bottom = 1;                                       \
@@ -200,8 +205,9 @@ typedef struct
     gint column_span;
 
     // Signals
-    gchar onclick[MAX_SIGNAL_NAME_SIZE];   // Path to the icon image file
-    gchar on_active[MAX_SIGNAL_NAME_SIZE]; // Path to the icon image file
+    gchar onclick[MAX_SIGNAL_NAME_SIZE];     // Path to the icon image file
+    gchar on_active[MAX_SIGNAL_NAME_SIZE];   // Path to the icon image file
+    gchar on_response[MAX_SIGNAL_NAME_SIZE]; // Path to the icon image file
     // Params of Signals
     gchar param[PARAM_COUNT][MAX_SIGNAL_NAME_SIZE]; // First function parameter
 
@@ -222,7 +228,7 @@ typedef struct VIEW
     ViewConfig *view_config;
 } View;
 
-extern View *root_view_gloabl;
+extern View *root_view_global;
 extern View *root_dialog_view_global;
 
 // We should rename this from global to core wich means system libs and has more signification

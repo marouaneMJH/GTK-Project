@@ -31,6 +31,30 @@ ViewConfig *configure_fixed_property(FixedConfig *fixed_config, ViewConfig *view
     if (g_strcmp0(property, "text_color") == 0)
         strcpy(fixed_config->text_color, value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            fixed_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            fixed_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            fixed_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            fixed_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            fixed_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            fixed_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            fixed_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            fixed_config->halign = GTK_ALIGN_FILL;
+    }
+
     // Icon image and icon
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
@@ -40,7 +64,7 @@ ViewConfig *configure_fixed_property(FixedConfig *fixed_config, ViewConfig *view
 
 ViewConfig *init_fixed_config(FILE *index, FixedConfig *fixed_config)
 {
-    return init_generic_config(index,(void*)fixed_config,(ConfigurePropertyCallback)configure_fixed_property);
+    return init_generic_config(index, (void *)fixed_config, (ConfigurePropertyCallback)configure_fixed_property);
 }
 GtkWidget *create_fixed(FixedConfig fixed_config)
 {
@@ -56,11 +80,18 @@ GtkWidget *create_fixed(FixedConfig fixed_config)
     // Set colors
     widget_set_colors(fixed, fixed_config.bg_color, fixed_config.text_color);
 
-    
     widget_set_colors(fixed, fixed_config.bg_color, fixed_config.text_color);
 
     // Set margins
     widget_set_margins(fixed, fixed_config.margins);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(fixed, fixed_config.hexpand);
+    gtk_widget_set_vexpand(fixed, fixed_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(fixed, fixed_config.halign);
+    gtk_widget_set_valign(fixed, fixed_config.valign);
 
     return fixed;
 }

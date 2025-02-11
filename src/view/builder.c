@@ -923,7 +923,7 @@ View *build_app(GtkApplication *app, View *root_view, const gchar *file_path)
                 // Set window as root view parent to be returned
                 root_view = parent_view;
 
-                root_view_gloabl = parent_view;
+                root_view_global = parent_view;
 
                 // Update container flag
                 is_relative_container = is_container_view(index);

@@ -93,6 +93,31 @@ ViewConfig *configure_combo_text_box_property(
         g_ptr_array_add(combo_text_box_config->options, combo_text_box_option);
     }
 
+    
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            combo_text_box_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            combo_text_box_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            combo_text_box_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            combo_text_box_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            combo_text_box_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            combo_text_box_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            combo_text_box_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            combo_text_box_config->halign = GTK_ALIGN_FILL;
+    }
+
     // Set view config property
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
@@ -228,6 +253,14 @@ GtkWidget *create_combo_text_box(ComboTextBoxConfig combo_text_box_config)
 
     if (combo_text_box_config.default_index != -1 && !combo_text_box_config.has_entry)
         gtk_combo_box_set_active(GTK_COMBO_BOX(combo_text_box), combo_text_box_config.default_index);
+
+        // Enable or disable cells expand (the parent should be expandable; not important)
+        gtk_widget_set_hexpand(combo_text_box, combo_text_box_config.hexpand);
+        gtk_widget_set_vexpand(combo_text_box, combo_text_box_config.vexpand);
+    
+        // Set alignments
+        gtk_widget_set_halign(combo_text_box, combo_text_box_config.halign);
+        gtk_widget_set_valign(combo_text_box, combo_text_box_config.valign);
     return combo_text_box;
 }
 

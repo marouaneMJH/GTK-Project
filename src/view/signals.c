@@ -29,7 +29,7 @@ static void sig_change_friend_bg_color(GtkWidget *widget, gpointer data)
         g_print("\nError: sig_change_friend_bg_color(), passing argument.\n");
         return;
     }
-    View *friend = find_view_by_id(param_array->params[0], root_view_gloabl);
+    View *friend = find_view_by_id(param_array->params[0], root_view_global);
     widget_set_colors(friend->widget, param_array->params[1], param_array->params[2]);
 }
 
@@ -47,14 +47,14 @@ static void sig_change_font_size(GtkWidget *widget, gpointer data)
 {
     ParamNode *param_array = (ParamNode *)data;
 
-    View *label_view = find_view_by_id(param_array->params[0], root_view_gloabl);
+    View *label_view = find_view_by_id(param_array->params[0], root_view_global);
 
     widget_set_font_size(label_view->widget, atoi(param_array->params[1]));
 }
 
 static void sig_destroy(GtkWidget *widget, gpointer data)
 {
-    GtkWidget *window = root_view_gloabl->widget;
+    GtkWidget *window = root_view_global->widget;
 
     gtk_widget_destroy(window);
 }
@@ -64,6 +64,35 @@ static void sig_dialog(GtkWidget *widget, gpointer data)
     GtkWidget *dialog = root_dialog_view_global->widget;
 
     show_dialog(dialog);
+}
+
+static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data) {
+    switch (response_id) {
+        case GTK_RESPONSE_OK:
+            g_print("User clicked OK.\n");
+            break;
+
+        case GTK_RESPONSE_CANCEL:
+            g_print("User clicked Cancel.\n");
+            gtk_widget_destroy(GTK_WIDGET(dialog)); // Close the dialog
+            break;
+
+        case GTK_RESPONSE_YES:
+            g_print("User clicked Yes.\n");
+            break;
+
+        case GTK_RESPONSE_NO:
+            g_print("User clicked No.\n");
+            break;
+
+        case 100: // Custom response
+            g_print("Custom response 100 triggered.\n");
+            break;
+
+        default:
+            g_print("Unknown response ID: %d\n", response_id);
+            break;
+    }
 }
 
 void connect_signales(View *view)
@@ -79,6 +108,10 @@ void connect_signales(View *view)
     else if (view->view_config->on_active[0] != '\0')
     {
         event_name = view->view_config->on_active;
+    }
+    else if (view->view_config->on_response[0] != '\0')
+    {
+        event_name = view->view_config->on_response;
     }
 
     // Map event names to their corresponding callback functions
@@ -101,6 +134,9 @@ void connect_signales(View *view)
 
         else if (strcmp(event_name, "sig_dialog") == 0)
             callback_function = sig_dialog;
+
+        else if (strcmp(event_name, "sig_dialog_response") == 0)
+            callback_function = sig_dialog_response;
     }
 
     // Connect the callback function
@@ -110,6 +146,9 @@ void connect_signales(View *view)
 
         else if (view->view_config->on_active[0] != '\0')
             g_signal_connect(G_OBJECT(view->widget), "activate", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+
+        else if (view->view_config->on_response[0] != '\0')
+             g_signal_connect(G_OBJECT(view->widget), "response", G_CALLBACK(callback_function), NULL);
 }
 
 // Link signals

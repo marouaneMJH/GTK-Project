@@ -6,7 +6,7 @@
 /*  default values */
 #define DEFAULT_BOX_DIMENSIONS \
     {                          \
-        .height = 0,         \
+        .height = 0,           \
         .width = 0}
 
 #define DEFAULT_BOX_MARGINS \
@@ -25,6 +25,10 @@
         .baseline_position = GTK_BASELINE_POSITION_CENTER, \
         .margins = DEFAULT_BOX_MARGINS,                    \
         .dimensions = DEFAULT_BOX_DIMENSIONS,              \
+        .hexpand = FALSE,                                  \
+        .vexpand = FALSE,                                  \
+        .halign = GTK_ALIGN_FILL,                          \
+        .valign = GTK_ALIGN_FILL,                          \
         .bg_color = "\0",                                  \
         .text_color = "\0",                                \
         .bg_image = "\0"}
@@ -45,6 +49,12 @@ typedef struct
     Margins margins;
 
     Dimensions dimensions;
+
+    gboolean hexpand;
+    gboolean vexpand;
+
+    GtkAlign halign;
+    GtkAlign valign;
 
     gchar bg_color[MAX_COLOR_SIZE];
     gchar text_color[MAX_COLOR_SIZE];

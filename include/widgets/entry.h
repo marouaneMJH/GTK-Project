@@ -47,7 +47,8 @@
         .progress_fraction = 0,                 \
         .progress_pulse_step = 0,               \
         .activates_default = FALSE,             \
-        .has_frame = TRUE                       \
+        .has_frame = TRUE,                       \
+        .has_delete_icon = FALSE                \
     }
 
 /**
@@ -66,6 +67,7 @@ typedef struct
     Margins margins;       // Margins around the entry
 
     /* Entry appearance */
+    gboolean has_delete_icon;        // Whether the entry has a delete icon
     gboolean has_frame;               // Whether the entry has a frame
     gdouble opacity;                  // Opacity of the entry (0.0 to 1.0)
     gchar bg_color[MAX_COLOR_SIZE];   // Background color (e.g., "\0")

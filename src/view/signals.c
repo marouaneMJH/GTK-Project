@@ -170,10 +170,10 @@ static void sig_dialog_warning(GtkWidget *widget, gpointer data)
         g_print("Error: Unable to load image './assets/images/warning_icon.jpeg'\n");
     }
 
-    box2_config.dimensions.width=199;
-    box2_config.dimensions.width=199;
+    box2_config.dimensions.width = 199;
+    box2_config.dimensions.width = 199;
 
-    GtkWidget *box2=create_box(box2_config);
+    GtkWidget *box2 = create_box(box2_config);
 
     gtk_box_pack_start(GTK_BOX(box2), image, FALSE, FALSE, 10);
     gtk_box_pack_start(GTK_BOX(box), box2, FALSE, FALSE, 10);
@@ -202,6 +202,58 @@ static void sig_dialog_warning(GtkWidget *widget, gpointer data)
 
     // Destroy the dialog after response
     gtk_widget_destroy(dialog);
+}
+
+static void sig_show_image(GtkWidget *widget, gpointer data)
+{
+    ParamNode *param_array = (ParamNode *)data;
+    if (!param_array)
+    {
+        g_print("\nError: sig_show_image(), missing parameters.\n");
+        return;
+    }
+
+    // Set up dialog configuration
+    DialogConfig dialog_config = DEFAULT_DIALOG;
+    strcpy(dialog_config.title, param_array->params[1][0] != '\0' ? param_array->params[1] : "Image Viewer");
+
+    // Set up box configuration
+    BoxConfig box_image_config = DEFAULT_BOX;
+    box_image_config.dimensions.height = 300; // Adjusted height
+    box_image_config.dimensions.width = 300;  // Adjusted width
+    box_image_config.halign = GTK_ALIGN_CENTER;
+    box_image_config.valign = GTK_ALIGN_CENTER;
+
+    // Create the box
+    GtkWidget *box = create_box(box_image_config);
+
+    // Set up image configuration
+    ImageConfig image_config = DEFAULT_IMAGE;
+    strcpy(image_config.path, param_array->params[0][0] != '\0' ? param_array->params[0] : "./assets/images/smale/img1.jpg");
+    image_config.dimensions.height = 200; // Adjusted image height
+    image_config.dimensions.width = 200;  // Adjusted image width
+    image_config.opacity = 1.0;           // Full opacity
+
+    // Check if the image file exists
+    if (!g_file_test(image_config.path, G_FILE_TEST_EXISTS))
+    {
+        g_print("Error: Image file '%s' not found.\n", image_config.path);
+        GtkWidget *error_label = gtk_label_new("Image not found.");
+        gtk_box_pack_start(GTK_BOX(box), error_label, TRUE, TRUE, 0);
+    }
+    else
+    {
+        // Create the image widget and add to the box
+        GtkWidget *image_widget = create_image(image_config);
+        gtk_box_pack_start(GTK_BOX(box), image_widget, TRUE, TRUE, 0);
+    }
+
+    // Create the dialog and add the box to its content area
+    GtkWidget *dialog = create_dialog(dialog_config);
+    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box);
+
+    // Show the dialog
+    show_dialog(dialog);
 }
 
 void connect_signales(View *view)
@@ -258,6 +310,9 @@ void connect_signales(View *view)
 
         else if (strcmp(event_name, "sig_dialog_warning") == 0)
             callback_function = sig_dialog_warning;
+
+        else if (strcmp(event_name, "sig_show_image") == 0)
+            callback_function = sig_show_image;
     }
 
     // Connect the callback function
@@ -271,20 +326,3 @@ void connect_signales(View *view)
         else if (view->view_config->on_response[0] != '\0')
             g_signal_connect(G_OBJECT(view->widget), "response", G_CALLBACK(callback_function), NULL);
 }
-
-// Link signals
-// if (view_config->onclick[0] != '\0')
-// {
-//     if (g_strcmp0(view_config->onclick, "click1") == 0)
-//         g_signal_connect(G_OBJECT(button_widget), "clicked", G_CALLBACK(click1), NULL);
-//     else if (g_strcmp0(view_config->onclick, "click2") == 0)
-//         g_signal_connect(G_OBJECT(button_widget), "clicked", G_CALLBACK(click2), NULL);
-// }
-
-// if (view_config->onclick[0] != '\0')
-// {
-//     if (g_strcmp0(view_config->onclick, "menu_onclick") == 0)
-//         g_signal_connect(G_OBJECT(menu_item_widget), "activate", G_CALLBACK(menu_item_onclick), NULL);
-//     else if (g_strcmp0(view_config->onclick, "menu_onclick1") == 0)
-//         g_signal_connect(G_OBJECT(menu_item_widget), "activate", G_CALLBACK(menu_item_onclick), NULL);
-//     }

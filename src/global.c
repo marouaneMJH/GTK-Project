@@ -145,6 +145,33 @@ void widget_set_font_family(GtkWidget *widget, const char *font_family)
     g_object_unref(provider);
 }
 
+void set_header_bar(GtkWidget *window, const gchar *title, const gchar *icon_path)
+{
+    // Create a header bar
+    GtkWidget *header_bar = gtk_header_bar_new();
+    gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(header_bar), TRUE);
+    gtk_header_bar_set_decoration_layout(GTK_HEADER_BAR(header_bar), "menu:minimize,maximize,close");
+
+    // Set the title of the header bar
+    gtk_header_bar_set_title(GTK_HEADER_BAR(header_bar), title);
+
+    // Load the icon from the specified path
+    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(icon_path, NULL);
+    GdkPixbuf *scaled_pixbuf = gdk_pixbuf_scale_simple(pixbuf, 32, 32, GDK_INTERP_BILINEAR);
+
+    // Create a horizontal box to hold the icon and title
+    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+    GtkWidget *icon = gtk_image_new_from_pixbuf(scaled_pixbuf);
+
+    // Add the icon to the box
+    gtk_box_pack_start(GTK_BOX(box), icon, FALSE, FALSE, 0);
+
+    // Add the box to the header bar
+    gtk_header_bar_pack_start(GTK_HEADER_BAR(header_bar), box);
+
+    // Set the header bar as the title bar of the window
+    gtk_window_set_titlebar(GTK_WINDOW(window), header_bar);
+}
 
 // These functions are just for comparing with CSS not for use because the most of them are deprecated
 // void widget_set_text_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)

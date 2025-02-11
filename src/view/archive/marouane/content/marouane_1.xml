@@ -160,6 +160,41 @@
                 
                 </box>
 
+                <box halign="50" >
+                    <label 
+                        label_text=" Vos connaissances de GTK+"
+                    />
+                    <frame 
+                        width="50" >
+                        <box
+                            id="box2"
+                            orientation="horizontal"
+                        >   
+
+                            <radio_button
+                                id="rbtn1"
+                                label="Faible"
+                            />
+
+                            <radio_button
+                                id="rbtn2"
+                                label="Moyen"
+                            />
+
+                            <radio_button
+                                id="rbtn3"
+                                label="Bien"
+                            />
+
+                            <radio_button
+                                id="rbtn4"
+                                label="Tres bien"
+                            />
+
+                        </box>
+                    </frame>
+                
+                </box>
 
                 
                 <box halign="50" >
@@ -202,7 +237,7 @@
                             valign="30"
                             width="20"
                             height="20"
-                            margin_top="20"
+                            margin_top="5"
                     
                     >
                         <combo_text_box 
@@ -217,92 +252,19 @@
 
                             position_x="0"
                             position_y="0"
-                            
-
                         />
+                    
                     </fixed>
                 
                 </box>
 
-                <fixed
                 
-                >
-                    <box
-                        position_x="450"
-                        position_y="350"
-                    >
-                        <label 
-                            label_text=" Vos connaissances de GTK+"
-                        />
-                        <frame 
-                            width="50"
-                            halign="start"
-                        >
-                            <box
-                                id="box2"
-                                orientation="horizontal"
-                            >   
 
-                                <radio_button
-                                    id="rbtn1"
-                                    label="Faible"
-                                />
 
-                                <radio_button
-                                    id="rbtn2"
-                                    label="Moyen"
-                                />
 
-                                <radio_button
-                                    id="rbtn3"
-                                    label="Bien"
-                                />
-
-                                <radio_button
-                                    id="rbtn4"
-                                    label="Tres bien"
-                                />
-
-                            </box>
-                        </frame>
-                    </box>
-                    
-                    <box
-                        orientation="horizontal"
-                        
-                        position_x="550"
-                        position_y="450"
-
-                        
-                        bg_color="green"
-                        halign="start"
-                        valign="start"
-                        width="200"
-                        spacing="50"
-                    >
-                        <button 
-                            label="_OK"
-                            onclick="sig_change_self_bg_color"
-                            width="200"
-                            param_1="red"
-                            param_2="green"
-                        />   
-                        <button 
-                            label="_Ouit"
-                            width="200"
-                            onclick="sig_self_destroy"
-                            param_1="red"
-                            param_2="green"
-                        />   
-                    </box>
-            
-                </fixed>
-
-                
 
             </box>
-        
-        
+
         
         </box>
     </scrolled_window>

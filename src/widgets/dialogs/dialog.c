@@ -140,7 +140,9 @@ GtkWidget *create_dialog(DialogConfig config)
         // "_No", GTK_RESPONSE_NO,
         // "_Cancel", GTK_RESPONSE_CANCEL, 
         NULL);
-        // set_header_bar(dialog, config.title,config.icon_path);
+
+        
+        set_header_bar(dialog, config.title,config.icon_path);
     // Set dimensions
 
     gtk_window_set_default_size(GTK_WINDOW(dialog), config.dimensions.width, config.dimensions.height);

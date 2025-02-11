@@ -1,0 +1,74 @@
+<dialog
+	id="dialog"
+	title="Dialog Title"
+	width="300"
+	height="100"
+	icon_path="assets/images/programer.jpg"
+	icon_name="folder"
+	hint_type="dialog"
+	is_modal="true"
+	on_response="sig_dialog_response"
+	has_header="true"
+	
+>
+
+	<box
+		id="bxS"
+	>
+		
+		<box
+			id="box1"
+			orientation="vertical"
+		>
+			<box
+				orientation="horizontal"
+
+			>
+				<image
+					id="img1"
+					type="pixbuf"
+					path="./assets/images/warning_icon.jpeg"
+					width="30"
+					height="30"
+					margin_right="10"
+				/>
+
+				<label
+					id="label11"
+					label_text="Vous voulez afficher une image?"
+
+				/>
+			</box>
+
+			<box
+				orientation="horizontal"
+				width="200"
+				bg_color="green"
+				halign="start"
+				valign="start"
+				box_expand="true"
+				box_fill="true"
+			>
+				<button 
+					label="_Oui"
+					width="20"
+					onclick="sig_show_image"
+
+				/>
+				<button 
+					label="_Non"
+					onclick="sig_destroy_self"
+					width="200"
+					margin_left="20"
+				/>
+				<button 
+					label="_Anuler"
+					onclick="sig_destroy_self"
+					width="20"
+					margin_left="20"
+				/>
+			</box>
+
+		</box>
+	</box>
+</dialog>

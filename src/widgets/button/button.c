@@ -139,7 +139,7 @@ GtkWidget *create_button(ButtonConfig button_config)
         gtk_widget_set_tooltip_text(button, button_config.tooltip);
 
     // Set dimensions (width and height)
-    if (button_config.dimensions.width > 0 && button_config.dimensions.height > 0)
+    if (button_config.dimensions.width > 0 || button_config.dimensions.height > 0)
         gtk_widget_set_size_request(button, button_config.dimensions.width, button_config.dimensions.height);
 
     // Set expand property

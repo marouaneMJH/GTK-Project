@@ -120,9 +120,6 @@
                                     label="faible     "
 
                                 />
-
-
-
                             </box>
                         </frame>
                     
@@ -192,46 +189,57 @@
                 
                 </box>
 
-
-                <box 
-                    halign="start"
-                    valign="start"
-                    width="400"
-
+                <box
+                    orientation="horizontal" 
                 >
-                    <label 
-                        label_text=" Vos connaissances de GTK+"
-                    />
-                    <frame 
-                        width="50" >
-                        <box
-                            id="box2"
-                            orientation="horizontal"
-                        >   
+                    <box 
+                        halign="start"
+                        valign="start"
+                        margin_buttom="10"
+                        height="50" 
+                        width="50" 
+                    >
+                        <label 
+                            label_text="La qualite de votre ordinateur"
+                        />
+                        <frame 
+                                                            id="box2"
+                                spacing="20"
+                                halign="start"
+                            valign="start"
+                            height="50" 
+                            width="50" 
+                        >
+                            <box
+                                id="box2"
+                                halign="start"
+                            valign="start"
+                            height="50" 
+                            width="50" 
+                            >   
 
-                            <radio_button
-                                id="rbtn1"
-                                label="Faible"
-                            />
+                                <radio_button
+                                    id="rbtn1"
+                                    label="Très bonne"
+                                    
+                                />
 
-                            <radio_button
-                                id="rbtn2"
-                                label="Moyen"
-                            />
+                                <radio_button
+                                    id="rbtn2"
+                                    label="Moyen"
+                                />
 
-                            <radio_button
-                                id="rbtn3"
-                                label="Bien"
-                            />
+                                <radio_button
+                                    id="rbtn3"
+                                    label="faible     "
 
-                            <radio_button
-                                id="rbtn4"
-                                label="Tres bien"
-                            />
+                                />
+                            </box>
+                        </frame>
+                    
+                    </box>
 
-                        </box>
-                    </frame>
-                
+
                 </box>
             </box>
 

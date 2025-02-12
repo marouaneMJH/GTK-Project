@@ -6,6 +6,7 @@
 typedef struct
 {
     gchar params[PARAM_COUNT][MAX_SIGNAL_NAME_SIZE]; // First function parameter
+
 } ParamNode;
 
 static void sig_change_self_bg_color(GtkWidget *widget, gpointer data)
@@ -273,77 +274,76 @@ void connect_signales(View *view)
 
     // Extract the event name once to avoid repetition
     const char *event_name = NULL;
-    if (view->view_config->onclick[0] != '\0')
-    {
-        event_name = view->view_config->onclick;
-    }
-    else if (view->view_config->on_active[0] != '\0')
-    {
-        event_name = view->view_config->on_active;
-    }
-    else if (view->view_config->on_response[0] != '\0')
-    {
-        event_name = view->view_config->on_response;
-    }
-    else if (view->view_config->on_change[0] != '\0')
-    {
-        event_name = view->view_config->on_change;
-    }
+
     // Map event names to their corresponding callback functions
-    if (event_name)
+    if (view->view_config->signal.event_type != SIG_NONE)
     {
-        if (strcmp(event_name, "sig_change_self_bg_color") == 0)
+        if (strcmp(view->view_config->signal.sig_handler, "sig_change_self_bg_color") == 0)
             callback_function = sig_change_self_bg_color;
 
-        else if (strcmp(event_name, "sig_dialog_message") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_dialog_message") == 0)
             callback_function = sig_dialog_message;
 
-        else if (strcmp(event_name, "sig_change_friend_bg_color") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_change_friend_bg_color") == 0)
             callback_function = sig_change_friend_bg_color;
 
-        else if (strcmp(event_name, "sig_change_font_size") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_change_font_size") == 0)
             callback_function = sig_change_font_size;
 
-        else if (strcmp(event_name, "sig_destroy") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_destroy") == 0)
             callback_function = sig_destroy;
 
-        else if (strcmp(event_name, "sig_dialog") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_dialog") == 0)
             callback_function = sig_dialog;
 
-        else if (strcmp(event_name, "sig_dialog_response") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_dialog_response") == 0)
             callback_function = sig_dialog_response;
 
-        else if (strcmp(event_name, "sig_dialog_color") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_dialog_color") == 0)
             callback_function = sig_dialog_color;
 
-        else if (strcmp(event_name, "sig_dialog_font") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_dialog_font") == 0)
             callback_function = sig_dialog_font;
 
-        else if (strcmp(event_name, "sig_self_destroy") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_self_destroy") == 0)
             callback_function = sig_self_destroy;
 
-        else if (strcmp(event_name, "sig_dialog_warning") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_dialog_warning") == 0)
             callback_function = sig_dialog_warning;
 
-        else if (strcmp(event_name, "sig_show_image") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_show_image") == 0)
             callback_function = sig_show_image;
-        
-        else if (strcmp(event_name, "sig_print_content") == 0)
+
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_print_content") == 0)
             callback_function = sig_print_content;
-        else if (strcmp(event_name, "sig_destroy_dialog") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_destroy_dialog") == 0)
             callback_function = sig_destroy_dialog;
     }
 
     // Connect the callback function
     if (callback_function)
-        if (view->view_config->onclick[0] != '\0')
+        if (view->view_config->signal.event_type == SIG_ON_CLICK)
             g_signal_connect(G_OBJECT(view->widget), "clicked", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
 
-        else if (view->view_config->on_active[0] != '\0')
+        else if (view->view_config->signal.event_type == SIG_ON_ACTIVATE)
             g_signal_connect(G_OBJECT(view->widget), "activate", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
 
-        else if (view->view_config->on_response[0] != '\0')
-             g_signal_connect(G_OBJECT(view->widget), "response", G_CALLBACK(callback_function), NULL);
-        else if (view->view_config->on_change[0] != '\0')
+        else if (view->view_config->signal.event_type == SIG_ON_RESPONSE)
+            g_signal_connect(G_OBJECT(view->widget), "response", G_CALLBACK(callback_function), NULL);
+
+        else if (view->view_config->signal.event_type == SIG_ON_CHANGE)
             g_signal_connect(G_OBJECT(view->widget), "changed", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
 }

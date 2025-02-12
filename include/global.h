@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #include "./constants.h"
-
+#include "set_view_config_property.h"
 /* Global macros  */
 
 // check if the pointer is not null
@@ -29,150 +29,89 @@
         }                                       \
     } while (0)
 
-#define MAX_TAG_SIZE 50
-#define MAX_VIEW_ID_SIZE 50
-#define PARAM_COUNT 4
 
-#define SET_VIEW_CONFIG_PROPERTY(property, value, view_config)                      \
-    if (g_strcmp0(property, "position_x") == 0)                                     \
-    {                                                                               \
-        view_config->position_x = atoi(value);                                      \
-    }                                                                               \
-    if (g_strcmp0(property, "position_y") == 0)                                     \
-    {                                                                               \
-        view_config->position_y = atoi(value);                                      \
-    }                                                                               \
-    if (g_strcmp0(property, "pack_direction") == 0)                                 \
-    {                                                                               \
-        view_config->pack_direction = atoi(value);                                  \
-    }                                                                               \
-    if (g_strcmp0(property, "box_expand") == 0)                                     \
-    {                                                                               \
-        view_config->box_expand = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;     \
-    }                                                                               \
-    if (g_strcmp0(property, "box_fill") == 0)                                       \
-    {                                                                               \
-        view_config->box_fill = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;       \
-    }                                                                               \
-    if (g_strcmp0(property, "tab_label") == 0)                                      \
-    {                                                                               \
-        g_strlcpy(view_config->tab_label, value, MAX_LABEL_SIZE);                   \
-    }                                                                               \
-    if (g_strcmp0(property, "box_padding") == 0)                                    \
-    {                                                                               \
-        view_config->box_padding = atoi(value);                                     \
-    }                                                                               \
-    if (g_strcmp0(property, "flow_box_order") == 0)                                 \
-    {                                                                               \
-        view_config->flow_box_order = atoi(value);                                  \
-    }                                                                               \
-    if (g_strcmp0(property, "paned_order") == 0)                                    \
-    {                                                                               \
-        view_config->paned_order = atoi(value);                                     \
-    }                                                                               \
-    if (g_strcmp0(property, "is_reorderable") == 0)                                 \
-    {                                                                               \
-        view_config->is_reorderable = g_strcmp0(value, "true") == 0 ? TRUE : FALSE; \
-    }                                                                               \
-    if (g_strcmp0(property, "row") == 0)                                            \
-    {                                                                               \
-        view_config->row = atoi(value);                                             \
-    }                                                                               \
-    if (g_strcmp0(property, "column") == 0)                                         \
-    {                                                                               \
-        view_config->column = atoi(value);                                          \
-    }                                                                               \
-    if (g_strcmp0(property, "row_span") == 0)                                       \
-    {                                                                               \
-        view_config->row_span = atoi(value);                                        \
-    }                                                                               \
-    if (g_strcmp0(property, "column_span") == 0)                                    \
-    {                                                                               \
-        view_config->column_span = atoi(value);                                     \
-    }                                                                               \
-    if (g_strcmp0(property, "onclick") == 0)                                        \
-    {                                                                               \
-        g_strlcpy(view_config->onclick, value, MAX_SIGNAL_NAME_SIZE);               \
-    }                                                                               \
-    if (g_strcmp0(property, "on_active") == 0)                                      \
-    {                                                                               \
-        g_strlcpy(view_config->on_active, value, MAX_SIGNAL_NAME_SIZE);             \
-    }                                                                               \
-    if (g_strcmp0(property, "on_response") == 0)                                    \
-    {                                                                               \
-        g_strlcpy(view_config->on_response, value, MAX_SIGNAL_NAME_SIZE);           \
-    }                                                                               \
-    if (g_strcmp0(property, "on_change") == 0)                                      \
-    {                                                                               \
-        g_strlcpy(view_config->on_change, value, MAX_SIGNAL_NAME_SIZE);             \
-    }                                                                               \
-    if (g_strcmp0(property, "param_1") == 0)                                        \
-    {                                                                               \
-        g_strlcpy(view_config->param[0], value, MAX_SIGNAL_NAME_SIZE);              \
-    }                                                                               \
-    if (g_strcmp0(property, "param_2") == 0)                                        \
-    {                                                                               \
-        g_print("r\n\nead param_2:%s", value);                                      \
-        g_strlcpy(view_config->param[1], value, MAX_SIGNAL_NAME_SIZE);              \
-    }                                                                               \
-    if (g_strcmp0(property, "param_3") == 0)                                        \
-    {                                                                               \
-        g_strlcpy(view_config->param[2], value, MAX_SIGNAL_NAME_SIZE);              \
-    }                                                                               \
-    if (g_strcmp0(property, "param_4") == 0)                                        \
-    {                                                                               \
-        g_strlcpy(view_config->param[3], value, MAX_SIGNAL_NAME_SIZE);              \
-    }                                                                               \
-    if (g_strcmp0(property, "menu_orientation") == 0)                               \
-    {                                                                               \
-        g_strlcpy(view_config->menu_orientation, value, MAX_SIGNAL_NAME_SIZE);      \
-    }                                                                               \
-    if (g_strcmp0(property, "menu_top") == 0)                                       \
-    {                                                                               \
-        view_config->menu_top = atoi(value);                                        \
-    }                                                                               \
-    if (g_strcmp0(property, "menu_bottom") == 0)                                    \
-    {                                                                               \
-        view_config->menu_bottom = atoi(value);                                     \
-    }                                                                               \
-    if (g_strcmp0(property, "menu_left") == 0)                                      \
-    {                                                                               \
-        view_config->menu_left = atoi(value);                                       \
-    }                                                                               \
-    if (g_strcmp0(property, "menu_right") == 0)                                     \
-    {                                                                               \
-        view_config->menu_right = atoi(value);                                      \
-    }
 
-#define DFEAULT_VIEW_CONFIG(view_config)                                    \
-    do                                                                      \
-    {                                                                       \
-        view_config->position_x = 0;                                        \
-        view_config->position_y = 0;                                        \
-        view_config->pack_direction = 1;                                    \
-        view_config->box_expand = FALSE;                                    \
-        view_config->box_fill = FALSE;                                      \
-        view_config->box_padding = 0;                                       \
-        view_config->group = NULL;                                          \
-        view_config->view_id[0] = '\0';                                     \
-        view_config->tab_label[0] = '\0';                                   \
-        view_config->is_reorderable = TRUE;                                 \
-        view_config->row = 0;                                               \
-        view_config->column = 0;                                            \
-        view_config->row_span = 1;                                          \
-        view_config->column_span = 1;                                       \
-        view_config->onclick[0] = '\0';                                     \
-        view_config->on_active[0] = '\0';                                   \
-        view_config->on_response[0] = '\0';                                 \
-        view_config->on_change[0] = '\0';                                   \
-        strcpy(view_config->menu_orientation, "vertical");                  \
-        view_config->menu_top = 0;                                          \
-        view_config->menu_bottom = 1;                                       \
-        view_config->menu_left = 0;                                         \
-        view_config->menu_right = 0;                                        \
-        for (int i = 0; i < PARAM_COUNT; view_config->param[i++][0] = '\0') \
-            ;                                                               \
-    } while (0);
+
+
+
+    
+/**
+ * @brief Most commonly used GTK3 signals
+ *
+ * This enum defines the most frequently used signals in GTK3 applications.
+ * It is used to identify which signals are connected to the current widget.
+ * Each signal corresponds to a specific event, such as a button click, text change,
+ * or window close request. These signals help in managing user interactions
+ * and widget behavior within the application.
+ *
+ * Usage:
+ * - Use this enum to reference signals in a more readable and organized way.
+ * - Combine with a signal mapping function to dynamically connect signals.
+ * - Used in SignalConfig to know whitch signale the widget use
+ *
+ * Example:
+ * SignalType signal = SIG_ON_CLICK;
+ * g_signal_connect(widget, get_signal_name(signal), G_CALLBACK(callback_function), NULL);
+ */
+typedef enum
+{
+    SIG_NONE, // No signal
+
+    SIG_ON_CLICK,             // Triggered when a button is clicked.
+    SIG_ON_TOGGLE,            // Triggered when a toggleable widget changes state.
+    SIG_ON_CHANGE,            // Triggered when content changes.
+    SIG_ON_ACTIVATE,          // Triggered when Enter is pressed inside a widget.
+    SIG_ON_DELETE_EVENT,      // Triggered when a window is requested to close.
+    SIG_ON_DESTROY,           // Triggered when a widget is destroyed.
+    SIG_ON_VALUE_CHANGED,     // Triggered when a value changes (e.g., slider moves).
+    SIG_ON_ROW_ACTIVATED,     // Triggered when a row is double-clicked or activated.
+    SIG_ON_KEY_PRESS,         // Triggered when a key is pressed while widget has focus.
+    SIG_ON_KEY_RELEASE,       // Triggered when a key is released.
+    SIG_ON_BUTTON_PRESS,      // Triggered when a mouse button is pressed.
+    SIG_ON_BUTTON_RELEASE,    // Triggered when a mouse button is released.
+    SIG_ON_MOTION_NOTIFY,     // Triggered when the mouse moves over a widget.
+    SIG_ON_FOCUS_IN,          // Triggered when a widget gains focus.
+    SIG_ON_FOCUS_OUT,         // Triggered when a widget loses focus.
+    SIG_ON_SWITCH_PAGE,       // Triggered when switching tabs in a notebook.
+    SIG_ON_SELECTION_CHANGED, // Triggered when selection changes in views (e.g., GtkTreeView).
+    SIG_ON_POPUP_MENU,        // Triggered when a context menu is requested (right-click).
+    SIG_ON_SCROLL,            // Triggered when the scroll wheel is used.
+    SIG_ON_ENTER_NOTIFY,      // Triggered when the mouse enters a widget's area.
+    SIG_ON_LEAVE_NOTIFY,      // Triggered when the mouse leaves a widget's area.
+    SIG_ON_RESPONSE,
+
+    SIG_LAST // Placeholder for the last signal
+} SignalType;
+
+/**
+ * @brief Signal and its handler configuration
+ *
+ * This struct defines a mapping between a GTK signal and its corresponding handler function.
+ * It is useful for managing multiple signals in a structured way, making it easier to
+ * dynamically connect signals to their respective widgets in a GTK application.
+ *
+ * Fields:
+ * - `sig_handler`: A string representing the name of the handler function that will be
+ *    called when the signal is emitted.
+ * - `event_name`: An enumeration value of type `SignalType` that specifies the signal type.
+ *
+ * Example usage:
+ * @code
+ * - XML
+ *      on_click="sig_function"
+ * - C
+ * SignalConfig config = {
+ *     .sig_handler = "sig_function",
+ *     .event_name = SIG_ON_CLICK
+ * };
+
+ * @endcode
+ */
+typedef struct
+{
+    gchar sig_handler[MAX_SIGNAL_NAME_SIZE];
+    SignalType event_type;
+} SignalConfig;
 
 typedef struct
 {
@@ -210,10 +149,14 @@ typedef struct
     gint column_span;
 
     // Signals
+    // todo to delete it
     gchar onclick[MAX_SIGNAL_NAME_SIZE];     // Path to the icon image file
     gchar on_active[MAX_SIGNAL_NAME_SIZE];   // Path to the icon image file
     gchar on_response[MAX_SIGNAL_NAME_SIZE]; // Path to the icon image file
     gchar on_change[MAX_SIGNAL_NAME_SIZE];
+
+    SignalConfig signal; // the signale name and handler
+
     // Params of Signals
     gchar param[PARAM_COUNT][MAX_SIGNAL_NAME_SIZE]; // First function parameter
 

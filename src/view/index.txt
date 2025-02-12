@@ -118,7 +118,6 @@
                                 <radio_button
                                     id="rbtn3"
                                     label="faible     "
-
                                 />
                             </box>
                         </frame>
@@ -171,7 +170,7 @@
                                         
                                 valign="start"
                                 halign="start"
-                         >
+                        >
                             <box
                                 id="box2"
                                 orientation="horizontal"
@@ -278,7 +277,7 @@
                     <button 
                         label="_Ok"
                         width="150"
-                        onclick="sig_dialog"
+                        on_click="sig_dialog"
                     />
                     <button 
                         label="_Quiter"

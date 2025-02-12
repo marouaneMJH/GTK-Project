@@ -2,6 +2,7 @@
 #define INDEX_H
 
 #include "./global.h"
+#include "./set_view_config_property.h"
 
 // Widget
 

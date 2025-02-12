@@ -2,8 +2,8 @@
 #define BUILDER_H
 
 #include "./index.h"
-#define INDEX_TXT "./src/view/index.txt"
-#define DIALOG_TXT "./src/view/dialog.txt"
+#define INDEX_TXT "./src/view/index.xml"
+#define DIALOG_TXT "./src/view/dialog.xml"
 #define MODE "r"
 
 typedef enum

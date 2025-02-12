@@ -9,13 +9,15 @@
 #define MAX_ICON_NAME_SIZE 50
 #define MAX_URI_SIZE 256
 #define MAX_PROPERTY_SIZE 50
+// The maximum size of the xml tag value, it's big cuz of multi line paragraph  
 #define MAX_VALUE_SIZE 1024
 #define MAX_ICON_PATH_SIZE 50
+// The maximum size of the signale function handler name (string)
 #define MAX_SIGNAL_NAME_SIZE 100
 
 #define MAX_TAG_SIZE 50
 #define MAX_VIEW_ID_SIZE 50
-#define PARAM_COUNT 4 // the maximum parameter can signal function have
+#define PARAM_COUNT 4 // The maximum parameter can signal function have
 
 
 #define MAX_LABEL_SIZE 100

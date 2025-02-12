@@ -243,6 +243,20 @@
                 </box>
             </box>
 
+
+            <fixed
+
+            >
+                <box
+                position_x="150"
+                position_y="150"
+                >
+                    <button 
+                        label_text="Ok"
+                    />
+                </box>
+            </fixed>
+
         
         </box>
     </scrolled_window>

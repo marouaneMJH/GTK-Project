@@ -86,77 +86,106 @@
                     width="500"
                     spacing="20"
             >
-                <box 
-                    margin_buttom="10"
-                    width="50" >
-                    <label 
-                        label_text=" Vos connaissances de GTK+"
-                    />
-                    <frame 
-                        width="50" >
-                        <box
-                            id="box2"
-                            orientation="horizontal"
-                        >   
-
-                            <radio_button
-                                id="rbtn1"
-                                label="Faible"
-                            />
-
-                            <radio_button
-                                id="rbtn2"
-                                label="Moyen"
-                            />
-
-                            <radio_button
-                                id="rbtn3"
-                                label="Bien"
-                            />
-
-                            <radio_button
-                                id="rbtn4"
-                                label="Tres bien"
-                            />
-
-                        </box>
-                    </frame>
-                
-                </box>
-
-
                 <box
-                    width="50"
-                    margin_buttom="10"
+                    orientation="horizontal" 
+                    spacing="20"
                 >
+                    <box 
+                        margin_buttom="10"
+                        width="50" >
                         <label 
-                            label_text=" Vos connaissances de GTK+"
+                            label_text="La qualite de votre ordinateur"
                         />
                         <frame 
                             width="50" >
                             <box
                                 id="box2"
                                 orientation="horizontal"
+                                spacing="20"
                             >   
 
-                                <check_button
+                                <radio_button
                                     id="rbtn1"
-                                    label="Faible"
+                                    label="Très bonne"
+                                    
                                 />
 
-                                <check_button
+                                <radio_button
                                     id="rbtn2"
                                     label="Moyen"
                                 />
 
+                                <radio_button
+                                    id="rbtn3"
+                                    label="faible     "
+
+                                />
+
+
+
+                            </box>
+                        </frame>
+                    
+                    </box>
+
+                    <box
+
+                    >
+                        <label 
+                            label_text="Liste déroulante"
+                        />
+                        <combo_text_box 
+                            has_entry="true"
+                            option1="   HP"
+                            option2="   DELL"
+                            option3="   ASSUS"
+                            option4="   ACER"
+                            is_editable="false"
+
+                            default_value="Choix de la marque"
+                        />
+
+                    </box>
+                </box>
+
+                <box
+                    id="checks_"
+                    width="50"
+                    margin_buttom="10"
+                >
+                        <label 
+                            label_text=" Son ergonomie"
+                        />
+                        <frame 
+                            width="50" >
+                            <box
+                                id="box2"
+                                orientation="horizontal"
+            
+                                valign="start"
+                                halign="start"
+                                width="50"
+
+                            >   
+
+                                <check_button
+                                    id="rbtn1"
+                                    label="Convivial"
+                                />
+
+                                <check_button
+                                    id="rbtn2"
+                                    label="Intéressant"
+                                />
+
                                 <check_button
                                     id="rbtn3"
-                                    label="Bien"
+                                    label="Facile à utilser "
                                 />
 
                                 <check_button
                                     id="rbtn4"
-                                    label="Tres bien"
+                                    label="Optimuse le Travail"
                                 />
                         </box>
                     </frame>

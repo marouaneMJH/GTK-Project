@@ -10,6 +10,7 @@
 >
 
     <scrolled_window
+    on_key_press="sig_key_press"
         id="sw1"
     >
         <box

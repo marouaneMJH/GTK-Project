@@ -1,75 +1,79 @@
 #pragma once
-#define SET_SIGNAL_PROPERTY                                                          \
-    if (g_strcmp0(property, "on_click") == 0)                                        \
-    {                                                                                \
-        view_config->signal.event_type = SIG_ON_CLICK;                               \
-        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE);     \
-    }                                                                                \
-    else if (g_strcmp0(property, "on_toggle") == 0)                                  \
-    {                                                                                \
-        view_config->signal.event_type = SIG_ON_TOGGLE;                              \
-        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE);     \
-    }                                                                                \
-    else if (g_strcmp0(property, "on_change") == 0)                                  \
-    {                                                                                \
-        view_config->signal.event_type = SIG_ON_CHANGE;                              \
-        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE);     \
-    }                                                                                \
-    else if (g_strcmp0(property, "on_activate") == 0)                                \
-    {                                                                                \
-        view_config->signal.event_type = SIG_ON_ACTIVATE;                            \
-        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE);     \
-    }                                                                                \
-    else if (g_strcmp0(property, "on_delete_event") == 0)                            \
-    {                                                                                \
-        view_config->signal.event_type = SIG_ON_DELETE_EVENT;                        \
-        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE);     \
-    }                                                                                \
-    else if (g_strcmp0(property, "on_destroy") == 0)                                 \
-    {                                                                                \
-        view_config->signal.event_type = SIG_ON_DESTROY;                             \
-        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE);     \
-    }                                                                                \
-    else if (g_strcmp0(property, "on_value_changed") == 0)                           \
-    {                                                                                \
-        view_config->signal.event_type = SIG_ON_VALUE_CHANGED;                       \
-        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE);     \
-    }                                                                                \
-    else if (g_strcmp0(property, "on_row_activated") == 0)                           \
-    {                                                                                \
-        view_config->signal.event_type = SIG_ON_ROW_ACTIVATED;                       \
-        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE);     \
-    }                                                                                \
-    else if (g_strcmp0(property, "on_key_press") == 0)                               \
-    {                                                                                \
-        view_config->signal.event_type = SIG_ON_KEY_PRESS;                           \
-        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE);     \
-    }                                                                                \
-    else if (g_strcmp0(property, "on_button_press") == 0)                            \
-    {                                                                                \
-        view_config->signal.event_type = SIG_ON_BUTTON_PRESS;                        \
-        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE);     \
-    }                                                                                \
-    else if (g_strcmp0(property, "on_focus_in") == 0)                                \
-    {                                                                                \
-        view_config->signal.event_type = SIG_ON_FOCUS_IN;                            \
-        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE);     \
-    }                                                                                \
-    else if (g_strcmp0(property, "on_selection_changed") == 0)                       \
-    {                                                                                \
-        view_config->signal.event_type = SIG_ON_SELECTION_CHANGED;                   \
-        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE);     \
-    }                                                                                \
-    else if (g_strcmp0(property, "on_popup_menu") == 0)                              \
-    {                                                                                \
-        view_config->signal.event_type = SIG_ON_POPUP_MENU;                          \
-        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE);     \
-    }                                                                                \
-    else if (g_strcmp0(property, "on_response") == 0)                                \
-    {                                                                                \
-        view_config->signal.event_type = SIG_ON_RESPONSE                             \
-            g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+#define SET_SIGNAL_PROPERTY                                                      \
+    if (g_strcmp0(property, "on_click") == 0)                                    \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_CLICK;                           \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+    }                                                                            \
+    else if (g_strcmp0(property, "on_toggle") == 0)                              \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_TOGGLE;                          \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+    }                                                                            \
+    else if (g_strcmp0(property, "on_change") == 0)                              \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_CHANGE;                          \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+    }                                                                            \
+    else if (g_strcmp0(property, "on_activate") == 0)                            \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_ACTIVATE;                        \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+    }                                                                            \
+    else if (g_strcmp0(property, "on_delete_event") == 0)                        \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_DELETE_EVENT;                    \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+    }                                                                            \
+    else if (g_strcmp0(property, "on_destroy") == 0)                             \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_DESTROY;                         \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+    }                                                                            \
+    else if (g_strcmp0(property, "on_value_changed") == 0)                       \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_VALUE_CHANGED;                   \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+    }                                                                            \
+    else if (g_strcmp0(property, "on_row_activated") == 0)                       \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_ROW_ACTIVATED;                   \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+    }                                                                            \
+    else if (g_strcmp0(property, "on_key_press") == 0)                           \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_KEY_PRESS;                       \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+    }                                                                            \
+    else if (g_strcmp0(property, "on_button_press") == 0)                        \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_BUTTON_PRESS;                    \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+    }                                                                            \
+    else if (g_strcmp0(property, "on_focus_in") == 0)                            \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_FOCUS_IN;                        \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+    }                                                                            \
+    else if (g_strcmp0(property, "on_selection_changed") == 0)                   \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_SELECTION_CHANGED;               \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+    }                                                                            \
+    else if (g_strcmp0(property, "on_popup_menu") == 0)                          \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_POPUP_MENU;                      \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+    }                                                                            \
+    else if (g_strcmp0(property, "on_response") == 0)                            \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_RESPONSE;                        \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
     }
+
+
+
+
 
 #define SET_VIEW_CONFIG_PROPERTY(property, value, view_config)                      \
     if (g_strcmp0(property, "position_x") == 0)                                     \
@@ -167,6 +171,8 @@
         view_config->menu_right = atoi(value);                                      \
     }
 
+
+    
 #define DFEAULT_VIEW_CONFIG(view_config)                                    \
     do                                                                      \
     {                                                                       \

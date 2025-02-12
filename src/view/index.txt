@@ -126,21 +126,34 @@
                     </box>
 
                     <box
-
+                        valign="start"
+                        halign="start"
+                        width="400"
+                        height="1"
                     >
                         <label 
                             label_text="Liste déroulante"
+                            margin_top="20"
                         />
-                        <combo_text_box 
+
+                        <fixed  
+                        
+                        >
+                            <combo_text_box 
                             has_entry="true"
-                            option1="   HP"
-                            option2="   DELL"
-                            option3="   ASSUS"
-                            option4="   ACER"
+                            option1="          HP             "
+                            option2="          DELL"
+                            option3="          ASSUS"
+                            option4="          ACER"
                             is_editable="false"
-                            width="1000"
+                            width="200"
+                            height="1"
                             default_value="Choix de la marque"
                         />
+                        
+                        
+                        </fixed>
+
 
                     </box>
                 </box>
@@ -154,7 +167,11 @@
                             label_text=" Son ergonomie"
                         />
                         <frame 
-                            width="50" >
+                            width="50"
+                                        
+                                valign="start"
+                                halign="start"
+                         >
                             <box
                                 id="box2"
                                 orientation="horizontal"
@@ -182,7 +199,7 @@
 
                                 <check_button
                                     id="rbtn4"
-                                    label="Optimuse le Travail"
+                                    label="Optimise le Travail"
                                 />
                         </box>
                     </frame>

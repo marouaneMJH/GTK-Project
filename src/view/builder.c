@@ -20,7 +20,7 @@ View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
     view->view_config = view_config;
     view->widget = widget;
 
-    /* Connect to a si */
+    /* Connect to the view widget if existe */
     connect_signales(view);
 
     return view;

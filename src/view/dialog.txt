@@ -22,19 +22,22 @@
 		>
 			<box
 				orientation="horizontal"
-
+				halign="start"
+				valign="start"
+				height="200"
+				spacing="10"
+				
 			>
-				<image
-					id="img1"
-					type="pixbuf"
-					path="./assets/images/warning_icon.jpeg"
-					width="30"
-					height="30"
-					margin_right="10"
-				/>
 
+					<image
+						id="img1"
+						path="./assets/images/warning_icon.jpeg"
+						
+					/>
+				
 				<label
 					id="label11"
+					margin_top="90"
 					label_text="Vous voulez afficher une image?"
 
 				/>
@@ -42,11 +45,10 @@
 
 			<box
 				orientation="horizontal"
-				width="200"
-				halign="start"
-				valign="start"
 				box_expand="true"
 				box_fill="true"
+				bg_color="lightgrey"
+				spacing="30"
 			>
 				<button 
 					label="_Oui"
@@ -58,13 +60,13 @@
 					label="_Non"
 					onclick="sig_destroy_dialog"
 					width="90"
-					margin_left="20"
+					
 				/>
 				<button 
 					label="_Anuler"
-					onclick="sig_self_destroy_"
+					onclick="sig_self_destroy"
 					width="90"
-					margin_left="20"
+					
 				/>
 			</box>
 

@@ -86,7 +86,9 @@
                 id="conent_box"
                 margin_top="10"
                 margin_left="20"
-                width="50"
+                    valign="start"
+                    halign="start"
+                    width="500"
             >
                 <box width="50" >
                     <label 
@@ -160,49 +162,13 @@
                 
                 </box>
 
-                <box halign="50" >
-                    <label 
-                        label_text=" Vos connaissances de GTK+"
-                    />
-                    <frame 
-                        width="50" >
-                        <box
-                            id="box2"
-                            orientation="horizontal"
-                        >   
-
-                            <radio_button
-                                id="rbtn1"
-                                label="Faible"
-                            />
-
-                            <radio_button
-                                id="rbtn2"
-                                label="Moyen"
-                            />
-
-                            <radio_button
-                                id="rbtn3"
-                                label="Bien"
-                            />
-
-                            <radio_button
-                                id="rbtn4"
-                                label="Tres bien"
-                            />
-
-                        </box>
-                    </frame>
-                
-                </box>
 
                 
                 <box 
                     halign="50"
                     valign="50"
                     width="500"
-                    height="500"
-
+                    height="200"
                 >
                     <label 
                         label_text="Choix un date"
@@ -214,12 +180,18 @@
                             id="box2"
                             orientation="horizontal"
                         >   
-
+                            <label 
+                                label_text="Jour"
+                            />
                             <combo_text_box
                                 type="day"
                                 has_entry="true"
                                 is_editable="false"
                                 default_value="1"
+                            />
+                            <label 
+                                label_text="Moi"
+                                margin_start="20"
                             />
 
                             <combo_text_box
@@ -227,6 +199,11 @@
                                 has_entry="true"
                                 is_editable="false"
                                 default_value="0"
+                            />
+
+                            <label 
+                                label_text="Annee"
+                                margin_start="200"
                             />
 
                             <combo_text_box
@@ -261,19 +238,79 @@
                         />
 
                     </fixed>
-                
-                
+
                 </box>
 
 
-                <entry 
-                    placeholder_text="name"
-                    on_change="sig_print_content"
-                />
-                
+                <fixed 
+                id="id"
+                margin_top="0"
+                >
+
+                    <box 
+                    bg_color="red"
+                        halign="start"
+                        valign="start"
+                        position_x="350"
+                        position_y="50"
+                    >
+                        <label 
+                            label_text=" Vos connaissances de GTK+"
+                        />
+                        <frame 
+                            width="50" >
+                            <box
+                                id="box2"
+                                orientation="horizontal"
+                            >   
+
+                                <radio_button
+                                    id="rbtn1"
+                                    label="Faible"
+                                />
+
+                                <radio_button
+                                    id="rbtn2"
+                                    label="Moyen"
+                                />
+
+                                <radio_button
+                                    id="rbtn3"
+                                    label="Bien"
+                                />
+
+                                <radio_button
+                                    id="rbtn4"
+                                    label="Tres bien"
+                                />
+
+                            </box>
+                        </frame>
+                    
+                    </box>
 
 
+                    <box
+                        spacing="10"
+                        orientation="horizontal"
+                        valign="start"
+                        halign="start"
+                        position_x="10"
+                        position_y="10"
+                    >
+                        <button 
+                            label="_Ok"
+                            onclick="sig_dialog"
+                        />
+                    
+                        <button 
+                            label="_Quit"
+                            onclick="sig_destroy"
+                        />
+                    
+                    </box>
 
+                </fixed>
 
             </box>
 

@@ -262,6 +262,11 @@ void sig_print_content(GtkWidget *widget, gpointer data)
     g_print("Content: %s\n", gtk_entry_get_text(GTK_ENTRY(widget)));
 }
 
+static void sig_destroy_dialog(GtkWidget *widget, gpointer data)
+{
+    gtk_widget_destroy(root_dialog_view_global->widget);
+}
+
 void connect_signales(View *view)
 {
     void *callback_function = NULL;
@@ -325,6 +330,8 @@ void connect_signales(View *view)
         
         else if (strcmp(event_name, "sig_print_content") == 0)
             callback_function = sig_print_content;
+        else if (strcmp(event_name, "sig_destroy_dialog") == 0)
+            callback_function = sig_destroy_dialog;
     }
 
     // Connect the callback function

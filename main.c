@@ -67,6 +67,7 @@ gboolean clicked1 = FALSE;
 // Activate callback for GtkApplication
 static void activate(GtkApplication *app, gpointer user_data)
 {
+    root_app = app;
     // Create a new window
 
    View *root_view = build_app(app, root_view, INDEX_TXT);

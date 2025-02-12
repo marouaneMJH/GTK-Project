@@ -1,0 +1,326 @@
+<window
+    id="win1"
+    width="900"
+    height="900"
+    title="GTK controle"
+    icon_name="folder"
+    icon_path="assets\images\paint.png"
+    has_header="true"
+    
+>
+
+    <scrolled_window
+        id="sw1"
+    >
+        <box
+            id="box1"
+        >
+            <menu_bar >
+                <menu_item 
+                    label="_MonChoix"
+                />
+                <menu_item 
+                    label="VonChoix"
+                >
+                    <menu
+                        
+                    >
+                    <menu_item 
+                        label="Sous Choix1"
+                    />
+                    <menu_item 
+                        label="Sous Choix2"
+                    >
+                        <menu
+                            id="menu33"
+                            menu_orientation="horizontal"
+
+                        >
+                            <menu_item
+                                id="menu_item3"
+                                label="_LeurChoix1"
+                                menu_left="0"
+                                menu_right="1"
+                            />
+                            <menu_item
+                                id="menu_item3"
+                                label="_LeurChoix2"
+                                menu_left="1"
+                                menu_right="2"
+                            />
+                            <menu_item
+                                id="menu_item3"
+                                label="_LeurChoix3"
+                                menu_left="2"
+                                menu_right="3"
+                                on_active="sig_change_self_bg_color"
+                                param_1="red"
+                                param_2="red"
+                            />
+                            <menu_item
+                                id="menu_item3"
+                                label="_LeurChoix4"
+                                menu_left="3"
+                                menu_right="4"
+                            />
+
+                        </menu>
+                    </menu_item>
+                    <menu_item 
+                        label="Sous Choix3"
+                    />
+                    </menu>
+                
+                </menu_item>
+
+
+                <menu_item 
+                    label="LeurChoix"
+                />
+            
+            
+            </menu_bar>
+
+
+            <box
+                id="conent_box"
+                margin_top="40"
+                margin_left="20"
+                    valign="start"
+                    halign="start"
+                    width="500"
+                    spacing="20"
+            >
+                <box 
+                    margin_buttom="10"
+                    width="50" >
+                    <label 
+                        label_text=" Vos connaissances de GTK+"
+                    />
+                    <frame 
+                        width="50" >
+                        <box
+                            id="box2"
+                            orientation="horizontal"
+                        >   
+
+                            <radio_button
+                                id="rbtn1"
+                                label="Faible"
+                            />
+
+                            <radio_button
+                                id="rbtn2"
+                                label="Moyen"
+                            />
+
+                            <radio_button
+                                id="rbtn3"
+                                label="Bien"
+                            />
+
+                            <radio_button
+                                id="rbtn4"
+                                label="Tres bien"
+                            />
+
+                        </box>
+                    </frame>
+                
+                </box>
+
+
+                <box
+                    width="50"
+                    margin_buttom="10"
+                >
+                        <label 
+                            label_text=" Vos connaissances de GTK+"
+                        />
+                        <frame 
+                            width="50" >
+                            <box
+                                id="box2"
+                                orientation="horizontal"
+                            >   
+
+                                <check_button
+                                    id="rbtn1"
+                                    label="Faible"
+                                />
+
+                                <check_button
+                                    id="rbtn2"
+                                    label="Moyen"
+                                />
+
+                                <check_button
+                                    id="rbtn3"
+                                    label="Bien"
+                                />
+
+                                <check_button
+                                    id="rbtn4"
+                                    label="Tres bien"
+                                />
+                        </box>
+                    </frame>
+                
+                </box>
+
+
+                
+                <box 
+                    halign="50"
+                    valign="50"
+                    width="500"
+                    height="200"
+                    margin_buttom="10"
+                >
+                    <label 
+                        label_text="Choix un date"
+                    />
+                    <frame 
+                        width="50"
+                    >
+                        <box
+                            id="box2"
+                            orientation="horizontal"
+                        >   
+                            <label 
+                                label_text="Jour"
+                            />
+                            <combo_text_box
+                                type="day"
+                                has_entry="true"
+                                is_editable="false"
+                                default_value="1"
+                            />
+                            <label 
+                                label_text="Moi"
+                                margin_start="20"
+                            />
+
+                            <combo_text_box
+                                type="month"
+                                has_entry="true"
+                                is_editable="false"
+                                default_value="0"
+                            />
+
+                            <label 
+                                label_text="Annee"
+                                margin_start="20"
+                            />
+
+                            <combo_text_box
+                                type="year"
+                                has_entry="true"
+                                is_editable="false"
+                                default_value="0"
+                            />
+                        </box>
+                    </frame>
+
+                    <fixed 
+                            halign="30"
+                            valign="30"
+                            width="20"
+                            height="20"
+                            margin_top="5"
+                    
+                    >
+                        <combo_text_box 
+                            has_entry="true"
+                            is_editable="false"
+                            default_value="Fair un choix"
+                            default_index="0"
+
+                            option1="option1"
+                            option2="option2"
+                            option3="option3"
+
+                            position_x="0"
+                            position_y="0"
+                        />
+
+                    </fixed>
+
+                </box>
+
+
+                <fixed 
+                id="id"
+                >
+
+                    <box 
+                        halign="start"
+                        valign="start"
+                        width="400"
+                        position_x="350"
+                        position_y="250"
+                    >
+                        <label 
+                            label_text=" Vos connaissances de GTK+"
+                        />
+                        <frame 
+                            width="50" >
+                            <box
+                                id="box2"
+                                orientation="horizontal"
+                            >   
+
+                                <radio_button
+                                    id="rbtn1"
+                                    label="Faible"
+                                />
+
+                                <radio_button
+                                    id="rbtn2"
+                                    label="Moyen"
+                                />
+
+                                <radio_button
+                                    id="rbtn3"
+                                    label="Bien"
+                                />
+
+                                <radio_button
+                                    id="rbtn4"
+                                    label="Tres bien"
+                                />
+
+                            </box>
+                        </frame>
+                    
+                    </box>
+
+
+                    <box
+                        spacing="10"
+                        orientation="horizontal"
+                        valign="start"
+                        halign="start"
+                         position_x="350"
+                        position_y="350"
+                    >
+                        <button 
+                            label="_Ok"
+                            onclick="sig_dialog"
+                        />
+                    
+                        <button 
+                            label="_Quit"
+                            onclick="sig_destroy"
+                        />
+                    
+                    </box>
+
+                </fixed>
+
+            </box>
+
+        
+        </box>
+    </scrolled_window>
+</window>

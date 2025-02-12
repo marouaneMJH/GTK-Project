@@ -108,6 +108,8 @@ ViewConfig *configure_window_property(WindowConfig *window_config, ViewConfig *v
         else if (g_strcmp0(value, "desktop") == 0)
             window_config->hint_type = GDK_WINDOW_TYPE_HINT_DESKTOP;
     }
+    if (g_strcmp0(property, "has_header") == 0)
+        window_config->has_header = strcmp(value, "true") == 0;
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
@@ -163,7 +165,7 @@ ViewConfig *init_window_config(FILE *index, WindowConfig *window_config)
                 else
                 {
                     // Apply the property value to the window config
-                    int config_status ;
+                    int config_status;
                     view_config = configure_window_property(window_config, view_config, property, value, &config_status);
                     if (config_status == 0)
                     {
@@ -187,14 +189,13 @@ GtkWidget *create_window(GtkApplication *app, WindowConfig window_config)
     GtkWindow *window;
     window = GTK_WINDOW(gtk_application_window_new(app));
 
-
     gtk_window_set_title(window, window_config.title);
     gtk_window_set_default_size(window, window_config.dimensions.width, window_config.dimensions.height);
     gtk_window_set_resizable(window, window_config.is_resizable);
     gtk_window_set_position(window, window_config.position);
     window_config.is_fullscreen ? gtk_window_fullscreen(window) : gtk_window_unfullscreen(window);
     window_config.is_maximized ? gtk_window_maximize(window) : gtk_window_unmaximize(window);
-   gtk_window_set_modal(window, FALSE);
+    gtk_window_set_modal(window, FALSE);
     gtk_window_set_keep_above(window, window_config.is_keep_above);
     gtk_window_set_keep_below(window, window_config.is_keep_below);
     if (window_config.icon_path && window_config.icon_path[0] != '\0')
@@ -226,9 +227,9 @@ GtkWidget *create_window(GtkApplication *app, WindowConfig window_config)
 
     // Set margins
     widget_set_margins(GTK_WIDGET(window), window_config.margins);
+    if (window_config.has_header)
+        set_header_bar(GTK_WIDGET(window), window_config.title, window_config.icon_path);
 
-   set_header_bar(GTK_WIDGET(window), window_config.title,window_config.icon_path);
-    
     return GTK_WIDGET(window);
 }
 

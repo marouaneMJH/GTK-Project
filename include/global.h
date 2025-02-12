@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #include "./constants.h"
-
+#include "widgets/view/view.h"
 /* Global macros  */
 
 // check if the pointer is not null
@@ -29,207 +29,16 @@
         }                                       \
     } while (0)
 
-#define MAX_TAG_SIZE 50
-#define MAX_VIEW_ID_SIZE 50
-#define PARAM_COUNT 4
 
-#define SET_VIEW_CONFIG_PROPERTY(property, value, view_config)                      \
-    if (g_strcmp0(property, "position_x") == 0)                                     \
-    {                                                                               \
-        view_config->position_x = atoi(value);                                      \
-    }                                                                               \
-    if (g_strcmp0(property, "position_y") == 0)                                     \
-    {                                                                               \
-        view_config->position_y = atoi(value);                                      \
-    }                                                                               \
-    if (g_strcmp0(property, "pack_direction") == 0)                                 \
-    {                                                                               \
-        view_config->pack_direction = atoi(value);                                  \
-    }                                                                               \
-    if (g_strcmp0(property, "box_expand") == 0)                                     \
-    {                                                                               \
-        view_config->box_expand = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;     \
-    }                                                                               \
-    if (g_strcmp0(property, "box_fill") == 0)                                       \
-    {                                                                               \
-        view_config->box_fill = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;       \
-    }                                                                               \
-    if (g_strcmp0(property, "tab_label") == 0)                                      \
-    {                                                                               \
-        g_strlcpy(view_config->tab_label, value, MAX_LABEL_SIZE);                   \
-    }                                                                               \
-    if (g_strcmp0(property, "box_padding") == 0)                                    \
-    {                                                                               \
-        view_config->box_padding = atoi(value);                                     \
-    }                                                                               \
-    if (g_strcmp0(property, "flow_box_order") == 0)                                 \
-    {                                                                               \
-        view_config->flow_box_order = atoi(value);                                  \
-    }                                                                               \
-    if (g_strcmp0(property, "paned_order") == 0)                                    \
-    {                                                                               \
-        view_config->paned_order = atoi(value);                                     \
-    }                                                                               \
-    if (g_strcmp0(property, "is_reorderable") == 0)                                 \
-    {                                                                               \
-        view_config->is_reorderable = g_strcmp0(value, "true") == 0 ? TRUE : FALSE; \
-    }                                                                               \
-    if (g_strcmp0(property, "row") == 0)                                            \
-    {                                                                               \
-        view_config->row = atoi(value);                                             \
-    }                                                                               \
-    if (g_strcmp0(property, "column") == 0)                                         \
-    {                                                                               \
-        view_config->column = atoi(value);                                          \
-    }                                                                               \
-    if (g_strcmp0(property, "row_span") == 0)                                       \
-    {                                                                               \
-        view_config->row_span = atoi(value);                                        \
-    }                                                                               \
-    if (g_strcmp0(property, "column_span") == 0)                                    \
-    {                                                                               \
-        view_config->column_span = atoi(value);                                     \
-    }                                                                               \
-    if (g_strcmp0(property, "onclick") == 0)                                        \
-    {                                                                               \
-        g_strlcpy(view_config->onclick, value, MAX_SIGNAL_NAME_SIZE);               \
-    }                                                                               \
-    if (g_strcmp0(property, "on_active") == 0)                                      \
-    {                                                                               \
-        g_strlcpy(view_config->on_active, value, MAX_SIGNAL_NAME_SIZE);             \
-    }                                                                               \
-    if (g_strcmp0(property, "on_response") == 0)                                    \
-    {                                                                               \
-        g_strlcpy(view_config->on_response, value, MAX_SIGNAL_NAME_SIZE);           \
-    }                                                                               \
-    if (g_strcmp0(property, "param_1") == 0)                                        \
-    {                                                                               \
-        g_strlcpy(view_config->param[0], value, MAX_SIGNAL_NAME_SIZE);              \
-    }                                                                               \
-    if (g_strcmp0(property, "param_2") == 0)                                        \
-    {                                                                               \
-        g_print("r\n\nead param_2:%s", value);                                      \
-        g_strlcpy(view_config->param[1], value, MAX_SIGNAL_NAME_SIZE);              \
-    }                                                                               \
-    if (g_strcmp0(property, "param_3") == 0)                                        \
-    {                                                                               \
-        g_strlcpy(view_config->param[2], value, MAX_SIGNAL_NAME_SIZE);              \
-    }                                                                               \
-    if (g_strcmp0(property, "param_4") == 0)                                        \
-    {                                                                               \
-        g_strlcpy(view_config->param[3], value, MAX_SIGNAL_NAME_SIZE);              \
-    }                                                                               \
-    if (g_strcmp0(property, "menu_orientation") == 0)                               \
-    {                                                                               \
-        g_strlcpy(view_config->menu_orientation, value, MAX_SIGNAL_NAME_SIZE);      \
-    }                                                                               \
-    if (g_strcmp0(property, "menu_top") == 0)                                       \
-    {                                                                               \
-        view_config->menu_top = atoi(value);                                        \
-    }                                                                               \
-    if (g_strcmp0(property, "menu_bottom") == 0)                                    \
-    {                                                                               \
-        view_config->menu_bottom = atoi(value);                                     \
-    }                                                                               \
-    if (g_strcmp0(property, "menu_left") == 0)                                      \
-    {                                                                               \
-        view_config->menu_left = atoi(value);                                       \
-    }                                                                               \
-    if (g_strcmp0(property, "menu_right") == 0)                                     \
-    {                                                                               \
-        view_config->menu_right = atoi(value);                                      \
-    }
 
-#define DFEAULT_VIEW_CONFIG(view_config)                                    \
-    do                                                                      \
-    {                                                                       \
-        view_config->position_x = 0;                                        \
-        view_config->position_y = 0;                                        \
-        view_config->pack_direction = 1;                                    \
-        view_config->box_expand = FALSE;                                    \
-        view_config->box_fill = FALSE;                                      \
-        view_config->box_padding = 0;                                       \
-        view_config->group = NULL;                                          \
-        view_config->view_id[0] = '\0';                                     \
-        view_config->tab_label[0] = '\0';                                   \
-        view_config->is_reorderable = TRUE;                                 \
-        view_config->row = 0;                                               \
-        view_config->column = 0;                                            \
-        view_config->row_span = 1;                                          \
-        view_config->column_span = 1;                                       \
-        view_config->onclick[0] = '\0';                                     \
-        view_config->on_active[0] = '\0';                                   \
-        view_config->on_response[0] = '\0';                                 \
-        strcpy(view_config->menu_orientation, "vertical");                  \
-        view_config->menu_top = 0;                                          \
-        view_config->menu_bottom = 1;                                       \
-        view_config->menu_left = 0;                                         \
-        view_config->menu_right = 0;                                        \
-        for (int i = 0; i < PARAM_COUNT; view_config->param[i++][0] = '\0') \
-            ;                                                               \
-    } while (0);
 
-typedef struct
-{
-    gchar view_id[MAX_VIEW_ID_SIZE];
 
-    // Fixed container
-    int position_x;
-    int position_y;
 
-    // Box container
-    int pack_direction;
-    gboolean box_expand;
-    gboolean box_fill;
-    int box_padding;
 
-    // FlowBox container
-    gint flow_box_order;
-
-    // Paned container
-    // add1: 0 or add2: 1
-    gint paned_order;
-
-    // Ex: radio button
-    GtkWidget *group;
-
-    // NoteBook container properties
-    // tab label in Notebook container
-    gchar tab_label[MAX_LABEL_SIZE];
-    gboolean is_reorderable;
-
-    // Grid container properties
-    gint row;
-    gint column;
-    gint row_span;
-    gint column_span;
-
-    // Signals
-    gchar onclick[MAX_SIGNAL_NAME_SIZE];     // Path to the icon image file
-    gchar on_active[MAX_SIGNAL_NAME_SIZE];   // Path to the icon image file
-    gchar on_response[MAX_SIGNAL_NAME_SIZE]; // Path to the icon image file
-    // Params of Signals
-    gchar param[PARAM_COUNT][MAX_SIGNAL_NAME_SIZE]; // First function parameter
-
-    gchar menu_orientation[MAX_LABEL_SIZE];
-    gint menu_top;
-    gint menu_bottom;
-    gint menu_left;
-    gint menu_right;
-
-} ViewConfig;
-
-typedef struct VIEW
-{
-    GtkWidget *widget;
-    struct VIEW *parent;
-    struct VIEW *child;
-    struct VIEW *next;
-    ViewConfig *view_config;
-} View;
 
 extern View *root_view_global;
 extern View *root_dialog_view_global;
+extern GtkApplication *root_app;
 
 // We should rename this from global to core wich means system libs and has more signification
 

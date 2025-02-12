@@ -13,6 +13,11 @@
 #define MAX_ICON_PATH_SIZE 50
 #define MAX_SIGNAL_NAME_SIZE 100
 
+#define MAX_TAG_SIZE 50
+#define MAX_VIEW_ID_SIZE 50
+#define PARAM_COUNT 4 // the maximum parameter can signal function have
+
+
 #define MAX_LABEL_SIZE 100
 #define MAX_FONT_FAMILY_SIZE 30 // Maximum characters in  font family name
 

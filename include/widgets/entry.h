@@ -41,7 +41,7 @@
         .bg_color = "\0",                       \
         .text_color = "\0",                     \
         .overwrite_mode = FALSE,                \
-        .max_length = 50,                       \
+        .max_length = 100,                       \
         .alignment = 0,                         \
         .completion = NULL,                     \
         .progress_fraction = 0,                 \

@@ -30,8 +30,9 @@
         .position = GTK_WIN_POS_CENTER,           \
         .is_fullscreen = FALSE,                   \
         .is_maximized = FALSE,                    \
-        .is_modal = FALSE,                         \
+        .is_modal = FALSE,                        \
         .is_decorated = TRUE,                     \
+        .has_header = FALSE,                      \
         .is_keep_above = FALSE,                   \
         .is_keep_below = FALSE,                   \
         .hint_type = GDK_WINDOW_TYPE_HINT_NORMAL, \
@@ -73,6 +74,7 @@ typedef struct
     gboolean is_keep_above;
     gboolean is_keep_below;
     gboolean is_decorated;
+    gboolean has_header; // if the window has a header or not
 
     // behavior of the window
     GdkWindowTypeHint hint_type;

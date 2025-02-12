@@ -248,11 +248,25 @@
 
             >
                 <box
-                position_x="150"
-                position_y="150"
+                    position_x="450"
+                    position_y="140"
+                    width="1000"
+                    height="500"
+                    valign="start"
+                    halign="start"
+                    orientation="horizontal"
+                    spacing="20"
+
                 >
                     <button 
-                        label_text="Ok"
+                        label="_Ok"
+                        width="150"
+                        onclick="sig_dialog"
+                    />
+                    <button 
+                        label="_Quiter"
+                        onclick="sig_destroy"
+                        width="150"
                     />
                 </box>
             </fixed>

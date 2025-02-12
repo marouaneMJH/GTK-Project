@@ -138,7 +138,7 @@
                             option3="   ASSUS"
                             option4="   ACER"
                             is_editable="false"
-
+                            width="1000"
                             default_value="Choix de la marque"
                         />
 

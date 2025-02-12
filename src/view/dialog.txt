@@ -31,7 +31,10 @@
 
 					<image
 						id="img1"
-						path="./assets/images/warning_icon.jpeg"
+						height="90"
+						width="90"
+						type="pixbuf"
+						path="assets/images/warning_icon.jpeg"
 						
 					/>
 				
@@ -48,24 +51,25 @@
 				box_expand="true"
 				box_fill="true"
 				bg_color="lightgrey"
-				spacing="30"
+				spacing="40"
 			>
 				<button 
 					label="_Oui"
-					width="90"
+					width="120"
 					onclick="sig_show_image"
+					margin_left="20"
 
 				/>
 				<button
 					label="_Non"
 					onclick="sig_destroy_dialog"
-					width="90"
+					width="120"
 					
 				/>
 				<button 
 					label="_Anuler"
 					onclick="sig_self_destroy"
-					width="90"
+					width="120"
 					
 				/>
 			</box>

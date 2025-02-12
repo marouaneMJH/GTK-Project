@@ -2,7 +2,7 @@
     id="win1"
     width="900"
     height="900"
-    title="Presentation"
+    title="GTK controle"
     icon_name="folder"
     icon_path="assets\images\paint.png"
     has_header="true"
@@ -17,19 +17,19 @@
         >
             <menu_bar >
                 <menu_item 
-                    label="_Ordinateur"
+                    label="_MonChoix"
                 />
                 <menu_item 
-                    label="_Portable"
+                    label="VonChoix"
                 >
                     <menu
                         
                     >
                     <menu_item 
-                        label="_Marque"
+                        label="Sous Choix1"
                     />
                     <menu_item 
-                        label="Puissance"
+                        label="Sous Choix2"
                     >
                         <menu
                             id="menu33"
@@ -38,31 +38,36 @@
                         >
                             <menu_item
                                 id="menu_item3"
-                                label="Processor"
+                                label="_LeurChoix1"
                                 menu_left="0"
                                 menu_right="1"
                             />
                             <menu_item
                                 id="menu_item3"
-                                label="Viresse"
+                                label="_LeurChoix2"
                                 menu_left="1"
                                 menu_right="2"
                             />
                             <menu_item
                                 id="menu_item3"
-                                label="Disque dur"
+                                label="_LeurChoix3"
                                 menu_left="2"
                                 menu_right="3"
                                 on_active="sig_change_self_bg_color"
                                 param_1="red"
                                 param_2="red"
                             />
-
+                            <menu_item
+                                id="menu_item3"
+                                label="_LeurChoix4"
+                                menu_left="3"
+                                menu_right="4"
+                            />
 
                         </menu>
                     </menu_item>
                     <menu_item 
-                        label=" _Prix"
+                        label="Sous Choix3"
                     />
                     </menu>
                 

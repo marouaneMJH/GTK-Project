@@ -1,5 +1,5 @@
-#include "./../../include/builder.h"
-#include "./../../include/widgets/view/signals.h"
+#include "./../../../include/builder.h"
+#include "./../../../include/widgets/view/signals.h"
 
 /**
  * @brief structure for handle signales parametres

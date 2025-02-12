@@ -14,6 +14,7 @@
     >
         <box
             id="box1"
+
         >
             <menu_bar >
                 <menu_item 
@@ -91,6 +92,7 @@
                     width="500"
                     spacing="20"
             >
+                <paned >
                 <box 
                     margin_buttom="10"
                     width="50" >
@@ -128,7 +130,7 @@
                     </frame>
                 
                 </box>
-
+                </paned>
 
                 <box
                     width="50"

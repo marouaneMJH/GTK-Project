@@ -281,7 +281,7 @@
                     />
                     <button 
                         label="_Quiter"
-                        onclick="sig_destroy"
+                        on_click="sig_destroy"
                         width="150"
                     />
                 </box>

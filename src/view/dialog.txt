@@ -60,19 +60,19 @@
 				<button 
 					label="_Oui"
 					width="120"
-					onclick="sig_show_image"
+					on_click="sig_show_image"
 					margin_left="20"
 
 				/>
 				<button
 					label="_Non"
-					onclick="sig_destroy_dialog"
+					on_click="sig_destroy_dialog"
 					width="120"
 					
 				/>
 				<button 
 					label="_Anuler"
-					onclick="sig_destroy_dialog"
+					on_click="sig_destroy_dialog"
 					width="120"
 					
 				/>

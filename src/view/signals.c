@@ -1,4 +1,6 @@
 #include "./../../include/builder.h"
+#include "./../../include/widgets/view/signals.h"
+
 /**
  * @brief structure for handle signales parametres
  * //todo variable: checck if on_cllick signal activate or not and also for other signales

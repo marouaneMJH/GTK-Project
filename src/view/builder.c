@@ -526,14 +526,6 @@ View *read_entry_tag(FILE *index, View *parent_view, gboolean is_relative_contai
     parent_view = add_view(entry_view, parent_view, is_relative_container);
 
 
-    if (view_config->onclick[0] != '\0')
-    {
-        if (g_strcmp0(view_config->onclick, "sig_type") == 0)
-        {
-            g_signal_connect(G_OBJECT(entry_widget), "changed", G_CALLBACK(sig_entry_activate), NULL);
-        }
-    }
-
     return entry_view;
 }
 

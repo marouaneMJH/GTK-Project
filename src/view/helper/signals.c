@@ -36,6 +36,55 @@ static void sig_change_friend_bg_color(GtkWidget *widget, gpointer data)
     widget_set_colors(friend->widget, param_array->params[1], param_array->params[2]);
 }
 
+/**
+ * color
+ * font
+ * size
+ * margins
+ * then the specify signales
+ *
+ *
+ */
+
+static void sig_change_friend_color(GtkWidget *widget, gpointer data)
+{
+    if (GTK_IS_ENTRY(widget))
+    {
+        const char *name = gtk_entry_get_text(GTK_ENTRY(widget)); // Get text from entry
+
+        View *view = find_view_by_id("xxx-button", root_view_global);
+        View *label = find_view_by_id("label_color", root_view_global);
+
+        if (view && label)
+        {
+            widget_set_colors(view->widget, name, NULL); // Update widget color
+
+            // Get the color (assuming `view->widget` is a color chooser)
+            GdkRGBA color;
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(view->widget), &color);
+
+            // Convert RGBA to HEX (#RRGGBB)
+            char hex_color[8]; // Format: #RRGGBB
+            snprintf(hex_color, sizeof(hex_color), "#%02X%02X%02X",
+                     (int)(color.red * 255),
+                     (int)(color.green * 255),
+                     (int)(color.blue * 255));
+
+            // Properly concatenate the label text
+            char *label_text = g_strconcat("Color: ", hex_color, NULL);
+            gtk_label_set_text(GTK_LABEL(label->widget), label_text);
+
+            g_free(label_text); // Free allocated memory
+        }
+        else
+        {
+            g_print("\nThe view or label does not exist");
+        }
+
+        gtk_entry_set_text(GTK_ENTRY(widget), ""); // Clear entry text
+    }
+}
+
 static void sig_dialog_message(GtkWidget *widget, gpointer data)
 {
     ParamNode *param_array = (ParamNode *)data;
@@ -271,22 +320,30 @@ static void sig_destroy_dialog(GtkWidget *widget, gpointer data)
 }
 
 // Callback for key press events
-gboolean sig_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data) {
+gboolean sig_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
     g_print("Key pressed: %s (keyval: %d)\n", gdk_keyval_name(event->keyval), event->keyval);
 
     // Check for specific keys
-    if (event->keyval == GDK_KEY_Escape) {
+    if (event->keyval == GDK_KEY_Escape)
+    {
         g_print("Escape key pressed. Exiting...\n");
-        gtk_main_quit();  // Exit the application on Esc
-    } else if (event->keyval == GDK_KEY_Return) {
+        gtk_main_quit(); // Exit the application on Esc
+    }
+    else if (event->keyval == GDK_KEY_Return)
+    {
         g_print("Enter key pressed!\n");
-    } else if (event->keyval == GDK_KEY_Left) {
+    }
+    else if (event->keyval == GDK_KEY_Left)
+    {
         g_print("Left arrow key pressed!\n");
-    } else if (event->keyval == GDK_KEY_Right) {
+    }
+    else if (event->keyval == GDK_KEY_Right)
+    {
         g_print("Right arrow key pressed!\n");
     }
 
-    return FALSE;  // Return FALSE to propagate the event further
+    return FALSE; // Return FALSE to propagate the event further
 }
 
 void connect_signales(View *view)
@@ -356,6 +413,10 @@ void connect_signales(View *view)
         else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_key_press") == 0)
             callback_function = sig_key_press;
+
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_change_friend_color") == 0)
+            callback_function = sig_change_friend_color;
     }
 
     // Connect the callback function

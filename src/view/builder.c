@@ -143,6 +143,9 @@ int get_view_index(gchar *widget_tag) // Why FILE *index
     if (g_strcmp0(widget_tag, "toggle_button") == 0)
         return ToggleButtonTag;
 
+    if (g_strcmp0(widget_tag, "color_button") == 0)
+        return ColorButtonTag;
+
     return -1;
 }
 
@@ -493,6 +496,11 @@ View *build_app(GtkApplication *app, View *root_view, const gchar *file_path)
 
             case ToggleButtonTag:
                 parent_view = read_toggle_button_tag(index, parent_view, is_relative_container);
+                is_relative_container = is_container_view(index);
+                break;
+
+            case ColorButtonTag:
+                parent_view = read_color_button_tag(index, parent_view, is_relative_container);
                 is_relative_container = is_container_view(index);
                 break;
 

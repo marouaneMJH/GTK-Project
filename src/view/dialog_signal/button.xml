@@ -1,4 +1,4 @@
-<window
+<dialog
     id="win1"
     width="900"
     height="900"
@@ -63,14 +63,12 @@
                     <label 
                         id="label_color"
                         label_text="Color : NULL"   
-                    />
-                    <color_button 
-                        id="color_button"
-                        on_color_set="sig_change_button_color"
+                        
+
                     />
                 </box>
             </frame>
         
         </box>
     </box>
-</window>
+</dialog>

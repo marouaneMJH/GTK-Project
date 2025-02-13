@@ -335,7 +335,6 @@ View *find_view_by_id(char *view_id, View *root_view)
         if (view)
             return view;
     }
-
     return (View *)view;
 }
 

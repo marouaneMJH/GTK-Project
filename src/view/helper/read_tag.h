@@ -503,6 +503,24 @@ View *read_toggle_button_tag(FILE *index, View *parent_view, gboolean is_relativ
     return toggle_button_view;
 }
 
+View *read_color_button_tag(FILE *index, View *parent_view, gboolean is_relative_container)
+{
+    ViewConfig *view_config;
+    ColorButtonConfig color_button_config = DEFAULT_COLOR_BUTTON;
+
+    view_config = init_color_button_config(index, &color_button_config);
+
+    GtkWidget *color_button_widget = create_color_button(color_button_config);
+
+    View *toggle_button_view = create_view(view_config->view_id, color_button_widget, view_config);
+
+    // Ajouter le toggle_button à la hiérarchie des vues
+
+    add_view(toggle_button_view, parent_view, is_relative_container);
+
+    return toggle_button_view;
+}
+
 
 
 #endif

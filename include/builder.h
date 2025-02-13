@@ -37,7 +37,8 @@ typedef enum
     OverlayTag,
     DialogTag,
     ComboTextBoxTag,
-    ToggleButtonTag
+    ToggleButtonTag,
+    ColorButtonTag,
 } Tags;
 
 // Global structure;

@@ -74,7 +74,7 @@ static void activate(GtkApplication *app, gpointer user_data)
    GtkWidget *window = root_view->widget;
     
     
-    build_app(app, NULL, DIALOG_TXT);
+    // build_app(app, NULL, DIALOG_TXT);
     // View *btn1 = find_view_by_id("bt1", root_view);
     // if (btn1)
     //     g_signal_connect(G_OBJECT(btn1->widget), "clicked", G_CALLBACK(click1), root_view);

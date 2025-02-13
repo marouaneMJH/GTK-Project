@@ -136,9 +136,9 @@ GtkWidget *create_dialog(DialogConfig config)
         /**
          * // review why we use this, we can personnlise the dialog as possible as we can so we can use our function 
          */
-        // "_Yes", GTK_RESPONSE_YES,
-        // "_No", GTK_RESPONSE_NO,
-        // "_Cancel", GTK_RESPONSE_CANCEL, 
+        "_Oui", GTK_RESPONSE_YES,
+        "_Non", GTK_RESPONSE_NO,
+        "_Annuler", GTK_RESPONSE_CANCEL, 
         NULL);
 
         

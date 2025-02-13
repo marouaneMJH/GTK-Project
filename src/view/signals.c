@@ -66,6 +66,53 @@ static void sig_dialog(GtkWidget *widget, gpointer data)
     show_dialog(dialog);
 }
 
+
+
+void show_img()
+{
+      // Set up dialog configuration
+      DialogConfig dialog_config = DEFAULT_DIALOG;
+      strcpy(dialog_config.title, "Image Viewer");
+  
+      // Set up box configuration
+      BoxConfig box_image_config = DEFAULT_BOX;
+      box_image_config.dimensions.height = 300; // Adjusted height
+      box_image_config.dimensions.width = 300;  // Adjusted width
+      box_image_config.halign = GTK_ALIGN_CENTER;
+      box_image_config.valign = GTK_ALIGN_CENTER;
+  
+      // Create the box
+      GtkWidget *box = create_box(box_image_config);
+  
+      // Set up image configuration
+      ImageConfig image_config = DEFAULT_IMAGE;
+      strcpy(image_config.path, "./assets/images/smale/img1.jpg");
+      image_config.dimensions.height = 200; // Adjusted image height
+      image_config.dimensions.width = 200;  // Adjusted image width
+      image_config.opacity = 1.0;           // Full opacity
+  
+      // Check if the image file exists
+      if (!g_file_test(image_config.path, G_FILE_TEST_EXISTS))
+      {
+          g_print("Error: Image file '%s' not found.\n", image_config.path);
+          GtkWidget *error_label = gtk_label_new("Image not found.");
+          gtk_box_pack_start(GTK_BOX(box), error_label, TRUE, TRUE, 0);
+      }
+      else
+      {
+          // Create the image widget and add to the box
+          GtkWidget *image_widget = create_image(image_config);
+          gtk_box_pack_start(GTK_BOX(box), image_widget, TRUE, TRUE, 0);
+      }
+  
+      // Create the dialog and add the box to its content area
+      GtkWidget *dialog = create_dialog(dialog_config);
+      gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box);
+  
+      // Show the dialog
+      show_dialog(dialog);
+}
+
 static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data)
 {
     switch (response_id)
@@ -80,13 +127,15 @@ static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer us
         g_print("User clicked Exiting the box.\n");
         gtk_widget_destroy(GTK_WIDGET(dialog)); // Close the dialog
         break;
-
-    case GTK_RESPONSE_YES:
+        
+        case GTK_RESPONSE_YES:
         g_print("User clicked Yes.\n");
+        show_img();
         break;
-
-    case GTK_RESPONSE_NO:
+        
+        case GTK_RESPONSE_NO:
         g_print("User clicked No.\n");
+        gtk_widget_destroy(GTK_WIDGET(dialog)); // Close the dialog
         break;
 
     case 100: // Custom response
@@ -204,6 +253,7 @@ static void sig_dialog_warning(GtkWidget *widget, gpointer data)
     // Destroy the dialog after response
     gtk_widget_destroy(dialog);
 }
+
 
 static void sig_show_image(GtkWidget *widget, gpointer data)
 {

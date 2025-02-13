@@ -1,4 +1,6 @@
-#include "./../../include/builder.h"
+#include "./../../../include/builder.h"
+#include "./../../../include/widgets/view/signals.h"
+
 /**
  * @brief structure for handle signales parametres
  * //todo variable: checck if on_cllick signal activate or not and also for other signales
@@ -6,6 +8,7 @@
 typedef struct
 {
     gchar params[PARAM_COUNT][MAX_SIGNAL_NAME_SIZE]; // First function parameter
+
 } ParamNode;
 
 static void sig_change_self_bg_color(GtkWidget *widget, gpointer data)
@@ -312,81 +315,196 @@ void sig_print_content(GtkWidget *widget, gpointer data)
     g_print("Content: %s\n", gtk_entry_get_text(GTK_ENTRY(widget)));
 }
 
+static void sig_destroy_dialog(GtkWidget *widget, gpointer data)
+{
+    gtk_widget_destroy(root_dialog_view_global->widget);
+}
+
+// Callback for key press events
+gboolean sig_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data) {
+    g_print("Key pressed: %s (keyval: %d)\n", gdk_keyval_name(event->keyval), event->keyval);
+
+    // Check for specific keys
+    if (event->keyval == GDK_KEY_Escape) {
+        g_print("Escape key pressed. Exiting...\n");
+        gtk_main_quit();  // Exit the application on Esc
+    } else if (event->keyval == GDK_KEY_Return) {
+        g_print("Enter key pressed!\n");
+    } else if (event->keyval == GDK_KEY_Left) {
+        g_print("Left arrow key pressed!\n");
+    } else if (event->keyval == GDK_KEY_Right) {
+        g_print("Right arrow key pressed!\n");
+    }
+
+    return FALSE;  // Return FALSE to propagate the event further
+}
+
 void connect_signales(View *view)
 {
+    // Exit the function if no signale triggered
+    if (view->view_config->signal.event_type == SIG_NONE)
+        return;
+
     void *callback_function = NULL;
 
-    // Extract the event name once to avoid repetition
-    const char *event_name = NULL;
-    if (view->view_config->onclick[0] != '\0')
-    {
-        event_name = view->view_config->onclick;
-    }
-    else if (view->view_config->on_active[0] != '\0')
-    {
-        event_name = view->view_config->on_active;
-    }
-    else if (view->view_config->on_response[0] != '\0')
-    {
-        event_name = view->view_config->on_response;
-    }
-    else if (view->view_config->on_change[0] != '\0')
-    {
-        event_name = view->view_config->on_change;
-    }
     // Map event names to their corresponding callback functions
-    if (event_name)
+    if (view->view_config->signal.event_type != SIG_NONE)
     {
-        if (strcmp(event_name, "sig_change_self_bg_color") == 0)
+        if (strcmp(view->view_config->signal.sig_handler, "sig_change_self_bg_color") == 0)
             callback_function = sig_change_self_bg_color;
 
-        else if (strcmp(event_name, "sig_dialog_message") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_dialog_message") == 0)
             callback_function = sig_dialog_message;
 
-        else if (strcmp(event_name, "sig_change_friend_bg_color") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_change_friend_bg_color") == 0)
             callback_function = sig_change_friend_bg_color;
 
-        else if (strcmp(event_name, "sig_change_font_size") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_change_font_size") == 0)
             callback_function = sig_change_font_size;
 
-        else if (strcmp(event_name, "sig_destroy") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_destroy") == 0)
             callback_function = sig_destroy;
 
-        else if (strcmp(event_name, "sig_dialog") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_dialog") == 0)
             callback_function = sig_dialog;
 
-        else if (strcmp(event_name, "sig_dialog_response") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_dialog_response") == 0)
             callback_function = sig_dialog_response;
 
-        else if (strcmp(event_name, "sig_dialog_color") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_dialog_color") == 0)
             callback_function = sig_dialog_color;
 
-        else if (strcmp(event_name, "sig_dialog_font") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_dialog_font") == 0)
             callback_function = sig_dialog_font;
 
-        else if (strcmp(event_name, "sig_self_destroy") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_self_destroy") == 0)
             callback_function = sig_self_destroy;
 
-        else if (strcmp(event_name, "sig_dialog_warning") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_dialog_warning") == 0)
             callback_function = sig_dialog_warning;
 
-        else if (strcmp(event_name, "sig_show_image") == 0)
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_show_image") == 0)
             callback_function = sig_show_image;
-        
-        else if (strcmp(event_name, "sig_print_content") == 0)
+
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_print_content") == 0)
             callback_function = sig_print_content;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_destroy_dialog") == 0)
+            callback_function = sig_destroy_dialog;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_key_press") == 0)
+            callback_function = sig_key_press;
     }
 
     // Connect the callback function
     if (callback_function)
-        if (view->view_config->onclick[0] != '\0')
+    {
+        switch (view->view_config->signal.event_type)
+        {
+        case SIG_ON_CLICK:
             g_signal_connect(G_OBJECT(view->widget), "clicked", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
 
-        else if (view->view_config->on_active[0] != '\0')
-            g_signal_connect(G_OBJECT(view->widget), "activate", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+        case SIG_ON_TOGGLE:
+            g_signal_connect(G_OBJECT(view->widget), "toggled", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
 
-        else if (view->view_config->on_response[0] != '\0')
-             g_signal_connect(G_OBJECT(view->widget), "response", G_CALLBACK(callback_function), NULL);
-        else if (view->view_config->on_change[0] != '\0')
+        case SIG_ON_CHANGE:
             g_signal_connect(G_OBJECT(view->widget), "changed", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_ACTIVATE:
+            g_signal_connect(G_OBJECT(view->widget), "activate", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_DELETE_EVENT:
+            g_signal_connect(G_OBJECT(view->widget), "delete-event", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_DESTROY:
+            g_signal_connect(G_OBJECT(view->widget), "destroy", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_VALUE_CHANGED:
+            g_signal_connect(G_OBJECT(view->widget), "value-changed", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_ROW_ACTIVATED:
+            g_signal_connect(G_OBJECT(view->widget), "row-activated", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_KEY_PRESS:
+            g_signal_connect(G_OBJECT(view->widget), "key-press-event", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_KEY_RELEASE:
+            g_signal_connect(G_OBJECT(view->widget), "key-release-event", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_BUTTON_PRESS:
+            g_signal_connect(G_OBJECT(view->widget), "button-press-event", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_BUTTON_RELEASE:
+            g_signal_connect(G_OBJECT(view->widget), "button-release-event", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_MOTION_NOTIFY:
+            g_signal_connect(G_OBJECT(view->widget), "motion-notify-event", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_FOCUS_IN:
+            g_signal_connect(G_OBJECT(view->widget), "focus-in-event", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_FOCUS_OUT:
+            g_signal_connect(G_OBJECT(view->widget), "focus-out-event", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_SWITCH_PAGE:
+            g_signal_connect(G_OBJECT(view->widget), "switch-page", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_SELECTION_CHANGED:
+            g_signal_connect(G_OBJECT(view->widget), "selection-changed", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_POPUP_MENU:
+            g_signal_connect(G_OBJECT(view->widget), "popup-menu", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_SCROLL:
+            g_signal_connect(G_OBJECT(view->widget), "scroll-event", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_ENTER_NOTIFY:
+            g_signal_connect(G_OBJECT(view->widget), "enter-notify-event", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_LEAVE_NOTIFY:
+            g_signal_connect(G_OBJECT(view->widget), "leave-notify-event", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
+            break;
+
+        case SIG_ON_RESPONSE:
+            g_signal_connect(G_OBJECT(view->widget), "response", G_CALLBACK(callback_function), NULL);
+            break;
+
+        default:
+            // Handle SIG_NONE or unknown signals if necessary
+            g_print("\nError signale type %d not found.", view->view_config->signal.event_type);
+            break;
+        }
+    }
 }

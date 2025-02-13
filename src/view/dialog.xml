@@ -1,0 +1,81 @@
+<dialog
+	id="dialog"
+	title="Message "
+	width="300"
+	height="100"
+	hint_type="dialog"
+	is_modal="true"
+	on_response="sig_dialog_response"
+	has_header="true"
+	
+>
+
+	<box
+		id="bxS"
+	>
+		
+		<box
+			id="box1"
+			orientation="vertical"
+		>
+			<box
+				orientation="horizontal"
+				halign="start"
+				valign="start"
+				
+				spacing="10"
+				
+			>
+
+					<image
+						id="img1"
+						height="60"
+						width="60"
+						type="pixbuf"
+						path="assets/images/warning_icon.jpeg"
+						
+					/>
+				
+				<label
+					id="label11"
+					label_text="Vous voulez afficher une image?"
+					margin_top="20"
+					font_size="12"
+
+				/>
+			</box>
+
+			<box
+				orientation="horizontal"
+				box_expand="true"
+				box_fill="true"
+				spacing="40"
+				margin_top="20"
+				margin_bottom="20"
+				margin_right="20"
+				
+			>
+				<button 
+					label="_Oui"
+					width="120"
+					on_click="sig_show_image"
+					margin_left="20"
+
+				/>
+				<button
+					label="_Non"
+					on_click="sig_destroy_dialog"
+					width="120"
+					
+				/>
+				<button 
+					label="_Anuler"
+					on_click="sig_destroy_dialog"
+					width="120"
+					
+				/>
+			</box>
+
+		</box>
+	</box>
+</dialog>

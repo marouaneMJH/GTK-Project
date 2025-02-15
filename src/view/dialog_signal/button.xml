@@ -1,0 +1,74 @@
+<dialog
+    id="win1"
+    width="900"
+    height="900"
+    title="Presentation"
+    icon_name="folder"
+    icon_path="assets\images\paint.png"
+    has_header="true"
+    
+>
+    <box
+        id="main_box"
+        orientation="horizontal"
+    >
+        <box
+        >
+            <label 
+                label_text="no color chossing"
+                id="label_color_chooser"
+            />
+            <entry placeholder_text="Enter the button color" on_activate="sig_change_friend_color"  />
+            <entry />
+            <entry />
+            <entry />
+            <entry />
+
+
+        </box>
+
+        <box
+                margin_left="30"
+
+        >
+
+            <frame
+                id="main_frame"
+                label="button"
+                valign="start"
+                halign="start"
+                height="100"
+                width="100"
+            >
+                <box
+                    margin_top="25"
+                    margin_bottom="30"
+                    margin_left="25"
+                    margin_right="25"
+                >
+                    <button 
+                        id="xxx-button"
+                    />
+                </box>
+            </frame>
+
+            <frame
+            >
+                <box
+                    margin_top="25"
+                    margin_bottom="30"
+                    margin_left="25"
+                    margin_right="25"
+                >
+                    <label 
+                        id="label_color"
+                        label_text="Color : NULL"   
+                        
+
+                    />
+                </box>
+            </frame>
+        
+        </box>
+    </box>
+</dialog>

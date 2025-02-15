@@ -55,6 +55,11 @@
         view_config->signal.event_type = SIG_ON_FOCUS_IN;                        \
         g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
     }                                                                            \
+    else if (g_strcmp0(property, "on_focus_out") == 0)                           \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_FOCUS_OUT;                       \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+    }                                                                            \
     else if (g_strcmp0(property, "on_selection_changed") == 0)                   \
     {                                                                            \
         view_config->signal.event_type = SIG_ON_SELECTION_CHANGED;               \
@@ -69,11 +74,12 @@
     {                                                                            \
         view_config->signal.event_type = SIG_ON_RESPONSE;                        \
         g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+    }                                                                            \
+    else if (g_strcmp0(property, "on_color_set") == 0)                           \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_COLOR_SET;                       \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
     }
-
-
-
-
 
 #define SET_VIEW_CONFIG_PROPERTY(property, value, view_config)                      \
     if (g_strcmp0(property, "position_x") == 0)                                     \
@@ -139,7 +145,6 @@
     }                                                                               \
     if (g_strcmp0(property, "param_2") == 0)                                        \
     {                                                                               \
-        g_print("r\n\nead param_2:%s", value);                                      \
         g_strlcpy(view_config->param[1], value, MAX_SIGNAL_NAME_SIZE);              \
     }                                                                               \
     if (g_strcmp0(property, "param_3") == 0)                                        \
@@ -171,8 +176,6 @@
         view_config->menu_right = atoi(value);                                      \
     }
 
-
-    
 #define DFEAULT_VIEW_CONFIG(view_config)                                    \
     do                                                                      \
     {                                                                       \

@@ -335,43 +335,43 @@ View *find_view_by_id(char *view_id, View *root_view)
         if (view)
             return view;
     }
-
     return (View *)view;
 }
 
 // Function to force width and height using CSS for a widget
 void set_widget_size(GtkWidget *widget, Dimensions dimensions)
 {
-    // Create a CSS provider
-    GtkCssProvider *css_provider = gtk_css_provider_new();
-    GdkScreen *screen = gtk_widget_get_screen(widget);
+    gtk_widget_set_size_request(widget,dimensions.width,dimensions.height);
+    // // Create a CSS provider
+    // GtkCssProvider *css_provider = gtk_css_provider_new();
+    // GdkScreen *screen = gtk_widget_get_screen(widget);
 
-    // Create the CSS rule as a string
-    gchar *css = g_strdup_printf(
-        ".fixed-size { "
-        "  min-width: %dpx; "
-        "  max-width: %dpx; "
-        "  width: %dpx; "
-        "  min-height: %dpx; "
-        "  max-height: %dpx; "
-        "  height: %dpx; "
-        "}", 
-        dimensions.width, dimensions.width, dimensions.width, dimensions.height, dimensions.height, dimensions.height);
+    // // Create the CSS rule as a string
+    // gchar *css = g_strdup_printf(
+    //     ".fixed-size { "
+    //     "  min-width: %dpx; "
+    //     "  max-width: %dpx; "
+    //     "  width: %dpx; "
+    //     "  min-height: %dpx; "
+    //     "  max-height: %dpx; "
+    //     "  height: %dpx; "
+    //     "}", 
+    //     dimensions.width, dimensions.width, dimensions.width, dimensions.height, dimensions.height, dimensions.height);
 
-    // Load the CSS data into the provider
-    gtk_css_provider_load_from_data(css_provider, css, -1, NULL);
+    // // Load the CSS data into the provider
+    // gtk_css_provider_load_from_data(css_provider, css, -1, NULL);
 
-    // Apply the CSS provider to the widget's style context
-    gtk_style_context_add_provider(
-        gtk_widget_get_style_context(widget), 
-        GTK_STYLE_PROVIDER(css_provider), 
-        GTK_STYLE_PROVIDER_PRIORITY_USER
-    );
+    // // Apply the CSS provider to the widget's style context
+    // gtk_style_context_add_provider(
+    //     gtk_widget_get_style_context(widget), 
+    //     GTK_STYLE_PROVIDER(css_provider), 
+    //     GTK_STYLE_PROVIDER_PRIORITY_USER
+    // );
 
-    // Add the 'fixed-size' class to the widget
-    gtk_style_context_add_class(gtk_widget_get_style_context(widget), "fixed-size");
+    // // Add the 'fixed-size' class to the widget
+    // gtk_style_context_add_class(gtk_widget_get_style_context(widget), "fixed-size");
 
-    // Clean up
-    g_free(css);
-    g_object_unref(css_provider);
+    // // Clean up
+    // g_free(css);
+    // g_object_unref(css_provider);
 }

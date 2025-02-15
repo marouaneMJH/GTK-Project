@@ -6,12 +6,11 @@
 #define MAX_LABEL_TEXT_SIZE 1024
 /* Default values for label configuration */
 
-
 // Default Margins
 #define DEFAULT_LABEL_MARGINS { \
-    .top = 0,                  \
-    .bottom = 0,               \
-    .start = 0,                \
+    .top = 0,                   \
+    .bottom = 0,                \
+    .start = 0,                 \
     .end = 0}
 
 #define DEFAULT_LABEL                      \
@@ -23,6 +22,10 @@
         .jtype = GTK_JUSTIFY_CENTER,       \
         .ellipsize = PANGO_ELLIPSIZE_NONE, \
         .margins = DEFAULT_LABEL_MARGINS,  \
+        .hexpand = FALSE,                  \
+        .vexpand = FALSE,                  \
+        .halign = GTK_ALIGN_FILL,          \
+        .valign = GTK_ALIGN_FILL,          \
         .is_wrap = FALSE,                  \
         .text_color = "\0",                \
         .bg_color = "\0",                  \
@@ -50,6 +53,12 @@ typedef struct
 
     gfloat xalign; // aligne text to display on line start
     gfloat yalign;
+
+    gboolean hexpand;
+    gboolean vexpand;
+
+    GtkAlign halign;
+    GtkAlign valign;
 
     /* Behavior */
     gboolean is_selectable; // Text can be copied by user

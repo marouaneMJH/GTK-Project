@@ -26,6 +26,30 @@ ViewConfig *configure_spin_button_property(SpinButtonConfig *spin_button_config,
     else if (g_strcmp0(property, "is_digits") == 0)
         spin_button_config->is_digits = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            spin_button_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            spin_button_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            spin_button_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            spin_button_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            spin_button_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            spin_button_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            spin_button_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            spin_button_config->halign = GTK_ALIGN_FILL;
+    }
+
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
@@ -33,23 +57,32 @@ ViewConfig *configure_spin_button_property(SpinButtonConfig *spin_button_config,
 
 ViewConfig *init_spin_button_config(FILE *index, SpinButtonConfig *spin_button_config)
 {
-    return init_generic_config(index,(void*)spin_button_config,(ConfigurePropertyCallback)configure_spin_button_property);
-
+    return init_generic_config(index, (void *)spin_button_config, (ConfigurePropertyCallback)configure_spin_button_property);
 }
-GtkWidget *create_spin_button(SpinButtonConfig spin_button)
+GtkWidget *create_spin_button(SpinButtonConfig spin_button_config)
 {
     GtkAdjustment *w_adj = gtk_adjustment_new(
-        spin_button.initial_value,
-        spin_button.min,
-        spin_button.max,
-        spin_button.step,
+        spin_button_config.initial_value,
+        spin_button_config.min,
+        spin_button_config.max,
+        spin_button_config.step,
         0.1,
-        spin_button.is_digits ? 2 : 0);
+        spin_button_config.is_digits ? 2 : 0);
 
-    GtkWidget *w_spin_button = gtk_spin_button_new(
+    GtkWidget *spin_button_widget = gtk_spin_button_new(
         GTK_ADJUSTMENT(w_adj),
         3,
-        spin_button.is_digits ? 2 : 0);
+        spin_button_config.is_digits ? 2 : 0);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(spin_button_widget, spin_button_config.hexpand);
+    gtk_widget_set_vexpand(spin_button_widget, spin_button_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(spin_button_widget, spin_button_config.halign);
+    gtk_widget_set_valign(spin_button_widget, spin_button_config.valign);
+
+    return spin_button_widget;
 }
 
 /* Signales */

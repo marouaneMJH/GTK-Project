@@ -1,42 +1,35 @@
 <window
     id="win1"
-    width="900"
+    width="1500"
     height="900"
-    title="Presentation"
+    title="GTK IDE"
     icon_name="folder"
-    icon_path="assets\images\paint.png"
-    has_header="true"
-    
+    icon_path="assets\images\programer.jpg"
+    has_header="false"
+    is_maximized="false"
 >
 
-    <scrolled_window
-    on_key_press="sig_key_press"
-        id="sw1"
+
+    <box
+        id="box1"
     >
-    
-        <box
-            id="box1"
-        >
-            <menu_bar >
-                <menu_item 
-                    label="_Ordinateur"
-                />
-                <menu_item 
-                    label="_Portable"
-                >
-                    <menu
-                        
-                    >
-                    <menu_item 
+        <menu_bar id="jkf">
+            <menu_item
+                label="_Ordinateur"
+            />
+            <menu_item
+                label="_Portable"
+            >
+                <menu id="djk">
+                    <menu_item
                         label="_Marque"
                     />
-                    <menu_item 
+                    <menu_item
                         label="Puissance"
                     >
                         <menu
                             id="menu33"
                             menu_orientation="horizontal"
-
                         >
                             <menu_item
                                 id="menu_item3"
@@ -63,44 +56,185 @@
 
                         </menu>
                     </menu_item>
-                    <menu_item 
+                    <menu_item
                         label=" _Prix"
                     />
-                    </menu>
-                
-                </menu_item>
+                </menu>
+
+            </menu_item>
 
 
-                <menu_item 
-                    label="LeurChoix"
-                />
-            
-            
-            </menu_bar>
+            <menu_item
+                label="LeurChoix"
+            />
 
 
-            <box
-                id="conent_box"
-                margin_top="40"
-                margin_left="20"
-                    valign="start"
-                    halign="start"
-                    width="500"
-                    spacing="20"
-                    bg_color="darkgrey"
-            >   
-                <paned 
-                    orientation="horizontal"
-                    height="1000"
-                    bg_color="#e4e4e4"
+        </menu_bar>
+
+        <scrolled_window
+            on_key_press="sig_key_press"
+            id="sw1"
+            box_expand="true"
+            box_fill="true"
+        >
+            <paned
+                id="paned1"
+                orientation="horizontal"
+                position="200"
+                is_wide="true"
+            >
+                <box
+                    id="conent_box"
+                    paned_order="1"
                 >
-                    <button paned_order="1"/>
-                    <button paned_order="0" />
+                    <label id="id"
+                        label_text="Widgets"
+                        xalign="0.5"
+                        yalign="0.5"
+                        valign="center"
+                        box_expand="true"
+                        box_fill="true"
+                    />
 
-                
+                </box>
+
+                <paned
+                    id="paned2"
+                    orientation="horizontal"
+                    paned_order="2"
+                    position="1000"
+                >
+
+                    <scrolled_window
+                        id="scw2"
+                        paned_order="1"
+                    >
+
+                        <frame
+                            id="btn1"
+                            label="Viewer"
+                            margin_top="5"
+                            margin_bottom="5"
+                            margin_left="5"
+                            margin_right="5"
+                            vexpand="true"
+                            hexpand="true"
+                        />
+                    </scrolled_window>
+
+                    <box
+                        id="box"
+                        paned_order="2"
+                        spacing="10"
+                    >
+                        <label
+                            id="label1"
+                            label_text="Label"
+                            xalign="0.5"
+                            box_expand="true"
+                        />
+
+                        <button
+                            id="btn1"
+                            label="Button"
+                            halign="center"
+                            box_expand="true"
+                            box_fill="true"
+                        />
+
+                        <box
+                            id="box3"
+                            halign="center"
+                            orientation="horizontal"
+                            spacing="5"
+                        >
+                            <radio_button
+                                id="rbtn1"
+                                label="Choice1"
+                                valign="center"
+                                box_expand="true"
+                                box_fill="true"
+                                is_group="true"
+                            />
+                            <radio_button
+                                id="rbtn2"
+                                label="Choice2"
+                                valign="center"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                            <radio_button
+                                id="rbtn2"
+                                label="Choice3"
+                                valign="center"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+                        <box
+                            id="box3"
+                            orientation="horizontal"
+                            halign="center"
+                            spacing="5"
+                        >
+                            <check_button
+                                id="check_btn1"
+                                label="Choice1"
+                                valign="center"
+                                box_expand="true"
+                                box_fill="true"
+                                is_group="true"
+                            />
+                            <check_button
+                                id="check_btn2"
+                                label="Choice2"
+                                valign="center"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                            <check_button
+                                id="check_btn2"
+                                label="Choice3"
+                                valign="center"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+
+                        <switch_button
+                            id="sbtn1"
+                            halign="center"
+                            box_expand="true"
+                        />
+
+                        <toggle_button
+                            id="tbtn1"
+                            label="Toggle button"
+                            halign="center"
+                            box_expand="true"
+                        />
+
+                        <link_button
+                            id="linkbtn2"
+                            label="Go to Link"
+                            uri="https://www.fstm.ac.ma"
+                            halign="center"
+                            box_expand="true"
+                        />
+
+                        <spin_button
+                            id="spin_btn1"
+                            min="1"
+                            max="100"
+                            width="100"
+                            height="30"
+                            halign="center"
+                            box_expand="true"
+                        />
+
+                    </box>
                 </paned>
-        </box>
-        
-        </box>
-    </scrolled_window>
+            </paned>
+        </scrolled_window>
+    </box>
 </window>

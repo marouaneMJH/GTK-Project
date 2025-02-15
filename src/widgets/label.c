@@ -78,6 +78,30 @@ ViewConfig *configure_label_property(LabelConfig *label_config, ViewConfig *view
     else if (g_strcmp0(property, "margin_end") == 0)
         label_config->margins.end = atoi(value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            label_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            label_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            label_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            label_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            label_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            label_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            label_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            label_config->halign = GTK_ALIGN_FILL;
+    }
+
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
@@ -110,19 +134,25 @@ GtkWidget *create_label(LabelConfig label_config)
         gtk_label_set_markup(GTK_LABEL(label_widget), label_config.label_text);
     }
 
-
     // Update the margin when label_config margin updated
     if (
-        label_config.margins.bottom  ||
-        label_config.margins.top  ||
-        label_config.margins.start  ||
-        label_config.margins.end )
+        label_config.margins.bottom ||
+        label_config.margins.top ||
+        label_config.margins.start ||
+        label_config.margins.end)
     {
         widget_set_margins(label_widget, label_config.margins);
     }
 
     // apply font color
     widget_set_colors(label_widget, label_config.bg_color, label_config.text_color);
+
+    gtk_widget_set_hexpand(label_widget, label_config.hexpand);
+    gtk_widget_set_vexpand(label_widget, label_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(label_widget, label_config.halign);
+    gtk_widget_set_valign(label_widget, label_config.valign);
 
     // apply font family
     if (label_config.font_family[0] != '\0')

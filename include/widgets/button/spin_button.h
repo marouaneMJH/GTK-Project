@@ -11,6 +11,10 @@
         .step = 1,           \
         .initial_value = 50, \
         .decimal = 2,        \
+        .hexpand = FALSE,                                  \
+        .vexpand = FALSE,                                  \
+        .halign = GTK_ALIGN_FILL,                          \
+        .valign = GTK_ALIGN_FILL,                          \
         .is_numeric = TRUE,  \
         .is_digits = FALSE}
 
@@ -26,22 +30,23 @@ typedef struct
     gboolean is_numeric;
     gboolean is_digits; // Disable decimal places of an number
 
+    gboolean hexpand;
+    gboolean vexpand;
+
+    GtkAlign halign;
+    GtkAlign valign;
     // todo to free the function
     // GtkWidget* adjustment;
 } SpinButtonConfig;
-
-
 
 /**
  * @brief create spin button by spin_button structure
  */
 GtkWidget *create_spin_button(SpinButtonConfig spin_button);
 
-
 ViewConfig *configure_window_property(SpinButtonConfig *spin_button_config, ViewConfig *view_config, gchar *property, gchar *value);
 
-ViewConfig *init_spin_button_config(FILE *index, SpinButtonConfig  *spin_button_config);
-
+ViewConfig *init_spin_button_config(FILE *index, SpinButtonConfig *spin_button_config);
 
 /* Signales */
 /**
@@ -50,9 +55,6 @@ ViewConfig *init_spin_button_config(FILE *index, SpinButtonConfig  *spin_button_
  * @param[in, out] val A pointer to a gdouble variable where the current value of the spin button will be stored.
  */
 static void get_button_value_call_back(GtkWidget *spin_button, gpointer val);
-
-
-
 
 /**
  * @brief get the spin button value when value changed

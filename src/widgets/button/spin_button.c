@@ -26,6 +26,33 @@ ViewConfig *configure_spin_button_property(SpinButtonConfig *spin_button_config,
     else if (g_strcmp0(property, "is_digits") == 0)
         spin_button_config->is_digits = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
 
+    // Margins
+    if (g_strcmp0(property, "margin_top") == 0)
+        spin_button_config->margins.top = atoi(value);
+
+    if (g_strcmp0(property, "margin_bottom") == 0)
+        spin_button_config->margins.bottom = atoi(value);
+
+    if (g_strcmp0(property, "margin_left") == 0)
+        spin_button_config->margins.start = atoi(value);
+
+    if (g_strcmp0(property, "margin_right") == 0)
+        spin_button_config->margins.end = atoi(value);
+
+    // Dimensions
+    if (g_strcmp0(property, "width") == 0)
+        spin_button_config->dimensions.width = atoi(value);
+
+    if (g_strcmp0(property, "height") == 0)
+        spin_button_config->dimensions.height = atoi(value);
+
+    // Colors
+    if (g_strcmp0(property, "bg_color") == 0)
+        strcpy(spin_button_config->bg_color, value);
+
+    if (g_strcmp0(property, "color") == 0)
+        strcpy(spin_button_config->text_color, value);
+
     if (g_strcmp0(property, "valign") == 0)
     {
         if (g_strcmp0(value, "center") == 0)
@@ -67,12 +94,19 @@ GtkWidget *create_spin_button(SpinButtonConfig spin_button_config)
         spin_button_config.max,
         spin_button_config.step,
         0.1,
-        spin_button_config.is_digits ? 2 : 0);
+        spin_button_config.is_digits ? spin_button_config.decimal : 0);
 
     GtkWidget *spin_button_widget = gtk_spin_button_new(
         GTK_ADJUSTMENT(w_adj),
         3,
-        spin_button_config.is_digits ? 2 : 0);
+        spin_button_config.is_digits ? spin_button_config.decimal : 0);
+
+    if (spin_button_config.dimensions.width > 0 || spin_button_config.dimensions.height > 0)
+        gtk_widget_set_size_request(spin_button_widget, spin_button_config.dimensions.width, spin_button_config.dimensions.height);
+
+    widget_set_margins(spin_button_widget, spin_button_config.margins);
+
+    widget_set_colors(spin_button_widget, spin_button_config.bg_color, spin_button_config.text_color);
 
     // Enable or disable cells expand (the parent should be expandable; not important)
     gtk_widget_set_hexpand(spin_button_widget, spin_button_config.hexpand);

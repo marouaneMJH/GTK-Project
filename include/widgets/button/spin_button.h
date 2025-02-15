@@ -3,23 +3,41 @@
 
 #include "./../../global.h"
 
+/*  default values */
+#define DEFAULT_BOX_DIMENSIONS \
+    {                          \
+        .height = 0,           \
+        .width = 0}
+
+#define DEFAULT_BOX_MARGINS \
+    {                       \
+        .bottom = 0,        \
+        .top = 0,           \
+        .start = 0,         \
+        .end = 0}
+
 // the default values of spin button structure
-#define DEFAULT_SPIN_BUTTON  \
-    {                        \
-        .min = 0,            \
-        .max = 100,          \
-        .step = 1,           \
-        .initial_value = 50, \
-        .decimal = 2,        \
-        .hexpand = FALSE,                                  \
-        .vexpand = FALSE,                                  \
-        .halign = GTK_ALIGN_FILL,                          \
-        .valign = GTK_ALIGN_FILL,                          \
-        .is_numeric = TRUE,  \
+#define DEFAULT_SPIN_BUTTON                   \
+    {                                         \
+        .margins = DEFAULT_BOX_MARGINS,       \
+        .dimensions = DEFAULT_BOX_DIMENSIONS, \
+        .min = 0,                             \
+        .max = 100,                           \
+        .step = 1,                            \
+        .initial_value = 50,                  \
+        .decimal = 2,                         \
+        .hexpand = FALSE,                     \
+        .vexpand = FALSE,                     \
+        .halign = GTK_ALIGN_FILL,             \
+        .valign = GTK_ALIGN_FILL,             \
+        .is_numeric = TRUE,                   \
+        .bg_color = "\0",                     \
+        .text_color = "\0",                   \
         .is_digits = FALSE}
 
 typedef struct
 {
+
     gdouble min;
     gdouble max;
     gdouble step;
@@ -37,12 +55,20 @@ typedef struct
     GtkAlign valign;
     // todo to free the function
     // GtkWidget* adjustment;
+
+    Margins margins;
+
+    Dimensions dimensions;
+
+    gchar bg_color[MAX_COLOR_SIZE];
+    gchar text_color[MAX_COLOR_SIZE];
+    
 } SpinButtonConfig;
 
 /**
  * @brief create spin button by spin_button structure
  */
-GtkWidget *create_spin_button(SpinButtonConfig spin_button);
+GtkWidget *create_spin_button(SpinButtonConfig spin_button_config);
 
 ViewConfig *configure_window_property(SpinButtonConfig *spin_button_config, ViewConfig *view_config, gchar *property, gchar *value);
 

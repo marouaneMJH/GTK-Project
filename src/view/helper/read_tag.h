@@ -13,7 +13,7 @@ View *read_window_tag(FILE *index, GtkApplication *app, View *parent_view, gbool
     GtkWidget *window_widget = create_window(app, window_config);
 
     // GtkWidget *window_widget = NULL;
-    View *window_view = create_view(view_config->view_id, window_widget, view_config);
+    View *window_view = create_view(window_widget, view_config);
 
     // Add view to view model
     parent_view = add_view(window_view, parent_view, is_relative_container);
@@ -31,7 +31,7 @@ View *read_dialog_tag(FILE *index, View *parent_view, gboolean is_relative_conta
 
     GtkWidget *dialog_widget = create_dialog(dialog_config);
 
-    View *dialog_view = create_view(view_config->view_id, dialog_widget, view_config);
+    View *dialog_view = create_view(dialog_widget, view_config);
     
     // Add view to view model
     parent_view = add_view(dialog_view, parent_view, is_relative_container);
@@ -48,7 +48,7 @@ View *read_box_tag(FILE *index, View *parent_view, gboolean is_relative_containe
 
     GtkWidget *box_widget = create_box(box_config);
 
-    View *box_view = create_view(view_config->view_id, box_widget, view_config);
+    View *box_view = create_view(box_widget, view_config);
 
     // Add view to view model
     parent_view = add_view(box_view, parent_view, is_relative_container);
@@ -65,7 +65,7 @@ View *read_stack_tag(FILE *index, View *parent_view, gboolean is_relative_contai
 
     GtkWidget *stack_widget = create_stack(stack_config);
 
-    View *stack_view = create_view(view_config->view_id, stack_widget, view_config);
+    View *stack_view = create_view(stack_widget, view_config);
 
     // Add view to view model
     parent_view = add_view(stack_view, parent_view, is_relative_container);
@@ -82,7 +82,7 @@ View *read_frame_tag(FILE *index, View *parent_view, gboolean is_relative_contai
 
     GtkWidget *frame_widget = create_frame(frame_config);
 
-    View *frame_view = create_view(view_config->view_id, frame_widget, view_config);
+    View *frame_view = create_view(frame_widget, view_config);
 
     // Add view to view model
     parent_view = add_view(frame_view, parent_view, is_relative_container);
@@ -99,7 +99,7 @@ View *read_overlay_tag(FILE *index, View *parent_view, gboolean is_relative_cont
 
     GtkWidget *overlay_widget = create_overlay(overlay_config);
 
-    View *overlay_view = create_view(view_config->view_id, overlay_widget, view_config);
+    View *overlay_view = create_view(overlay_widget, view_config);
 
     // Add view to view model
     parent_view = add_view(overlay_view, parent_view, is_relative_container);
@@ -116,7 +116,7 @@ View *read_fixed_tag(FILE *index, View *parent_view, gboolean is_relative_contai
 
     GtkWidget *fixed_widget = create_fixed(fixed_config);
 
-    View *fixed_view = create_view(view_config->view_id, fixed_widget, view_config);
+    View *fixed_view = create_view(fixed_widget, view_config);
 
     // Add view to view model
     parent_view = add_view(fixed_view, parent_view, is_relative_container);
@@ -133,7 +133,7 @@ View *read_button_tag(FILE *index, View *parent_view, gboolean is_relative_conta
 
     GtkWidget *button_widget = create_button(button_config);
 
-    View *button_view = create_view(view_config->view_id, button_widget, view_config);
+    View *button_view = create_view(button_widget, view_config);
 
     // Add view to view model
     parent_view = add_view(button_view, parent_view, is_relative_container);
@@ -150,7 +150,7 @@ View *read_entry_tag(FILE *index, View *parent_view, gboolean is_relative_contai
 
     GtkWidget *entry_widget = create_entry(entry_config);
 
-    View *entry_view = create_view(view_config->view_id, entry_widget, view_config);
+    View *entry_view = create_view(entry_widget, view_config);
 
     // Add view to view model
     parent_view = add_view(entry_view, parent_view, is_relative_container);
@@ -168,7 +168,7 @@ View *read_radio_button_tag(FILE *index, View *parent_view, gboolean is_relative
 
     GtkWidget *radio_button_widget = create_radio_button(radio_button_config);
 
-    View *radio_button_view = create_view(view_config->view_id, radio_button_widget, view_config);
+    View *radio_button_view = create_view(radio_button_widget, view_config);
 
     // Add view to view model
     parent_view = add_view(radio_button_view, parent_view, is_relative_container);
@@ -185,7 +185,7 @@ View *read_image_tag(FILE *index, View *parent_view, gboolean is_relative_contai
 
     GtkWidget *image_widget = create_image(image_config);
 
-    View *image_view = create_view(view_config->view_id, image_widget, view_config);
+    View *image_view = create_view(image_widget, view_config);
 
     // Add view to view model
     add_view(image_view, parent_view, is_relative_container);
@@ -203,7 +203,7 @@ View *read_menu_tag(FILE *index, View *parent_view, gboolean is_relative_contain
 
     GtkWidget *menu_widget = create_menu(menu_config);
 
-    View *menu_view = create_view(view_config->view_id, menu_widget, view_config);
+    View *menu_view = create_view(menu_widget, view_config);
 
     // Add view to view model
     add_view(menu_view, parent_view, is_relative_container);
@@ -220,7 +220,7 @@ View *read_menu_item_tag(FILE *index, View *parent_view, gboolean is_relative_co
 
     GtkWidget *menu_item_widget = create_menu_item(menu_item_config);
 
-    View *menu_item_view = create_view(view_config->view_id, menu_item_widget, view_config);
+    View *menu_item_view = create_view(menu_item_widget, view_config);
 
     // Add view to view model
     add_view(menu_item_view, parent_view, is_relative_container);
@@ -237,7 +237,7 @@ View *read_menu_bar_tag(FILE *index, View *parent_view, gboolean is_relative_con
 
     GtkWidget *menu_bar_widget = create_menu_bar(menu_bar_config);
 
-    View *menu_bar_view = create_view(view_config->view_id, menu_bar_widget, view_config);
+    View *menu_bar_view = create_view(menu_bar_widget, view_config);
 
     // Add view to view model
     add_view(menu_bar_view, parent_view, is_relative_container);
@@ -255,7 +255,7 @@ View *read_spin_button_tag(FILE *index, View *parent_view, gboolean is_relative_
 
     GtkWidget *spin_button_widget = create_spin_button(spin_button_config);
 
-    View *spin_button_view = create_view(view_config->view_id, spin_button_widget, view_config);
+    View *spin_button_view = create_view(spin_button_widget, view_config);
 
     // Add view to view model
     add_view(spin_button_view, parent_view, is_relative_container);
@@ -275,7 +275,7 @@ View *read_flow_box_tag(FILE *index, View *parent_view, gboolean is_relative_con
     // Create flow box widget
     GtkWidget *flow_box_widget = create_flow_box(flow_box_config);
 
-    View *flow_box_view = create_view(view_config->view_id, flow_box_widget, view_config);
+    View *flow_box_view = create_view(flow_box_widget, view_config);
 
     // Add view to view model
     add_view(flow_box_view, parent_view, is_relative_container);
@@ -292,7 +292,7 @@ View *read_paned_tag(FILE *index, View *parent_view, gboolean is_relative_contai
 
     GtkWidget *paned_widget = create_paned(paned_config);
 
-    View *paned_view = create_view(view_config->view_id, paned_widget, view_config);
+    View *paned_view = create_view(paned_widget, view_config);
 
     // Add view to view model
     add_view(paned_view, parent_view, is_relative_container);
@@ -309,7 +309,7 @@ View *read_label_tag(FILE *index, View *parent_view, gboolean is_relative_contai
 
     GtkWidget *label_widget = create_label(label_config);
 
-    View *label_view = create_view(view_config->view_id, label_widget, view_config);
+    View *label_view = create_view(label_widget, view_config);
 
     // Add view to view model
     add_view(label_view, parent_view, is_relative_container);
@@ -325,7 +325,7 @@ View *read_separator_tag(FILE *index, View *parent_view, gboolean is_relative_co
 
     GtkWidget *separator_widget = create_separator(separator_config);
 
-    View *separator_view = create_view(view_config->view_id, separator_widget, view_config);
+    View *separator_view = create_view(separator_widget, view_config);
 
     // Add view to view model
     add_view(separator_view, parent_view, is_relative_container);
@@ -341,7 +341,7 @@ View *read_check_button_tag(FILE *index, View *parent_view, gboolean is_relative
 
     GtkWidget *check_button_widget = create_check_button(check_button_config);
 
-    View *check_button_view = create_view(view_config->view_id, check_button_widget, view_config);
+    View *check_button_view = create_view(check_button_widget, view_config);
 
     // Add view to view model
     add_view(check_button_view, parent_view, is_relative_container);
@@ -358,7 +358,7 @@ View *read_switch_button_tag(FILE *index, View *parent_view, gboolean is_relativ
 
     GtkWidget *switch_button_widget = create_switch_button(switch_button_config);
 
-    View *switch_button_view = create_view(view_config->view_id, switch_button_widget, view_config);
+    View *switch_button_view = create_view(switch_button_widget, view_config);
 
     // Add view to view model
     add_view(switch_button_view, parent_view, is_relative_container);
@@ -375,7 +375,7 @@ View *read_link_button_tag(FILE *index, View *parent_view, gboolean is_relative_
 
     GtkWidget *link_button_widget = create_link_button(link_button_config);
 
-    View *link_button_view = create_view(view_config->view_id, link_button_widget, view_config);
+    View *link_button_view = create_view(link_button_widget, view_config);
 
     // Add view to view model
     add_view(link_button_view, parent_view, is_relative_container);
@@ -392,7 +392,7 @@ View *read_scrolled_window_tag(FILE *index, View *parent_view, gboolean is_relat
 
     GtkWidget *scrolled_window_widget = create_scrolled_window(scrolled_window_config);
 
-    View *scrolled_window_view = create_view(view_config->view_id, scrolled_window_widget, view_config);
+    View *scrolled_window_view = create_view(scrolled_window_widget, view_config);
 
     // Add view to view model
     add_view(scrolled_window_view, parent_view, is_relative_container);
@@ -409,7 +409,7 @@ View *read_progress_bar_tag(FILE *index, View *parent_view, gboolean is_relative
 
     GtkWidget *progress_bar_widget = create_progress_bar(progress_bar_config);
 
-    View *progress_bar_view = create_view(view_config->view_id, progress_bar_widget, view_config);
+    View *progress_bar_view = create_view(progress_bar_widget, view_config);
 
     // Add view to view model
     add_view(progress_bar_view, parent_view, is_relative_container);
@@ -426,7 +426,7 @@ View *read_notebook_tag(FILE *index, View *parent_view, gboolean is_relative_con
 
     GtkWidget *notebook_widget = create_notebook(notebook_config);
 
-    View *notebook_view = create_view(view_config->view_id, notebook_widget, view_config);
+    View *notebook_view = create_view(notebook_widget, view_config);
 
     // Add view to view model
     add_view(notebook_view, parent_view, is_relative_container);
@@ -443,7 +443,7 @@ View *read_grid_tag(FILE *index, View *parent_view, gboolean is_relative_contain
 
     GtkWidget *grid_widget = create_grid(grid_config);
 
-    View *grid_view = create_view(view_config->view_id, grid_widget, view_config);
+    View *grid_view = create_view(grid_widget, view_config);
 
     // Add view to view model
     add_view(grid_view, parent_view, is_relative_container);
@@ -460,7 +460,7 @@ View *read_text_area_tag(FILE *index, View *parent_view, gboolean is_relative_co
 
     GtkWidget *text_area_widget = create_text_area(text_area_config);
 
-    View *text_area_view = create_view(view_config->view_id, text_area_widget, view_config);
+    View *text_area_view = create_view(text_area_widget, view_config);
 
     // Add view to view model
     add_view(text_area_view, parent_view, is_relative_container);
@@ -477,7 +477,7 @@ View *read_combo_text_box_tag(FILE *index, View *parent_view, gboolean is_relati
 
     GtkWidget *combo_text_box_widget = create_combo_text_box(combo_text_box_config);
 
-    View *combo_text_box_view = create_view(view_config->view_id, combo_text_box_widget, view_config);
+    View *combo_text_box_view = create_view(combo_text_box_widget, view_config);
 
     // Add view to view model
     add_view(combo_text_box_view, parent_view, is_relative_container);
@@ -494,7 +494,7 @@ View *read_toggle_button_tag(FILE *index, View *parent_view, gboolean is_relativ
 
     GtkWidget *toggle_button_widget = create_toggle_button(toggle_button_config);
 
-    View *toggle_button_view = create_view(view_config->view_id, toggle_button_widget, view_config);
+    View *toggle_button_view = create_view(toggle_button_widget, view_config);
 
     // Ajouter le toggle_button à la hiérarchie des vues
 

@@ -40,8 +40,8 @@
         .hexpand = FALSE,                                  \
         .vexpand = FALSE,                                  \
         .icon_path = "\0",                                 \
-        .halign = GTK_ALIGN_CENTER,                        \
-        .valign = GTK_ALIGN_CENTER,                        \
+        .halign = GTK_ALIGN_FILL,                        \
+        .valign = GTK_ALIGN_FILL,                        \
         .always_show_image = TRUE,                        \
         .focus_on_click = TRUE,                            \
         .use_underline = FALSE,                            \

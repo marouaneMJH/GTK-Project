@@ -7,7 +7,7 @@ static void sig_entry_activate(GtkWidget *entry, gpointer data)
     g_print("Hellow entry");
 }
 
-View *create_view(gchar *view_id, GtkWidget *widget, ViewConfig *view_config)
+View *create_view(GtkWidget *widget, ViewConfig *view_config)
 {
     View *view = NULL;
     SAFE_ALLOC(view, View, 1);

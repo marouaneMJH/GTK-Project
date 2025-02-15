@@ -14,58 +14,28 @@
         id="box1"
     >
         <menu_bar id="jkf">
+
             <menu_item
-                label="_Ordinateur"
-            />
-            <menu_item
-                label="_Portable"
+                label="_File"
             >
-                <menu id="djk">
+                <menu id="menu1">
                     <menu_item
-                        label="_Marque"
+                        label="_New"
                     />
                     <menu_item
-                        label="Puissance"
-                    >
-                        <menu
-                            id="menu33"
-                            menu_orientation="horizontal"
-                        >
-                            <menu_item
-                                id="menu_item3"
-                                label="Processor"
-                                menu_left="0"
-                                menu_right="1"
-                            />
-                            <menu_item
-                                id="menu_item3"
-                                label="Viresse"
-                                menu_left="1"
-                                menu_right="2"
-                            />
-                            <menu_item
-                                id="menu_item3"
-                                label="Disque dur"
-                                menu_left="2"
-                                menu_right="3"
-                                on_active="sig_change_self_bg_color"
-                                param_1="red"
-                                param_2="red"
-                            />
+                        label="_Save"
+                    />
 
-
-                        </menu>
-                    </menu_item>
                     <menu_item
-                        label=" _Prix"
+                        label=" _Exit"
                     />
                 </menu>
 
             </menu_item>
 
-
             <menu_item
-                label="LeurChoix"
+                id="about_menu_item"
+                label="_About"
             />
 
 
@@ -111,7 +81,7 @@
                     >
 
                         <frame
-                            id="btn1"
+                            id="viewer"
                             label="Viewer"
                             margin_top="5"
                             margin_bottom="5"
@@ -127,111 +97,312 @@
                         paned_order="2"
                         spacing="10"
                     >
-                        <label
-                            id="label1"
-                            label_text="Label"
-                            xalign="0.5"
-                            box_expand="true"
-                        />
-
-                        <button
+                        <frame
                             id="btn1"
-                            label="Button"
-                            halign="center"
-                            box_expand="true"
-                            box_fill="true"
-                        />
-
-                        <box
-                            id="box3"
-                            halign="center"
-                            orientation="horizontal"
-                            spacing="5"
+                            label="Containers"
+                            margin_top="5"
+                            margin_bottom="5"
+                            margin_left="5"
+                            margin_right="5"
+                            vexpand="true"
+                            hexpand="true"
                         >
-                            <radio_button
-                                id="rbtn1"
-                                label="Choice1"
-                                valign="center"
-                                box_expand="true"
-                                box_fill="true"
-                                is_group="true"
-                            />
-                            <radio_button
-                                id="rbtn2"
-                                label="Choice2"
-                                valign="center"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                            <radio_button
-                                id="rbtn2"
-                                label="Choice3"
-                                valign="center"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                        </box>
-                        <box
-                            id="box3"
-                            orientation="horizontal"
-                            halign="center"
-                            spacing="5"
+                            <grid
+                                id="grd1"
+                                vexpand="true"
+                                hexpand="true"
+                                row_spacing="10"
+                                column_spacing="10"
+                                margin_top="5"
+                                margin_bottom="5"
+                                margin_left="5"
+                                margin_right="5"
+                            >
+
+                                <button
+                                    id="btn1"
+                                    label="Box"
+                                    hexpand="true"
+                                    row="0"
+                                    column="0"
+                                    icon_path="./assets/images/icons/container_bw.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="box"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="Fixed"
+                                    hexpand="true"
+                                    row="0"
+                                    column="1"
+                                    icon_path="./assets/images/icons/container_bw.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="fixed"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="Grid"
+                                    hexpand="true"
+                                    row="1"
+                                    column="0"
+                                    icon_path="./assets/images/icons/container_bw.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="grid"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="Paned"
+                                    hexpand="true"
+                                    row="1"
+                                    column="1"
+                                    icon_path="./assets/images/icons/container_bw.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="paned"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="FlowBox"
+                                    hexpand="true"
+                                    row="2"
+                                    column="0"
+                                    icon_path="./assets/images/icons/container_bw.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="flowbox"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="Notebook"
+                                    hexpand="true"
+                                    row="2"
+                                    column="1"
+                                    icon_path="./assets/images/icons/container_bw.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="notebook"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="Overlay"
+                                    hexpand="true"
+                                    row="3"
+                                    column="0"
+                                    icon_path="./assets/images/icons/container_bw.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="overlay"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="Frame"
+                                    hexpand="true"
+                                    row="3"
+                                    column="1"
+                                    icon_path="./assets/images/icons/container_bw.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="frame"
+                                />
+
+                            </grid>
+                        </frame>
+
+                        <frame
+                            id="btn1"
+                            label="Menus"
+                            margin_top="5"
+                            margin_bottom="5"
+                            margin_left="5"
+                            margin_right="5"
+                            vexpand="true"
+                            hexpand="true"
                         >
-                            <check_button
-                                id="check_btn1"
-                                label="Choice1"
-                                valign="center"
-                                box_expand="true"
-                                box_fill="true"
-                                is_group="true"
-                            />
-                            <check_button
-                                id="check_btn2"
-                                label="Choice2"
-                                valign="center"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                            <check_button
-                                id="check_btn2"
-                                label="Choice3"
-                                valign="center"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                        </box>
+                            <grid
+                                id="grd1"
+                                vexpand="true"
+                                hexpand="true"
+                                row_spacing="10"
+                                column_spacing="10"
+                                margin_top="5"
+                                margin_bottom="5"
+                                margin_left="5"
+                                margin_right="5"
+                            >
 
-                        <switch_button
-                            id="sbtn1"
-                            halign="center"
-                            box_expand="true"
-                        />
+                                <button
+                                    id="btn1"
+                                    label="MenuBar"
+                                    hexpand="true"
+                                    row="0"
+                                    column="0"
+                                    icon_path="./assets/images/icons/open-menu.png"
+                                />
 
-                        <toggle_button
-                            id="tbtn1"
-                            label="Toggle button"
-                            halign="center"
-                            box_expand="true"
-                        />
+                                <button
+                                    id="btn1"
+                                    label="Menu"
+                                    hexpand="true"
+                                    row="0"
+                                    column="1"
+                                    icon_path="./assets/images/icons/open-menu.png"
+                                />
 
-                        <link_button
-                            id="linkbtn2"
-                            label="Go to Link"
-                            uri="https://www.fstm.ac.ma"
-                            halign="center"
-                            box_expand="true"
-                        />
+                                <button
+                                    id="btn1"
+                                    label="MenuItem"
+                                    hexpand="true"
+                                    row="1"
+                                    column="0"
+                                    icon_path="./assets/images/icons/open-menu.png"
+                                />
 
-                        <spin_button
-                            id="spin_btn1"
-                            min="1"
-                            max="100"
-                            width="100"
-                            height="30"
-                            halign="center"
-                            box_expand="true"
-                        />
+                            </grid>
+                        </frame>
 
+                        <frame
+                            id="btn1"
+                            label="Widgets"
+                            margin_top="5"
+                            margin_bottom="5"
+                            margin_left="5"
+                            margin_right="5"
+                            vexpand="true"
+                            hexpand="true"
+                        >
+                            <grid
+                                id="grd1"
+                                vexpand="true"
+                                hexpand="true"
+                                row_spacing="10"
+                                column_spacing="10"
+                                margin_top="5"
+                                margin_bottom="5"
+                                margin_left="5"
+                                margin_right="5"
+                            >
+
+                                <button
+                                    id="btn1"
+                                    label="Label"
+                                    hexpand="true"
+                                    row="0"
+                                    column="0"
+                                    icon_path="./assets/images/icons/open-menu.png"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="LinkButton"
+                                    hexpand="true"
+                                    row="0"
+                                    column="1"
+                                    icon_path="./assets/images/icons/open-menu.png"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="Button"
+                                    hexpand="true"
+                                    row="1"
+                                    column="0"
+                                    icon_path="./assets/images/icons/open-menu.png"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="Entry"
+                                    hexpand="true"
+                                    row="1"
+                                    column="1"
+                                    icon_path="./assets/images/icons/open-menu.png"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="SwitchButton"
+                                    hexpand="true"
+                                    row="2"
+                                    column="0"
+                                    icon_path="./assets/images/icons/open-menu.png"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="ToggleButton"
+                                    hexpand="true"
+                                    row="2"
+                                    column="1"
+                                    icon_path="./assets/images/icons/open-menu.png"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="RadioButton"
+                                    hexpand="true"
+                                    row="3"
+                                    column="0"
+                                    icon_path="./assets/images/icons/open-menu.png"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="Checkbox"
+                                    hexpand="true"
+                                    row="3"
+                                    column="1"
+                                    icon_path="./assets/images/icons/open-menu.png"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="TextArea"
+                                    hexpand="true"
+                                    row="4"
+                                    column="0"
+                                    icon_path="./assets/images/icons/open-menu.png"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="SpinButton"
+                                    hexpand="true"
+                                    row="4"
+                                    column="1"
+                                    icon_path="./assets/images/icons/open-menu.png"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="ProgressBar"
+                                    hexpand="true"
+                                    row="5"
+                                    column="0"
+                                    icon_path="./assets/images/icons/open-menu.png"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="Separator"
+                                    hexpand="true"
+                                    row="5"
+                                    column="1"
+                                    icon_path="./assets/images/icons/open-menu.png"
+                                />
+
+                                <button
+                                    id="btn1"
+                                    label="Image"
+                                    hexpand="true"
+                                    row="6"
+                                    column="0"
+                                    icon_path="./assets/images/icons/open-menu.png"
+                                />
+
+                            </grid>
+                        </frame>
                     </box>
                 </paned>
             </paned>

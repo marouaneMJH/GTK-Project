@@ -128,7 +128,7 @@ GtkWidget *create_box(BoxConfig box_config)
     gtk_widget_set_valign(box, box_config.valign);
 
     // Set spacing
-    // gtk_box_set_spacing(GTK_BOX(box), box_config.spacing);
+    gtk_box_set_spacing(GTK_BOX(box), box_config.spacing);
     // Set packing
     // gtk_box_set_child_packing(GTK_BOX(box), child_widget, is_expand, is_fill, padding, GTK_PACK_START)
 

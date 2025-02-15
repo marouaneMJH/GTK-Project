@@ -17,8 +17,8 @@
 /* Default dimensions for entry */
 #define DEFAULT_ENTRY_DIMENSIONS \
     {                            \
-        .height = 50,            \
-        .width = 200}
+        .height = 0,            \
+        .width = 0}
 
 /* Default margins for entry */
 #define DEFAULT_ENTRY_MARGINS \

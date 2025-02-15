@@ -310,6 +310,15 @@ View *build_app(GtkApplication *app, View *root_view, const gchar *file_path)
     gboolean stop = FALSE;
     while ((c = fgetc(index)) != EOF && !stop)
     {
+
+        // Ignore comment
+        if (c == '#')
+        {
+            while ((c = fgetc(index)) != '\n')
+                ;
+            continue;
+        }
+
         if (c == '<')
         {
             if (fgetc(index) == '/')

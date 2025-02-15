@@ -101,6 +101,10 @@
                         <button label="radio button" />
                         <button label="switch button" />
                         <button label="link button"  bg_color="#F6F5F4" />
+                        #this is a comment 
+                        # and also this is a comment  #here
+                        #
+#
                         </box>
                     </expander>
                 </box>

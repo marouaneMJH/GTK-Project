@@ -11,6 +11,12 @@ typedef struct
 
 } ParamNode;
 
+// for test
+static void sig_hello(GtkWidget *widget, gpointer data)
+{
+    g_print("\nsignale: hello\n");
+}
+
 static void sig_change_self_bg_color(GtkWidget *widget, gpointer data)
 {
     ParamNode *param_array = (ParamNode *)data;
@@ -42,8 +48,6 @@ static void sig_change_friend_bg_color(GtkWidget *widget, gpointer data)
  * size
  * margins
  * then the specify signales
- *
- *
  */
 
 static void sig_change_friend_color(GtkWidget *widget, gpointer data)
@@ -120,6 +124,7 @@ static void sig_dialog(GtkWidget *widget, gpointer data)
 
 static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data)
 {
+
     switch (response_id)
     {
     case GTK_RESPONSE_OK:
@@ -171,90 +176,6 @@ static void sig_self_destroy(GtkWidget *widget, gpointer data)
 {
 
     gtk_widget_destroy(widget);
-}
-
-static void sig_dialog_warning(GtkWidget *widget, gpointer data)
-{
-    ParamNode *param_array = (ParamNode *)data;
-    if (!param_array)
-    {
-        g_print("\nError: sig_dialog_warning(), missing parameters.\n");
-        return;
-    }
-
-    GtkWidget *dialog;
-    GtkWidget *content_area;
-    GtkWidget *image;
-    GtkWidget *label;
-    GtkWidget *box;
-
-    ImageConfig image_config = DEFAULT_IMAGE;
-    LabelConfig label_config = DEFAULT_LABEL;
-    BoxConfig box_config = DEFAULT_BOX;
-    BoxConfig box2_config = DEFAULT_BOX;
-
-    // Create the dialog window
-    dialog = gtk_dialog_new_with_buttons("Warning",
-                                         GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-                                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         "_OK", GTK_RESPONSE_OK,
-                                         "_Cancel", GTK_RESPONSE_CANCEL,
-                                         "_Quit", GTK_RESPONSE_CANCEL,
-
-                                         NULL);
-
-    // Get the content area of the dialog
-    content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
-
-    // Create a horizontal box to hold the image and label
-    box_config.orientation = GTK_ORIENTATION_HORIZONTAL;
-    box_config.spacing = 10;
-
-    box = create_box(box_config);
-    gtk_container_add(GTK_CONTAINER(content_area), box);
-
-    // Load the image from the file
-    strcpy(image_config.path, "./assets/images/warning_icon.jpeg");
-    image_config.dimensions.height = 20;
-    image_config.dimensions.width = 20;
-    image = create_image(image_config);
-    if (!image)
-    {
-        g_print("Error: Unable to load image './assets/images/warning_icon.jpeg'\n");
-    }
-
-    box2_config.dimensions.width = 199;
-    box2_config.dimensions.width = 199;
-
-    GtkWidget *box2 = create_box(box2_config);
-
-    gtk_box_pack_start(GTK_BOX(box2), image, FALSE, FALSE, 10);
-    gtk_box_pack_start(GTK_BOX(box), box2, FALSE, FALSE, 10);
-
-    // Create the warning label using the first parameter
-    strcpy(label_config.label_text,
-           param_array->params[0][0] != '\0'
-               ? param_array->params[0]
-               : "This is a warning message!");
-
-    label = create_label(label_config);
-
-    gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 10);
-
-    // Show all widgets in the dialog
-    show_dialog(dialog);
-
-    // Run the dialog and wait for user response
-    gint response = gtk_dialog_run(GTK_DIALOG(dialog));
-
-    // Handle dialog response if needed
-    if (response == GTK_RESPONSE_OK)
-    {
-        g_print("Warning dialog acknowledged.\n");
-    }
-
-    // Destroy the dialog after response
-    gtk_widget_destroy(dialog);
 }
 
 static void sig_show_image(GtkWidget *widget, gpointer data)
@@ -318,6 +239,82 @@ static void sig_destroy_dialog(GtkWidget *widget, gpointer data)
 {
     gtk_widget_destroy(root_dialog_view_global->widget);
 }
+
+/* Button color signales */
+// Go to signals.h to read documentation
+
+static void sig_color_btn_friend_bg_color(GtkWidget *widget, gpointer data)
+{
+    ParamNode *param_array = (ParamNode *)data;
+
+    if (!param_array)
+    {
+        g_print("\nthe param_array passed to sig_color_btn_friend_bg_color is null");
+        return; // exit the function
+    }
+    // review instead of seaching, we can make our main widget a broder to our app root
+    // review it will drop the complexity, other raison, in modifying dialog we have just one main widget
+
+    View *view = find_view_by_id(param_array->params[0], root_view_global);
+
+    if (!view)
+    {
+        g_print("\nthe view passed to sig_color_btn_friend_bg_color is null");
+        return; // exit the function
+    }
+
+    // to save given color by button color
+    GdkRGBA bg_color;
+
+    // geting the color from the color button
+    gtk_color_button_get_rgba(GTK_COLOR_BUTTON(widget), &bg_color);
+
+    // converting the rgba color to readable string for next function
+    char *bg_color_str = gdk_rgba_to_string(&bg_color);
+
+    // change the target widget bg color
+    widget_set_colors(view->widget, bg_color_str, NULL);
+
+    // deallocate the memory
+    if (bg_color_str)
+        free(bg_color_str);
+}
+
+static void sig_color_btn_friend_color(GtkWidget *widget, gpointer data)
+{
+    ParamNode *param_array = (ParamNode *)data;
+
+    if (!param_array)
+    {
+        g_print("\nthe param_array passed to sig_color_btn_friend_color is null");
+        return; // exit the function
+    }
+    View *view = find_view_by_id(param_array->params[0], root_view_global);
+
+    if (!view)
+    {
+        g_print("\nthe view passed to sig_color_btn_friend_color is null");
+        return; // exit the function
+    }
+
+    // to save given color by button color
+    GdkRGBA bg_color;
+
+    // geting the color from the color button
+    gtk_color_button_get_rgba(GTK_COLOR_BUTTON(widget), &bg_color);
+
+    // converting the rgba color to readable string for next function
+    char *bg_color_str = gdk_rgba_to_string(&bg_color);
+
+    // change the target widget color
+    widget_set_colors(view->widget, NULL, bg_color_str);
+
+    // deallocate the memory
+    if (bg_color_str)
+        free(bg_color_str);
+}
+
+/* End of Color signales */
 
 // Callback for key press events
 gboolean sig_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
@@ -397,10 +394,6 @@ void connect_signales(View *view)
             callback_function = sig_self_destroy;
 
         else if (strcmp(view->view_config->signal.sig_handler,
-                        "sig_dialog_warning") == 0)
-            callback_function = sig_dialog_warning;
-
-        else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_show_image") == 0)
             callback_function = sig_show_image;
 
@@ -417,6 +410,18 @@ void connect_signales(View *view)
         else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_change_friend_color") == 0)
             callback_function = sig_change_friend_color;
+
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_hello") == 0)
+            callback_function = sig_hello;
+
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_color_btn_friend_bg_color") == 0)
+            callback_function = sig_color_btn_friend_bg_color;
+
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_color_btn_friend_color") == 0)
+            callback_function = sig_color_btn_friend_color;
     }
 
     // Connect the callback function
@@ -510,6 +515,10 @@ void connect_signales(View *view)
 
         case SIG_ON_RESPONSE:
             g_signal_connect(G_OBJECT(view->widget), "response", G_CALLBACK(callback_function), NULL);
+            break;
+
+        case SIG_ON_COLOR_SET:
+            g_signal_connect(G_OBJECT(view->widget), "color-set", G_CALLBACK(callback_function), (ParamNode *)view->view_config->param);
             break;
 
         default:

@@ -39,6 +39,7 @@ typedef enum
     ComboTextBoxTag,
     ToggleButtonTag,
     ColorButtonTag,
+    ExpanderTag,
 } Tags;
 
 // Global structure;
@@ -51,7 +52,7 @@ gchar *read_tag(FILE *index);
 
 int get_view_index(gchar *widget_tag);
 
-View *build_app(GtkApplication *app, View *root_view, const char *file_path);
+View *build_app(GtkApplication *app, View *root_view, const gchar *file_path);
 
 void connect_signales(View* view);
 

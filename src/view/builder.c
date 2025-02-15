@@ -146,6 +146,9 @@ int get_view_index(gchar *widget_tag) // Why FILE *index
     if (g_strcmp0(widget_tag, "color_button") == 0)
         return ColorButtonTag;
 
+    if (g_strcmp0(widget_tag, "expander") == 0)
+        return ExpanderTag;
+
     return -1;
 }
 
@@ -504,6 +507,11 @@ View *build_app(GtkApplication *app, View *root_view, const gchar *file_path)
                 is_relative_container = is_container_view(index);
                 break;
 
+            case ExpanderTag:
+                parent_view = read_expander_tag(index, parent_view, is_relative_container);
+                is_relative_container = is_container_view(index);
+                break;
+
             // TODO : Complete other widgets
             default:
                 stop = TRUE;
@@ -523,4 +531,3 @@ View *build_app(GtkApplication *app, View *root_view, const gchar *file_path)
         g_print("Root view created\n");
     return root_view;
 }
-

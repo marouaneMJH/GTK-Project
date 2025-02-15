@@ -154,6 +154,8 @@ GtkWidget *create_button(ButtonConfig button_config)
         gtk_button_set_image(GTK_BUTTON(button), image);
         gtk_button_set_image_position(GTK_BUTTON(button), button_config.icon_position);
     }
+     
+    gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE );
 
     // Set alignment
     gtk_widget_set_halign(button, button_config.halign);

@@ -45,7 +45,8 @@ typedef enum
     SIG_ON_SCROLL,            // Triggered when the scroll wheel is used.
     SIG_ON_ENTER_NOTIFY,      // Triggered when the mouse enters a widget's area.
     SIG_ON_LEAVE_NOTIFY,      // Triggered when the mouse leaves a widget's area.
-    SIG_ON_RESPONSE,
+    SIG_ON_RESPONSE,          // Triggered when one of dialog button triggered
+    SIG_ON_COLOR_SET,         // Triggered when the the the GtkColorButton changed
 
     SIG_LAST // Placeholder for the last signal
 } SignalType;
@@ -80,5 +81,31 @@ typedef struct
     SignalType event_type;
 } SignalConfig;
 
+
+/*** Start Color Button ***/
+/**
+ * @brief this signale used on button color to change friend bg color
+ *
+ * signale to change friend bg color by id, it will search about the id
+ * then it will give it the curent buttonColor color, to seach about the widget
+ * we use param_1 witch is the widget id,should start with xxx (xxx-widget) to
+ * know that the main widget in the dialog
+ * 
+ * @param[in] widget ColorButton
+ * @param[in] gpointer pointer contain ParamNode items
+ * 
+ * @return[ou] void
+ */
+static void sig_color_btn_friend_bg_color(GtkWidget *widget, gpointer data);
+
+
+/**
+ * @brief change friend widget color 
+ * 
+ * like the  `sig_color_btn_friend_bg_color` but instead of bg_color we work with color
+ */
+static void sig_color_btn_friend_color(GtkWidget *widget, gpointer data);
+
+/*** Start Color Button ***/
 
 #endif

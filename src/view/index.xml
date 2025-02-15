@@ -18,7 +18,8 @@
                 label_text="no color chossing"
                 id="label_color_chooser"
             />
-            <entry placeholder_text="Enter the button color" on_activate="sig_change_friend_color"  />
+                        
+          <entry placeholder_text="Enter the button color" on_focus_in="sig_hello" />
             <entry />
             <entry />
             <entry />
@@ -41,7 +42,7 @@
                 width="100"
             >
                 <box
-                    margin_top="25"
+                margin_top="25"
                     margin_bottom="30"
                     margin_left="25"
                     margin_right="25"
@@ -66,8 +67,42 @@
                     />
                     <color_button 
                         id="color_button"
-                        on_color_set="sig_change_button_color"
+                        on_color_set="sig_color_btn_friend_bg_color"
+                        param_1="xxx-button"
                     />
+                    <color_button 
+                        id="color_button"
+                        on_color_set="sig_color_btn_friend_color"
+                        param_1="xxx-button"
+                    />
+                </box>
+            </frame>
+            <frame
+            
+            >
+                <box
+
+                >
+                    <expander
+                        label="button"
+                        font_size="12"
+                        height="200"
+                        width="20"
+                    >
+                        <box
+                            width="100"
+                            
+                        >
+                        <button label="button" />
+                        <button label="toggle button" />
+                        <button label="color button" />
+                        <button label="spin button" />
+                        <button label="check button" />
+                        <button label="radio button" />
+                        <button label="switch button" />
+                        <button label="link button"  bg_color="#F6F5F4" />
+                        </box>
+                    </expander>
                 </box>
             </frame>
         

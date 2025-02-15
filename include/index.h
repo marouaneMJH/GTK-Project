@@ -19,6 +19,7 @@
 #include "./containers/layouts/frame.h"
 #include "./containers/layouts/combo_text_box.h"
 #include "./containers/layouts/overlay.h"
+#include "./containers/layouts/expander.h"
 
 
 // buttons

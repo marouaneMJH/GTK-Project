@@ -512,15 +512,33 @@ View *read_color_button_tag(FILE *index, View *parent_view, gboolean is_relative
 
     GtkWidget *color_button_widget = create_color_button(color_button_config);
 
-    View *toggle_button_view = create_view(view_config->view_id, color_button_widget, view_config);
+    View *color_button_view = create_view(view_config->view_id, color_button_widget, view_config);
 
-    // Ajouter le toggle_button à la hiérarchie des vues
+    // Ajouter le color_button à la hiérarchie des vues
 
-    add_view(toggle_button_view, parent_view, is_relative_container);
+    add_view(color_button_view, parent_view, is_relative_container);
 
-    return toggle_button_view;
+    return color_button_view;
 }
 
 
+
+View *read_expander_tag(FILE *index, View *parent_view, gboolean is_relative_container)
+{
+    ViewConfig *view_config;
+    ExpanderConfig expander_config = DEFAULT_EXPANDER_CONFIG;
+
+    view_config = init_expander_config(index, &expander_config);
+
+    GtkWidget *expander_widget = create_expander(expander_config);
+
+    View *expander_view = create_view(view_config->view_id, expander_widget, view_config);
+
+    // Ajouter le expander à la hiérarchie des vues
+
+    add_view(expander_view, parent_view, is_relative_container);
+
+    return expander_view;
+}
 
 #endif

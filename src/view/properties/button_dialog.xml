@@ -15,7 +15,7 @@
 
         <label
             id="title_label"
-            label_text="Box properties"
+            label_text="Button properties"
             yalign="0.5"
             font_size="18"
             box_expand="true"
@@ -85,105 +85,18 @@
                         >
                             <label
                                 id="label11"
-                                label_text="Orientation"
+                                label_text="Label"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
                             />
-                            <combo_text_box
-                                id="orientation_combo"
-                                default_index="0"
-                                option1="Vertical (default)"
-                                option2="Horizontal"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-
-                        </box>
-
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            box_expand="true"
-                            box_fill="true"
-                            margin_left="10"
-                            margin_right="10"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="label11"
-                                label_text="Spacing"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-
-                            <spin_button
-                                id="spacing_spin"
-                                initial_value="0"
-                                min="0"
-                                max="10000"
+                            <entry
+                                id="label_entry"
+                                placeholder_text="eg: Click here"
                                 box_expand="true"
                                 box_fill="true"
                             />
                         </box>
-
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            box_expand="true"
-                            box_fill="true"
-                            margin_left="10"
-                            margin_right="10"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="label11"
-                                label_text="Baseline"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                            <combo_text_box
-                                id="baseline_combo"
-                                default_index="0"
-                                option1="Center (default)"
-                                option2="Top"
-                                option3="Bottom"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-
-                        </box>
-
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            box_expand="true"
-                            box_fill="true"
-                            margin_left="10"
-                            margin_right="10"
-                            margin_bottom="10"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="homogeneous_label"
-                                label_text="Homogeneous"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-
-                            <switch_button
-                                id="homogeneous_switch"
-                                box_expand="true"
-                                box_fill="true"
-                                margin_right="20"
-                                halign="end"
-                            />
-
-                        </box>
-
 
                     </box>
 
@@ -1128,7 +1041,7 @@
                 box_expand="true"
                 box_fill="true"
                 icon_path="./assets/images/icons/approve.png"
-                param_1="box"
+                param_1="button"
                 on_click="sig_create_new_view"
             />
 

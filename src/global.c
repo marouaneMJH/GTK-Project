@@ -320,7 +320,7 @@ ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCall
 
 View *find_view_by_id(char *view_id, View *root_view)
 {
-    g_print("PASSED WIDGETS WHILE SEARCHING: %s\n", root_view->view_config->view_id);
+    // g_print("PASSED WIDGETS WHILE SEARCHING: %s\n", root_view->view_config->view_id);
     if (g_strcmp0(root_view->view_config->view_id, view_id) == 0)
         return (View *)root_view;
 

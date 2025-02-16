@@ -40,6 +40,30 @@ ViewConfig *configure_toggle_button_property(ToggleButtonConfig *toggle_button_c
     else if (g_strcmp0(property, "height") == 0)
         toggle_button_config->dimensions.height = atoi(value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            toggle_button_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            toggle_button_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            toggle_button_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            toggle_button_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            toggle_button_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            toggle_button_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            toggle_button_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            toggle_button_config->halign = GTK_ALIGN_FILL;
+    }
+
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
@@ -53,40 +77,47 @@ ViewConfig *init_toggle_button_config(FILE *index, ToggleButtonConfig *toggle_bu
 // Fonction de création du ToggleButton
 GtkWidget *create_toggle_button(ToggleButtonConfig toggle_button_config)
 {
-    GtkWidget *w_toggle_button;
+    GtkWidget *toggle_button_widget;
 
     // Création avec ou sans mnémonique
     if (toggle_button_config.is_mnemonic)
-        w_toggle_button = gtk_toggle_button_new_with_mnemonic(toggle_button_config.label);
+        toggle_button_widget = gtk_toggle_button_new_with_mnemonic(toggle_button_config.label);
     else
-        w_toggle_button = gtk_toggle_button_new_with_label(toggle_button_config.label);
+        toggle_button_widget = gtk_toggle_button_new_with_label(toggle_button_config.label);
 
     // Définition des dimensions si spécifiées
     if (toggle_button_config.dimensions.width > 0 || toggle_button_config.dimensions.height > 0)
     {
         gtk_widget_set_size_request(
-            w_toggle_button,
+            toggle_button_widget,
             toggle_button_config.dimensions.width,
             toggle_button_config.dimensions.height);
     }
 
     // Appliquer la visibilité
-    gtk_widget_set_visible(w_toggle_button, toggle_button_config.is_visible);
+    gtk_widget_set_visible(toggle_button_widget, toggle_button_config.is_visible);
 
     // Appliquer l'état actif
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w_toggle_button), toggle_button_config.is_active);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle_button_widget), toggle_button_config.is_active);
 
     // Appliquer le mode indicateur
-    gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(w_toggle_button), toggle_button_config.mode);
+    gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(toggle_button_widget), toggle_button_config.mode);
 
     // Appliquer l'état incohérent
-    gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(w_toggle_button), toggle_button_config.is_inconsistent);
+    gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(toggle_button_widget), toggle_button_config.is_inconsistent);
 
     // Ajouter une infobulle si définie
     if (strlen(toggle_button_config.tooltip) > 0)
-        gtk_widget_set_tooltip_text(w_toggle_button, toggle_button_config.tooltip);
+        gtk_widget_set_tooltip_text(toggle_button_widget, toggle_button_config.tooltip);
 
-    return w_toggle_button;
+    gtk_widget_set_hexpand(toggle_button_widget, toggle_button_config.hexpand);
+    gtk_widget_set_vexpand(toggle_button_widget, toggle_button_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(toggle_button_widget, toggle_button_config.halign);
+    gtk_widget_set_valign(toggle_button_widget, toggle_button_config.valign);
+
+    return toggle_button_widget;
 }
 
 /* Signaux */

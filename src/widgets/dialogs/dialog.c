@@ -10,7 +10,7 @@ ViewConfig *configure_dialog_property(DialogConfig *dialog_config, ViewConfig *v
 
     if (g_strcmp0(property, "title") == 0)
         strcpy(dialog_config->title, value);
-    
+
     if (g_strcmp0(property, "icon_path") == 0)
         strcpy(dialog_config->icon_path, value);
 
@@ -23,12 +23,14 @@ ViewConfig *configure_dialog_property(DialogConfig *dialog_config, ViewConfig *v
     if (g_strcmp0(property, "is_modal") == 0)
         dialog_config->is_modal = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
 
+    if (g_strcmp0(property, "has_header") == 0)
+        dialog_config->has_header = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
     if (g_strcmp0(property, "width") == 0)
         dialog_config->dimensions.width = atoi(value);
 
     if (g_strcmp0(property, "height") == 0)
         dialog_config->dimensions.height = atoi(value);
-
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
@@ -40,7 +42,7 @@ ViewConfig *init_dialog_config(FILE *index, DialogConfig *dialog_config)
     if (!index || !dialog_config)
         return NULL;
 
-    // Allocate memory for the view config
+    // Allocate memory for the view dialog_config
     ViewConfig *view_config = NULL;
     SAFE_ALLOC(view_config, ViewConfig, 1);
     DFEAULT_VIEW_CONFIG(view_config);
@@ -63,7 +65,7 @@ ViewConfig *init_dialog_config(FILE *index, DialogConfig *dialog_config)
         // Read the property of the tag
         property = read_property(index, &status);
 
-        // If the all properties are readed then break the loop and return the view id and pass the properties to the dialog config
+        // If the all properties are readed then break the loop and return the view id and pass the properties to the dialog dialog_config
         if (status == 2)
             return view_config;
 
@@ -81,7 +83,7 @@ ViewConfig *init_dialog_config(FILE *index, DialogConfig *dialog_config)
                 }
                 else
                 {
-                    // Apply the property value to the dialog config
+                    // Apply the property value to the dialog dialog_config
                     int config_status;
                     view_config = configure_dialog_property(dialog_config, view_config, property, value, &config_status);
                     if (!config_status)
@@ -98,57 +100,28 @@ ViewConfig *init_dialog_config(FILE *index, DialogConfig *dialog_config)
     return view_config;
 }
 
-static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data) {
-    switch (response_id) {
-        case GTK_RESPONSE_OK:
-            g_print("User clicked OK.\n");
-            break;
-
-        case GTK_RESPONSE_CANCEL:
-            g_print("User clicked Cancel.\n");
-            gtk_widget_destroy(GTK_WIDGET(dialog)); // Close the dialog
-            break;
-
-        case GTK_RESPONSE_YES:
-            g_print("User clicked Yes.\n");
-            break;
-
-        case GTK_RESPONSE_NO:
-            g_print("User clicked No.\n");
-            break;
-
-        case 100: // Custom response
-            g_print("Custom response 100 triggered.\n");
-            break;
-
-        default:
-            g_print("Unknown response ID: %d\n", response_id);
-            break;
-    }
-}
-
-GtkWidget *create_dialog(DialogConfig config)
+GtkWidget *create_dialog(DialogConfig dialog_config)
 {
     GtkWidget *dialog = gtk_dialog_new_with_buttons(
-        config.title,
+        dialog_config.title,
         GTK_WINDOW(root_view_global->widget),
-        config.is_modal ? GTK_DIALOG_MODAL : 0,
+        dialog_config.is_modal ? GTK_DIALOG_MODAL : 0,
         /**
-         * // review why we use this, we can personnlise the dialog as possible as we can so we can use our function 
+         * // review why we use this, we can personnlise the dialog as possible as we can so we can use our function
          */
-        // "_Yes", GTK_RESPONSE_YES,
-        // "_No", GTK_RESPONSE_NO,
-        // "_Cancel", GTK_RESPONSE_CANCEL, 
+        // "_Oui", GTK_RESPONSE_YES,
+        // "_Non", GTK_RESPONSE_NO,
+        // "_Annuler", GTK_RESPONSE_CANCEL,
         NULL);
 
-
-        set_header_bar(dialog, config.title,config.icon_path);
+    if (dialog_config.has_header)
+        set_header_bar(dialog, dialog_config.title, dialog_config.icon_path);
     // Set dimensions
 
-    gtk_window_set_default_size(GTK_WINDOW(dialog), config.dimensions.width, config.dimensions.height);
+    gtk_window_set_default_size(GTK_WINDOW(dialog), dialog_config.dimensions.width, dialog_config.dimensions.height);
 
     // Set background color if provided
-    widget_set_colors(dialog, config.bg_color, config.text_color);
+    widget_set_colors(dialog, dialog_config.bg_color, dialog_config.text_color);
 
     // g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(sig_dialog_response), NULL);
 

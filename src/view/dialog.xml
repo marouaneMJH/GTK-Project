@@ -1,10 +1,8 @@
 <dialog
 	id="dialog"
 	title="Message "
-	width="900"
-	height="350"
-	icon_path="assets/images/programer.jpg"
-	icon_name="folder"
+	width="300"
+	height="100"
 	hint_type="dialog"
 	is_modal="true"
 	on_response="sig_dialog_response"

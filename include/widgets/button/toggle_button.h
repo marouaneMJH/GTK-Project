@@ -28,6 +28,10 @@
         .is_visible = FALSE,                            \
         .mode = TRUE,                                   \
         .is_inconsistent = FALSE,                       \
+        .hexpand = FALSE,                                  \
+        .vexpand = FALSE,                                  \
+        .halign = GTK_ALIGN_FILL,                          \
+        .valign = GTK_ALIGN_FILL,                          \
         .dimensions = DEFAULT_TOGGLE_BUTTON_DIMENSIONS, \
         .margins = DEFAULT_TOGGLE_BUTTON_MARGINS,       \
         .bg_color = "",                                 \
@@ -44,6 +48,10 @@ typedef struct
     gboolean is_visible;    // Détermine si le bouton est affiché
     gboolean mode;          // Affichage du bouton avec/sans indicateur
     gboolean is_inconsistent; // État intermédiaire du bouton
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
     Dimensions dimensions;
     Margins margins;
     gchar bg_color[MAX_COLOR_SIZE];

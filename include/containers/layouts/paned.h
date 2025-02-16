@@ -23,6 +23,10 @@
         .is_wide = FALSE,                        \
         .margins = DEFAULT_PANED_MARGINS,        \
         .dimensions = DEFAULT_PANED_DIMENSIONS,  \
+        .hexpand = FALSE,                        \
+        .vexpand = FALSE,                        \
+        .halign = GTK_ALIGN_FILL,                \
+        .valign = GTK_ALIGN_FILL,                \
         .bg_color = "\0",                        \
         .text_color = "\0"}
 
@@ -37,6 +41,12 @@ typedef struct
     // Enable or diable wide handle
     gboolean is_wide;
 
+    gboolean hexpand;
+    gboolean vexpand;
+
+    GtkAlign halign;
+    GtkAlign valign;
+
     Margins margins;
 
     Dimensions dimensions;
@@ -46,8 +56,7 @@ typedef struct
 
 } PanedConfig;
 
-
-ViewConfig *configure_paned_property(PanedConfig *paned_config,ViewConfig *view_config ,gchar *property, gchar *value);
+ViewConfig *configure_paned_property(PanedConfig *paned_config, ViewConfig *view_config, gchar *property, gchar *value);
 
 ViewConfig *init_paned_config(FILE *index, PanedConfig *paned_box_config);
 

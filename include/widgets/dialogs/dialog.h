@@ -19,31 +19,28 @@
         .height = 500}
 
 /* Default configuration for general dialog */
-#define DEFAULT_DIALOG                                 \
-    {                                                  \
-        .title = "General Dialog",                     \
-        .is_modal = TRUE,                              \
-        .dimensions = DEFAULT_DIALOG_DIMENSIONS,       \
-        .parent = NULL,                                \
-        .icon_path = '\0',                             \
-        .bg_color = "\0",                              \
-        .text_color = "\0"                             \
-    }
-
-
-
+#define DEFAULT_DIALOG                           \
+    {                                            \
+        .title = "Custom Dialog",                \
+        .is_modal = TRUE,                        \
+        .is_modal = FALSE,                       \
+        .dimensions = DEFAULT_DIALOG_DIMENSIONS, \
+        .parent = NULL,                          \
+        .icon_path = '\0',                       \
+        .bg_color = "\0",                        \
+        .text_color = "\0"}
 
 typedef struct
 {
     gchar title[MAX_DIALOG_TITLE_SIZE]; // Title of the dialog
     gboolean is_modal;                  // Whether the dialog is modal
+    gboolean has_header;                // Whether the dialog is modal
     Dimensions dimensions;              // initial dimensions
     GtkWindow *parent;                  // Parent window (can be NULL)
     gchar icon_path[MAX_ICON_PATH_SIZE];
-    gchar bg_color[MAX_COLOR_SIZE];     // Background color
-    gchar text_color[MAX_COLOR_SIZE];   // Font color
+    gchar bg_color[MAX_COLOR_SIZE];   // Background color
+    gchar text_color[MAX_COLOR_SIZE]; // Font color
 } DialogConfig;
-
 
 ViewConfig *init_dialog_config(FILE *index, DialogConfig *dialog_config);
 
@@ -73,6 +70,6 @@ void show_dialog(GtkWidget *dialog);
  *
  * @param dialog The dialog to destroy.
  */
-void destroy_dialog(GtkWidget* dialog);
+void destroy_dialog(GtkWidget *dialog);
 
 #endif

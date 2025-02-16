@@ -153,6 +153,51 @@ static void sig_dialog(GtkWidget *widget, gpointer data)
     show_dialog(dialog);
 }
 
+void show_img()
+{
+    // Set up dialog configuration
+    DialogConfig dialog_config = DEFAULT_DIALOG;
+    strcpy(dialog_config.title, "Image Viewer");
+
+    // Set up box configuration
+    BoxConfig box_image_config = DEFAULT_BOX;
+    box_image_config.dimensions.height = 300; // Adjusted height
+    box_image_config.dimensions.width = 300;  // Adjusted width
+    box_image_config.halign = GTK_ALIGN_CENTER;
+    box_image_config.valign = GTK_ALIGN_CENTER;
+
+    // Create the box
+    GtkWidget *box = create_box(box_image_config);
+
+    // Set up image configuration
+    ImageConfig image_config = DEFAULT_IMAGE;
+    strcpy(image_config.path, "./assets/images/smale/img1.jpg");
+    image_config.dimensions.height = 200; // Adjusted image height
+    image_config.dimensions.width = 200;  // Adjusted image width
+    image_config.opacity = 1.0;           // Full opacity
+
+    // Check if the image file exists
+    if (!g_file_test(image_config.path, G_FILE_TEST_EXISTS))
+    {
+        g_print("Error: Image file '%s' not found.\n", image_config.path);
+        GtkWidget *error_label = gtk_label_new("Image not found.");
+        gtk_box_pack_start(GTK_BOX(box), error_label, TRUE, TRUE, 0);
+    }
+    else
+    {
+        // Create the image widget and add to the box
+        GtkWidget *image_widget = create_image(image_config);
+        gtk_box_pack_start(GTK_BOX(box), image_widget, TRUE, TRUE, 0);
+    }
+
+    // Create the dialog and add the box to its content area
+    GtkWidget *dialog = create_dialog(dialog_config);
+    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box);
+
+    // Show the dialog
+    show_dialog(dialog);
+}
+
 static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data)
 {
 
@@ -171,10 +216,12 @@ static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer us
 
     case GTK_RESPONSE_YES:
         g_print("User clicked Yes.\n");
+        show_img();
         break;
 
     case GTK_RESPONSE_NO:
         g_print("User clicked No.\n");
+        gtk_widget_destroy(GTK_WIDGET(dialog)); // Close the dialog
         break;
 
     case 100: // Custom response
@@ -205,7 +252,6 @@ static void sig_dialog_font(GtkWidget *widget, gpointer data)
 
 static void sig_self_destroy(GtkWidget *widget, gpointer data)
 {
-
     gtk_widget_destroy(widget);
 }
 
@@ -374,6 +420,284 @@ gboolean sig_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data
     return FALSE; // Return FALSE to propagate the event further
 }
 
+static void sig_properties_dialog(GtkWidget *widget, gpointer data)
+{
+    ParamNode *param_array = (ParamNode *)data;
+    if (!param_array)
+    {
+        g_print("\nError: sig_change_friend_bg_color(), passing argument.\n");
+        return;
+    }
+
+    if (g_strcmp0(param_array->params[0], "box") == 0)
+        build_app(root_app, NULL, BOX_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "fixed") == 0)
+        build_app(root_app, NULL, FIXED_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "grid") == 0)
+        build_app(root_app, NULL, GRID_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "paned") == 0)
+        build_app(root_app, NULL, PANED_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "frame") == 0)
+        build_app(root_app, NULL, FRAME_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "flowbox") == 0)
+        build_app(root_app, NULL, FLOWBOX_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "overlay") == 0)
+        build_app(root_app, NULL, OVERLAY_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "notebook") == 0)
+        build_app(root_app, NULL, NOTEBOOK_PROPERTIES_DIALOG_TXT);
+
+    GtkWidget *dialog = root_dialog_view_global->widget;
+
+    show_dialog(dialog);
+}
+
+void create_new_box_from_dialog()
+{
+    View *viewer = find_view_by_id("viewer", root_view_global);
+    if (!viewer)
+    {
+        g_print("Error: ==> Cannot find the viewer\n");
+        return;
+    }
+
+    BoxConfig box_config = DEFAULT_BOX;
+    View *input_widget = NULL;
+
+    // Orientation
+    input_widget = find_view_by_id("orientation_combo", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the viewer\n");
+        return;
+    }
+    gchar *selected_orientation = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(input_widget->widget));
+    g_print("SELECTED ORIENTATION: ===> %s \n", selected_orientation);
+    if (stricmp(selected_orientation, "horizontal") == 0)
+        box_config.orientation = GTK_ORIENTATION_HORIZONTAL;
+
+    // Spacing
+    input_widget = find_view_by_id("spacing_spin", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the viewer\n");
+        return;
+    }
+    gint spacing = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(input_widget->widget));
+    g_print("SELECTED SPACING: ===> %d \n", spacing);
+    box_config.spacing = spacing;
+
+    // Width
+    input_widget = find_view_by_id("width_spin", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the viewer\n");
+        return;
+    }
+    gint width = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(input_widget->widget));
+    box_config.dimensions.width = width;
+
+    // Height
+    input_widget = find_view_by_id("height_spin", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the viewer\n");
+        return;
+    }
+    gint height = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(input_widget->widget));
+    box_config.dimensions.height = height;
+
+    // Margin top
+    input_widget = find_view_by_id("margin_top_spin", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the margin_top_spin\n");
+        return;
+    }
+    gint margin_top = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(input_widget->widget));
+    box_config.margins.top = margin_top;
+
+    // Margin bottom
+    input_widget = find_view_by_id("margin_bottom_spin", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the margin_bottom_spin\n");
+        return;
+    }
+    gint margin_bottom = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(input_widget->widget));
+    box_config.margins.bottom = margin_bottom;
+
+    // Margin left
+    input_widget = find_view_by_id("margin_left_spin", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the margin_left_spin\n");
+        return;
+    }
+    gint margin_left = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(input_widget->widget));
+    box_config.margins.start = margin_left;
+
+    // Margin right
+    input_widget = find_view_by_id("margin_right_spin", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the margin_right_spin\n");
+        return;
+    }
+    gint margin_right = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(input_widget->widget));
+    box_config.margins.end = margin_right;
+
+    // Baseline
+    input_widget = find_view_by_id("baseline_combo", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the viewer\n");
+        return;
+    }
+    gchar *baseline = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(input_widget->widget));
+    if (stricmp(selected_orientation, "top") == 0)
+        box_config.baseline_position = GTK_BASELINE_POSITION_TOP;
+    else if (stricmp(selected_orientation, "bottom") == 0)
+        box_config.baseline_position = GTK_BASELINE_POSITION_BOTTOM;
+
+    // HAlign
+    input_widget = find_view_by_id("halign_combo", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the viewer\n");
+        return;
+    }
+    gchar *halign = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(input_widget->widget));
+    if (stricmp(halign, "start") == 0)
+        box_config.halign = GTK_ALIGN_START;
+    else if (stricmp(halign, "end") == 0)
+        box_config.halign = GTK_ALIGN_END;
+    else if (stricmp(halign, "baseline") == 0)
+        box_config.halign = GTK_ALIGN_BASELINE;
+    else if (stricmp(halign, "center") == 0)
+        box_config.halign = GTK_ALIGN_CENTER;
+
+    // VAlign
+    input_widget = find_view_by_id("valign_combo", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the viewer\n");
+        return;
+    }
+    gchar *valign = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(input_widget->widget));
+    if (stricmp(valign, "start") == 0)
+        box_config.valign = GTK_ALIGN_START;
+    else if (stricmp(valign, "end") == 0)
+        box_config.valign = GTK_ALIGN_END;
+    else if (stricmp(valign, "baseline") == 0)
+        box_config.valign = GTK_ALIGN_BASELINE;
+    else if (stricmp(valign, "center") == 0)
+        box_config.valign = GTK_ALIGN_CENTER;
+
+    // Homogeneous
+    input_widget = find_view_by_id("homogeneous_switch", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the homogeneous_switch\n");
+        return;
+    }
+    gboolean homogeneous = gtk_switch_get_active(GTK_SWITCH(input_widget->widget));
+    box_config.homogeneous = homogeneous;
+
+    // HExpand
+    input_widget = find_view_by_id("hexpand_switch", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the hexpand_switch\n");
+        return;
+    }
+    gboolean hexpand = gtk_switch_get_active(GTK_SWITCH(input_widget->widget));
+    box_config.hexpand = hexpand;
+
+    // VExpand
+    input_widget = find_view_by_id("vexpand_switch", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the vexpand_switch\n");
+        return;
+    }
+    gboolean vexpand = gtk_switch_get_active(GTK_SWITCH(input_widget->widget));
+    box_config.vexpand = vexpand;
+
+    // Background color
+    input_widget = find_view_by_id("bg_color_entry", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the bg_color_entry\n");
+        return;
+    }
+    const gchar *bg_color = gtk_entry_get_text(GTK_ENTRY(input_widget->widget));
+    strcpy(box_config.bg_color, bg_color);
+
+    strcpy(box_config.bg_color, "red");
+
+    // Text color
+    input_widget = find_view_by_id("color_entry", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the color_entry\n");
+        return;
+    }
+    const gchar *text_color = gtk_entry_get_text(GTK_ENTRY(input_widget->widget));
+    strcpy(box_config.text_color, text_color);
+
+    // Background image
+    input_widget = find_view_by_id("bg_image_entry", root_dialog_view_global);
+    if (!input_widget)
+    {
+        g_print("Error: ==> Cannot find the bg_image_entry\n");
+        return;
+    }
+    const gchar *bg_image = gtk_entry_get_text(GTK_ENTRY(input_widget->widget));
+    strcpy(box_config.bg_image, bg_image);
+
+    GtkWidget *new_box = create_box(box_config);
+    gtk_container_add(GTK_CONTAINER(viewer->widget), new_box);
+    gtk_widget_show_all(root_view_global->widget);
+}
+
+static void sig_create_new_view(GtkWidget *widget, gpointer data)
+{
+
+    // TODO: Add the new widget to viewer
+    // Steps:
+    // 1 - Get viewer
+    // 2 - Read config from root dialog for each widget
+    // 3 - Create the view basing on the config
+    // 4 - Add the view a new view graph (or exist one except the main)
+
+    ParamNode *param_array = (ParamNode *)data;
+    if (!param_array)
+    {
+        g_print("Error: ==> passing argument.\n");
+        return;
+    }
+
+    if (g_strcmp0(param_array->params[0], "box") == 0)
+    {
+        create_new_box_from_dialog();
+    }
+    else if (g_strcmp0(param_array->params[0], "fixed") == 0)
+    {
+    }
+    else if (g_strcmp0(param_array->params[0], "grid") == 0)
+        build_app(root_app, NULL, GRID_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "paned") == 0)
+        build_app(root_app, NULL, PANED_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "frame") == 0)
+        build_app(root_app, NULL, FRAME_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "flowbox") == 0)
+        build_app(root_app, NULL, FLOWBOX_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "overlay") == 0)
+        build_app(root_app, NULL, OVERLAY_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "notebook") == 0)
+        build_app(root_app, NULL, NOTEBOOK_PROPERTIES_DIALOG_TXT);
+}
+
 void connect_signales(View *view)
 {
     // Exit the function if no signale triggered
@@ -437,6 +761,12 @@ void connect_signales(View *view)
         else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_key_press") == 0)
             callback_function = sig_key_press;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_properties_dialog") == 0)
+            callback_function = sig_properties_dialog;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_create_new_view") == 0)
+            callback_function = sig_create_new_view;
 
         else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_change_friend_color") == 0)

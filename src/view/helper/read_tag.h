@@ -512,7 +512,7 @@ View *read_color_button_tag(FILE *index, View *parent_view, gboolean is_relative
 
     GtkWidget *color_button_widget = create_color_button(color_button_config);
 
-    View *color_button_view = create_view(view_config->view_id, color_button_widget, view_config);
+    View *color_button_view = create_view(color_button_widget, view_config);
 
     // Ajouter le color_button à la hiérarchie des vues
 
@@ -532,7 +532,7 @@ View *read_expander_tag(FILE *index, View *parent_view, gboolean is_relative_con
 
     GtkWidget *expander_widget = create_expander(expander_config);
 
-    View *expander_view = create_view(view_config->view_id, expander_widget, view_config);
+    View *expander_view = create_view(expander_widget, view_config);
 
     // Ajouter le expander à la hiérarchie des vues
 

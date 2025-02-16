@@ -66,6 +66,7 @@ ViewConfig *init_fixed_config(FILE *index, FixedConfig *fixed_config)
 {
     return init_generic_config(index, (void *)fixed_config, (ConfigurePropertyCallback)configure_fixed_property);
 }
+
 GtkWidget *create_fixed(FixedConfig fixed_config)
 {
     GtkWidget *fixed = NULL;

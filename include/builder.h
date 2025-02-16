@@ -12,6 +12,7 @@
 #define FRAME_PROPERTIES_DIALOG_TXT "./src/view/properties/frame_dialog.xml"
 #define OVERLAY_PROPERTIES_DIALOG_TXT "./src/view/properties/overlay_dialog.xml"
 #define NOTEBOOK_PROPERTIES_DIALOG_TXT "./src/view/properties/notebook_dialog.xml"
+#define BUTTON_PROPERTIES_DIALOG_TXT "./src/view/properties/button_dialog.xml"
 #define MODE "r"
 
 typedef enum

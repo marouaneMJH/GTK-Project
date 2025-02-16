@@ -309,6 +309,8 @@
                                     row="1"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="button"
                                 />
 
                                 <button

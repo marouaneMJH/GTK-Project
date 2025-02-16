@@ -3,13 +3,12 @@
 
 #include "./../../../include/index.h"
 
-
 /**
- * @file function that link between widget and ther container 
- * 
- * each function verify if the whidget it's a container 
+ * @file function that link between widget and ther container
+ *
+ * each function verify if the whidget it's a container
  * if yes, it will include the child and if not, it will just ignore it
- * 
+ *
  */
 
 int link_with_box_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_config)
@@ -91,6 +90,15 @@ int link_with_frame_container(GtkWidget *parent, GtkWidget *child, ViewConfig *v
     return 1;
 }
 
+int link_with_expander_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_config)
+{
+    if (!GTK_IS_EXPANDER(parent))
+        return 0;
+
+    gtk_container_add(GTK_CONTAINER(parent), child);
+    return 1;
+}
+
 int link_with_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_config)
 {
     if (GTK_IS_MENU_ITEM(child) || GTK_IS_MENU(child) || GTK_IS_NOTEBOOK(parent))
@@ -102,7 +110,8 @@ int link_with_container(GtkWidget *parent, GtkWidget *child, ViewConfig *view_co
              link_with_grid_container(parent, child, view_config) ||
              link_with_stack_container(parent, child, view_config) ||
              link_with_frame_container(parent, child, view_config) ||
-             link_with_overlay_container(parent, child, view_config))
+             link_with_overlay_container(parent, child, view_config) ||
+             link_with_expander_container(parent, child, view_config))
                 ? 1
                 : 0);
     ;

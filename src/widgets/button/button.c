@@ -88,23 +88,29 @@ ViewConfig *configure_button_property(ButtonConfig *button_config, ViewConfig *v
         button_config->margins.end = atoi(value);
 
     // Dimensions
-    if (g_strcmp0(property, "width") == 0)
+    else if (g_strcmp0(property, "width") == 0)
         button_config->dimensions.width = atoi(value);
 
-    if (g_strcmp0(property, "height") == 0)
+    else if (g_strcmp0(property, "height") == 0)
         button_config->dimensions.height = atoi(value);
 
-    if (g_strcmp0(property, "bg_color") == 0)
+    else if (g_strcmp0(property, "bg_color") == 0)
         strcpy(button_config->bg_color, value);
 
-    if (g_strcmp0(property, "color") == 0)
+    else if (g_strcmp0(property, "color") == 0)
         strcpy(button_config->color, value);
 
-    if (g_strcmp0(property, "hexpand") == 0)
+    else if (g_strcmp0(property, "hexpand") == 0)
         button_config->hexpand = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
 
-    if (g_strcmp0(property, "vexpand") == 0)
+    else if (g_strcmp0(property, "vexpand") == 0)
         button_config->vexpand = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
+    else if (g_strcmp0(property, "bg_image") == 0)
+        strcpy(button_config->bg_image, value);
+
+    else if (g_strcmp0(property, "font_size") == 0)
+        button_config->font_size = atoi(value);
 
     // Icon image and icon
 
@@ -118,14 +124,12 @@ ViewConfig *init_button_config(FILE *index, ButtonConfig *button_config)
     return init_generic_config(index, (void *)button_config, (ConfigurePropertyCallback)configure_button_property);
 }
 
-
 GtkWidget *create_button(ButtonConfig button_config)
 {
     GtkWidget *button;
 
     // Create button with or without mnemonic based on use_underline flag
     button = gtk_button_new_with_mnemonic(button_config.label);
-
 
     // Set sensitivity
     gtk_widget_set_sensitive(button, button_config.is_sensitive);
@@ -154,9 +158,17 @@ GtkWidget *create_button(ButtonConfig button_config)
         gtk_button_set_image(GTK_BUTTON(button), image);
         gtk_button_set_image_position(GTK_BUTTON(button), button_config.icon_position);
     }
-     
+
     // to hide button border
     // gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE );
+
+    // Set bg_image
+    if (strcmp(button_config.bg_image, "\0") != 0)
+        widget_set_background_image(button, button_config.bg_image, NULL);
+
+    // Set Font Size
+    if (button_config.font_size != 10)
+        widget_set_font_size(button, button_config.font_size);
 
     // Set alignment
     gtk_widget_set_halign(button, button_config.halign);

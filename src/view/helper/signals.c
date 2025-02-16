@@ -17,6 +17,37 @@ static void sig_hello(GtkWidget *widget, gpointer data)
     g_print("\nsignale: hello\n");
 }
 
+void widget_type(View *root)
+{
+    if (root == NULL)
+        return;
+    const char *type_name = G_OBJECT_TYPE_NAME(root->widget);
+    if(root->parent)
+    {
+        const char *parent_type_name = G_OBJECT_TYPE_NAME(root->parent->widget);    
+        g_print("Widget type: %s\tContainer type:  %s.\n", type_name, parent_type_name);
+    }else 
+    {
+        
+        g_print("Widget type: %s\tContainer type:  NULL.\n", type_name);
+    }
+    // if (type_name)
+    //     free(type_name);
+
+    // if (parent_type_name)
+    //     free(parent_type_name);
+
+    widget_type(root->child);
+    widget_type(root->next);
+}
+
+static void sig_tree_widget_type(GtkWidget *widget, gpointer data)
+{
+    widget_type(root_view_global);
+}
+
+// end  testing signales
+
 static void sig_change_self_bg_color(GtkWidget *widget, gpointer data)
 {
     ParamNode *param_array = (ParamNode *)data;
@@ -267,7 +298,7 @@ static void sig_color_btn_friend_bg_color(GtkWidget *widget, gpointer data)
     GdkRGBA bg_color;
 
     // geting the color from the color button
-    gtk_color_button_get_rgba(GTK_COLOR_BUTTON(widget), &bg_color);
+    gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(widget), &bg_color);
 
     // converting the rgba color to readable string for next function
     char *bg_color_str = gdk_rgba_to_string(&bg_color);
@@ -301,7 +332,7 @@ static void sig_color_btn_friend_color(GtkWidget *widget, gpointer data)
     GdkRGBA bg_color;
 
     // geting the color from the color button
-    gtk_color_button_get_rgba(GTK_COLOR_BUTTON(widget), &bg_color);
+    gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(widget), &bg_color);
 
     // converting the rgba color to readable string for next function
     char *bg_color_str = gdk_rgba_to_string(&bg_color);
@@ -422,6 +453,10 @@ void connect_signales(View *view)
         else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_color_btn_friend_color") == 0)
             callback_function = sig_color_btn_friend_color;
+
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_tree_widget_type") == 0)
+            callback_function = sig_tree_widget_type;
     }
 
     // Connect the callback function

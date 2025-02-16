@@ -1,5 +1,6 @@
 #include "./include/builder.h"
 
+
 // Activate callback for GtkApplication
 static void activate(GtkApplication *app, gpointer user_data)
 {
@@ -12,11 +13,13 @@ static void activate(GtkApplication *app, gpointer user_data)
     // WindowConfig window_config = DEFAULT_WINDOW;
     // GtkWidget *window = create_window(app, window_config);
 
-    // ColorButtonConfig button_config = DEFAULT_COLOR_BUTTON;
-    // GtkWidget *button = create_color_button(button_config);
-
-    // gtk_container_add(GTK_CONTAINER(expander), button);
-    // gtk_container_add(GTK_CONTAINER(window), expander);
+    // // ColorButtonConfig button_config = DEFAULT_COLOR_BUTTON;
+    // // GtkWidget *button = create_color_button(button_config);
+    // GtkWidget *button=gtk_font_button_new();
+    
+    
+    // // gtk_container_add(GTK_CONTAINER(expander), button);
+    // gtk_container_add(GTK_CONTAINER(window), button);
 
     gtk_widget_show_all(window);
 }

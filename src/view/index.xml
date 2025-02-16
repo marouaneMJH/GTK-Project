@@ -12,6 +12,7 @@
         id="main_box"
         orientation="horizontal"
     >
+        <button label="print tree" on_click="sig_dialog" font_size="12" bg_image="big/ubuntu1.jpeg" />
         <box
         >
             <label 
@@ -87,10 +88,10 @@
                         label="button"
                         font_size="12"
                         height="200"
-                        width="20"
+                            width="400"
                     >
                         <box
-                            width="100"
+                            width="400"
                             
                         >
                         <button label="button" />

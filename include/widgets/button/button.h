@@ -42,12 +42,14 @@
         .icon_path = "\0",                                 \
         .halign = GTK_ALIGN_CENTER,                        \
         .valign = GTK_ALIGN_CENTER,                        \
-        .always_show_image = TRUE,                        \
+        .always_show_image = TRUE,                         \
         .focus_on_click = TRUE,                            \
         .use_underline = FALSE,                            \
         .use_stock = FALSE,                                \
         .icon_position = GTK_POS_LEFT,                     \
         .bg_color = "\0",                                  \
+        .font_size = 10,                                    \
+        .bg_image = "\0",                                  \
         .color = "\0"}
 
 typedef struct
@@ -76,6 +78,8 @@ typedef struct
     /* Button appearance */
     gchar bg_color[MAX_COLOR_SIZE]; // Background color (e.g., "\0")
     gchar color[MAX_COLOR_SIZE];    // Text color (e.g., "#0000000")
+    gchar bg_image[MAX_ICON_PATH_SIZE];
+    gint font_size;
 
     // @deprecated
     gboolean use_stock;      // Whether to use stock items for the button (deprecated)

@@ -3,8 +3,6 @@
 	title="Message "
 	width="300"
 	height="100"
-	icon_path="assets/images/programer.jpg"
-	icon_name="folder"
 	hint_type="dialog"
 	is_modal="true"
 	on_response="sig_dialog_response"

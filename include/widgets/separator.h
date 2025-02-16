@@ -21,6 +21,10 @@
         .orientation = GTK_ORIENTATION_VERTICAL,    \
         .dimensions = DEFAULT_SEPARATOR_DIMENSIONS, \
         .margins = DEFAULT_SEPARATOR_MARGINS, \
+        .hexpand = FALSE,                                  \
+        .vexpand = FALSE,                                  \
+        .halign = GTK_ALIGN_FILL,                          \
+        .valign = GTK_ALIGN_FILL,                          \
         .is_visible = TRUE}
 
 typedef struct
@@ -28,6 +32,12 @@ typedef struct
     gchar tooltip[MAX_TOOLTIP_SIZE];
     GtkOrientation orientation;
     gboolean is_visible;
+    gboolean hexpand;
+    gboolean vexpand;
+
+    GtkAlign halign;
+    GtkAlign valign;
+
     Dimensions dimensions;
     Margins margins;
 } SeparatorConfig;

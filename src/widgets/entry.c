@@ -46,7 +46,7 @@ ViewConfig *configure_entry_property(EntryConfig *entry_config, ViewConfig *view
 
     if (g_strcmp0(property, "has_frame") == 0)
         entry_config->has_frame = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
-    
+
     if (g_strcmp0(property, "has_delete_icon") == 0)
         entry_config->has_delete_icon = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
 
@@ -128,11 +128,12 @@ GtkWidget *create_entry(EntryConfig entry_config)
 
     g_print("=============================================\n");
     GtkWidget *entry = gtk_entry_new();
-    
-    if(entry_config.has_delete_icon){
+
+    if (entry_config.has_delete_icon)
+    {
         gtk_entry_set_icon_from_icon_name(GTK_ENTRY(entry), GTK_ENTRY_ICON_SECONDARY, "edit-clear");
-        const gchar* icon=gtk_entry_get_icon_name(GTK_ENTRY(entry), GTK_ENTRY_ICON_SECONDARY);
-        if(icon)
+        const gchar *icon = gtk_entry_get_icon_name(GTK_ENTRY(entry), GTK_ENTRY_ICON_SECONDARY);
+        if (icon)
             g_signal_connect(entry, "icon-press", G_CALLBACK(on_icon_press), NULL);
     }
 
@@ -149,10 +150,10 @@ GtkWidget *create_entry(EntryConfig entry_config)
     if ((entry_config.purpose == GTK_INPUT_PURPOSE_PASSWORD) || (entry_config.purpose == GTK_INPUT_PURPOSE_PIN))
         gtk_entry_set_visibility(GTK_ENTRY(entry), FALSE);
 
-    
     gtk_entry_set_max_length(GTK_ENTRY(entry), entry_config.max_length);
     g_print("Entry max length: %d\n", entry_config.max_length);
-    gtk_widget_set_size_request(entry, entry_config.dimensions.width, entry_config.dimensions.height);
+    if (entry_config.dimensions.height > 0 || entry_config.dimensions.width > 0)
+        gtk_widget_set_size_request(entry, entry_config.dimensions.width, entry_config.dimensions.height);
 
     gtk_widget_set_opacity(entry, entry_config.opacity);
     gtk_entry_set_alignment(GTK_ENTRY(entry), entry_config.alignment);

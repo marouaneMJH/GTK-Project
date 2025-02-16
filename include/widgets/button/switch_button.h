@@ -24,6 +24,10 @@
         .is_active = FALSE,                             \
         .state = FALSE,                                 \
         .is_visible = FALSE,                            \
+        .hexpand = FALSE,                                  \
+        .vexpand = FALSE,                                  \
+        .halign = GTK_ALIGN_FILL,                          \
+        .valign = GTK_ALIGN_FILL,                          \
         .dimensions = DEFAULT_SWITCH_BUTTON_DIMENSIONS, \
         .margins = DEFAULT_SWITCH_BUTTON_MARGINS,       \
         .bg_color = "\0",                               \
@@ -37,6 +41,10 @@ typedef struct
     gboolean is_active;
     gboolean is_visible;
     gboolean state;
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
     Dimensions dimensions;
     Margins margins;
     gchar bg_color[MAX_COLOR_SIZE];

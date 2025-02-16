@@ -4,6 +4,8 @@ View *root_view_global;
 View *root_dialog_view_global;
 GtkApplication *root_app;
 
+View *new_root_view_global;
+
 // inline void free_widget(GtkWidget *widget)
 // {
 //     if (widget != NULL)

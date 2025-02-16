@@ -1,8 +1,6 @@
 
 #include "./../../../include/widgets/button/switch_button.h"
 
-
-
 ViewConfig *configure_switch_button_property(SwitchButtonConfig *switch_button_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
     if (!switch_button_config || !property || !value)
@@ -36,7 +34,7 @@ ViewConfig *configure_switch_button_property(SwitchButtonConfig *switch_button_c
         return view_config;
     }
 
-        // Margins
+    // Margins
     if (g_strcmp0(property, "margin_top") == 0)
         switch_button_config->margins.top = atoi(value);
 
@@ -62,6 +60,30 @@ ViewConfig *configure_switch_button_property(SwitchButtonConfig *switch_button_c
     if (g_strcmp0(property, "text_color") == 0)
         strcpy(switch_button_config->text_color, value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            switch_button_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            switch_button_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            switch_button_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            switch_button_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            switch_button_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            switch_button_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            switch_button_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            switch_button_config->halign = GTK_ALIGN_FILL;
+    }
+
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
@@ -69,7 +91,7 @@ ViewConfig *configure_switch_button_property(SwitchButtonConfig *switch_button_c
 
 ViewConfig *init_switch_button_config(FILE *index, SwitchButtonConfig *switch_button_config)
 {
-    return init_generic_config(index,(void*)switch_button_config,(ConfigurePropertyCallback)configure_switch_button_property);
+    return init_generic_config(index, (void *)switch_button_config, (ConfigurePropertyCallback)configure_switch_button_property);
 }
 
 GtkWidget *create_switch_button(SwitchButtonConfig switch_button_config)
@@ -103,6 +125,13 @@ GtkWidget *create_switch_button(SwitchButtonConfig switch_button_config)
 
     // Set margins
     widget_set_margins(switch_button, switch_button_config.margins);
+
+    gtk_widget_set_hexpand(switch_button, switch_button_config.hexpand);
+    gtk_widget_set_vexpand(switch_button, switch_button_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(switch_button, switch_button_config.halign);
+    gtk_widget_set_valign(switch_button, switch_button_config.valign);
 
     return switch_button;
 }

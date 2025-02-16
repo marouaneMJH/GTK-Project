@@ -358,6 +358,7 @@
                                 option2="center"
                                 option3="start"
                                 option4="end"
+                                option5="baseline"
                                 box_expand="true"
                                 box_fill="true"
                             />
@@ -388,6 +389,7 @@
                                 option2="center"
                                 option3="start"
                                 option4="end"
+                                option5="baseline"
                                 box_expand="true"
                                 box_fill="true"
                             />

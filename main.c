@@ -1,6 +1,9 @@
 #include "./include/builder.h"
 
-
+void on_event_box_button_press()
+{
+    printf("hello");
+}
 // Activate callback for GtkApplication
 static void activate(GtkApplication *app, gpointer user_data)
 {
@@ -13,13 +16,19 @@ static void activate(GtkApplication *app, gpointer user_data)
     // WindowConfig window_config = DEFAULT_WINDOW;
     // GtkWidget *window = create_window(app, window_config);
 
-    // // ColorButtonConfig button_config = DEFAULT_COLOR_BUTTON;
-    // // GtkWidget *button = create_color_button(button_config);
+    // GtkWidget *label=gtk_label_new("hello");
+    // GtkWidget *event_box = gtk_event_box_new();
+    // gtk_container_add(GTK_CONTAINER(event_box), label);
+    // gtk_widget_show(label);
+    // gtk_widget_show(event_box);
+
+    // g_signal_connect(event_box, "button-press-event",
+    //                  G_CALLBACK(on_event_box_button_press), NULL);
+
     // GtkWidget *button=gtk_font_button_new();
-    
-    
+
     // // gtk_container_add(GTK_CONTAINER(expander), button);
-    // gtk_container_add(GTK_CONTAINER(window), button);
+    // gtk_container_add(GTK_CONTAINER(window), event_box);
 
     gtk_widget_show_all(window);
 }

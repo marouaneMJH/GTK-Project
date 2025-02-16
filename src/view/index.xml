@@ -57,6 +57,9 @@
                     id="conent_box"
                     paned_order="1"
                 >
+                <event_box 
+                        on_button_press="sig_hello"
+                >
                     <label id="id"
                         label_text="Widgets"
                         xalign="0.5"
@@ -65,6 +68,8 @@
                         box_expand="true"
                         box_fill="true"
                     />
+
+                </event_box>
 
                 </box>
 

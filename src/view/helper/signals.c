@@ -12,9 +12,17 @@ typedef struct
 } ParamNode;
 
 // for test
-static void sig_hello(GtkWidget *widget, gpointer data)
+
+gboolean sig_hello(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
-    g_print("\nsignale: hello\n");
+    if (event->type == GDK_BUTTON_PRESS)
+    {
+        g_print("Label clicked! Button %d at (%.2f, %.2f)\n",
+                event->button, event->x, event->y);
+        // Return TRUE to indicate the event was handled.
+        return TRUE;
+    }
+    return FALSE;
 }
 
 void widget_type(View *root)
@@ -22,13 +30,14 @@ void widget_type(View *root)
     if (root == NULL)
         return;
     const char *type_name = G_OBJECT_TYPE_NAME(root->widget);
-    if(root->parent)
+    if (root->parent)
     {
-        const char *parent_type_name = G_OBJECT_TYPE_NAME(root->parent->widget);    
+        const char *parent_type_name = G_OBJECT_TYPE_NAME(root->parent->widget);
         g_print("Widget type: %s\tContainer type:  %s.\n", type_name, parent_type_name);
-    }else 
+    }
+    else
     {
-        
+
         g_print("Widget type: %s\tContainer type:  NULL.\n", type_name);
     }
     // if (type_name)
@@ -120,15 +129,6 @@ static void sig_change_friend_color(GtkWidget *widget, gpointer data)
     }
 }
 
-static void sig_dialog_message(GtkWidget *widget, gpointer data)
-{
-    ParamNode *param_array = (ParamNode *)data;
-    MessageDialogConfig message_dialog_config = DEFAULT_MESSAGE_DIALOG_CONFIG;
-    strcpy(message_dialog_config.message, param_array->params[0]);
-    GtkWidget *dialog_widget = create_message_dialog(message_dialog_config);
-    show_dialog(dialog_widget);
-}
-
 static void sig_change_font_size(GtkWidget *widget, gpointer data)
 {
     ParamNode *param_array = (ParamNode *)data;
@@ -153,51 +153,6 @@ static void sig_dialog(GtkWidget *widget, gpointer data)
     show_dialog(dialog);
 }
 
-void show_img()
-{
-    // Set up dialog configuration
-    DialogConfig dialog_config = DEFAULT_DIALOG;
-    strcpy(dialog_config.title, "Image Viewer");
-
-    // Set up box configuration
-    BoxConfig box_image_config = DEFAULT_BOX;
-    box_image_config.dimensions.height = 300; // Adjusted height
-    box_image_config.dimensions.width = 300;  // Adjusted width
-    box_image_config.halign = GTK_ALIGN_CENTER;
-    box_image_config.valign = GTK_ALIGN_CENTER;
-
-    // Create the box
-    GtkWidget *box = create_box(box_image_config);
-
-    // Set up image configuration
-    ImageConfig image_config = DEFAULT_IMAGE;
-    strcpy(image_config.path, "./assets/images/smale/img1.jpg");
-    image_config.dimensions.height = 200; // Adjusted image height
-    image_config.dimensions.width = 200;  // Adjusted image width
-    image_config.opacity = 1.0;           // Full opacity
-
-    // Check if the image file exists
-    if (!g_file_test(image_config.path, G_FILE_TEST_EXISTS))
-    {
-        g_print("Error: Image file '%s' not found.\n", image_config.path);
-        GtkWidget *error_label = gtk_label_new("Image not found.");
-        gtk_box_pack_start(GTK_BOX(box), error_label, TRUE, TRUE, 0);
-    }
-    else
-    {
-        // Create the image widget and add to the box
-        GtkWidget *image_widget = create_image(image_config);
-        gtk_box_pack_start(GTK_BOX(box), image_widget, TRUE, TRUE, 0);
-    }
-
-    // Create the dialog and add the box to its content area
-    GtkWidget *dialog = create_dialog(dialog_config);
-    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box);
-
-    // Show the dialog
-    show_dialog(dialog);
-}
-
 static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data)
 {
 
@@ -216,7 +171,6 @@ static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer us
 
     case GTK_RESPONSE_YES:
         g_print("User clicked Yes.\n");
-        show_img();
         break;
 
     case GTK_RESPONSE_NO:
@@ -234,78 +188,11 @@ static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer us
     }
 }
 
-static void sig_dialog_color(GtkWidget *widget, gpointer data)
-{
-    ColorChooserDialogConfig dialog_color_config = DEFAULT_COLOR_CHOOSER_DIALOG_CONFIG;
-    GtkWidget *dialog_color_widget = create_color_chooser_dialog(dialog_color_config);
-
-    show_dialog(dialog_color_widget);
-}
-
-static void sig_dialog_font(GtkWidget *widget, gpointer data)
-{
-    FontChooserDialogConfig dialog_font_config = DEFAULT_FONT_CHOOSER_DIALOG_CONFIG;
-    GtkWidget *dialog_font_widget = create_font_chooser_dialog(dialog_font_config);
-
-    show_dialog(dialog_font_widget);
-}
-
 static void sig_self_destroy(GtkWidget *widget, gpointer data)
 {
     gtk_widget_destroy(widget);
 }
 
-static void sig_show_image(GtkWidget *widget, gpointer data)
-{
-    ParamNode *param_array = (ParamNode *)data;
-    if (!param_array)
-    {
-        g_print("\nError: sig_show_image(), missing parameters.\n");
-        return;
-    }
-
-    // Set up dialog configuration
-    DialogConfig dialog_config = DEFAULT_DIALOG;
-    strcpy(dialog_config.title, param_array->params[1][0] != '\0' ? param_array->params[1] : "Image Viewer");
-
-    // Set up box configuration
-    BoxConfig box_image_config = DEFAULT_BOX;
-    box_image_config.dimensions.height = 300; // Adjusted height
-    box_image_config.dimensions.width = 300;  // Adjusted width
-    box_image_config.halign = GTK_ALIGN_CENTER;
-    box_image_config.valign = GTK_ALIGN_CENTER;
-
-    // Create the box
-    GtkWidget *box = create_box(box_image_config);
-
-    // Set up image configuration
-    ImageConfig image_config = DEFAULT_IMAGE;
-    strcpy(image_config.path, param_array->params[0][0] != '\0' ? param_array->params[0] : "./assets/images/smale/img1.jpg");
-    image_config.dimensions.height = 200; // Adjusted image height
-    image_config.dimensions.width = 200;  // Adjusted image width
-    image_config.opacity = 1.0;           // Full opacity
-
-    // Check if the image file exists
-    if (!g_file_test(image_config.path, G_FILE_TEST_EXISTS))
-    {
-        g_print("Error: Image file '%s' not found.\n", image_config.path);
-        GtkWidget *error_label = gtk_label_new("Image not found.");
-        gtk_box_pack_start(GTK_BOX(box), error_label, TRUE, TRUE, 0);
-    }
-    else
-    {
-        // Create the image widget and add to the box
-        GtkWidget *image_widget = create_image(image_config);
-        gtk_box_pack_start(GTK_BOX(box), image_widget, TRUE, TRUE, 0);
-    }
-
-    // Create the dialog and add the box to its content area
-    GtkWidget *dialog = create_dialog(dialog_config);
-    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box);
-
-    // Show the dialog
-    show_dialog(dialog);
-}
 
 void sig_print_content(GtkWidget *widget, gpointer data)
 {
@@ -713,10 +600,6 @@ void connect_signales(View *view)
             callback_function = sig_change_self_bg_color;
 
         else if (strcmp(view->view_config->signal.sig_handler,
-                        "sig_dialog_message") == 0)
-            callback_function = sig_dialog_message;
-
-        else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_change_friend_bg_color") == 0)
             callback_function = sig_change_friend_bg_color;
 
@@ -737,20 +620,9 @@ void connect_signales(View *view)
             callback_function = sig_dialog_response;
 
         else if (strcmp(view->view_config->signal.sig_handler,
-                        "sig_dialog_color") == 0)
-            callback_function = sig_dialog_color;
-
-        else if (strcmp(view->view_config->signal.sig_handler,
-                        "sig_dialog_font") == 0)
-            callback_function = sig_dialog_font;
-
-        else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_self_destroy") == 0)
             callback_function = sig_self_destroy;
 
-        else if (strcmp(view->view_config->signal.sig_handler,
-                        "sig_show_image") == 0)
-            callback_function = sig_show_image;
 
         else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_print_content") == 0)

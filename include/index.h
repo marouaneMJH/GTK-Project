@@ -20,6 +20,7 @@
 #include "./containers/layouts/combo_text_box.h"
 #include "./containers/layouts/overlay.h"
 #include "./containers/layouts/expander.h"
+#include "./containers/layouts/event_box.h"
 
 
 // buttons

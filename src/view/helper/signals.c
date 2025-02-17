@@ -82,6 +82,9 @@ static void sig_change_friend_bg_color(GtkWidget *widget, gpointer data)
     widget_set_colors(friend->widget, param_array->params[1], param_array->params[2]);
 }
 
+
+
+
 /**
  * color
  * font

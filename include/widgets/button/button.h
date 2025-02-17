@@ -98,4 +98,6 @@ ViewConfig *init_button_config(FILE *index, ButtonConfig *button_config);
  */
 GtkWidget *create_button(ButtonConfig button);
 
+void write_button_tag(FILE* output_file,ViewConfig* view_config);
+
 #endif

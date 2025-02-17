@@ -185,3 +185,69 @@ GtkWidget *create_button(ButtonConfig button_config)
 
     return button;
 }
+
+
+void write_button_tag(FILE *output_file, GtkWidget *button)
+{
+    if (!output_file || !button)
+        return;
+
+    const gchar *label = gtk_button_get_label(GTK_BUTTON(button));
+
+    // Get the style context for the button
+    GtkStyleContext *context = gtk_widget_get_style_context(button);
+    GtkStateFlags state = gtk_style_context_get_state(context);
+    GdkRGBA fg_color = {0, 0, 0, 1}; // default fallback
+    GdkRGBA bg_color = {0, 0, 0, 1};
+
+    // Try to get the foreground (text) color.
+    // Note: Not all themes set "color"; this may not succeed.
+    gtk_style_context_get(context, state, "color", &fg_color, NULL);
+
+    // Try to get the background color.
+    // Depending on the theme, this property might not be set.
+    gtk_style_context_get(context, state, "background-color", &bg_color, NULL);
+
+    // Convert colors to strings (e.g., "#rrggbbaa")
+    gchar *fg_str = gdk_rgba_to_string(&fg_color);
+    gchar *bg_str = gdk_rgba_to_string(&bg_color);
+
+    fprintf(output_file,
+            "<button\n label=\"%s\" color=\"%s\" bg_color=\"%s\" />\n",
+            label,
+            fg_str,
+            bg_str);
+
+    g_free(fg_str);
+    g_free(bg_str);
+};
+#define WRITE_TABS(number, file) ;
+
+inline void print_tabs(FILE *output_file, int tabs_number)
+{
+    for (int i = 0; i < tabs_number; fprintf(output_file, "\t", i++))
+        ;
+}
+
+// find_close_tag(widget)
+    // print </>
+
+void write_widget(View *view, int tabs_number)
+{
+
+    // exit the function if void
+    if (!view)
+        return;
+    // find widget and write it
+    write_widget(view->child, tabs_number + 1);
+
+
+    // closetag  if container
+
+    write_widget(view->next, tabs_number );
+    //
+}
+
+void build_xml(FILE *output_file)
+{
+}

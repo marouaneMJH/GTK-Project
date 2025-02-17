@@ -9,6 +9,11 @@
     is_maximized="false"
 >
 
+<!-- container:  WINDOW  -->
+<!-- container:  WINDOW <=  BOX CONTAINER : BOX  -->
+<!-- container:  BOX <=  MENU_BAR CONTAINE:  MENU  -->
+<!-- container:  BOX <=  MENU_BAR CONTAINE:  MENU  -->
+
 
     <box
         id="box1"
@@ -263,6 +268,9 @@
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
                                 />
+
+    <!-- name hello  -->
+
 
                             </grid>
                         </frame>

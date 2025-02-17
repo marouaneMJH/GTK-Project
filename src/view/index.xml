@@ -9,42 +9,12 @@
     is_maximized="false"
 >
 
-<!-- container:  WINDOW  -->
-<!-- container:  WINDOW <=  BOX CONTAINER : BOX  -->
-<!-- container:  BOX <=  MENU_BAR CONTAINE:  MENU  -->
-<!-- container:  BOX <=  MENU_BAR CONTAINE:  MENU  -->
+
 
 
     <box
         id="box1"
     >
-        <menu_bar id="jkf">
-
-            <menu_item
-                label="_File"
-            >
-                <menu id="menu1">
-                    <menu_item
-                        label="_New"
-                    />
-                    <menu_item
-                        label="_Save"
-                    />
-
-                    <menu_item
-                        label=" _Exit"
-                    />
-                </menu>
-
-            </menu_item>
-
-            <menu_item
-                id="about_menu_item"
-                label="_About"
-            />
-
-
-        </menu_bar>
 
         <scrolled_window
             on_key_press="sig_key_press"
@@ -196,7 +166,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="button"
                                     label="Overlay"
                                     hexpand="true"
                                     row="3"
@@ -207,7 +177,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="button"
                                     label="Frame"
                                     hexpand="true"
                                     row="3"
@@ -221,7 +191,7 @@
                         </frame>
 
                         <frame
-                            id="btn1"
+                            id="frame"
                             label="Menus"
                             margin_top="5"
                             margin_bottom="5"
@@ -269,7 +239,6 @@
                                     icon_path="./assets/images/icons/open-menu.png"
                                 />
 
-    <!-- name hello  -->
 
 
                             </grid>

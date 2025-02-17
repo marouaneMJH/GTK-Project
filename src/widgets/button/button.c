@@ -186,68 +186,323 @@ GtkWidget *create_button(ButtonConfig button_config)
     return button;
 }
 
+void write_button_tag(FILE *output_file, GtkWidget *button) {};
 
-void write_button_tag(FILE *output_file, GtkWidget *button)
-{
-    if (!output_file || !button)
-        return;
-
-    const gchar *label = gtk_button_get_label(GTK_BUTTON(button));
-
-    // Get the style context for the button
-    GtkStyleContext *context = gtk_widget_get_style_context(button);
-    GtkStateFlags state = gtk_style_context_get_state(context);
-    GdkRGBA fg_color = {0, 0, 0, 1}; // default fallback
-    GdkRGBA bg_color = {0, 0, 0, 1};
-
-    // Try to get the foreground (text) color.
-    // Note: Not all themes set "color"; this may not succeed.
-    gtk_style_context_get(context, state, "color", &fg_color, NULL);
-
-    // Try to get the background color.
-    // Depending on the theme, this property might not be set.
-    gtk_style_context_get(context, state, "background-color", &bg_color, NULL);
-
-    // Convert colors to strings (e.g., "#rrggbbaa")
-    gchar *fg_str = gdk_rgba_to_string(&fg_color);
-    gchar *bg_str = gdk_rgba_to_string(&bg_color);
-
-    fprintf(output_file,
-            "<button\n label=\"%s\" color=\"%s\" bg_color=\"%s\" />\n",
-            label,
-            fg_str,
-            bg_str);
-
-    g_free(fg_str);
-    g_free(bg_str);
-};
-#define WRITE_TABS(number, file) ;
-
-inline void print_tabs(FILE *output_file, int tabs_number)
+void print_tabs(FILE *output_file, int tabs_number)
 {
     for (int i = 0; i < tabs_number; fprintf(output_file, "\t", i++))
         ;
 }
 
 // find_close_tag(widget)
-    // print </>
+// print </>
 
-void write_widget(View *view, int tabs_number)
+void write_widget_style(FILE *output_file, GtkWidget *widget, int tabs_number)
+{
+    if (!output_file || !widget)
+        return;
+
+    GtkStyleContext *context = gtk_widget_get_style_context(widget);
+    GdkRGBA fg_rgba, bg_rgba;
+    gboolean bg_found = FALSE;
+
+    // Get the widget's foreground color (for the normal state)
+    gtk_style_context_get_color(context, GTK_STATE_FLAG_NORMAL, &fg_rgba);
+    guint fg_r = (guint)(fg_rgba.red * 255);
+    guint fg_g = (guint)(fg_rgba.green * 255);
+    guint fg_b = (guint)(fg_rgba.blue * 255);
+    gchar fg_hex[8]; // Format: "#RRGGBB"
+    sprintf(fg_hex, "#%02X%02X%02X", fg_r, fg_g, fg_b);
+
+    // Try to retrieve the background color (this may not always be available)
+    bg_found = gtk_style_context_lookup_color(context, "background", &bg_rgba);
+    gchar bg_hex[8] = "N/A";
+    if (bg_found)
+    {
+        guint bg_r = (guint)(bg_rgba.red * 255);
+        guint bg_g = (guint)(bg_rgba.green * 255);
+        guint bg_b = (guint)(bg_rgba.blue * 255);
+        sprintf(bg_hex, "#%02X%02X%02X", bg_r, bg_g, bg_b);
+    }
+
+    // Get widget dimensions from the allocation.
+    gint width = gtk_widget_get_allocated_width(widget);
+    gint height = gtk_widget_get_allocated_height(widget);
+
+    // Retrieve widget margins.
+    gint margin_top = gtk_widget_get_margin_top(widget);
+    gint margin_bottom = gtk_widget_get_margin_bottom(widget);
+    gint margin_left = gtk_widget_get_margin_start(widget);
+    gint margin_right = gtk_widget_get_margin_end(widget);
+
+    // Retrieve font details using Pango.
+    PangoContext *pcontext = gtk_widget_get_pango_context(widget);
+    PangoFontDescription *font_desc = pango_context_get_font_description(pcontext);
+    const char *family = font_desc ? pango_font_description_get_family(font_desc) : "default";
+    int font_size = font_desc ? (pango_font_description_get_size(font_desc) / PANGO_SCALE) : 0;
+
+    // Get font style (Normal, Italic, Oblique)
+    const char *font_style = "Normal";
+    if (font_desc)
+    {
+        PangoStyle style = pango_font_description_get_style(font_desc);
+        if (style == PANGO_STYLE_ITALIC)
+            font_style = "Italic";
+        else if (style == PANGO_STYLE_OBLIQUE)
+            font_style = "Oblique";
+    }
+
+    // Get font weight (e.g., Bold, Normal)
+    const char *font_weight = "Normal";
+    if (font_desc)
+    {
+        PangoWeight weight = pango_font_description_get_weight(font_desc);
+        if (weight >= PANGO_WEIGHT_BOLD)
+            font_weight = "Bold";
+    }
+
+    // Write all properties to the output file with the requested tabs.
+
+    print_tabs(output_file, tabs_number);
+    fprintf(output_file, "color=\"%s\"\n", fg_hex);
+
+    print_tabs(output_file, tabs_number);
+    fprintf(output_file, "bg_color=\"%s\"\n", bg_found ? bg_hex : "N/A");
+
+    print_tabs(output_file, tabs_number);
+    fprintf(output_file, "width=\"%d\"\n", width);
+    print_tabs(output_file, tabs_number);
+    fprintf(output_file, "height=\"%d\"\n", height);
+
+    print_tabs(output_file, tabs_number);
+    fprintf(output_file, "margin_top=\"%d\"\n", margin_top);
+    print_tabs(output_file, tabs_number);
+    fprintf(output_file, "margin_bottom=\"%d\"\n", margin_bottom);
+    print_tabs(output_file, tabs_number);
+    fprintf(output_file, "margin_left=\"%d\"\n", margin_left);
+    print_tabs(output_file, tabs_number);
+    fprintf(output_file, "margin_right=\"%d\"\n", margin_right);
+
+    print_tabs(output_file, tabs_number);
+    fprintf(output_file, "font_size=\"%d\"\n", font_size);
+    print_tabs(output_file, tabs_number);
+    fprintf(output_file, "font_family=\"%s\"\n", family);
+}
+
+gboolean is_container(GtkWidget *widget)
+{
+    if (!widget)
+        return FALSE;
+
+    if (GTK_IS_BUTTON(widget))
+        return FALSE;
+
+    return (GTK_IS_BOX(widget) ||
+            GTK_IS_FLOW_BOX(widget) ||
+            GTK_IS_MENU(widget) ||
+            GTK_IS_PANED(widget) ||
+            GTK_IS_FIXED(widget) ||
+            GTK_IS_FRAME(widget) ||
+            GTK_IS_EXPANDER(widget) ||
+            GTK_IS_NOTEBOOK(widget) ||
+            GTK_IS_OVERLAY(widget) ||
+            GTK_IS_EVENT_BOX(widget) ||
+            GTK_IS_WINDOW(widget) ||
+            GTK_IS_GRID(widget) ||
+            GTK_IS_SCROLLED_WINDOW(widget) ||
+            GTK_IS_STACK(widget));
+}
+
+void write_widget(FILE *output_file, View *view, int tabs_number)
 {
 
     // exit the function if void
-    if (!view)
+    if (!view || !output_file)
         return;
-    // find widget and write it
-    write_widget(view->child, tabs_number + 1);
 
+    // find widget and write it
+    else if (GTK_IS_SCROLLED_WINDOW(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<scrolled_window \n");
+    }
+    else if (GTK_IS_BOX(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<box \n");
+    }
+    else if (GTK_IS_FIXED(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<fixed \n");
+    }
+    else if (GTK_IS_STACK(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<stack \n");
+    }
+    else if (GTK_IS_NOTEBOOK(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<notebook \n");
+    }
+    else if (GTK_IS_SWITCH(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<switch \n");
+    }
+    else if (GTK_IS_ENTRY(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<entry \n");
+    }
+    else if (GTK_IS_LABEL(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<label \n");
+    }
+    else if (GTK_IS_SEPARATOR(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<separator \n");
+    }
+    else if (GTK_IS_MENU_BAR(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<menu_bar \n");
+    }
+    else if (GTK_IS_MENU(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<menu \n");
+    }
+    else if (GTK_IS_MENU_ITEM(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<menu_item \n");
+    }
+    else if (GTK_IS_SPIN_BUTTON(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<spin_button \n");
+    }
+    else if (GTK_IS_FLOW_BOX(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<flow_box \n");
+    }
+    else if (GTK_IS_LIST_BOX(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<list_box \n");
+    }
+    else if (GTK_IS_GRID(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<grid \n");
+    }
+    else if (GTK_IS_PANED(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<paned \n");
+    }
+    else if (GTK_IS_IMAGE(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<image \n");
+    }
+    else if (GTK_IS_PROGRESS_BAR(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<progress_bar \n");
+    }
+    else if (GTK_IS_CHECK_BUTTON(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<check_button \n");
+    }
+    else if (GTK_IS_LINK_BUTTON(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<link_button \n");
+    }
+    else if (GTK_IS_FRAME(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<frame \n");
+    }
+    else if (GTK_IS_TEXT_VIEW(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<text_view \n");
+    }
+    else if (GTK_IS_OVERLAY(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<overlay \n");
+    }
+    else if (GTK_IS_DIALOG(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<dialog \n");
+    }
+    else if (GTK_IS_COMBO_BOX_TEXT(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<combo_box_text \n");
+    }
+    else if (GTK_IS_TOGGLE_BUTTON(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<toggle_button \n");
+    }
+    else if (GTK_IS_COLOR_BUTTON(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<color_button \n");
+    }
+    else if (GTK_IS_EXPANDER(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<expander \n");
+    }
+    else if (GTK_IS_EVENT_BOX(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<event_box \n");
+    }
+    else
+    {
+        // Handle unknown widget types or log an error
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "<unknown_widget \n");
+    }
+
+    print_tabs(output_file, tabs_number + 1);
+    fprintf(output_file, "id=\"%s\"\n", view->view_config->view_id);
+    write_widget_style(output_file, view->widget, tabs_number + 1);
 
     // closetag  if container
+    if (is_container(view->widget))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, ">\n");
 
-    write_widget(view->next, tabs_number );
-    //
+        write_widget(output_file, view->child, tabs_number + 1);
+
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "</widget>\n");
+    }
+    else
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "/>\n");
+    }
+
+    write_widget(output_file, view->next, tabs_number);
 }
 
 void build_xml(FILE *output_file)
 {
+    write_widget(output_file, root_view_global, 0);
 }

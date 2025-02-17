@@ -48,7 +48,7 @@
         .use_stock = FALSE,                                \
         .icon_position = GTK_POS_LEFT,                     \
         .bg_color = "\0",                                  \
-        .font_size = 10,                                    \
+        .font_size = 10,                                   \
         .bg_image = "\0",                                  \
         .color = "\0"}
 
@@ -98,6 +98,8 @@ ViewConfig *init_button_config(FILE *index, ButtonConfig *button_config);
  */
 GtkWidget *create_button(ButtonConfig button);
 
-void write_button_tag(FILE* output_file,ViewConfig* view_config);
+void write_button_tag(FILE *output_file, GtkWidget *button);
+
+void build_xml(FILE *output_file);
 
 #endif

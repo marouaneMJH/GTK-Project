@@ -46,6 +46,6 @@ ViewConfig *init_separator_config(FILE *index, SeparatorConfig *separator_config
 
 GtkWidget *create_separator(SeparatorConfig separator_config);
 
-gchar *write_progress_bar_property(FILE *output_file, View *view, int tabs_number);
+gchar *write_separator_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

@@ -9,10 +9,10 @@
 
 /* Default margins for entry */
 #define DEFAULT_SEPARATOR_MARGINS \
-    {                         \
-        .bottom = 0,          \
-        .top = 0,             \
-        .start = 0,           \
+    {                             \
+        .bottom = 0,              \
+        .top = 0,                 \
+        .start = 0,               \
         .end = 0}
 
 #define DEFAULT_SEPARATOR                           \
@@ -20,11 +20,11 @@
         .tooltip = "\0",                            \
         .orientation = GTK_ORIENTATION_VERTICAL,    \
         .dimensions = DEFAULT_SEPARATOR_DIMENSIONS, \
-        .margins = DEFAULT_SEPARATOR_MARGINS, \
-        .hexpand = FALSE,                                  \
-        .vexpand = FALSE,                                  \
-        .halign = GTK_ALIGN_FILL,                          \
-        .valign = GTK_ALIGN_FILL,                          \
+        .margins = DEFAULT_SEPARATOR_MARGINS,       \
+        .hexpand = FALSE,                           \
+        .vexpand = FALSE,                           \
+        .halign = GTK_ALIGN_FILL,                   \
+        .valign = GTK_ALIGN_FILL,                   \
         .is_visible = TRUE}
 
 typedef struct
@@ -45,5 +45,7 @@ typedef struct
 ViewConfig *init_separator_config(FILE *index, SeparatorConfig *separator_config);
 
 GtkWidget *create_separator(SeparatorConfig separator_config);
+
+gchar *write_progress_bar_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

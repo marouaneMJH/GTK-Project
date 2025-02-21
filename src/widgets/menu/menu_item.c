@@ -65,17 +65,20 @@ GtkWidget *create_menu_item(MenuItemConfig menu_item_config)
     GtkWidget *menu_item = NULL;
 
     // Creation
-    if (menu_item_config.is_memonic && menu_item_config.label[0] != '\0') {
+    if (menu_item_config.is_memonic && menu_item_config.label[0] != '\0')
+    {
         // Create with mnemonic
         menu_item = gtk_menu_item_new_with_mnemonic(menu_item_config.label);
-    } 
-    else if (menu_item_config.label[0] != '\0') {
+    }
+    else if (menu_item_config.label[0] != '\0')
+    {
         // Create with label
         menu_item = gtk_menu_item_new_with_label(menu_item_config.label);
         // Only set underline if explicitly requested
         gtk_menu_item_set_use_underline(GTK_MENU_ITEM(menu_item), menu_item_config.use_underline);
-    } 
-    else {
+    }
+    else
+    {
         // Create empty menu item
         menu_item = gtk_menu_item_new();
     }
@@ -105,4 +108,14 @@ GtkWidget *create_menu_item(MenuItemConfig menu_item_config)
 void menu_item_set_submenu(GtkWidget *widget, GtkWidget *submenu)
 {
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(widget), submenu);
+}
+
+gchar *write_menu_item_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "menu_item", tabs_number);
+
+    return "menu_item";
 }

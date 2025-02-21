@@ -1,8 +1,7 @@
 #ifndef STACK_H
 #define STACK_H
 
-// TODO work with switcher for the signal the original stack container will be switcher 
-
+// TODO work with switcher for the signal the original stack container will be switcher
 
 #include "./../../global.h"
 
@@ -29,7 +28,7 @@
         .transition_type = GTK_STACK_TRANSITION_TYPE_CROSSFADE, \
         .bg_color = "\0",                                       \
         .text_color = "\0",                                     \
-        .margins = DEFAULT_STACK_MARGINS,                        \
+        .margins = DEFAULT_STACK_MARGINS,                       \
         .dimensions = DEFAULT_STACK_DIMENSIONS}
 
 typedef struct
@@ -61,5 +60,7 @@ ViewConfig *init_stack_config(FILE *index, StackConfig *stack_config);
  * @return[ou] GtkWidget pointer to new stack widget
  */
 GtkWidget *create_stack(StackConfig stack_config);
+
+gchar *write_stack_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

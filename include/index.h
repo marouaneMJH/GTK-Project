@@ -22,7 +22,6 @@
 #include "./containers/layouts/expander.h"
 #include "./containers/layouts/event_box.h"
 
-
 // buttons
 #include "./widgets/button/check_button.h"
 #include "./widgets/button/link_button.h"
@@ -31,7 +30,6 @@
 #include "./widgets/button/switch_button.h"
 #include "./widgets/button/spin_button.h"
 #include "./widgets/button/color_button.h"
-
 
 #include "./widgets/menu/menu_bar.h"
 #include "./widgets/menu/menu.h"
@@ -52,5 +50,8 @@
 #include "./widgets/text_area.h"
 #include "./widgets/progress_bar.h"
 #include "./widgets/image.h"
+
+// View
+#include "./widgets/View/xml_builder/xml_builder.h"
 
 #endif

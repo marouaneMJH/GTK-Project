@@ -98,8 +98,14 @@ ViewConfig *init_button_config(FILE *index, ButtonConfig *button_config);
  */
 GtkWidget *create_button(ButtonConfig button);
 
-void write_button_tag(FILE *output_file, GtkWidget *button);
+gchar *write_button_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
 
-void build_xml(FILE *output_file);
+    write_widget_tag_style_view_config(output_file, view, "button", tabs_number);
+
+    return "button";
+}
 
 #endif

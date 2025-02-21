@@ -68,9 +68,8 @@ ViewConfig *configure_stack_property(StackConfig *stack_config, ViewConfig *view
 
 ViewConfig *init_stack_config(FILE *index, StackConfig *stack_config)
 {
-    return init_generic_config(index,(void*)stack_config,(ConfigurePropertyCallback)configure_stack_property);
+    return init_generic_config(index, (void *)stack_config, (ConfigurePropertyCallback)configure_stack_property);
 }
-
 
 GtkWidget *create_stack(StackConfig stack_config)
 {
@@ -81,7 +80,7 @@ GtkWidget *create_stack(StackConfig stack_config)
     gtk_stack_set_homogeneous(GTK_STACK(stack), stack_config.is_homogeneous);
 
     // Enable or disable transitions
-    if(stack_config.is_transition_enabled)
+    if (stack_config.is_transition_enabled)
         gtk_stack_get_transition_running(GTK_STACK(stack));
 
     // Set transition duration (milliseconds)
@@ -101,4 +100,14 @@ GtkWidget *create_stack(StackConfig stack_config)
     widget_set_margins(stack, stack_config.margins);
 
     return stack;
+}
+
+gchar *write_stack_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "stack", tabs_number);
+
+    return "stack";
 }

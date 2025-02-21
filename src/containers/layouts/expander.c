@@ -138,3 +138,13 @@ GtkWidget *create_expander(ExpanderConfig expander_config)
 
     return expander;
 }
+
+gchar *write_expander_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "expander", tabs_number);
+
+    return "expander";
+}

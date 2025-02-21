@@ -118,4 +118,6 @@ GtkWidget *create_window(GtkApplication *app, WindowConfig window_config);
  */
 void show_window(GtkWidget *window);
 
+gchar *write_window_property(FILE *output_file, View *view, int tabs_number);
+
 #endif

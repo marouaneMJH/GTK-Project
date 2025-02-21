@@ -1,0 +1,21 @@
+<window
+	id="window_2"
+	title="Second Window"
+	icon_name="folder"
+>
+	<scrolled_window
+		id="sw2"
+	>
+		<box
+			id="box2"
+			orientation="vertical"
+			height="700"
+			width="800"
+			bg_color="red"
+		>
+			<button 
+				label="you welcom"
+			/>
+		</box>
+	</scrolled_window>
+</window>

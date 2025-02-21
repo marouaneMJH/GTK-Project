@@ -130,3 +130,13 @@ void add_grid(GtkWidget *widget, gint column, gint row, gint column_span, gint r
     else
         gtk_grid_attach(GTK_GRID(widget), widget, column, row, column_span, row_span);
 }
+
+gchar *write_grid_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "grid", tabs_number);
+
+    return "grid";
+}

@@ -64,7 +64,7 @@ ViewConfig *configure_menu_property(MenuConfig *menu_config, ViewConfig *view_co
 
 ViewConfig *init_menu_config(FILE *index, MenuConfig *menu_config)
 {
-    return init_generic_config(index,(void*)menu_config,(ConfigurePropertyCallback)configure_menu_property);
+    return init_generic_config(index, (void *)menu_config, (ConfigurePropertyCallback)configure_menu_property);
 }
 GtkWidget *create_menu(MenuConfig menu_config)
 {
@@ -108,4 +108,14 @@ GtkWidget *create_menu(MenuConfig menu_config)
 void menu_set_group(GtkWidget *widget, GtkWidget *group)
 {
     // gtk_menu_set_group(GTK_MENU(widget), gtk_menu_get_group(GTK_MENU(group)));
+}
+
+gchar *write_menu_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "menu", tabs_number);
+
+    return "menu";
 }

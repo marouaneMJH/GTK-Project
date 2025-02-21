@@ -93,7 +93,6 @@ ViewConfig *configure_combo_text_box_property(
         g_ptr_array_add(combo_text_box_config->options, combo_text_box_option);
     }
 
-    
     if (g_strcmp0(property, "valign") == 0)
     {
         if (g_strcmp0(value, "center") == 0)
@@ -254,13 +253,13 @@ GtkWidget *create_combo_text_box(ComboTextBoxConfig combo_text_box_config)
     if (combo_text_box_config.default_index != -1 && !combo_text_box_config.has_entry)
         gtk_combo_box_set_active(GTK_COMBO_BOX(combo_text_box), combo_text_box_config.default_index);
 
-        // Enable or disable cells expand (the parent should be expandable; not important)
-        gtk_widget_set_hexpand(combo_text_box, combo_text_box_config.hexpand);
-        gtk_widget_set_vexpand(combo_text_box, combo_text_box_config.vexpand);
-    
-        // Set alignments
-        gtk_widget_set_halign(combo_text_box, combo_text_box_config.halign);
-        gtk_widget_set_valign(combo_text_box, combo_text_box_config.valign);
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(combo_text_box, combo_text_box_config.hexpand);
+    gtk_widget_set_vexpand(combo_text_box, combo_text_box_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(combo_text_box, combo_text_box_config.halign);
+    gtk_widget_set_valign(combo_text_box, combo_text_box_config.valign);
     return combo_text_box;
 }
 
@@ -288,4 +287,14 @@ void combo_box_make_interval(GtkWidget *combo_text_box, int start, int end)
     {
         gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo_text_box), (char *)g_strdup_printf("%0d", i), (char *)g_strdup_printf("%0d", i));
     }
+}
+
+gchar *write_combo_text_box_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "combo_text_box", tabs_number);
+
+    return "combo_text_box";
 }

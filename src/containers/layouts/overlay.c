@@ -71,6 +71,14 @@ GtkWidget *create_overlay(OverlayConfig overlay_config)
         overlay_config.margins.start)
         widget_set_margins(overlay, overlay_config.margins);
     return overlay;
+}
 
-    
+gchar *write_overlay_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "overlay", tabs_number);
+
+    return "overlay";
 }

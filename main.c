@@ -1,9 +1,6 @@
+
 #include "./include/builder.h"
 
-void on_event_box_button_press()
-{
-    printf("hello");
-}
 // Activate callback for GtkApplication
 static void activate(GtkApplication *app, gpointer user_data)
 {
@@ -13,42 +10,42 @@ static void activate(GtkApplication *app, gpointer user_data)
     View *root_view = build_app(app, root_view, INDEX_TXT);
     GtkWidget *window = root_view->widget;
 
-    FILE *output_file = fopen("output_file.xml", "w");
-    if(!output_file)
-    {
-        printf("\nAAAAAAAAAAAAAAAAAAAAA");
-        exit(10);
-    }
-    build_xml(output_file);
+    // FILE *output_file = fopen("output_file.xml", "w");
+    // if (!output_file)
+    // {
+    //     printf("\nAAA AAA AAA AAA AAA AAA AAA");
+    //     exit(EXIT_FAILURE);
+    // }
+    // // build_xml(output_file);
     // fclose(output_file);
 
-        // WindowConfig window_config = DEFAULT_WINDOW;
-        // GtkWidget *window = create_window(app, window_config);
+    // WindowConfig window_config = DEFAULT_WINDOW;
+    // GtkWidget *window = create_window(app, window_config);
 
-        // GtkWidget* box=gtk_box_new(10,10);
-        // GtkWidget* button=gtk_button_new_with_label(NULL);
+    // GtkWidget* box=gtk_box_new(10,10);
+    // GtkWidget* button=gtk_button_new_with_label(NULL);
 
-        // gboolean id=GTK_IS_CONTAINER(button);
-        // g_print("\nis box container: %d",id);
+    // gboolean id=GTK_IS_CONTAINER(button);
+    // g_print("\nis box container: %d",id);
 
-        // gboolean id2=GTK_IS_EVENT_BOX(button);
-        // g_print("\nbutton button container: %d",id2);
+    // gboolean id2=GTK_IS_EVENT_BOX(button);
+    // g_print("\nbutton button container: %d",id2);
 
-        // GtkWidget *label=gtk_label_new("hello");
-        // GtkWidget *event_box = gtk_event_box_new();
-        // gtk_container_add(GTK_CONTAINER(event_box), label);
-        // gtk_widget_show(label);
-        // gtk_widget_show(event_box);
+    // GtkWidget *label=gtk_label_new("hello");
+    // GtkWidget *event_box = gtk_event_box_new();
+    // gtk_container_add(GTK_CONTAINER(event_box), label);
+    // gtk_widget_show(label);
+    // gtk_widget_show(event_box);
 
-        // g_signal_connect(event_box, "button-press-event",
-        //                  G_CALLBACK(on_event_box_button_press), NULL);
+    // g_signal_connect(event_box, "button-press-event",
+    //                  G_CALLBACK(on_event_box_button_press), NULL);
 
-        // GtkWidget *button=gtk_font_button_new();
+    // GtkWidget *button=gtk_font_button_new();
 
-        // // gtk_container_add(GTK_CONTAINER(expander), button);
-        // gtk_container_add(GTK_CONTAINER(window), event_box);
+    // // gtk_container_add(GTK_CONTAINER(expander), button);
+    // gtk_container_add(GTK_CONTAINER(window), event_box);
 
-        gtk_widget_show_all(window);
+    gtk_widget_show_all(window);
 }
 
 // Main function

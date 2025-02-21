@@ -78,4 +78,7 @@ ViewConfig *init_label_config(FILE *index, LabelConfig *label_config);
 
 // function to creat lable widget
 GtkWidget *create_label(LabelConfig label);
+
+gchar *write_label_property(FILE *output_file, View *view, int tabs_number);
+
 #endif

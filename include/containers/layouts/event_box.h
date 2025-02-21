@@ -21,4 +21,6 @@ ViewConfig *init_event_box_config(FILE *index, EventBoxConfig *event_box_config)
 
 GtkWidget *create_event_box(EventBoxConfig event_box_config);
 
+gchar *write_event_box_property(FILE *output_file, View *view, int tabs_number);
+
 #endif

@@ -166,3 +166,13 @@ gboolean get_toggle_button_inconsistent(GtkWidget *toggle_button)
 {
     return gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(toggle_button));
 }
+
+gchar *write_toggle_button_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "toggle_button", tabs_number);
+
+    return "toggle_button";
+}

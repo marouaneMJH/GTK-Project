@@ -85,7 +85,7 @@ ViewConfig *configure_radio_button_property(RadioButtonConfig *radio_button_conf
 
 ViewConfig *init_radio_button_config(FILE *index, RadioButtonConfig *radio_button_config)
 {
-    return init_generic_config(index,(void*)radio_button_config,(ConfigurePropertyCallback)configure_radio_button_property);
+    return init_generic_config(index, (void *)radio_button_config, (ConfigurePropertyCallback)configure_radio_button_property);
 }
 GtkWidget *create_radio_button(RadioButtonConfig radio_button_config)
 {
@@ -185,4 +185,14 @@ GtkWidget *create_radio_button(RadioButtonConfig radio_button_config)
 void radio_button_set_group(GtkWidget *widget, GtkWidget *group)
 {
     gtk_radio_button_set_group(GTK_RADIO_BUTTON(widget), gtk_radio_button_get_group(GTK_RADIO_BUTTON(group)));
+}
+
+gchar *write_radio_button_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "radio_button", tabs_number);
+
+    return "radio_button";
 }

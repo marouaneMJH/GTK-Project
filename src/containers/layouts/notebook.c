@@ -107,3 +107,13 @@ GtkWidget *create_notebook(NotebookConfig notebook_config)
     // gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(notebook), child, TRUE);
     return notebook;
 }
+
+gchar *write_notebook_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "notebook", tabs_number);
+
+    return "notebook";
+}

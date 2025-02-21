@@ -11,7 +11,7 @@
         .bg_color = "\0",           \
         .is_editable = TRUE,        \
         .wrap_mode = GTK_WRAP_WORD, \
-        .dimensions.width = 0,    \
+        .dimensions.width = 0,      \
         .dimensions.height = 0}
 
 typedef struct
@@ -50,5 +50,7 @@ ViewConfig *init_text_area_config(FILE *index, TextAreaConfig *text_area_config)
  * @return GtkWidget pointer to new text area widget
  */
 GtkWidget *create_text_area(TextAreaConfig text_area);
+
+gchar *write_text_area_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

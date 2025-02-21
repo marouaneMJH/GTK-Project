@@ -131,3 +131,13 @@ gdouble get_spin_button_value(GtkWidget *spin_widget)
     g_signal_connect(spin_widget, "value-changed", G_CALLBACK(get_button_value_call_back), NULL); // Connect callback
     return gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_widget));
 }
+
+gchar *write_spin_button_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "spin_button", tabs_number);
+
+    return "spin_button";
+}

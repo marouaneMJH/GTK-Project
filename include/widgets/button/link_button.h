@@ -24,7 +24,7 @@
         .tooltip = "\0",                              \
         .is_visited = FALSE,                          \
         .dimensions = DEFAULT_LINK_BUTTON_DIMENSIONS, \
-        .margins = DEFAULT_LINK_BUTTON_MARGIN, \
+        .margins = DEFAULT_LINK_BUTTON_MARGIN,        \
         .bg_color = "\0",                             \
         .text_color = "\0"}
 
@@ -55,5 +55,7 @@ ViewConfig *init_link_button_config(FILE *index, LinkButtonConfig *link_button_c
  * @return Pointer to the newly created GtkWidget representing the link button.
  */
 GtkWidget *create_link_button(LinkButtonConfig config);
+
+gchar *write_link_button_property(FILE *output_file, View *view, int tabs_number);
 
 #endif // LINK_BUTTON_H

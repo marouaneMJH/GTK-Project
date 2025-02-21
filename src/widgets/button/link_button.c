@@ -1,8 +1,6 @@
 #include "./../../../include/global.h"
 #include "./../../../include/widgets/button/link_button.h"
 
-
-
 ViewConfig *configure_link_button_property(LinkButtonConfig *link_button_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
     if (!link_button_config || !property || !value)
@@ -24,7 +22,7 @@ ViewConfig *configure_link_button_property(LinkButtonConfig *link_button_config,
     if (g_strcmp0(property, "is_visited") == 0)
         link_button_config->is_visited = g_strcmp0(value, "true") == 0;
 
-        // Margins
+    // Margins
     if (g_strcmp0(property, "margin_top") == 0)
         link_button_config->margins.top = atoi(value);
 
@@ -50,7 +48,6 @@ ViewConfig *configure_link_button_property(LinkButtonConfig *link_button_config,
     if (g_strcmp0(property, "text_color") == 0)
         strcpy(link_button_config->text_color, value);
 
-
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
@@ -58,7 +55,7 @@ ViewConfig *configure_link_button_property(LinkButtonConfig *link_button_config,
 
 ViewConfig *init_link_button_config(FILE *index, LinkButtonConfig *link_button_config)
 {
-    return init_generic_config(index,(void*)link_button_config,(ConfigurePropertyCallback)configure_link_button_property);
+    return init_generic_config(index, (void *)link_button_config, (ConfigurePropertyCallback)configure_link_button_property);
 }
 
 GtkWidget *create_link_button(LinkButtonConfig link_button_config)
@@ -83,4 +80,14 @@ GtkWidget *create_link_button(LinkButtonConfig link_button_config)
     widget_set_margins(link_button, link_button_config.margins);
 
     return link_button;
+}
+
+gchar *write_link_button_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "link_button", tabs_number);
+
+    return "link_button";
 }

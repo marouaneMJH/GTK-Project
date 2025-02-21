@@ -144,3 +144,13 @@ void frame_add_child(GtkWidget *frame, GtkWidget *child)
     // Add the child widget to the frame
     gtk_container_add(GTK_CONTAINER(frame), child);
 }
+
+gchar *write_frame_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "frame", tabs_number);
+
+    return "frame";
+}

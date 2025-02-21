@@ -1,6 +1,5 @@
 #include "../../include/widgets/progress_bar.h"
 
-
 ViewConfig *configure_progress_bar_property(ProgressBarConfig *progress_bar_config, ViewConfig *view_config, gchar *property, gchar *value)
 {
     if (!progress_bar_config || !property || !value)
@@ -76,7 +75,7 @@ ViewConfig *configure_progress_bar_property(ProgressBarConfig *progress_bar_conf
 
 ViewConfig *init_progress_bar_config(FILE *index, ProgressBarConfig *progress_bar_config)
 {
-    return init_generic_config(index,(void*)progress_bar_config,(ConfigurePropertyCallback)configure_progress_bar_property);
+    return init_generic_config(index, (void *)progress_bar_config, (ConfigurePropertyCallback)configure_progress_bar_property);
 }
 
 GtkWidget *create_progress_bar(ProgressBarConfig progress_bar_config)
@@ -91,7 +90,7 @@ GtkWidget *create_progress_bar(ProgressBarConfig progress_bar_config)
 
     if (progress_bar_config.progress_pulse_step > 0)
         gtk_progress_bar_set_pulse_step(GTK_PROGRESS_BAR(progress_bar), progress_bar_config.progress_pulse_step);
-        
+
     gtk_progress_bar_set_show_text(GTK_PROGRESS_BAR(progress_bar), progress_bar_config.is_text_visible);
     gtk_progress_bar_set_inverted(GTK_PROGRESS_BAR(progress_bar), progress_bar_config.is_inverted);
     gtk_progress_bar_set_ellipsize(GTK_PROGRESS_BAR(progress_bar), progress_bar_config.ellipsize);
@@ -105,4 +104,14 @@ GtkWidget *create_progress_bar(ProgressBarConfig progress_bar_config)
     widget_set_margins(progress_bar, progress_bar_config.margins);
 
     return progress_bar;
+}
+
+gchar *write_progress_bar_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "progress_bar", tabs_number);
+
+    return "progress_bar";
 }

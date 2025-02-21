@@ -57,10 +57,9 @@ ViewConfig *configure_flow_box_property(FlowBoxConfig *flow_box_config, ViewConf
     return view_config;
 }
 
-
 ViewConfig *init_flow_box_config(FILE *index, FlowBoxConfig *flow_box_config)
 {
-    return init_generic_config(index,(void*)flow_box_config,(ConfigurePropertyCallback)configure_flow_box_property);
+    return init_generic_config(index, (void *)flow_box_config, (ConfigurePropertyCallback)configure_flow_box_property);
 }
 
 GtkWidget *create_flow_box(FlowBoxConfig flow_box_config)
@@ -106,4 +105,14 @@ GtkWidget *create_flow_box(FlowBoxConfig flow_box_config)
     widget_set_margins(flow_box, flow_box_config.margins);
 
     return flow_box;
+}
+
+gchar *write_flow_box_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "flow_box", tabs_number);
+
+    return "flow_box";
 }

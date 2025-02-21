@@ -56,7 +56,7 @@ ViewConfig *configure_image_property(ImageConfig *image_config, ViewConfig *view
 
 ViewConfig *init_image_config(FILE *index, ImageConfig *image_config)
 {
-    return init_generic_config(index,(void*)image_config,(ConfigurePropertyCallback)configure_image_property);
+    return init_generic_config(index, (void *)image_config, (ConfigurePropertyCallback)configure_image_property);
 }
 GtkWidget *create_image(ImageConfig image_config)
 {
@@ -68,7 +68,6 @@ GtkWidget *create_image(ImageConfig image_config)
     }
 
     GtkWidget *image = NULL;
-
 
     switch (image_config.type)
     {
@@ -96,7 +95,7 @@ GtkWidget *create_image(ImageConfig image_config)
     default:
         break;
     }
-    
+
     gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
     gtk_widget_set_opacity(image, image_config.opacity);
     widget_set_margins(image, image_config.margins);
@@ -127,7 +126,6 @@ GtkWidget *create_image_from_pixbuf(char *path, Dimensions dimensions)
         g_printerr("Error loading image\n");
         return NULL;
     }
-    
 
     // Resize the image
     GdkPixbuf *scaled_pixbuf = gdk_pixbuf_scale_simple(pixbuf, dimensions.width, dimensions.height, GDK_INTERP_BILINEAR);
@@ -140,4 +138,14 @@ GtkWidget *create_image_from_pixbuf(char *path, Dimensions dimensions)
     g_object_unref(scaled_pixbuf);
 
     return image;
+}
+
+gchar *write_image_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "image", tabs_number);
+
+    return "image";
 }

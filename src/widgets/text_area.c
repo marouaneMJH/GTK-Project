@@ -68,8 +68,18 @@ GtkWidget *create_text_area(TextAreaConfig text_area)
     widget_set_colors(text_view, text_area.bg_color, text_area.text_color);
 
     gtk_container_add(GTK_CONTAINER(scrolled_window), text_view);
-    if(text_area.dimensions.width > 0 && text_area.dimensions.height > 0)
+    if (text_area.dimensions.width > 0 && text_area.dimensions.height > 0)
         set_widget_size(scrolled_window, text_area.dimensions);
 
     return scrolled_window;
+}
+
+gchar *write_text_area_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "text_area", tabs_number);
+
+    return "text_area";
 }

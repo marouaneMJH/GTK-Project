@@ -12,10 +12,10 @@
         .height = 0}
 
 #define DEFAULT_CHECK_BUTTON_MARGIN \
-    {                              \
-        .bottom = 0,               \
-        .top = 0,                  \
-        .start = 0,                \
+    {                               \
+        .bottom = 0,                \
+        .top = 0,                   \
+        .start = 0,                 \
         .end = 0}
 
 #define DEFAULT_CHECK_BUTTON                           \
@@ -26,7 +26,7 @@
         .is_inconsistent = FALSE,                      \
         .use_underline = FALSE,                        \
         .dimensions = DEFAULT_CHECK_BUTTON_DIMENSIONS, \
-        .margins = DEFAULT_CHECK_BUTTON_MARGIN, \
+        .margins = DEFAULT_CHECK_BUTTON_MARGIN,        \
         .bg_color = "\0",                              \
         .text_color = "\0"}
 
@@ -60,5 +60,7 @@ ViewConfig *init_check_button_config(FILE *index, CheckButtonConfig *check_butto
  * @return Un pointeur vers le GtkWidget représentant le bouton check.
  */
 GtkWidget *create_check_button(CheckButtonConfig check_button_config);
+
+gchar *write_check_button_property(FILE *output_file, View *view, int tabs_number);
 
 #endif // CHECK_BUTTON_H

@@ -294,7 +294,115 @@ gchar *write_combo_text_box_property(FILE *output_file, View *view, int tabs_num
     if (!output_file || !view)
         return "\0";
 
+    // Write the widget tag and style configuration (without styling elements)
     write_widget_tag_style_view_config(output_file, view, "combo_text_box", tabs_number);
+
+    // Get the GtkComboBoxText from the view
+    GtkComboBoxText *combo_box = GTK_COMBO_BOX_TEXT(view->widget);
+
+    // Check if the combo box has an entry
+    gboolean has_entry = gtk_combo_box_get_has_entry(GTK_COMBO_BOX(combo_box));
+    if (has_entry != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "has_entry=\"%s\"\n", has_entry ? "true" : "false");
+    }
+
+    // Get the placeholder text
+    const gchar *placeholder_text = gtk_entry_get_placeholder_text(
+        GTK_ENTRY(gtk_bin_get_child(GTK_BIN(combo_box))));
+
+    if (placeholder_text != NULL) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "placeholder_text=\"%s\"\n", placeholder_text);
+    }
+
+    // Get the default value
+    const gchar *default_value = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(combo_box))));
+    if (default_value != NULL && g_strcmp0(default_value, "") != 0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "default_value=\"%s\"\n", default_value);
+    }
+
+    // Get the default index
+    gint default_index = gtk_combo_box_get_active(GTK_COMBO_BOX(combo_box));
+    if (default_index != -1) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "default_index=\"%d\"\n", default_index);
+    }
+
+    // Get the wrap width
+    gint wrap_width = gtk_combo_box_get_wrap_width(GTK_COMBO_BOX(combo_box));
+    if (wrap_width != 1) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "wrap_width=\"%d\"\n", wrap_width);
+    }
+
+    // Check if the popup has a fixed width
+    gboolean popup_fixed_width = gtk_combo_box_get_popup_fixed_width(GTK_COMBO_BOX(combo_box));
+    if (popup_fixed_width != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "popup_fixed_width=\"%s\"\n", popup_fixed_width ? "true" : "false");
+    }
+
+    // Get the number of visible rows in the dropdown
+    gint popup_shown_rows = gtk_combo_box_get_popup_fixed_width(GTK_COMBO_BOX(combo_box));
+    if (popup_shown_rows != 3) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "popup_shown_rows=\"%d\"\n", popup_shown_rows);
+    }
+
+    // Check if the combo box is editable
+    gboolean is_editable = gtk_editable_get_editable(GTK_EDITABLE(gtk_bin_get_child(GTK_BIN(combo_box))));
+    if (is_editable != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_editable=\"%s\"\n", is_editable ? "true" : "false");
+    }
+
+    // Get the horizontal expand property
+    gboolean hexpand = gtk_widget_get_hexpand(GTK_WIDGET(combo_box));
+    if (hexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "hexpand=\"%s\"\n", hexpand ? "true" : "false");
+    }
+
+    // Get the vertical expand property
+    gboolean vexpand = gtk_widget_get_vexpand(GTK_WIDGET(combo_box));
+    if (vexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "vexpand=\"%s\"\n", vexpand ? "true" : "false");
+    }
+
+    // Get the horizontal alignment
+    GtkAlign halign = gtk_widget_get_halign(GTK_WIDGET(combo_box));
+    if (halign != GTK_ALIGN_FILL) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "halign=\"%s\"\n", halign == GTK_ALIGN_START ? "start" : halign == GTK_ALIGN_END  ? "end"
+                                                                                  : halign == GTK_ALIGN_CENTER ? "center"
+                                                                                  : halign == GTK_ALIGN_FILL   ? "fill"
+                                                                                                               : "unknown");
+    }
+
+    // Get the vertical alignment
+    GtkAlign valign = gtk_widget_get_valign(GTK_WIDGET(combo_box));
+    if (valign != GTK_ALIGN_FILL) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "valign=\"%s\"\n", valign == GTK_ALIGN_START ? "start" : valign == GTK_ALIGN_END  ? "end"
+                                                                                  : valign == GTK_ALIGN_CENTER ? "center"
+                                                                                  : valign == GTK_ALIGN_FILL   ? "fill"
+                                                                                                               : "unknown");
+    }
 
     return "combo_text_box";
 }

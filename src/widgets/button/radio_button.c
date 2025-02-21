@@ -192,7 +192,97 @@ gchar *write_radio_button_property(FILE *output_file, View *view, int tabs_numbe
     if (!output_file || !view)
         return "\0";
 
+    // Write the widget tag and style configuration (without styling elements)
     write_widget_tag_style_view_config(output_file, view, "radio_button", tabs_number);
+
+    // Get the GtkRadioButton from the view
+    GtkRadioButton *radio_button = GTK_RADIO_BUTTON(view->widget);
+
+    // Get the label text
+    const gchar *label = gtk_button_get_label(GTK_BUTTON(radio_button));
+    if (g_strcmp0(label, "\0") != 0) // Check if the label text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "label=\"%s\"\n", label);
+    }
+
+    // Get the icon name GtkWidget *image = gtk_button_get_image(GTK_BUTTON(radio_button));
+    // if (image && GTK_IS_IMAGE(image)) // Check if the button has an image
+    // {
+    //     const gchar *icon_name = gtk_image_get_icon_name(GTK_IMAGE(image));
+    //     if (g_strcmp0(icon_name, "\0") != 0) // Check if the icon name is not the default
+    //     {
+    //         print_tabs(output_file, tabs_number + 1);
+    //         fprintf(output_file, "icon_name=\"%s\"\n", icon_name);
+    //     }
+    // }
+
+    // Get the tooltip text
+    const gchar *tooltip = gtk_widget_get_tooltip_text(GTK_WIDGET(radio_button));
+    if (g_strcmp0(tooltip, "\0") != 0) // Check if the tooltip text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "tooltip=\"%s\"\n", tooltip);
+    }
+
+    // Check if the radio button is part of a group
+    gboolean is_group = gtk_radio_button_get_group(radio_button) != NULL;
+    if (is_group != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_group=\"%s\"\n", is_group ? "true" : "false");
+    }
+
+    // Check if the radio button uses mnemonics
+    gboolean is_mnemonic = gtk_button_get_use_underline(GTK_BUTTON(radio_button));
+    if (is_mnemonic != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_mnemonic=\"%s\"\n", is_mnemonic ? "true" : "false");
+    }
+
+    // Check if the radio button is selected
+    gboolean is_selected = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_button));
+    if (is_selected != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_selected=\"%s\"\n", is_selected ? "true" : "false");
+    }
+
+    // Check if the radio button is in button mode
+    gboolean is_button_mode = gtk_toggle_button_get_mode(GTK_TOGGLE_BUTTON(radio_button));
+    if (is_button_mode != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_button_mode=\"%s\"\n", is_button_mode ? "true" : "false");
+    }
+
+    // Check if the radio button is in an inconsistent state
+    gboolean is_inconsistent = gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(radio_button));
+    if (is_inconsistent != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_inconsistent=\"%s\"\n", is_inconsistent ? "true" : "false");
+    }
+
+    // Check if the radio button uses underline in the label
+    gboolean use_underline = gtk_button_get_use_underline(GTK_BUTTON(radio_button));
+    if (use_underline != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "use_underline=\"%s\"\n", use_underline ? "true" : "false");
+    }
+
+    // Get the icon position
+    GtkPositionType icon_position = gtk_button_get_image_position(GTK_BUTTON(radio_button));
+    if (icon_position != GTK_POS_LEFT) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "icon_position=\"%s\"\n", icon_position == GTK_POS_LEFT ? "left" : icon_position == GTK_POS_RIGHT ? "right"
+                                                                                            : icon_position == GTK_POS_TOP     ? "top"
+                                                                                            : icon_position == GTK_POS_BOTTOM  ? "bottom"
+                                                                                                                               : "unknown");
+    }
 
     return "radio_button";
 }

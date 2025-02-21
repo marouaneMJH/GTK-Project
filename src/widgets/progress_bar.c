@@ -111,7 +111,70 @@ gchar *write_progress_bar_property(FILE *output_file, View *view, int tabs_numbe
     if (!output_file || !view)
         return "\0";
 
+    // Write the widget tag and style configuration (without styling elements)
     write_widget_tag_style_view_config(output_file, view, "progress_bar", tabs_number);
+
+    // Get the GtkProgressBar from the view
+    GtkProgressBar *progress_bar = GTK_PROGRESS_BAR(view->widget);
+
+    // Get the text
+    const gchar *text = gtk_progress_bar_get_text(progress_bar);
+    if (g_strcmp0(text, "\0") != 0) // Check if the text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "text=\"%s\"\n", text);
+    }
+
+    // Get the progress fraction
+    gdouble progress_fraction = gtk_progress_bar_get_fraction(progress_bar);
+    if (progress_fraction != 0.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "progress_fraction=\"%f\"\n", progress_fraction);
+    }
+
+    // Get the progress pulse step
+    gdouble progress_pulse_step = gtk_progress_bar_get_pulse_step(progress_bar);
+    if (progress_pulse_step != 0.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "progress_pulse_step=\"%f\"\n", progress_pulse_step);
+    }
+
+    // Check if the text is visible
+    gboolean is_text_visible = gtk_progress_bar_get_show_text(progress_bar);
+    if (is_text_visible != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_text_visible=\"%s\"\n", is_text_visible ? "true" : "false");
+    }
+
+    // Check if the progress bar is inverted
+    gboolean is_inverted = gtk_progress_bar_get_inverted(progress_bar);
+    if (is_inverted != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_inverted=\"%s\"\n", is_inverted ? "true" : "false");
+    }
+
+    // Get the ellipsize mode
+    PangoEllipsizeMode ellipsize = gtk_progress_bar_get_ellipsize(progress_bar);
+    if (ellipsize != PANGO_ELLIPSIZE_END) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "ellipsize=\"%s\"\n", ellipsize == PANGO_ELLIPSIZE_NONE ? "none" : ellipsize == PANGO_ELLIPSIZE_START ? "start"
+                                                                                            : ellipsize == PANGO_ELLIPSIZE_MIDDLE  ? "middle"
+                                                                                            : ellipsize == PANGO_ELLIPSIZE_END     ? "end"
+                                                                                                                                   : "unknown");
+    }
+
+    // Get the opacity
+    gdouble opacity = gtk_widget_get_opacity(GTK_WIDGET(progress_bar));
+    if (opacity != 1.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "opacity=\"%f\"\n", opacity);
+    }
 
     return "progress_bar";
 }

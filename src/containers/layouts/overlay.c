@@ -78,7 +78,24 @@ gchar *write_overlay_property(FILE *output_file, View *view, int tabs_number)
     if (!output_file || !view)
         return "\0";
 
+    // Write the widget tag and style configuration (without styling elements)
     write_widget_tag_style_view_config(output_file, view, "overlay", tabs_number);
+
+    // Get the GtkOverlay from the view
+    GtkOverlay *overlay = GTK_OVERLAY(view->widget);
+
+    // Get the opacity
+    gdouble opacity = gtk_widget_get_opacity(GTK_WIDGET(overlay));
+    if (opacity != 1.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "opacity=\"%f\"\n", opacity);
+    }
+
+    // Get the border radius (if applicable)
+    // Note: GTK itself does not provide a direct API for border radius.
+    // This would typically be handled via CSS or custom properties.
+    // If you have a custom way to handle border radius, you can add it here.
 
     return "overlay";
 }

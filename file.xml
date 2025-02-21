@@ -11,14 +11,14 @@
 		<box 
 			id="box2"
 			width="361"
-			height="590"
+			height="677"
 		>
 			<button 
 				id=""
 				width="109"
-				on_click="sig_generate_xml"
-
 				height="100"
+				tooltip="(null)"
+				use_underline="true"
 			/>
 			<label 
 				id=""
@@ -33,30 +33,48 @@
 				id=""
 				width="109"
 				height="35"
-				on_click="sig_generate_xml"
+				tooltip="(null)"
+				use_underline="true"
 			/>
-
-			<radio_button
+			<radio_button 
+				id=""
+				width="361"
+				height="29"
 				label="button1"
+				tooltip="(null)"
+				is_selected="true"
+				is_button_mode="true"
 			/>
-			<radio_button
+			<radio_button 
+				id=""
+				width="361"
+				height="29"
 				label="button2"
+				tooltip="(null)"
+				is_button_mode="true"
 			/>
-			<radio_button
+			<radio_button 
+				id=""
+				width="361"
+				height="29"
 				label="button3"
+				tooltip="(null)"
+				is_button_mode="true"
 			/>
-
-
 			<button 
 				id=""
 				color="#008000"
 				width="109"
 				height="35"
+				tooltip="(null)"
+				use_underline="true"
 			/>
 			<button 
 				id=""
 				width="109"
 				height="35"
+				tooltip="(null)"
+				use_underline="true"
 			/>
 		</box>
 	</scrolled_window>

@@ -42,8 +42,10 @@ gchar *write_widget_property(FILE *output_file, View *view, int tabs_number)
     if (GTK_IS_FIXED(view->widget))
         return write_fixed_property(output_file, view, tabs_number);
 
-    if (GTK_IS_STACK(view->widget))
+    if (GTK_IS_RADIO_BUTTON(view->widget))
+        return write_radio_button_property(output_file, view, tabs_number);
 
+    if (GTK_IS_STACK(view->widget))
         return write_stack_property(output_file, view, tabs_number);
 
     if (GTK_IS_NOTEBOOK(view->widget))
@@ -106,9 +108,6 @@ gchar *write_widget_property(FILE *output_file, View *view, int tabs_number)
     if (GTK_IS_OVERLAY(view->widget))
         return write_overlay_property(output_file, view, tabs_number);
 
-    // if (GTK_IS_DIALOG(view->widget))
-    //     return write_dialog_property(output_file, view, tabs_number);
-
     if (GTK_IS_COMBO_BOX_TEXT(view->widget))
         return write_combo_text_box_property(output_file, view, tabs_number);
 
@@ -126,6 +125,9 @@ gchar *write_widget_property(FILE *output_file, View *view, int tabs_number)
 
     if (GTK_IS_WINDOW(view->widget))
         return write_window_property(output_file, view, tabs_number);
+
+    if (GTK_IS_BUTTON(view->widget))
+        return write_button_property(output_file, view, tabs_number);
 
     return "\0";
 }
@@ -147,6 +149,7 @@ void write_widget_close_tag(FILE *output_file, View *view, gchar *tag, int tabs_
 
         write_widget(output_file, view->child, tabs_number + 1);
 
+        // todo
         // verify the dual behavior widget
         // sometime  act like container and other like widget combo_text_box menu_item ...
 
@@ -169,24 +172,29 @@ void write_widget(FILE *output_file, View *view, int tabs_number)
     if (!view || !output_file)
         return;
 
+    // write widget property and child widgets
     char *str = write_widget_property(output_file, view, tabs_number);
 
-    // printing the tag of the widget
-    if (strlen(str))
-    {
-
-        // write the widget property
-        write_widget_style(output_file, view->widget, tabs_number + 1);
-
-        // close tag
-        write_widget_close_tag(output_file, view, str, tabs_number);
-    }
+    // close tag
+    write_widget_close_tag(output_file, view, str, tabs_number);
 
     // write the brother widget
     write_widget(output_file, view->next, tabs_number);
 }
 
-void build_xml(FILE *output_file)
+void build_xml(gchar *file_name)
 {
+    if (!file_name)
+        return;
+
+    FILE *output_file = fopen(file_name, "w");
+    if (!output_file)
+    {
+        // message dialog for file not existing
+        return;
+    }
     write_widget(output_file, root_view_global, 0);
+    fclose(output_file);
+
+    // message dialog for completing the ask
 }

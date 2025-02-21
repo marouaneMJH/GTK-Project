@@ -114,13 +114,56 @@ GtkWidget *create_paned(PanedConfig paned_config)
 
     return paned;
 }
-
 gchar *write_paned_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)
         return "\0";
 
+    // Write the widget tag and style configuration (without styling elements)
     write_widget_tag_style_view_config(output_file, view, "paned", tabs_number);
+
+    // Get the GtkPaned from the view
+    GtkPaned *paned = GTK_PANED(view->widget);
+
+    // Get the orientation
+    GtkOrientation orientation = gtk_orientable_get_orientation(GTK_ORIENTABLE(paned));
+    if (orientation != GTK_ORIENTATION_VERTICAL) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "orientation=\"%s\"\n", orientation == GTK_ORIENTATION_HORIZONTAL ? "horizontal" : "vertical");
+    }
+
+    // Get the position of the separator
+    gint position = gtk_paned_get_position(paned);
+    if (position != 200) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "position=\"%d\"\n", position);
+    }
+
+    // Check if the paned has a wide handle
+    gboolean is_wide = gtk_paned_get_wide_handle(paned);
+    if (is_wide != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_wide=\"%s\"\n", is_wide ? "true" : "false");
+    }
+
+    // Get the horizontal expand property
+    gboolean hexpand = gtk_widget_get_hexpand(GTK_WIDGET(paned));
+    if (hexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "hexpand=\"%s\"\n", hexpand ? "true" : "false");
+    }
+
+    // Get the vertical expand property
+    gboolean vexpand = gtk_widget_get_vexpand(GTK_WIDGET(paned));
+    if (vexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "vexpand=\"%s\"\n", vexpand ? "true" : "false");
+    }
 
     return "paned";
 }

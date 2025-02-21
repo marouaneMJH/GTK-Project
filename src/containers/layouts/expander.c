@@ -144,7 +144,97 @@ gchar *write_expander_property(FILE *output_file, View *view, int tabs_number)
     if (!output_file || !view)
         return "\0";
 
+    // Write the widget tag and style configuration (without styling elements)
     write_widget_tag_style_view_config(output_file, view, "expander", tabs_number);
+
+    // Get the GtkExpander from the view
+    GtkExpander *expander = GTK_EXPANDER(view->widget);
+
+    // Get the label text
+    const gchar *label = gtk_expander_get_label(expander);
+    if (g_strcmp0(label, "\0") != 0) // Check if the label text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "label=\"%s\"\n", label);
+    }
+
+    // Check if the expander is expanded
+    gboolean is_expanded = gtk_expander_get_expanded(expander);
+    if (is_expanded != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_expanded=\"%s\"\n", is_expanded ? "true" : "false");
+    }
+
+    // Check if the label fills all available horizontal space
+    gboolean is_label_fill = gtk_expander_get_label_fill(expander);
+    if (is_label_fill != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_label_fill=\"%s\"\n", is_label_fill ? "true" : "false");
+    }
+
+    // Check if the label uses Pango markup
+    gboolean is_markup = gtk_expander_get_use_markup(expander);
+    if (is_markup != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_markup=\"%s\"\n", is_markup ? "true" : "false");
+    }
+
+    // Check if the label has an underline
+    gboolean is_underline = gtk_expander_get_use_underline(expander);
+    if (is_underline != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_underline=\"%s\"\n", is_underline ? "true" : "false");
+    }
+
+    // Check if the expander resizes the toplevel
+    gboolean is_resize_toplevel = gtk_expander_get_resize_toplevel(expander);
+    if (is_resize_toplevel != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_resize_toplevel=\"%s\"\n", is_resize_toplevel ? "true" : "false");
+    }
+
+    // Get the horizontal expand property
+    gboolean hexpand = gtk_widget_get_hexpand(GTK_WIDGET(expander));
+    if (hexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "hexpand=\"%s\"\n", hexpand ? "true" : "false");
+    }
+
+    // Get the vertical expand property
+    gboolean vexpand = gtk_widget_get_vexpand(GTK_WIDGET(expander));
+    if (vexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "vexpand=\"%s\"\n", vexpand ? "true" : "false");
+    }
+
+    // Get the horizontal alignment
+    GtkAlign halign = gtk_widget_get_halign(GTK_WIDGET(expander));
+    if (halign != GTK_ALIGN_START) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "halign=\"%s\"\n", halign == GTK_ALIGN_START ? "start" : halign == GTK_ALIGN_END  ? "end"
+                                                                                  : halign == GTK_ALIGN_CENTER ? "center"
+                                                                                  : halign == GTK_ALIGN_FILL   ? "fill"
+                                                                                                               : "unknown");
+    }
+
+    // Get the vertical alignment
+    GtkAlign valign = gtk_widget_get_valign(GTK_WIDGET(expander));
+    if (valign != GTK_ALIGN_START) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "valign=\"%s\"\n", valign == GTK_ALIGN_START ? "start" : valign == GTK_ALIGN_END  ? "end"
+                                                                                  : valign == GTK_ALIGN_CENTER ? "center"
+                                                                                  : valign == GTK_ALIGN_FILL   ? "fill"
+                                                                                                               : "unknown");
+    }
 
     return "expander";
 }

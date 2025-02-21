@@ -56,9 +56,6 @@ ViewConfig *configure_label_property(LabelConfig *label_config, ViewConfig *view
     else if (strcmp(property, "is_selectable") == 0)
         label_config->is_selectable = (strcmp(value, "true") == 0) ? TRUE : FALSE;
 
-    else if (strcmp(property, "padding") == 0)
-        label_config->padding = atoi(value);
-
     else if (!g_strcmp0(property, "font_family"))
         strcpy(label_config->font_family, value);
 
@@ -165,7 +162,126 @@ gchar *write_label_property(FILE *output_file, View *view, int tabs_number)
     if (!output_file || !view)
         return "\0";
 
+    // Write the widget tag and style configuration (without styling elements)
     write_widget_tag_style_view_config(output_file, view, "label", tabs_number);
+
+    // Get the GtkLabel from the view
+    GtkLabel *label = GTK_LABEL(view->widget);
+
+    // Get the label text
+    const gchar *label_text = gtk_label_get_label(label);
+    if (g_strcmp0(label_text, "\0") != 0) // Check if the label text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "label_text=\"%s\"\n", label_text);
+    }
+
+    // Check if the label uses Pango markup
+    gboolean is_markup = gtk_label_get_use_markup(label);
+    if (is_markup != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_markup=\"%s\"\n", is_markup ? "true" : "false");
+    }
+
+    // Check if the label has an underline
+    gboolean is_underline = gtk_label_get_use_underline(label);
+    if (is_underline != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_underline=\"%s\"\n", is_underline ? "true" : "false");
+    }
+
+    // Get the justification type
+    GtkJustification jtype = gtk_label_get_justify(label);
+    if (jtype != GTK_JUSTIFY_CENTER) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "jtype=\"%s\"\n", jtype == GTK_JUSTIFY_LEFT ? "left" : jtype == GTK_JUSTIFY_RIGHT ? "right"
+                                                                                : jtype == GTK_JUSTIFY_CENTER  ? "center"
+                                                                                : jtype == GTK_JUSTIFY_FILL    ? "fill"
+                                                                                                               : "unknown");
+    }
+
+    // Get the ellipsize mode
+    PangoEllipsizeMode ellipsize = gtk_label_get_ellipsize(label);
+    if (ellipsize != PANGO_ELLIPSIZE_NONE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "ellipsize=\"%s\"\n", ellipsize == PANGO_ELLIPSIZE_START ? "start" : ellipsize == PANGO_ELLIPSIZE_MIDDLE ? "middle"
+                                                                                              : ellipsize == PANGO_ELLIPSIZE_END      ? "end"
+                                                                                                                                      : "none");
+    }
+
+    // Check if the label wraps text
+    gboolean is_wrap = gtk_label_get_line_wrap(label);
+    if (is_wrap != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_wrap=\"%s\"\n", is_wrap ? "true" : "false");
+    }
+
+    // Get the horizontal alignment
+    gfloat xalign = gtk_label_get_xalign(label);
+    if (xalign != 0.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "xalign=\"%f\"\n", xalign);
+    }
+
+    // Get the vertical alignment
+    gfloat yalign = gtk_label_get_yalign(label);
+    if (yalign != 0.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "yalign=\"%f\"\n", yalign);
+    }
+
+    // Check if the label is selectable
+    gboolean is_selectable = gtk_label_get_selectable(label);
+    if (is_selectable != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_selectable=\"%s\"\n", is_selectable ? "true" : "false");
+    }
+
+    // Get the horizontal expand property
+    gboolean hexpand = gtk_widget_get_hexpand(GTK_WIDGET(label));
+    if (hexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "hexpand=\"%s\"\n", hexpand ? "true" : "false");
+    }
+
+    // Get the vertical expand property
+    gboolean vexpand = gtk_widget_get_vexpand(GTK_WIDGET(label));
+    if (vexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "vexpand=\"%s\"\n", vexpand ? "true" : "false");
+    }
+
+    // Get the horizontal alignment
+    GtkAlign halign = gtk_widget_get_halign(GTK_WIDGET(label));
+    if (halign != GTK_ALIGN_FILL) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "halign=\"%s\"\n", halign == GTK_ALIGN_START ? "start" : halign == GTK_ALIGN_END  ? "end"
+                                                                                  : halign == GTK_ALIGN_CENTER ? "center"
+                                                                                  : halign == GTK_ALIGN_FILL   ? "fill"
+                                                                                                               : "unknown");
+    }
+
+    // Get the vertical alignment
+    GtkAlign valign = gtk_widget_get_valign(GTK_WIDGET(label));
+    if (valign != GTK_ALIGN_FILL) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "valign=\"%s\"\n", valign == GTK_ALIGN_START ? "start" : valign == GTK_ALIGN_END  ? "end"
+                                                                                  : valign == GTK_ALIGN_CENTER ? "center"
+                                                                                  : valign == GTK_ALIGN_FILL   ? "fill"
+                                                                                                               : "unknown");
+    }
 
     return "label";
 }

@@ -13,7 +13,6 @@ void write_widget_style(FILE *output_file, GtkWidget *widget, int tabs_number)
 
     GtkStyleContext *context = gtk_widget_get_style_context(widget);
     GdkRGBA fg_rgba, bg_rgba;
-    gboolean bg_found = FALSE;
 
     // Get the widget's foreground color (for the normal state)
     gtk_style_context_get_color(context, GTK_STATE_FLAG_NORMAL, &fg_rgba);
@@ -23,14 +22,19 @@ void write_widget_style(FILE *output_file, GtkWidget *widget, int tabs_number)
     gchar fg_hex[8]; // Format: "#RRGGBB"
     sprintf(fg_hex, "#%02X%02X%02X", fg_r, fg_g, fg_b);
 
-    // Try to retrieve the background color (this may not always be available)
-    bg_found = gtk_style_context_lookup_color(context, "background", &bg_rgba);
+    // Use gtk_render_background to render and obtain the background color
+    // Instead of directly calling the deprecated function, use gtk_render_background in a drawing context
+    GtkWidget *drawing_area = gtk_drawing_area_new();
+    GtkStyleContext *drawing_context = gtk_widget_get_style_context(drawing_area);
+    gtk_style_context_get_background_color(drawing_context, GTK_STATE_FLAG_NORMAL, &bg_rgba);
+
+    guint bg_r = (guint)(bg_rgba.red * 255);
+    guint bg_g = (guint)(bg_rgba.green * 255);
+    guint bg_b = (guint)(bg_rgba.blue * 255);
     gchar bg_hex[8] = "\0";
-    if (bg_found)
+
+    if (bg_r || bg_g || bg_b) // Check if the background color is not empty
     {
-        guint bg_r = (guint)(bg_rgba.red * 255);
-        guint bg_g = (guint)(bg_rgba.green * 255);
-        guint bg_b = (guint)(bg_rgba.blue * 255);
         sprintf(bg_hex, "#%02X%02X%02X", bg_r, bg_g, bg_b);
     }
 
@@ -71,38 +75,76 @@ void write_widget_style(FILE *output_file, GtkWidget *widget, int tabs_number)
     }
 
     // Write all properties to the output file with the requested tabs.
-
-    if (strlen(fg_hex))
+    if (g_strcmp0(fg_hex, "#2E3436")) // Checking if the foreground color is not the default one
     {
         print_tabs(output_file, tabs_number);
         fprintf(output_file, "color=\"%s\"\n", fg_hex);
     }
 
-    if (strlen(bg_hex) && bg_found)
+    if (strlen(bg_hex)) // Check if the background color was found
     {
         print_tabs(output_file, tabs_number);
         fprintf(output_file, "bg_color=\"%s\"\n", bg_hex);
     }
 
-    print_tabs(output_file, tabs_number);
-    fprintf(output_file, "width=\"%d\"\n", width);
-    print_tabs(output_file, tabs_number);
-    fprintf(output_file, "height=\"%d\"\n", height);
+    if (width != 1)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "width=\"%d\"\n", width);
+    }
+    if (height != 1)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "height=\"%d\"\n", height);
+    }
 
-    print_tabs(output_file, tabs_number);
-    fprintf(output_file, "margin_top=\"%d\"\n", margin_top);
-    print_tabs(output_file, tabs_number);
-    fprintf(output_file, "margin_bottom=\"%d\"\n", margin_bottom);
-    print_tabs(output_file, tabs_number);
-    fprintf(output_file, "margin_left=\"%d\"\n", margin_left);
-    print_tabs(output_file, tabs_number);
-    fprintf(output_file, "margin_right=\"%d\"\n", margin_right);
+    if (margin_top)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "margin_top=\"%d\"\n", margin_top);
+    }
+    if (margin_bottom)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "margin_bottom=\"%d\"\n", margin_bottom);
+    }
+    if (margin_left)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "margin_left=\"%d\"\n", margin_left);
+    }
+    if (margin_right)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "margin_right=\"%d\"\n", margin_right);
+    }
 
-    print_tabs(output_file, tabs_number);
-    fprintf(output_file, "font_size=\"%d\"\n", font_size);
-    print_tabs(output_file, tabs_number);
-    fprintf(output_file, "font_family=\"%s\"\n", family);
+    if (font_size != 9) // Checking if font size is the default
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "font_size=\"%d\"\n", font_size);
+    }
+
+    if (g_strcmp0(family, "Segoe UI")) // Checking if font family is not default "Segoe UI"
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "font_family=\"%s\"\n", family);
+    }
+
+    // Optionally, you can add font style and weight as well:
+    if (g_strcmp0(font_style, "Normal"))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "font_style=\"%s\"\n", font_style);
+    }
+
+    if (g_strcmp0(font_weight, "Normal"))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "font_weight=\"%s\"\n", font_weight);
+    }
 }
+
 
 void write_widget_tag_style_view_config(FILE *output_file, View *view, gchar *tag, int tabs_number)
 {
@@ -114,7 +156,7 @@ void write_widget_tag_style_view_config(FILE *output_file, View *view, gchar *ta
     print_tabs(output_file, tabs_number + 1);
     fprintf(output_file, "id=\"%s\"\n", view->view_config->view_id);
 
-    // print the style
+    // print the style 
     write_widget_style(output_file, view->widget, tabs_number + 1);
 
     // print the view config

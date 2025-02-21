@@ -145,7 +145,60 @@ gchar *write_image_property(FILE *output_file, View *view, int tabs_number)
     if (!output_file || !view)
         return "\0";
 
+    // Write the widget tag and style configuration (without styling elements)
     write_widget_tag_style_view_config(output_file, view, "image", tabs_number);
+
+    // Get the GtkImage from the view
+    GtkImage *image = GTK_IMAGE(view->widget);
+
+    // Get the image type (file, icon, etc.)
+    GtkImageType image_type = gtk_image_get_storage_type(image);
+    if (image_type != GTK_IMAGE_EMPTY) // Check if the image type is not empty
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "type=\"%s\"\n", image_type == GTK_IMAGE_PIXBUF ? "file" : image_type == GTK_IMAGE_ICON_NAME ? "icon"
+                                                                                    : image_type == GTK_IMAGE_GICON       ? "gicon"
+                                                                                    : image_type == GTK_IMAGE_ANIMATION   ? "animation"
+                                                                                    : image_type == GTK_IMAGE_ICON_SET    ? "icon_set"
+                                                                                                                          : "unknown");
+    }
+
+    // Get the image path or icon name (if applicable)
+    const gchar *path = NULL;
+    if (image_type == GTK_IMAGE_PIXBUF)
+    {
+        // todo solve the problem of this type
+    }
+    else if (image_type == GTK_IMAGE_ICON_NAME)
+    {
+        const gchar *icon_name = NULL;
+        gtk_image_get_icon_name(image, &icon_name, NULL);
+        path = icon_name;
+    }
+    else if (image_type == GTK_IMAGE_GICON)
+    {
+        GIcon *gicon = NULL;
+        gtk_image_get_gicon(image, &gicon, NULL);
+        if (G_IS_FILE_ICON(gicon))
+        {
+            GFile *file = g_file_icon_get_file(G_FILE_ICON(gicon));
+            path = g_file_get_path(file);
+        }
+    }
+
+    if (path && g_strcmp0(path, "\0") != 0) // Check if the path is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "path=\"%s\"\n", path);
+    }
+
+    // Get the opacity
+    gdouble opacity = gtk_widget_get_opacity(GTK_WIDGET(image));
+    if (opacity != 1.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "opacity=\"%f\"\n", opacity);
+    }
 
     return "image";
 }

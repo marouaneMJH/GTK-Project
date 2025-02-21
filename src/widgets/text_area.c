@@ -79,7 +79,30 @@ gchar *write_text_area_property(FILE *output_file, View *view, int tabs_number)
     if (!output_file || !view)
         return "\0";
 
+    // Write the widget tag and style configuration (without styling elements)
     write_widget_tag_style_view_config(output_file, view, "text_area", tabs_number);
+
+    // Get the GtkTextView from the view
+    GtkTextView *text_view = GTK_TEXT_VIEW(view->widget);
+
+    // Check if the text area is editable
+    gboolean is_editable = gtk_text_view_get_editable(text_view);
+    if (is_editable != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_editable=\"%s\"\n", is_editable ? "true" : "false");
+    }
+
+    // Get the wrap mode
+    GtkWrapMode wrap_mode = gtk_text_view_get_wrap_mode(text_view);
+    if (wrap_mode != GTK_WRAP_WORD) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "wrap_mode=\"%s\"\n", wrap_mode == GTK_WRAP_NONE ? "none" : wrap_mode == GTK_WRAP_CHAR    ? "char"
+                                                                                     : wrap_mode == GTK_WRAP_WORD      ? "word"
+                                                                                     : wrap_mode == GTK_WRAP_WORD_CHAR ? "word_char"
+                                                                                                                       : "unknown");
+    }
 
     return "text_area";
 }

@@ -107,7 +107,50 @@ gchar *write_stack_property(FILE *output_file, View *view, int tabs_number)
     if (!output_file || !view)
         return "\0";
 
+    // Write the widget tag and style configuration (without styling elements)
     write_widget_tag_style_view_config(output_file, view, "stack", tabs_number);
+
+    // Get the GtkStack from the view
+    GtkStack *stack = GTK_STACK(view->widget);
+
+    // Check if the stack is homogeneous
+    gboolean is_homogeneous = gtk_stack_get_homogeneous(stack);
+    if (is_homogeneous != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_homogeneous=\"%s\"\n", is_homogeneous ? "true" : "false");
+    }
+
+    // Check if transitions are enabled
+    gboolean is_transition_enabled = gtk_stack_get_transition_type(stack) != GTK_STACK_TRANSITION_TYPE_NONE;
+    if (is_transition_enabled != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_transition_enabled=\"%s\"\n", is_transition_enabled ? "true" : "false");
+    }
+
+    // Get the transition duration
+    guint transition_duration = gtk_stack_get_transition_duration(stack);
+    if (transition_duration != 250) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "transition_duration=\"%d\"\n", transition_duration);
+    }
+
+    // Get the transition type
+    GtkStackTransitionType transition_type = gtk_stack_get_transition_type(stack);
+    if (transition_type != GTK_STACK_TRANSITION_TYPE_CROSSFADE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "transition_type=\"%s\"\n", transition_type == GTK_STACK_TRANSITION_TYPE_NONE ? "none" : transition_type == GTK_STACK_TRANSITION_TYPE_CROSSFADE      ? "crossfade"
+                                                                                                                  : transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT      ? "slide_right"
+                                                                                                                  : transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT       ? "slide_left"
+                                                                                                                  : transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_UP         ? "slide_up"
+                                                                                                                  : transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN       ? "slide_down"
+                                                                                                                  : transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT ? "slide_left_right"
+                                                                                                                  : transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN    ? "slide_up_down"
+                                                                                                                                                                                  : "unknown");
+    }
 
     return "stack";
 }

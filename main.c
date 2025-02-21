@@ -10,14 +10,7 @@ static void activate(GtkApplication *app, gpointer user_data)
     View *root_view = build_app(app, root_view, INDEX_TXT);
     GtkWidget *window = root_view->widget;
 
-    // FILE *output_file = fopen("output_file.xml", "w");
-    // if (!output_file)
-    // {
-    //     printf("\nAAA AAA AAA AAA AAA AAA AAA");
-    //     exit(EXIT_FAILURE);
-    // }
-    // // build_xml(output_file);
-    // fclose(output_file);
+
 
     // WindowConfig window_config = DEFAULT_WINDOW;
     // GtkWidget *window = create_window(app, window_config);

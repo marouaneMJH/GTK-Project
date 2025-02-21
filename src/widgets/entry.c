@@ -212,7 +212,124 @@ gchar *write_entry_property(FILE *output_file, View *view, int tabs_number)
     if (!output_file || !view)
         return "\0";
 
+    // Write the widget tag and style configuration (without styling elements)
     write_widget_tag_style_view_config(output_file, view, "entry", tabs_number);
+
+    // Get the GtkEntry from the view
+    GtkEntry *entry = GTK_ENTRY(view->widget);
+
+    // Get the text
+    const gchar *text = gtk_entry_get_text(entry);
+    if (g_strcmp0(text, "") != 0) // Check if the text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "text=\"%s\"\n", text);
+    }
+
+    // Get the placeholder text
+    const gchar *placeholder_text = gtk_entry_get_placeholder_text(entry);
+    if (g_strcmp0(placeholder_text, "") != 0) // Check if the placeholder text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "placeholder_text=\"%s\"\n", placeholder_text);
+    }
+
+    // Check if the entry is visible
+    gboolean is_visible = gtk_widget_get_visible(GTK_WIDGET(entry));
+    if (is_visible != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_visible=\"%s\"\n", is_visible ? "true" : "false");
+    }
+
+    // Get the input purpose
+    GtkInputPurpose purpose = gtk_entry_get_input_purpose(entry);
+    if (purpose != GTK_INPUT_PURPOSE_FREE_FORM) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "purpose=\"%s\"\n", purpose == GTK_INPUT_PURPOSE_FREE_FORM ? "free_form" : purpose == GTK_INPUT_PURPOSE_ALPHA  ? "alpha"
+                                                                                                    : purpose == GTK_INPUT_PURPOSE_DIGITS   ? "digits"
+                                                                                                    : purpose == GTK_INPUT_PURPOSE_NUMBER   ? "number"
+                                                                                                    : purpose == GTK_INPUT_PURPOSE_PHONE    ? "phone"
+                                                                                                    : purpose == GTK_INPUT_PURPOSE_URL      ? "url"
+                                                                                                    : purpose == GTK_INPUT_PURPOSE_EMAIL    ? "email"
+                                                                                                    : purpose == GTK_INPUT_PURPOSE_NAME     ? "name"
+                                                                                                    : purpose == GTK_INPUT_PURPOSE_PASSWORD ? "password"
+                                                                                                    : purpose == GTK_INPUT_PURPOSE_PIN      ? "pin"
+                                                                                                                                            : "unknown");
+    }
+
+    // Check if the entry has a delete icon
+    gboolean has_delete_icon = gtk_entry_get_has_frame(entry);
+    if (has_delete_icon != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "has_delete_icon=\"%s\"\n", has_delete_icon ? "true" : "false");
+    }
+
+    // Check if the entry has a frame
+    gboolean has_frame = gtk_entry_get_has_frame(entry);
+    if (has_frame != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "has_frame=\"%s\"\n", has_frame ? "true" : "false");
+    }
+
+    // Get the opacity
+    gdouble opacity = gtk_widget_get_opacity(GTK_WIDGET(entry));
+    if (opacity != 1.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "opacity=\"%f\"\n", opacity);
+    }
+
+    // Check if the entry is in overwrite mode
+    gboolean overwrite_mode = gtk_entry_get_overwrite_mode(entry);
+    if (overwrite_mode != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "overwrite_mode=\"%s\"\n", overwrite_mode ? "true" : "false");
+    }
+
+    // Get the maximum length of the text
+    gint max_length = gtk_entry_get_max_length(entry);
+    if (max_length != 100) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "max_length=\"%d\"\n", max_length);
+    }
+
+    // Get the text alignment
+    gfloat alignment = gtk_entry_get_alignment(entry);
+    if (alignment != 0.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "alignment=\"%f\"\n", alignment);
+    }
+
+    // Get the progress fraction
+    gdouble progress_fraction = gtk_entry_get_progress_fraction(entry);
+    if (progress_fraction != 0.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "progress_fraction=\"%f\"\n", progress_fraction);
+    }
+
+    // Get the progress pulse step
+    gdouble progress_pulse_step = gtk_entry_get_progress_pulse_step(entry);
+    if (progress_pulse_step != 0.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "progress_pulse_step=\"%f\"\n", progress_pulse_step);
+    }
+
+    // Check if the entry activates the default widget
+    gboolean activates_default = gtk_entry_get_activates_default(entry);
+    if (activates_default != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "activates_default=\"%s\"\n", activates_default ? "true" : "false");
+    }
 
     return "entry";
 }

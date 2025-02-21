@@ -191,7 +191,86 @@ gchar *write_button_property(FILE *output_file, View *view, int tabs_number)
     if (!output_file || !view)
         return "\0";
 
+    // Write the widget tag and style configuration (without styling elements)
     write_widget_tag_style_view_config(output_file, view, "button", tabs_number);
+
+    // Get the GtkButton from the view
+    GtkButton *button = GTK_BUTTON(view->widget);
+
+    // Get the label text
+    const gchar *label = gtk_button_get_label(button);
+    if (g_strcmp0(label, "Click here") != 0) // Check if the label text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "label=\"%s\"\n", label);
+    }
+
+    // Check if the button is sensitive
+    gboolean is_sensitive = gtk_widget_get_sensitive(GTK_WIDGET(button));
+    if (is_sensitive != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_sensitive=\"%s\"\n", is_sensitive ? "true" : "false");
+    }
+
+    // Check if the button is visible
+    gboolean is_visible = gtk_widget_get_visible(GTK_WIDGET(button));
+    if (is_visible != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_visible=\"%s\"\n", is_visible ? "true" : "false");
+    }
+
+    // Get the tooltip text
+    const gchar *tooltip = gtk_widget_get_tooltip_text(GTK_WIDGET(button));
+    if (g_strcmp0(tooltip, "\0") != 0) // Check if the tooltip text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "tooltip=\"%s\"\n", tooltip);
+    }
+
+    // Get the horizontal expand property
+    gboolean hexpand = gtk_widget_get_hexpand(GTK_WIDGET(button));
+    if (hexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "hexpand=\"%s\"\n", hexpand ? "true" : "false");
+    }
+
+    // Get the vertical expand property
+    gboolean vexpand = gtk_widget_get_vexpand(GTK_WIDGET(button));
+    if (vexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "vexpand=\"%s\"\n", vexpand ? "true" : "false");
+    }
+
+    // Check if the button always shows the image
+    gboolean always_show_image = gtk_button_get_always_show_image(button);
+    if (always_show_image != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "always_show_image=\"%s\"\n", always_show_image ? "true" : "false");
+    }
+
+    // Check if the button uses underline in the label
+    gboolean use_underline = gtk_button_get_use_underline(button);
+    if (use_underline != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "use_underline=\"%s\"\n", use_underline ? "true" : "false");
+    }
+
+    // Get the icon position
+    GtkPositionType icon_position = gtk_button_get_image_position(button);
+    if (icon_position != GTK_POS_LEFT) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "icon_position=\"%s\"\n", icon_position == GTK_POS_LEFT ? "left" : icon_position == GTK_POS_RIGHT ? "right"
+                                                                                            : icon_position == GTK_POS_TOP     ? "top"
+                                                                                            : icon_position == GTK_POS_BOTTOM  ? "bottom"
+                                                                                                                               : "unknown");
+    }
 
     return "button";
 }

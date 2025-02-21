@@ -11,7 +11,7 @@ typedef struct
 
 } ParamNode;
 
-// for test
+// debug for test
 
 gboolean sig_hello(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
@@ -56,6 +56,7 @@ static void sig_tree_widget_type(GtkWidget *widget, gpointer data)
 }
 
 // end  testing signales
+
 
 static void sig_change_self_bg_color(GtkWidget *widget, gpointer data)
 {
@@ -154,6 +155,10 @@ static void sig_dialog(GtkWidget *widget, gpointer data)
     GtkWidget *dialog = root_dialog_view_global->widget;
 
     show_dialog(dialog);
+}
+static void sig_generate_xml(GtkWidget *widget, gpointer data)
+{
+    build_xml("file.xml");
 }
 
 static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data)
@@ -662,6 +667,10 @@ void connect_signales(View *view)
         else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_tree_widget_type") == 0)
             callback_function = sig_tree_widget_type;
+
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_generate_xml") == 0)
+            callback_function = sig_generate_xml;
     }
 
     // Connect the callback function

@@ -107,7 +107,51 @@ gchar *write_check_button_property(FILE *output_file, View *view, int tabs_numbe
     if (!output_file || !view)
         return "\0";
 
+    // Write the widget tag and style configuration (without styling elements)
     write_widget_tag_style_view_config(output_file, view, "check_button", tabs_number);
+
+    // Get the GtkCheckButton from the view
+    GtkCheckButton *check_button = GTK_CHECK_BUTTON(view->widget);
+
+    // Get the label text
+    const gchar *label = gtk_button_get_label(GTK_BUTTON(check_button));
+    if (g_strcmp0(label, "\0") != 0) // Check if the label text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "label=\"%s\"\n", label);
+    }
+
+    // Get the tooltip text
+    const gchar *tooltip = gtk_widget_get_tooltip_text(GTK_WIDGET(check_button));
+    if (g_strcmp0(tooltip, "\0") != 0) // Check if the tooltip text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "tooltip=\"%s\"\n", tooltip);
+    }
+
+    // Check if the check button is active
+    gboolean is_active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button));
+    if (is_active != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_active=\"%s\"\n", is_active ? "true" : "false");
+    }
+
+    // Check if the check button is in an inconsistent state
+    gboolean is_inconsistent = gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(check_button));
+    if (is_inconsistent != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_inconsistent=\"%s\"\n", is_inconsistent ? "true" : "false");
+    }
+
+    // Check if the check button uses underline in the label
+    gboolean use_underline = gtk_button_get_use_underline(GTK_BUTTON(check_button));
+    if (use_underline != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "use_underline=\"%s\"\n", use_underline ? "true" : "false");
+    }
 
     return "check_button";
 }

@@ -87,7 +87,43 @@ gchar *write_link_button_property(FILE *output_file, View *view, int tabs_number
     if (!output_file || !view)
         return "\0";
 
+    // Write the widget tag and style configuration (without styling elements)
     write_widget_tag_style_view_config(output_file, view, "link_button", tabs_number);
+
+    // Get the GtkLinkButton from the view
+    GtkLinkButton *link_button = GTK_LINK_BUTTON(view->widget);
+
+    // Get the URI
+    const gchar *uri = gtk_link_button_get_uri(link_button);
+    if (g_strcmp0(uri, "\0") != 0) // Check if the URI is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "uri=\"%s\"\n", uri);
+    }
+
+    // Get the label text
+    const gchar *label = gtk_button_get_label(GTK_BUTTON(link_button));
+    if (g_strcmp0(label, "\0") != 0) // Check if the label text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "label=\"%s\"\n", label);
+    }
+
+    // Get the tooltip text
+    const gchar *tooltip = gtk_widget_get_tooltip_text(GTK_WIDGET(link_button));
+    if (g_strcmp0(tooltip, "\0") != 0) // Check if the tooltip text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "tooltip=\"%s\"\n", tooltip);
+    }
+
+    // Check if the link button is visited
+    gboolean is_visited = gtk_link_button_get_visited(link_button);
+    if (is_visited != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_visited=\"%s\"\n", is_visited ? "true" : "false");
+    }
 
     return "link_button";
 }

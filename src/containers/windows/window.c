@@ -238,6 +238,7 @@ void show_window(GtkWidget *window)
     gtk_widget_show_all(GTK_WIDGET(window));
 }
 
+
 gchar *write_window_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

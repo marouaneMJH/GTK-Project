@@ -186,4 +186,12 @@ GtkWidget *create_button(ButtonConfig button_config)
     return button;
 }
 
-gchar *write_button_property(FILE *output_file, View *view, int tabs_number);
+gchar *write_button_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "button", tabs_number);
+
+    return "button";
+}

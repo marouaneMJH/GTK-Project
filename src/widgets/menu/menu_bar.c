@@ -85,3 +85,13 @@ GtkWidget *create_menu_bar(MenuBarConfig menu_bar_config)
 
     return menu_bar;
 }
+
+gchar *write_menu_bar_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "menu_bar", tabs_number);
+
+    return "menu_bar";
+}

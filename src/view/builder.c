@@ -324,12 +324,18 @@ View *build_app(GtkApplication *app, View *root_view, const gchar *file_path)
 
         if (c == '<')
         {
-            if (fgetc(index) == '/')
+            char next_char = fgetc(index);
+            if (next_char == '/')
             {
-
                 is_relative_container = FALSE;
                 parent_view = parent_view->parent;
                 g_print("Parent view changed\n");
+                continue;
+            }
+            else if (next_char == '!')
+            {
+                while ((c = fgetc(index)) != '>')
+                    ;
                 continue;
             }
             else

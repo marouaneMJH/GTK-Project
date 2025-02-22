@@ -234,3 +234,89 @@ BoxConfig *read_box_config_from_dialog()
     box_config_ptr = &button_config;
     return box_config_ptr;
 }
+
+gchar *write_box_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    // Write the widget tag and style configuration (without styling elements)
+    write_widget_tag_style_view_config(output_file, view, "box", tabs_number);
+
+    // Get the GtkBox from the view
+    GtkBox *box = GTK_BOX(view->widget);
+
+    // Get the orientation
+    GtkOrientation orientation = gtk_orientable_get_orientation(GTK_ORIENTABLE(box));
+    if (orientation != GTK_ORIENTATION_VERTICAL) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "orientation=\"%s\"\n", orientation == GTK_ORIENTATION_HORIZONTAL ? "horizontal" : "vertical");
+    }
+
+    // Get the spacing between children
+    gint spacing = gtk_box_get_spacing(box);
+    if (spacing != 0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "spacing=\"%d\"\n", spacing);
+    }
+
+    // Check if the box is homogeneous
+    gboolean homogeneous = gtk_box_get_homogeneous(box);
+    if (homogeneous != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "homogeneous=\"%s\"\n", homogeneous ? "true" : "false");
+    }
+
+    // Get the baseline position
+    GtkBaselinePosition baseline_position = gtk_box_get_baseline_position(box);
+    if (baseline_position != GTK_BASELINE_POSITION_CENTER) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "baseline_position=\"%s\"\n", baseline_position == GTK_BASELINE_POSITION_TOP ? "top" : baseline_position == GTK_BASELINE_POSITION_BOTTOM ? "bottom"
+                                                                                                                : baseline_position == GTK_BASELINE_POSITION_CENTER   ? "center"
+                                                                                                                                                                      : "unknown");
+    }
+
+    // Get the horizontal expand property
+    gboolean hexpand = gtk_widget_get_hexpand(GTK_WIDGET(box));
+    if (hexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "hexpand=\"%s\"\n", hexpand ? "true" : "false");
+    }
+
+    // Get the vertical expand property
+    gboolean vexpand = gtk_widget_get_vexpand(GTK_WIDGET(box));
+    if (vexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "vexpand=\"%s\"\n", vexpand ? "true" : "false");
+    }
+
+    // Get the horizontal alignment
+    GtkAlign halign = gtk_widget_get_halign(GTK_WIDGET(box));
+    if (halign != GTK_ALIGN_FILL) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "halign=\"%s\"\n", halign == GTK_ALIGN_START ? "start" : halign == GTK_ALIGN_END  ? "end"
+                                                                                  : halign == GTK_ALIGN_CENTER ? "center"
+                                                                                  : halign == GTK_ALIGN_FILL   ? "fill"
+                                                                                                               : "unknown");
+    }
+
+    // Get the vertical alignment
+    GtkAlign valign = gtk_widget_get_valign(GTK_WIDGET(box));
+    if (valign != GTK_ALIGN_FILL) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "valign=\"%s\"\n", valign == GTK_ALIGN_START ? "start" : valign == GTK_ALIGN_END  ? "end"
+                                                                                  : valign == GTK_ALIGN_CENTER ? "center"
+                                                                                  : valign == GTK_ALIGN_FILL   ? "fill"
+                                                                                                               : "unknown");
+    }
+
+    return "box";
+}

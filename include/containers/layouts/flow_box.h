@@ -77,4 +77,6 @@ ViewConfig *init_flow_box_config(FILE *index, FlowBoxConfig *flow_box_config);
  */
 GtkWidget *create_flow_box(FlowBoxConfig flow_box_config);
 
+gchar *write_flow_box_property(FILE *output_file, View *view, int tabs_number);
+
 #endif

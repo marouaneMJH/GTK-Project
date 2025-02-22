@@ -41,4 +41,6 @@ ViewConfig *init_menu_bar_config(FILE *index, MenuBarConfig *menu_bar_config);
 
 GtkWidget *create_menu_bar(MenuBarConfig menu_bar_config);
 
+gchar *write_menu_bar_property(FILE *output_file, View *view, int tabs_number);
+
 #endif

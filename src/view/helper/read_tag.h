@@ -32,10 +32,10 @@ View *read_dialog_tag(FILE *index, View *parent_view, gboolean is_relative_conta
     GtkWidget *dialog_widget = create_dialog(dialog_config);
 
     View *dialog_view = create_view(dialog_widget, view_config);
-    
+
     // Add view to view model
     parent_view = add_view(dialog_view, parent_view, is_relative_container);
-    
+
     return dialog_view;
 }
 
@@ -154,7 +154,6 @@ View *read_entry_tag(FILE *index, View *parent_view, gboolean is_relative_contai
 
     // Add view to view model
     parent_view = add_view(entry_view, parent_view, is_relative_container);
-
 
     return entry_view;
 }
@@ -521,8 +520,6 @@ View *read_color_button_tag(FILE *index, View *parent_view, gboolean is_relative
     return color_button_view;
 }
 
-
-
 View *read_expander_tag(FILE *index, View *parent_view, gboolean is_relative_container)
 {
     ViewConfig *view_config;
@@ -539,6 +536,23 @@ View *read_expander_tag(FILE *index, View *parent_view, gboolean is_relative_con
     add_view(expander_view, parent_view, is_relative_container);
 
     return expander_view;
+}
+
+View *read_event_box_tag(FILE *index, View *parent_view, gboolean is_relative_container)
+{
+    ViewConfig *view_config;
+    EventBoxConfig event_box_config = DEFAULT_EVENT_BOX_CONFIG;
+
+    view_config = init_event_box_config(index, &event_box_config);
+
+    GtkWidget *event_box_widget = create_event_box(event_box_config);
+
+    View *event_box_view = create_view(event_box_widget, view_config);
+
+    // Ajouter le expander à la hiérarchie des vues
+    add_view(event_box_view, parent_view, is_relative_container);
+
+    return event_box_view;
 }
 
 #endif

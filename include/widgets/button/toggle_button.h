@@ -8,16 +8,14 @@
 #define DEFAULT_TOGGLE_BUTTON_DIMENSIONS \
     {                                    \
         .height = 0,                     \
-        .width = 0                        \
-    }
+        .width = 0}
 
 #define DEFAULT_TOGGLE_BUTTON_MARGINS \
     {                                 \
         .bottom = 0,                  \
         .top = 0,                     \
         .start = 0,                   \
-        .end = 0                       \
-    }
+        .end = 0}
 
 #define DEFAULT_TOGGLE_BUTTON                           \
     {                                                   \
@@ -28,25 +26,24 @@
         .is_visible = FALSE,                            \
         .mode = TRUE,                                   \
         .is_inconsistent = FALSE,                       \
-        .hexpand = FALSE,                                  \
-        .vexpand = FALSE,                                  \
-        .halign = GTK_ALIGN_FILL,                          \
-        .valign = GTK_ALIGN_FILL,                          \
+        .hexpand = FALSE,                               \
+        .vexpand = FALSE,                               \
+        .halign = GTK_ALIGN_FILL,                       \
+        .valign = GTK_ALIGN_FILL,                       \
         .dimensions = DEFAULT_TOGGLE_BUTTON_DIMENSIONS, \
         .margins = DEFAULT_TOGGLE_BUTTON_MARGINS,       \
         .bg_color = "",                                 \
-        .text_color = ""                                \
-    }
+        .text_color = ""}
 
 /* Structure de configuration du Toggle Button */
 typedef struct
 {
     gchar label[MAX_BUTTON_LABEL_SIZE];
     gchar tooltip[MAX_TOOLTIP_SIZE];
-    gboolean is_mnemonic;   // Utilisation des mnemonics dans le label
-    gboolean is_active;     // Détermine si le bouton est activé/désactivé
-    gboolean is_visible;    // Détermine si le bouton est affiché
-    gboolean mode;          // Affichage du bouton avec/sans indicateur
+    gboolean is_mnemonic;     // Utilisation des mnemonics dans le label
+    gboolean is_active;       // Détermine si le bouton est activé/désactivé
+    gboolean is_visible;      // Détermine si le bouton est affiché
+    gboolean mode;            // Affichage du bouton avec/sans indicateur
     gboolean is_inconsistent; // État intermédiaire du bouton
     gboolean hexpand;
     gboolean vexpand;
@@ -80,5 +77,7 @@ gboolean get_toggle_button_mode(GtkWidget *toggle_button);
 
 void set_toggle_button_inconsistent(GtkWidget *toggle_button, gboolean is_inconsistent);
 gboolean get_toggle_button_inconsistent(GtkWidget *toggle_button);
+
+gchar *write_toggle_button_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

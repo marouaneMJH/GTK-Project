@@ -63,8 +63,6 @@ typedef struct
     /* Behavior */
     gboolean is_selectable; // Text can be copied by user
 
-    /* Layout */
-    gint padding; // Padding around the label
 } LabelConfig;
 
 ViewConfig *configure_label_property(LabelConfig *label_config, ViewConfig *view_config, gchar *property, gchar *value);
@@ -78,4 +76,7 @@ ViewConfig *init_label_config(FILE *index, LabelConfig *label_config);
 
 // function to creat lable widget
 GtkWidget *create_label(LabelConfig label);
+
+gchar *write_label_property(FILE *output_file, View *view, int tabs_number);
+
 #endif

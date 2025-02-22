@@ -215,4 +215,6 @@ void combo_text_box_remove(GtkComboBoxText *combo_text_box, gint index);
  */
 void combo_text_box_insert(GtkComboBoxText *combo_text_box, gint index, const gchar *id, const gchar *text);
 
+gchar *write_combo_text_box_property(FILE *output_file, View *view, int tabs_number);
+
 #endif

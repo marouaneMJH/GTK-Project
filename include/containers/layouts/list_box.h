@@ -50,4 +50,7 @@ ListBoxConfig *init_list_box();
  */
 GtkWidget *create_list_box(ListBoxConfig list_box_config);
 
+gchar *write_list_box_property(FILE *output_file, View *view, int tabs_number);
+
+
 #endif

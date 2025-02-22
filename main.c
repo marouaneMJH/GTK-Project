@@ -1,3 +1,4 @@
+
 #include "./include/builder.h"
 
 void print_graph1(View *root)
@@ -23,11 +24,28 @@ static void activate(GtkApplication *app, gpointer user_data)
     // WindowConfig window_config = DEFAULT_WINDOW;
     // GtkWidget *window = create_window(app, window_config);
 
-    // ColorButtonConfig button_config = DEFAULT_COLOR_BUTTON;
-    // GtkWidget *button = create_color_button(button_config);
+    // GtkWidget* box=gtk_box_new(10,10);
+    // GtkWidget* button=gtk_button_new_with_label(NULL);
 
-    // gtk_container_add(GTK_CONTAINER(expander), button);
-    // gtk_container_add(GTK_CONTAINER(window), expander);
+    // gboolean id=GTK_IS_CONTAINER(button);
+    // g_print("\nis box container: %d",id);
+
+    // gboolean id2=GTK_IS_EVENT_BOX(button);
+    // g_print("\nbutton button container: %d",id2);
+
+    // GtkWidget *label=gtk_label_new("hello");
+    // GtkWidget *event_box = gtk_event_box_new();
+    // gtk_container_add(GTK_CONTAINER(event_box), label);
+    // gtk_widget_show(label);
+    // gtk_widget_show(event_box);
+
+    // g_signal_connect(event_box, "button-press-event",
+    //                  G_CALLBACK(on_event_box_button_press), NULL);
+
+    // GtkWidget *button=gtk_font_button_new();
+
+    // // gtk_container_add(GTK_CONTAINER(expander), button);
+    // gtk_container_add(GTK_CONTAINER(window), event_box);
 
     gtk_widget_show_all(window);
 

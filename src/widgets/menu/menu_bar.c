@@ -85,3 +85,36 @@ GtkWidget *create_menu_bar(MenuBarConfig menu_bar_config)
 
     return menu_bar;
 }
+
+gchar *write_menu_bar_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    // Write the widget tag and style configuration (without styling elements)
+    write_widget_tag_style_view_config(output_file, view, "menu_bar", tabs_number);
+
+    // Get the GtkMenuBar from the view
+    GtkMenuBar *menu_bar = GTK_MENU_BAR(view->widget);
+
+    // Get the tooltip text
+    const gchar *tooltip = gtk_widget_get_tooltip_text(GTK_WIDGET(menu_bar));
+    if (g_strcmp0(tooltip, "\0") != 0) // Check if the tooltip text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "tooltip=\"%s\"\n", tooltip);
+    }
+
+    // Get the pack direction
+    GtkPackDirection pack_direction = gtk_menu_bar_get_pack_direction(menu_bar);
+    if (pack_direction != GTK_PACK_DIRECTION_LTR) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "pack_direction=\"%s\"\n", pack_direction == GTK_PACK_DIRECTION_LTR ? "ltr" : pack_direction == GTK_PACK_DIRECTION_RTL ? "rtl"
+                                                                                                       : pack_direction == GTK_PACK_DIRECTION_TTB   ? "ttb"
+                                                                                                       : pack_direction == GTK_PACK_DIRECTION_BTT   ? "btt"
+                                                                                                                                                    : "unknown");
+    }
+
+    return "menu_bar";
+}

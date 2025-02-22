@@ -6,6 +6,8 @@
 
 #include "./constants.h"
 #include "widgets/view/view.h"
+#include "./widgets/View/xml_builder/xml_writer_globals.h"
+
 /* Global macros  */
 
 // check if the pointer is not null

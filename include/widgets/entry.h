@@ -17,7 +17,7 @@
 /* Default dimensions for entry */
 #define DEFAULT_ENTRY_DIMENSIONS \
     {                            \
-        .height = 0,            \
+        .height = 0,             \
         .width = 0}
 
 /* Default margins for entry */
@@ -41,15 +41,14 @@
         .bg_color = "\0",                       \
         .text_color = "\0",                     \
         .overwrite_mode = FALSE,                \
-        .max_length = 100,                       \
+        .max_length = 100,                      \
         .alignment = 0,                         \
         .completion = NULL,                     \
         .progress_fraction = 0,                 \
         .progress_pulse_step = 0,               \
         .activates_default = FALSE,             \
-        .has_frame = TRUE,                       \
-        .has_delete_icon = FALSE                \
-    }
+        .has_frame = TRUE,                      \
+        .has_delete_icon = FALSE}
 
 /**
  * @brief Structure to configure an entry widget
@@ -67,7 +66,7 @@ typedef struct
     Margins margins;       // Margins around the entry
 
     /* Entry appearance */
-    gboolean has_delete_icon;        // Whether the entry has a delete icon
+    gboolean has_delete_icon;         // Whether the entry has a delete icon
     gboolean has_frame;               // Whether the entry has a frame
     gdouble opacity;                  // Opacity of the entry (0.0 to 1.0)
     gchar bg_color[MAX_COLOR_SIZE];   // Background color (e.g., "\0")
@@ -96,5 +95,7 @@ ViewConfig *init_entry_config(FILE *index, EntryConfig *entry_config);
  * @return GtkWidget* Pointer to the new entry widget
  */
 GtkWidget *create_entry(EntryConfig entry_data);
+
+gchar *write_entry_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

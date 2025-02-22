@@ -57,10 +57,9 @@ ViewConfig *configure_flow_box_property(FlowBoxConfig *flow_box_config, ViewConf
     return view_config;
 }
 
-
 ViewConfig *init_flow_box_config(FILE *index, FlowBoxConfig *flow_box_config)
 {
-    return init_generic_config(index,(void*)flow_box_config,(ConfigurePropertyCallback)configure_flow_box_property);
+    return init_generic_config(index, (void *)flow_box_config, (ConfigurePropertyCallback)configure_flow_box_property);
 }
 
 GtkWidget *create_flow_box(FlowBoxConfig flow_box_config)
@@ -106,4 +105,69 @@ GtkWidget *create_flow_box(FlowBoxConfig flow_box_config)
     widget_set_margins(flow_box, flow_box_config.margins);
 
     return flow_box;
+}
+
+gchar *write_flow_box_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    // Write the widget tag and style configuration (without styling elements)
+    write_widget_tag_style_view_config(output_file, view, "flow_box", tabs_number);
+
+    // Get the GtkFlowBox from the view
+    GtkFlowBox *flow_box = GTK_FLOW_BOX(view->widget);
+
+    // Get the minimum number of children per line
+    guint min_children_per_line = gtk_flow_box_get_min_children_per_line(flow_box);
+    if (min_children_per_line != 1) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "min_children_per_line=\"%u\"\n", min_children_per_line);
+    }
+
+    // Get the maximum number of children per line
+    guint max_children_per_line = gtk_flow_box_get_max_children_per_line(flow_box);
+    if (max_children_per_line != 5) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "max_children_per_line=\"%u\"\n", max_children_per_line);
+    }
+
+    // Get the column spacing
+    guint column_spacing = gtk_flow_box_get_column_spacing(flow_box);
+    if (column_spacing != 0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "column_spacing=\"%u\"\n", column_spacing);
+    }
+
+    // Get the row spacing
+    guint row_spacing = gtk_flow_box_get_row_spacing(flow_box);
+    if (row_spacing != 0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "row_spacing=\"%u\"\n", row_spacing);
+    }
+
+    // Check if the flow box is homogeneous
+    gboolean is_homogeneous = gtk_flow_box_get_homogeneous(flow_box);
+    if (is_homogeneous != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_homogeneous=\"%s\"\n", is_homogeneous ? "true" : "false");
+    }
+
+    // Get the selection mode
+    GtkSelectionMode selection_mode = gtk_flow_box_get_selection_mode(flow_box);
+    if (selection_mode != GTK_SELECTION_SINGLE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "selection_mode=\"%s\"\n", selection_mode == GTK_SELECTION_NONE ? "none" : selection_mode == GTK_SELECTION_SINGLE ? "single"
+                                                                                                    : selection_mode == GTK_SELECTION_BROWSE   ? "browse"
+                                                                                                    : selection_mode == GTK_SELECTION_MULTIPLE ? "multiple"
+                                                                                                                                               : "unknown");
+    }
+
+    return "flow_box";
 }

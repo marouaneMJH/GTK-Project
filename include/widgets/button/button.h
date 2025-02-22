@@ -48,6 +48,8 @@
         .use_stock = FALSE,                                \
         .icon_position = GTK_POS_LEFT,                     \
         .bg_color = "\0",                                  \
+        .font_size = 10,                                   \
+        .bg_image = "\0",                                  \
         .color = "\0"}
 
 typedef struct
@@ -76,6 +78,8 @@ typedef struct
     /* Button appearance */
     gchar bg_color[MAX_COLOR_SIZE]; // Background color (e.g., "\0")
     gchar color[MAX_COLOR_SIZE];    // Text color (e.g., "#0000000")
+    gchar bg_image[MAX_ICON_PATH_SIZE];
+    gint font_size;
 
     // @deprecated
     gboolean use_stock;      // Whether to use stock items for the button (deprecated)
@@ -97,5 +101,7 @@ ButtonConfig* read_button_config_from_widget(GtkWidget *widget);
  * @return[ou] GtkWidget pointer to new button widget
  */
 GtkWidget *create_button(ButtonConfig button);
+
+gchar *write_button_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

@@ -64,7 +64,7 @@ ViewConfig *configure_menu_property(MenuConfig *menu_config, ViewConfig *view_co
 
 ViewConfig *init_menu_config(FILE *index, MenuConfig *menu_config)
 {
-    return init_generic_config(index,(void*)menu_config,(ConfigurePropertyCallback)configure_menu_property);
+    return init_generic_config(index, (void *)menu_config, (ConfigurePropertyCallback)configure_menu_property);
 }
 GtkWidget *create_menu(MenuConfig menu_config)
 {
@@ -109,3 +109,66 @@ void menu_set_group(GtkWidget *widget, GtkWidget *group)
 {
     // gtk_menu_set_group(GTK_MENU(widget), gtk_menu_get_group(GTK_MENU(group)));
 }
+
+gchar *write_menu_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    // Write the widget tag and style configuration (without styling elements)
+    write_widget_tag_style_view_config(output_file, view, "menu", tabs_number);
+
+    // Get the GtkMenu from the view
+    GtkMenu *menu = GTK_MENU(view->widget);
+
+    // Get the accelerator path
+    const gchar *accel_path = gtk_menu_get_accel_path(menu);
+    if (g_strcmp0(accel_path, "\0") != 0) // Check if the accelerator path is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "accel_path=\"%s\"\n", accel_path);
+    }
+
+    // Get the active menu item
+    GtkWidget *active_item = gtk_menu_get_active(menu);
+    if (active_item != NULL) // Check if there is an active item
+    {
+        // Get the index of the active menu item
+        GList *children = gtk_container_get_children(GTK_CONTAINER(menu));
+        gint active_index = g_list_index(children, active_item);
+        g_list_free(children);
+
+        if (active_index != 0) // Check if it's not the default value
+        {
+            print_tabs(output_file, tabs_number + 1);
+            fprintf(output_file, "active_index=\"%d\"\n", active_index);
+        }
+    }
+
+    // Check if the menu reserves space for toggle indicators
+    gboolean reserve_toggle_size = gtk_menu_get_reserve_toggle_size(menu);
+    if (reserve_toggle_size != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "reserve_toggle_size=\"%s\"\n", reserve_toggle_size ? "true" : "false");
+    }
+
+    // Get the monitor number
+    gint monitor_num = gtk_menu_get_monitor(menu);
+    if (monitor_num != 0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "monitor_num=\"%d\"\n", monitor_num);
+    }
+
+    // Get the tooltip text
+    const gchar *tooltip = gtk_widget_get_tooltip_text(GTK_WIDGET(menu));
+    if (g_strcmp0(tooltip, "\0") != 0) // Check if the tooltip text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "tooltip=\"%s\"\n", tooltip);
+    }
+
+    return "menu";
+}
+

@@ -65,17 +65,20 @@ GtkWidget *create_menu_item(MenuItemConfig menu_item_config)
     GtkWidget *menu_item = NULL;
 
     // Creation
-    if (menu_item_config.is_memonic && menu_item_config.label[0] != '\0') {
+    if (menu_item_config.is_memonic && menu_item_config.label[0] != '\0')
+    {
         // Create with mnemonic
         menu_item = gtk_menu_item_new_with_mnemonic(menu_item_config.label);
-    } 
-    else if (menu_item_config.label[0] != '\0') {
+    }
+    else if (menu_item_config.label[0] != '\0')
+    {
         // Create with label
         menu_item = gtk_menu_item_new_with_label(menu_item_config.label);
         // Only set underline if explicitly requested
         gtk_menu_item_set_use_underline(GTK_MENU_ITEM(menu_item), menu_item_config.use_underline);
-    } 
-    else {
+    }
+    else
+    {
         // Create empty menu item
         menu_item = gtk_menu_item_new();
     }
@@ -102,7 +105,64 @@ GtkWidget *create_menu_item(MenuItemConfig menu_item_config)
     return menu_item;
 }
 
-void menu_item_set_submenu(GtkWidget *widget, GtkWidget *submenu)
+gchar *write_menu_item_property(FILE *output_file, View *view, int tabs_number)
 {
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(widget), submenu);
+    if (!output_file || !view)
+        return "\0";
+
+    // Write the widget tag and style configuration (without styling elements)
+    write_widget_tag_style_view_config(output_file, view, "menu_item", tabs_number);
+
+    // Get the GtkMenuItem from the view
+    GtkMenuItem *menu_item = GTK_MENU_ITEM(view->widget);
+
+    // Get the label text
+    const gchar *label = gtk_menu_item_get_label(menu_item);
+    if (g_strcmp0(label, "\0") != 0) // Check if the label text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "label=\"%s\"\n", label);
+    }
+
+    // Get the accelerator path
+    const gchar *accel_path = gtk_menu_item_get_accel_path(menu_item);
+    if (g_strcmp0(accel_path, "\0") != 0) // Check if the accelerator path is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "accel_path=\"%s\"\n", accel_path);
+    }
+
+    // Check if the menu item reserves space for an indicator
+    gboolean reserve_indicator = gtk_menu_item_get_reserve_indicator(menu_item);
+    if (reserve_indicator != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "reserve_indicator=\"%s\"\n", reserve_indicator ? "true" : "false");
+    }
+
+    // Check if the menu item uses underline in the label
+    gboolean use_underline = gtk_menu_item_get_use_underline(menu_item);
+    if (use_underline != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "use_underline=\"%s\"\n", use_underline ? "true" : "false");
+    }
+
+    // Check if the menu item uses mnemonics
+    gboolean is_mnemonic = gtk_menu_item_get_use_underline(menu_item);
+    if (is_mnemonic != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_mnemonic=\"%s\"\n", is_mnemonic ? "true" : "false");
+    }
+
+    // Get the tooltip text
+    const gchar *tooltip = gtk_widget_get_tooltip_text(GTK_WIDGET(menu_item));
+    if (g_strcmp0(tooltip, "\0") != 0) // Check if the tooltip text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "tooltip=\"%s\"\n", tooltip);
+    }
+
+    return "menu_item";
 }

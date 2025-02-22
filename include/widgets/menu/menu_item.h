@@ -24,7 +24,7 @@
         .accel_path = "\0",                         \
         .reserve_indicator = FALSE,                 \
         .use_underline = FALSE,                     \
-        .is_memonic = TRUE,                        \
+        .is_memonic = TRUE,                         \
         .tooltip = "\0",                            \
         .dimensions = DEFAULT_MENU_ITEM_DIMENSIONS, \
         .margins = DEFAULT_MENU_ITEM_MARGIN,        \
@@ -52,5 +52,7 @@ ViewConfig *init_menu_item_config(FILE *index, MenuItemConfig *menu_item_config)
 GtkWidget *create_menu_item(MenuItemConfig menu_item_config);
 
 void menu_item_set_submenu(GtkWidget *widget, GtkWidget *group);
+
+gchar *write_menu_item_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

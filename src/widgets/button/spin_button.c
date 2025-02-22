@@ -131,3 +131,92 @@ gdouble get_spin_button_value(GtkWidget *spin_widget)
     g_signal_connect(spin_widget, "value-changed", G_CALLBACK(get_button_value_call_back), NULL); // Connect callback
     return gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_widget));
 }
+
+gchar *write_spin_button_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    // Write the widget tag and style configuration (without styling elements)
+    write_widget_tag_style_view_config(output_file, view, "spin_button", tabs_number);
+
+    // Get the GtkSpinButton from the view
+    GtkSpinButton *spin_button = GTK_SPIN_BUTTON(view->widget);
+
+    // Get the minimum value
+    gdouble min;
+    gtk_spin_button_get_range(spin_button, &min, NULL);
+    if (min != 0.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "min=\"%f\"\n", min);
+    }
+
+    // Get the maximum value
+    gdouble max;
+    gtk_spin_button_get_range(spin_button, NULL, &max);
+    if (max != 100.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "max=\"%f\"\n", max);
+    }
+
+    // Get the step value
+    gdouble step;
+    gtk_spin_button_get_increments(spin_button, &step, NULL);
+    if (step != 1.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "step=\"%f\"\n", step);
+    }
+
+    // Get the initial value
+    gdouble initial_value = gtk_spin_button_get_value(spin_button);
+    if (initial_value != 50.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "initial_value=\"%f\"\n", initial_value);
+    }
+
+    // Get the number of decimal places
+    gint decimal = gtk_spin_button_get_digits(spin_button);
+    if (decimal != 2) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "decimal=\"%d\"\n", decimal);
+    }
+
+    // Check if the spin button is numeric
+    gboolean is_numeric = gtk_spin_button_get_numeric(spin_button);
+    if (is_numeric != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_numeric=\"%s\"\n", is_numeric ? "true" : "false");
+    }
+
+    // Check if the spin button disables decimal places
+    gboolean is_digits = gtk_spin_button_get_snap_to_ticks(spin_button);
+    if (is_digits != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_digits=\"%s\"\n", is_digits ? "true" : "false");
+    }
+
+    // Get the horizontal expand property
+    gboolean hexpand = gtk_widget_get_hexpand(GTK_WIDGET(spin_button));
+    if (hexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "hexpand=\"%s\"\n", hexpand ? "true" : "false");
+    }
+
+    // Get the vertical expand property
+    gboolean vexpand = gtk_widget_get_vexpand(GTK_WIDGET(spin_button));
+    if (vexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "vexpand=\"%s\"\n", vexpand ? "true" : "false");
+    }
+
+    return "spin_button";
+}

@@ -105,3 +105,57 @@ GtkWidget *create_separator(SeparatorConfig separator_config)
 
     return separator;
 }
+
+gchar *write_separator_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    // Write the widget tag and style configuration (without styling elements)
+    write_widget_tag_style_view_config(output_file, view, "separator", tabs_number);
+
+    // Get the GtkSeparator from the view
+    GtkSeparator *separator = GTK_SEPARATOR(view->widget);
+
+    // Get the tooltip text
+    const gchar *tooltip = gtk_widget_get_tooltip_text(GTK_WIDGET(separator));
+    if (g_strcmp0(tooltip, "\0") != 0) // Check if the tooltip text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "tooltip=\"%s\"\n", tooltip);
+    }
+
+    // Get the orientation
+    GtkOrientation orientation = gtk_orientable_get_orientation(GTK_ORIENTABLE(separator));
+    if (orientation != GTK_ORIENTATION_VERTICAL) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "orientation=\"%s\"\n", orientation == GTK_ORIENTATION_HORIZONTAL ? "horizontal" : "vertical");
+    }
+
+    // Check if the separator is visible
+    gboolean is_visible = gtk_widget_get_visible(GTK_WIDGET(separator));
+    if (is_visible != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_visible=\"%s\"\n", is_visible ? "true" : "false");
+    }
+
+    // Get the horizontal expand property
+    gboolean hexpand = gtk_widget_get_hexpand(GTK_WIDGET(separator));
+    if (hexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "hexpand=\"%s\"\n", hexpand ? "true" : "false");
+    }
+
+    // Get the vertical expand property
+    gboolean vexpand = gtk_widget_get_vexpand(GTK_WIDGET(separator));
+    if (vexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "vexpand=\"%s\"\n", vexpand ? "true" : "false");
+    }
+
+    return "separator";
+}

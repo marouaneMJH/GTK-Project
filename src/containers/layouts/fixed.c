@@ -99,3 +99,55 @@ void add_fixed(GtkWidget *widget, gint x, gint y)
 {
     gtk_fixed_put(GTK_FIXED(widget), widget, x, y);
 }
+
+gchar *write_fixed_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    // Write the widget tag and style configuration (without styling elements)
+    write_widget_tag_style_view_config(output_file, view, "fixed", tabs_number);
+
+    // Get the GtkFixed from the view
+    GtkFixed *fixed = GTK_FIXED(view->widget);
+
+    // Get the horizontal expand property
+    gboolean hexpand = gtk_widget_get_hexpand(GTK_WIDGET(fixed));
+    if (hexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "hexpand=\"%s\"\n", hexpand ? "true" : "false");
+    }
+
+    // Get the vertical expand property
+    gboolean vexpand = gtk_widget_get_vexpand(GTK_WIDGET(fixed));
+    if (vexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "vexpand=\"%s\"\n", vexpand ? "true" : "false");
+    }
+
+    // Get the horizontal alignment
+    GtkAlign halign = gtk_widget_get_halign(GTK_WIDGET(fixed));
+    if (halign != GTK_ALIGN_FILL) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "halign=\"%s\"\n", halign == GTK_ALIGN_START ? "start" : halign == GTK_ALIGN_END  ? "end"
+                                                                                  : halign == GTK_ALIGN_CENTER ? "center"
+                                                                                  : halign == GTK_ALIGN_FILL   ? "fill"
+                                                                                                               : "unknown");
+    }
+
+    // Get the vertical alignment
+    GtkAlign valign = gtk_widget_get_valign(GTK_WIDGET(fixed));
+    if (valign != GTK_ALIGN_FILL) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "valign=\"%s\"\n", valign == GTK_ALIGN_START ? "start" : valign == GTK_ALIGN_END  ? "end"
+                                                                                  : valign == GTK_ALIGN_CENTER ? "center"
+                                                                                  : valign == GTK_ALIGN_FILL   ? "fill"
+                                                                                                               : "unknown");
+    }
+
+    return "fixed";
+}

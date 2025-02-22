@@ -4,6 +4,7 @@
 #include "./index.h"
 #define INDEX_TXT "./src/view/index.xml"
 #define DIALOG_TXT "./src/view/dialog.xml"
+#define ERROR_DIALOG_TXT "./src/view/error_dialog.xml"
 #define BOX_PROPERTIES_DIALOG_TXT "./src/view/properties/box_dialog.xml"
 #define FIXED_PROPERTIES_DIALOG_TXT "./src/view/properties/fixed_dialog.xml"
 #define GRID_PROPERTIES_DIALOG_TXT "./src/view/properties/grid_dialog.xml"
@@ -53,7 +54,7 @@ typedef enum
 
 // Global structure;
 
-View *create_view(GtkWidget *widget, ViewConfig *view_config);
+View *create_view(GtkWidget *widget, ViewConfig *view_config, WidgetConfig *widget_config);
 
 View *add_view(View *view, View *relative, gboolean is_relative_container);
 
@@ -63,6 +64,6 @@ int get_view_index(gchar *widget_tag);
 
 View *build_app(GtkApplication *app, View *root_view, const gchar *file_path);
 
-void connect_signales(View *view);
+void connect_signals(View *view);
 
 #endif

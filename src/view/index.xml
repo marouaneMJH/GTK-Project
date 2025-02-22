@@ -9,24 +9,27 @@
     is_maximized="false"
 >
 
-
     <box
         id="box1"
     >
-        <menu_bar id="jkf">
+        <menu_bar id="menu_bar1">
 
             <menu_item
+                id="file_menu_item"
                 label="_File"
             >
                 <menu id="menu1">
                     <menu_item
+                        id="new_menu_item"
                         label="_New"
                     />
                     <menu_item
+                        id="open_menu_item"
                         label="_Save"
                     />
 
                     <menu_item
+                        id="save_menu_item"
                         label=" _Exit"
                     />
                 </menu>
@@ -43,7 +46,7 @@
 
         <scrolled_window
             on_key_press="sig_key_press"
-            id="sw1"
+            id="scw1"
             box_expand="true"
             box_fill="true"
         >
@@ -54,10 +57,10 @@
                 is_wide="true"
             >
                 <box
-                    id="conent_box"
+                    id="content_box"
                     paned_order="1"
                 >
-                    <label id="id"
+                    <label id="label1"
                         label_text="Widgets"
                         xalign="0.5"
                         yalign="0.5"
@@ -93,12 +96,12 @@
                     </scrolled_window>
 
                     <box
-                        id="box"
+                        id="box2"
                         paned_order="2"
                         spacing="10"
                     >
                         <frame
-                            id="btn1"
+                            id="frame1"
                             label="Containers"
                             margin_top="5"
                             margin_bottom="5"
@@ -108,7 +111,7 @@
                             hexpand="true"
                         >
                             <grid
-                                id="grd1"
+                                id="grid1"
                                 vexpand="true"
                                 hexpand="true"
                                 row_spacing="10"
@@ -120,7 +123,7 @@
                             >
 
                                 <button
-                                    id="btn1"
+                                    id="btn0"
                                     label="Box"
                                     hexpand="true"
                                     row="0"
@@ -131,18 +134,18 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn2"
                                     label="Fixed"
                                     hexpand="true"
                                     row="0"
                                     column="1"
                                     icon_path="./assets/images/icons/container_bw.png"
-                                    on_click="sig_properties_dialog"
+                                    on_click="sig_hello"
                                     param_1="fixed"
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn3"
                                     label="Grid"
                                     hexpand="true"
                                     row="1"
@@ -164,7 +167,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn4"
                                     label="FlowBox"
                                     hexpand="true"
                                     row="2"
@@ -175,7 +178,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn5"
                                     label="Notebook"
                                     hexpand="true"
                                     row="2"
@@ -186,7 +189,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn6"
                                     label="Overlay"
                                     hexpand="true"
                                     row="3"
@@ -197,7 +200,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn7"
                                     label="Frame"
                                     hexpand="true"
                                     row="3"
@@ -211,7 +214,7 @@
                         </frame>
 
                         <frame
-                            id="btn1"
+                            id="frame2"
                             label="Menus"
                             margin_top="5"
                             margin_bottom="5"
@@ -221,7 +224,7 @@
                             hexpand="true"
                         >
                             <grid
-                                id="grd1"
+                                id="grid2"
                                 vexpand="true"
                                 hexpand="true"
                                 row_spacing="10"
@@ -233,7 +236,7 @@
                             >
 
                                 <button
-                                    id="btn1"
+                                    id="btn8"
                                     label="MenuBar"
                                     hexpand="true"
                                     row="0"
@@ -242,7 +245,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn9"
                                     label="Menu"
                                     hexpand="true"
                                     row="0"
@@ -251,7 +254,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn10"
                                     label="MenuItem"
                                     hexpand="true"
                                     row="1"
@@ -263,7 +266,7 @@
                         </frame>
 
                         <frame
-                            id="btn1"
+                            id="frame3"
                             label="Widgets"
                             margin_top="5"
                             margin_bottom="5"
@@ -273,7 +276,7 @@
                             hexpand="true"
                         >
                             <grid
-                                id="grd1"
+                                id="grid3"
                                 vexpand="true"
                                 hexpand="true"
                                 row_spacing="10"
@@ -285,7 +288,7 @@
                             >
 
                                 <button
-                                    id="btn1"
+                                    id="btn11"
                                     label="Label"
                                     hexpand="true"
                                     row="0"
@@ -294,7 +297,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn12"
                                     label="LinkButton"
                                     hexpand="true"
                                     row="0"
@@ -303,7 +306,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn13"
                                     label="Button"
                                     hexpand="true"
                                     row="1"
@@ -314,7 +317,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn14"
                                     label="Entry"
                                     hexpand="true"
                                     row="1"
@@ -323,7 +326,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn15"
                                     label="SwitchButton"
                                     hexpand="true"
                                     row="2"
@@ -332,7 +335,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn16"
                                     label="ToggleButton"
                                     hexpand="true"
                                     row="2"
@@ -341,7 +344,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn17"
                                     label="RadioButton"
                                     hexpand="true"
                                     row="3"
@@ -350,7 +353,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn18"
                                     label="Checkbox"
                                     hexpand="true"
                                     row="3"
@@ -359,7 +362,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn19"
                                     label="TextArea"
                                     hexpand="true"
                                     row="4"
@@ -368,7 +371,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn20"
                                     label="SpinButton"
                                     hexpand="true"
                                     row="4"
@@ -377,7 +380,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn21"
                                     label="ProgressBar"
                                     hexpand="true"
                                     row="5"
@@ -386,7 +389,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn22"
                                     label="Separator"
                                     hexpand="true"
                                     row="5"
@@ -395,7 +398,7 @@
                                 />
 
                                 <button
-                                    id="btn1"
+                                    id="btn23"
                                     label="Image"
                                     hexpand="true"
                                     row="6"

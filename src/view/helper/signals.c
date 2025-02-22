@@ -2,6 +2,9 @@
 #include "./../../../include/widgets/view/signals.h"
 #include "./../../../include/widgets/view/view.h"
 
+static View *parent_view = NULL;
+static gboolean is_relative_container = TRUE;
+
 /**
  * @brief structure for handle signales parametres
  * //todo variable: checck if on_cllick signal activate or not and also for other signales
@@ -11,11 +14,28 @@ typedef struct
     gchar params[PARAM_COUNT][MAX_SIGNAL_NAME_SIZE]; // First function parameter
 
 } ParamNode;
+void print_graph_to_debug(View *root)
+{
+    if (!root)
+        return;
+
+    if (root->parent)
+        g_print("WIDGET: ===> %s => PARENT ==> %s\n", root->view_config->view_id, root->parent->view_config->view_id);
+    else
+        g_print("WIDGET: ===> %s => PARENT ==> ROOT\n", root->view_config->view_id);
+    if (root->next)
+        g_print("Has next: %s\n", root->next->view_config->view_id);
+    if (root->child)
+        g_print("Has child: %s\n", root->child->view_config->view_id);
+    print_graph_to_debug(root->child);
+    print_graph_to_debug(root->next);
+}
 
 // for test
 static void sig_hello(GtkWidget *widget, gpointer data)
 {
     g_print("\nsignale: hello\n");
+    // print_graph_to_debug(root_view_global);
 }
 
 static void sig_change_self_bg_color(GtkWidget *widget, gpointer data)
@@ -397,7 +417,7 @@ static void sig_properties_dialog(GtkWidget *widget, gpointer data)
     ParamNode *param_array = (ParamNode *)data;
     if (!param_array)
     {
-        g_print("\nError: sig_change_friend_bg_color(), passing argument.\n");
+        g_print("\nError: ==> passing argument.\n");
         return;
     }
 
@@ -425,202 +445,201 @@ static void sig_properties_dialog(GtkWidget *widget, gpointer data)
     show_dialog(dialog);
 }
 
-// Readers
-gchar *read_config_value_as_string(gchar *view_id)
+static void remove_widget_from_graph(GtkWidget *widget, gpointer data)
 {
-    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
-    if (!input_view)
+    const gchar *view_id = gtk_button_get_label(GTK_BUTTON(widget));
+    View *target = find_view_by_id(view_id, root_view_global);
+    View *temp = NULL;
+
+    if (target)
     {
-        g_print("Error: ==> Cannot find the %s\n", view_id);
-        return NULL;
+        temp = target->parent;
+
+        g_print("TEMP: %s\n", temp->view_config->view_id);
+        if (g_strcmp0(temp->child->view_config->view_id, view_id) == 0)
+        {
+            g_print("REMOVE CHILD\n");
+            // TODO: remove the child
+            temp->child = temp->child->next;
+        }
+        else
+        {
+            g_print("REMOVE BROTHER\n");
+            // TODO: Search the previous of the trget and remove it
+            temp = temp->child;
+            while (temp->next)
+            {
+                if (g_strcmp0(temp->next->view_config->view_id, view_id) == 0)
+                {
+                    temp->next = temp->next->next;
+                    break;
+                }
+                else
+                    temp = temp->next;
+            }
+        }
+        g_print("CHECK PARENT\n");
+        // TODO: if the child is a container the whole sub-graph should be removed
+        if (parent_view == target)
+        {
+            parent_view = temp;
+            g_print("PARENT AFTER REMOVE: %s\n", parent_view->view_config->view_id);
+        }
+
+        gtk_widget_destroy(target->widget);
+
+        // TODO: Adapte it for each widget
+        is_relative_container = TRUE;
+
+        free(target->view_config);
+        free(target);
     }
-    if (GTK_IS_COMBO_BOX(input_view->widget))
-        return gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(input_view->widget));
-    else if (GTK_IS_ENTRY(input_view->widget))
-        return gtk_entry_get_text(GTK_ENTRY(input_view->widget));
-    g_print("Error: => Widget type not compatible with the expected value\n");
-    return NULL;
+
+    // gtk_widget_destroy(target->widget);
+    gtk_widget_destroy(widget);
+
+    View *root_v = find_view_by_id("viewer", root_view_global);
+    print_graph_to_debug(root_v);
 }
 
-gint read_config_value_as_int(gchar *view_id)
+void set_current_button_config_to_dialog(ButtonConfig *button_config)
 {
-    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
-    if (!input_view)
-    {
-        g_print("Error: ==> Cannot find the %s\n", view_id);
-        return 0;
-    }
-    if (GTK_IS_SPIN_BUTTON(input_view->widget))
-        return gtk_spin_button_get_value(GTK_SPIN_BUTTON(input_view->widget));
+    // Label
+    write_config_value_as_string("label_entry", button_config->label);
+    // Width
+    write_config_value_as_int("width_spin", button_config->dimensions.width);
 
-    g_print("Error: => Widget type not compatible with the expected value\n");
-    return 0;
+    // Height
+    write_config_value_as_int("height_spin", button_config->dimensions.height);
+
+    // Margin top
+    write_config_value_as_int("margin_top_spin", button_config->margins.top);
+
+    // Margin bottom
+    write_config_value_as_int("margin_bottom_spin", button_config->margins.bottom);
+
+    // Margin left
+    write_config_value_as_int("margin_left_spin", button_config->margins.start);
+
+    // Margin right
+    write_config_value_as_int("margin_right_spin", button_config->margins.end);
+
+    // HAlign
+    gchar *halign = NULL;
+    switch (button_config->halign)
+    {
+    case GTK_ALIGN_START:
+        halign = "start";
+        break;
+    case GTK_ALIGN_END:
+        halign = "end";
+        break;
+    case GTK_ALIGN_BASELINE:
+        halign = "baseline";
+        break;
+    case GTK_ALIGN_CENTER:
+        halign = "center";
+        break;
+    default:
+        halign = "center";
+        break;
+    }
+    write_config_value_as_string("halign_combo", halign);
+
+    // VAlign
+    gchar *valign = NULL;
+    switch (button_config->valign)
+    {
+    case GTK_ALIGN_START:
+        valign = "start";
+        break;
+    case GTK_ALIGN_END:
+        valign = "end";
+        break;
+    case GTK_ALIGN_BASELINE:
+        valign = "baseline";
+        break;
+    case GTK_ALIGN_CENTER:
+        valign = "center";
+        break;
+    default:
+        valign = "center";
+        break;
+    }
+    write_config_value_as_string("valign_combo", valign);
+
+    // HExpand
+    write_config_value_as_boolean("hexpand_switch", button_config->hexpand);
+
+    // VExpand
+    write_config_value_as_boolean("vexpand_switch", button_config->vexpand);
+
+    // Background color
+    write_config_value_as_string("bg_color_entry", button_config->bg_color);
+
+    // Text color
+    write_config_value_as_string("color_entry", button_config->color);
 }
 
-gdouble read_config_value_as_double(gchar *view_id)
+void set_current_view_config_to_dialog(ViewConfig *view_config)
 {
-    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
-    if (!input_view)
-    {
-        g_print("Error: ==> Cannot find the %s\n", view_id);
-        return 0;
-    }
-    if (GTK_IS_SPIN_BUTTON(input_view->widget))
-        return gtk_spin_button_get_value(GTK_SPIN_BUTTON(input_view->widget));
-
-    g_print("Error: => Widget type not compatible with the expected value\n");
-    return 0;
+    if (!view_config)
+        return;
+    write_view_config_to_dialog(view_config);
 }
 
-gboolean read_config_value_as_boolean(gchar *view_id)
+static void update_widget_config(GtkWidget *widget, gpointer data)
 {
-    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
-    if (!input_view)
-    {
-        g_print("Error: ==> Cannot find the %s\n", view_id);
-        return false;
-    }
-    if (GTK_IS_SWITCH(input_view->widget))
-        return gtk_switch_get_active(GTK_SWITCH(input_view->widget));
 
-    g_print("Error: => Widget type not compatible with the expected value\n");
-    return false;
+    // TODO: Update widget config
+    // Steps:
+    // 1 - Get the view id
+    // 2 - Find the view by id
+    // 3 - Read the current config from the widget
+    // 3 - Read new view config from the dialog
+    // 4 - Update the view config
+
+    gchar *view_id = gtk_button_get_label(GTK_BUTTON(widget));
+    View *target_view = find_view_by_id(view_id, root_view_global);
+    if (target_view)
+    {
+        if (GTK_IS_BOX(target_view->widget))
+        {
+        }
+        else if (GTK_IS_BUTTON(target_view->widget))
+        {
+            ButtonConfig *button_config = read_button_config_from_widget(target_view->widget);
+            // ParamNode *param_array = NULL;
+            // SAFE_ALLOC(param_array, ParamNode, 1);
+            // strcpy(param_array->params[0], "button");
+            // sig_properties_dialog(NULL, param_array);
+            // set_current_button_config_to_dialog(button_config);
+            // set_current_view_config_to_dialog(target_view->view_config);
+        }
+
+        // TODO: activate update mode using nodeParam [1] = "updateMode"
+    }
+}
+
+void add_view_to_content_box(GtkWidget *widget)
+{
+    View *content_box_view = find_view_by_id("content_box", root_view_global);
+    if (content_box_view)
+    {
+        g_print("PARENT-VIEW: %s\n", parent_view->view_config->view_id);
+        g_signal_connect(G_OBJECT(widget), "clicked", G_CALLBACK(update_widget_config), NULL);
+        gtk_box_pack_end(GTK_BOX(content_box_view->widget), widget, TRUE, FALSE, 0);
+    }
 }
 
 // Create a new box view config dynamically
 View *create_new_box_from_dialog(View *parent_view, gboolean is_relative_container)
 {
-    BoxConfig button_config = DEFAULT_BOX;
 
-    // Orientation
-    gchar *selected_orientation = read_config_value_as_string("orientation_combo");
-    g_print("SELECTED ORIENTATION: ===> %s \n", selected_orientation);
-    if (stricmp(selected_orientation, "horizontal") == 0)
-        button_config.orientation = GTK_ORIENTATION_HORIZONTAL;
-
-    // Spacing
-    gint spacing = read_config_value_as_int("spacing_spin");
-    g_print("SELECTED SPACING: ===> %d \n", spacing);
-    button_config.spacing = spacing;
-
-    // Width
-    gint width = read_config_value_as_int("width_spin");
-    button_config.dimensions.width = width;
-
-    // Height
-    gint height = read_config_value_as_int("height_spin");
-    button_config.dimensions.height = height;
-
-    // Margin top
-    gint margin_top = read_config_value_as_int("margin_top_spin");
-    button_config.margins.top = margin_top;
-
-    // Margin bottom
-    gint margin_bottom = read_config_value_as_int("margin_bottom_spin");
-    button_config.margins.bottom = margin_bottom;
-
-    // Margin left
-    gint margin_left = read_config_value_as_int("margin_left_spin");
-    button_config.margins.start = margin_left;
-
-    // Margin right
-    gint margin_right = read_config_value_as_int("margin_right_spin");
-    button_config.margins.end = margin_right;
-
-    // Baseline
-    gchar *baseline = read_config_value_as_string("baseline_combo");
-    if (stricmp(selected_orientation, "top") == 0)
-        button_config.baseline_position = GTK_BASELINE_POSITION_TOP;
-    else if (stricmp(selected_orientation, "bottom") == 0)
-        button_config.baseline_position = GTK_BASELINE_POSITION_BOTTOM;
-
-    // HAlign
-    gchar *halign = read_config_value_as_string("halign_combo");
-    if (stricmp(halign, "start") == 0)
-        button_config.halign = GTK_ALIGN_START;
-    else if (stricmp(halign, "end") == 0)
-        button_config.halign = GTK_ALIGN_END;
-    else if (stricmp(halign, "baseline") == 0)
-        button_config.halign = GTK_ALIGN_BASELINE;
-    else if (stricmp(halign, "center") == 0)
-        button_config.halign = GTK_ALIGN_CENTER;
-
-    // VAlign
-    gchar *valign = read_config_value_as_string("valign_combo");
-    if (stricmp(valign, "start") == 0)
-        button_config.valign = GTK_ALIGN_START;
-    else if (stricmp(valign, "end") == 0)
-        button_config.valign = GTK_ALIGN_END;
-    else if (stricmp(valign, "baseline") == 0)
-        button_config.valign = GTK_ALIGN_BASELINE;
-    else if (stricmp(valign, "center") == 0)
-        button_config.valign = GTK_ALIGN_CENTER;
-
-    // Homogeneous
-    gboolean homogeneous = read_config_value_as_boolean("homogeneous_switch");
-    button_config.homogeneous = homogeneous;
-
-    // HExpand
-    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
-    button_config.hexpand = hexpand;
-
-    // VExpand
-    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
-    button_config.vexpand = vexpand;
-
-    // Background color
-    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
-    strcpy(button_config.bg_color, bg_color);
-
-    // Text color
-    const gchar *text_color = read_config_value_as_string("color_entry");
-    strcpy(button_config.text_color, text_color);
-
-    // Background image
-    const gchar *bg_image = read_config_value_as_string("bg_image_entry");
-    strcpy(button_config.bg_image, bg_image);
-
-    GtkWidget *new_box = create_box(button_config);
+    GtkWidget *new_box = create_box(*read_box_config_from_dialog());
 
     // View config
-    ViewConfig *view_config = NULL;
-    SAFE_ALLOC(view_config, ViewConfig, 1);
-    DFEAULT_VIEW_CONFIG(view_config);
-
-    gchar *view_id = read_config_value_as_string("view_id_entry");
-    strcpy(view_config->view_id, view_id);
-
-    // Box config
-    gboolean box_expand = read_config_value_as_boolean("box_expand_switch");
-    view_config->box_expand = box_expand;
-
-    gboolean box_fill = read_config_value_as_boolean("box_fill_switch");
-    view_config->box_fill = box_fill;
-
-    gint box_padding = read_config_value_as_int("box_padding_spin");
-    view_config->box_padding = box_padding;
-
-    gchar *pack_direction = read_config_value_as_string("pack_direction_combo");
-    if (stricmp(pack_direction, "end") == 0)
-        view_config->pack_direction = 0;
-    else
-        view_config->pack_direction = 1;
-
-    // Fixed config
-    gint position = read_config_value_as_int("position_x_spin");
-    view_config->position_x = position;
-    position = read_config_value_as_int("position_y_spin");
-    view_config->position_y = position;
-
-    // TODO: Complete other view config properties
-
-    // Signals config
-    // OnClick
-    gchar *sig_on_click_handler = read_config_value_as_string("on_click_entry");
-    view_config->signal.event_type = SIG_ON_BUTTON_PRESS;
-    g_strlcpy(view_config->signal.sig_handler, sig_on_click_handler, MAX_SIGNAL_NAME_SIZE);
-
-    View *new_box_view = create_view(new_box, view_config);
+    View *new_box_view = create_view(new_box, read_view_config_from_dialog());
 
     g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
     add_view(new_box_view, parent_view, is_relative_container);
@@ -631,127 +650,28 @@ View *create_new_box_from_dialog(View *parent_view, gboolean is_relative_contain
 // Create a new button view config dynamically
 View *create_new_button_from_dialog(View *parent_view, gboolean is_relative_container)
 {
-    ButtonConfig button_config = DEFAULT_BUTTON;
 
-    // Label
-    gchar *label = read_config_value_as_string("label_entry");
-    strcpy(button_config.label, label);
-    // Width
-    gint width = read_config_value_as_int("width_spin");
-    button_config.dimensions.width = width;
+    ButtonConfig *button_config = read_button_config_from_dialog();
 
-    // Height
-    gint height = read_config_value_as_int("height_spin");
-    button_config.dimensions.height = height;
+    GtkWidget *new_button = create_button(*button_config);
 
-    // Margin top
-    gint margin_top = read_config_value_as_int("margin_top_spin");
-    button_config.margins.top = margin_top;
-
-    // Margin bottom
-    gint margin_bottom = read_config_value_as_int("margin_bottom_spin");
-    button_config.margins.bottom = margin_bottom;
-
-    // Margin left
-    gint margin_left = read_config_value_as_int("margin_left_spin");
-    button_config.margins.start = margin_left;
-
-    // Margin right
-    gint margin_right = read_config_value_as_int("margin_right_spin");
-    button_config.margins.end = margin_right;
-
-    // HAlign
-    gchar *halign = read_config_value_as_string("halign_combo");
-    if (stricmp(halign, "start") == 0)
-        button_config.halign = GTK_ALIGN_START;
-    else if (stricmp(halign, "end") == 0)
-        button_config.halign = GTK_ALIGN_END;
-    else if (stricmp(halign, "baseline") == 0)
-        button_config.halign = GTK_ALIGN_BASELINE;
-    else if (stricmp(halign, "center") == 0)
-        button_config.halign = GTK_ALIGN_CENTER;
-
-    // VAlign
-    gchar *valign = read_config_value_as_string("valign_combo");
-    if (stricmp(valign, "start") == 0)
-        button_config.valign = GTK_ALIGN_START;
-    else if (stricmp(valign, "end") == 0)
-        button_config.valign = GTK_ALIGN_END;
-    else if (stricmp(valign, "baseline") == 0)
-        button_config.valign = GTK_ALIGN_BASELINE;
-    else if (stricmp(valign, "center") == 0)
-        button_config.valign = GTK_ALIGN_CENTER;
-
-    // HExpand
-    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
-    button_config.hexpand = hexpand;
-
-    // VExpand
-    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
-    button_config.vexpand = vexpand;
-
-    // Background color
-    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
-    strcpy(button_config.bg_color, bg_color);
-
-    // Text color
-    const gchar *text_color = read_config_value_as_string("color_entry");
-    strcpy(button_config.color, text_color);
-
-    GtkWidget *new_button = create_button(button_config);
-
-    // View config
-    ViewConfig *view_config = NULL;
-    SAFE_ALLOC(view_config, ViewConfig, 1);
-    DFEAULT_VIEW_CONFIG(view_config);
-
-    gchar *view_id = read_config_value_as_string("view_id_entry");
-    strcpy(view_config->view_id, view_id);
-
-    // Box config
-    gboolean box_expand = read_config_value_as_boolean("box_expand_switch");
-    view_config->box_expand = box_expand;
-
-    gboolean box_fill = read_config_value_as_boolean("box_fill_switch");
-    view_config->box_fill = box_fill;
-
-    gint box_padding = read_config_value_as_int("box_padding_spin");
-    view_config->box_padding = box_padding;
-
-    gchar *pack_direction = read_config_value_as_string("pack_direction_combo");
-    if (stricmp(pack_direction, "end") == 0)
-        view_config->pack_direction = 0;
-    else
-        view_config->pack_direction = 1;
-
-    // Fixed config
-    gint position = read_config_value_as_int("position_x_spin");
-    view_config->position_x = position;
-    position = read_config_value_as_int("position_y_spin");
-    view_config->position_y = position;
-
-    // TODO: Complete other view config properties
-
-    // Signals config
-    // OnClick
-    gchar *sig_on_click_handler = read_config_value_as_string("on_click_entry");
-    view_config->signal.event_type = SIG_ON_CLICK;
-    g_strlcpy(view_config->signal.sig_handler, sig_on_click_handler, MAX_SIGNAL_NAME_SIZE);
-
-    View *new_button_view = create_view(new_button, view_config);
+    View *new_button_view = create_view(new_button, read_view_config_from_dialog());
 
     g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
-    
+
     add_view(new_button_view, parent_view, is_relative_container);
+
+    ButtonConfig content_btn_config = DEFAULT_BUTTON;
+    strcpy(content_btn_config.label, new_button_view->view_config->view_id);
+    GtkWidget *content_btn = create_button(content_btn_config);
+
+    add_view_to_content_box(content_btn);
 
     return new_button_view;
 }
 
 static void sig_create_new_view(GtkWidget *widget, gpointer data)
 {
-
-    static View *parent_view = NULL;
-    static gboolean is_relative_container = TRUE;
 
     // TODO: Add the new widget to viewer
     // Steps:
@@ -788,21 +708,28 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
     {
     }
     else if (g_strcmp0(param_array->params[0], "grid") == 0)
-        build_app(root_app, NULL, GRID_PROPERTIES_DIALOG_TXT);
+    {
+    }
     else if (g_strcmp0(param_array->params[0], "paned") == 0)
-        build_app(root_app, NULL, PANED_PROPERTIES_DIALOG_TXT);
+    {
+    }
     else if (g_strcmp0(param_array->params[0], "frame") == 0)
-        build_app(root_app, NULL, FRAME_PROPERTIES_DIALOG_TXT);
+    {
+    }
     else if (g_strcmp0(param_array->params[0], "flowbox") == 0)
-        build_app(root_app, NULL, FLOWBOX_PROPERTIES_DIALOG_TXT);
+    {
+    }
     else if (g_strcmp0(param_array->params[0], "overlay") == 0)
-        build_app(root_app, NULL, OVERLAY_PROPERTIES_DIALOG_TXT);
+    {
+    }
     else if (g_strcmp0(param_array->params[0], "notebook") == 0)
-        build_app(root_app, NULL, NOTEBOOK_PROPERTIES_DIALOG_TXT);
+    {
+    }
     else if (g_strcmp0(param_array->params[0], "button") == 0)
     {
         parent_view = create_new_button_from_dialog(parent_view, is_relative_container);
         is_relative_container = FALSE;
+        g_print("PARENT VIEW AFTER ===============> %s \n", parent_view->view_config->view_id);
         gtk_widget_show_all(root_view_global->widget);
     }
 
@@ -811,7 +738,7 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
     sig_destroy_dialog(widget, NULL);
 }
 
-void connect_signales(View *view)
+void connect_signals(View *view)
 {
     // Exit the function if no signale triggered
     if (view->view_config->signal.event_type == SIG_NONE)

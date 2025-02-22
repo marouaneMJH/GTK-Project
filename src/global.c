@@ -107,6 +107,16 @@ void widget_set_margins(GtkWidget *widget, Margins margins)
     gtk_widget_set_margin_end(widget, margins.end);
 }
 
+Margins *widget_get_margins(GtkWidget *widget)
+{
+    Margins *margins = NULL;
+    SAFE_ALLOC(margins, Margins, 1);
+    margins->top = gtk_widget_get_margin_top(widget);
+    margins->bottom = gtk_widget_get_margin_bottom(widget);
+    margins->start = gtk_widget_get_margin_start(widget);
+    margins->end = gtk_widget_get_margin_end(widget);
+}
+
 
 void widget_set_font_size(GtkWidget *widget, int size)
 {
@@ -377,3 +387,196 @@ void set_widget_size(GtkWidget *widget, Dimensions dimensions)
     // g_free(css);
     // g_object_unref(css_provider);
 }
+
+// Readers
+
+ViewConfig *read_view_config_from_dialog()
+{
+    // View config
+    ViewConfig *view_config = NULL;
+    SAFE_ALLOC(view_config, ViewConfig, 1);
+    DFEAULT_VIEW_CONFIG(view_config);
+
+    gchar *view_id = read_config_value_as_string("view_id_entry");
+    strcpy(view_config->view_id, view_id);
+
+    // Box config
+    gboolean box_expand = read_config_value_as_boolean("box_expand_switch");
+    view_config->box_expand = box_expand;
+
+    gboolean box_fill = read_config_value_as_boolean("box_fill_switch");
+    view_config->box_fill = box_fill;
+
+    gint box_padding = read_config_value_as_int("box_padding_spin");
+    view_config->box_padding = box_padding;
+
+    gchar *pack_direction = read_config_value_as_string("pack_direction_combo");
+    if (stricmp(pack_direction, "end") == 0)
+        view_config->pack_direction = 0;
+    else
+        view_config->pack_direction = 1;
+
+    // Fixed config
+    gint position = read_config_value_as_int("position_x_spin");
+    view_config->position_x = position;
+    position = read_config_value_as_int("position_y_spin");
+    view_config->position_y = position;
+
+    // TODO: Complete other view config properties
+
+    // Signals config
+    // OnClick
+    gchar *sig_on_click_handler = read_config_value_as_string("on_click_entry");
+    view_config->signal.event_type = SIG_ON_CLICK;
+    g_strlcpy(view_config->signal.sig_handler, sig_on_click_handler, MAX_SIGNAL_NAME_SIZE);
+    return view_config;
+}
+
+gchar *read_config_value_as_string(gchar *view_id)
+{
+    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!input_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return NULL;
+    }
+    if (GTK_IS_COMBO_BOX(input_view->widget))
+        return gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(input_view->widget));
+    else if (GTK_IS_ENTRY(input_view->widget))
+        return gtk_entry_get_text(GTK_ENTRY(input_view->widget));
+    g_print("Error: => Widget type not compatible with the expected value\n");
+    return NULL;
+}
+
+gint read_config_value_as_int(gchar *view_id)
+{
+    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!input_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return 0;
+    }
+    if (GTK_IS_SPIN_BUTTON(input_view->widget))
+        return gtk_spin_button_get_value(GTK_SPIN_BUTTON(input_view->widget));
+
+    g_print("Error: => Widget type not compatible with the expected value\n");
+    return 0;
+}
+
+gdouble read_config_value_as_double(gchar *view_id)
+{
+    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!input_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return 0;
+    }
+    if (GTK_IS_SPIN_BUTTON(input_view->widget))
+        return gtk_spin_button_get_value(GTK_SPIN_BUTTON(input_view->widget));
+
+    g_print("Error: => Widget type not compatible with the expected value\n");
+    return 0;
+}
+
+gboolean read_config_value_as_boolean(gchar *view_id)
+{
+    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!input_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return false;
+    }
+    if (GTK_IS_SWITCH(input_view->widget))
+        return gtk_switch_get_active(GTK_SWITCH(input_view->widget));
+
+    g_print("Error: => Widget type not compatible with the expected value\n");
+    return false;
+}
+
+// Writers
+
+void write_view_config_to_dialog(ViewConfig *view_config)
+{
+    if (!view_config)
+        return;
+
+    // View config
+    write_config_value_as_string("view_id_entry", view_config->view_id);
+
+    // Box config
+    write_config_value_as_boolean("box_expand_switch", view_config->box_expand);
+    write_config_value_as_boolean("box_fill_switch", view_config->box_fill);
+    write_config_value_as_int("box_padding_spin", view_config->box_padding);
+
+    gchar *pack_direction = (view_config->pack_direction == 0) ? "end" : "start";
+    write_config_value_as_string("pack_direction_combo", pack_direction);
+
+    // Fixed config
+    write_config_value_as_int("position_x_spin", view_config->position_x);
+    write_config_value_as_int("position_y_spin", view_config->position_y);
+
+    // TODO: Complete other view config properties
+
+    // Signals config
+    // OnClick
+    write_config_value_as_string("on_click_entry", view_config->signal.sig_handler);
+}
+
+void write_config_value_as_string(gchar *view_id, gchar *value)
+{
+    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!input_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return;
+    }
+    if (GTK_IS_COMBO_BOX_TEXT(input_view->widget))
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(input_view->widget), value);
+    else if (GTK_IS_ENTRY(input_view->widget))
+        gtk_entry_set_text(GTK_ENTRY(input_view->widget), value);
+    else
+        g_print("Error: => Widget type not compatible with the expected value\n");
+}
+
+void write_config_value_as_int(gchar *view_id, gint value)
+{
+    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!input_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return;
+    }
+    if (GTK_IS_SPIN_BUTTON(input_view->widget))
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(input_view->widget), value);
+    else
+        g_print("Error: => Widget type not compatible with the expected value\n");
+}
+
+void write_config_value_as_double(gchar *view_id, gdouble value)
+{
+    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!input_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return;
+    }
+    if (GTK_IS_SPIN_BUTTON(input_view->widget))
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(input_view->widget), value);
+    else
+        g_print("Error: => Widget type not compatible with the expected value\n");
+}
+
+void write_config_value_as_boolean(gchar *view_id, gboolean value)
+{
+    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!input_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return;
+    }
+    if (GTK_IS_SWITCH(input_view->widget))
+        gtk_switch_set_active(GTK_SWITCH(input_view->widget), value);
+    else
+        g_print("Error: => Widget type not compatible with the expected value\n");
+}
+

@@ -66,6 +66,8 @@ typedef struct
 
 ViewConfig *init_box_config(FILE *index, BoxConfig *box_config);
 
+BoxConfig *read_box_config_from_dialog();
+
 /**
  * @brief create box widget with default
  * @param[in] box box structure

@@ -40,9 +40,9 @@
         .hexpand = FALSE,                                  \
         .vexpand = FALSE,                                  \
         .icon_path = "\0",                                 \
-        .halign = GTK_ALIGN_FILL,                        \
-        .valign = GTK_ALIGN_FILL,                        \
-        .always_show_image = TRUE,                        \
+        .halign = GTK_ALIGN_FILL,                          \
+        .valign = GTK_ALIGN_FILL,                          \
+        .always_show_image = TRUE,                         \
         .focus_on_click = TRUE,                            \
         .use_underline = FALSE,                            \
         .use_stock = FALSE,                                \
@@ -86,6 +86,10 @@ typedef struct
 } ButtonConfig;
 
 ViewConfig *init_button_config(FILE *index, ButtonConfig *button_config);
+
+ButtonConfig* read_button_config_from_dialog();
+
+ButtonConfig* read_button_config_from_widget(GtkWidget *widget);
 
 /**
  * @brief create button widget with default

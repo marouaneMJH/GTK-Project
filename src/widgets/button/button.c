@@ -173,3 +173,124 @@ GtkWidget *create_button(ButtonConfig button_config)
 
     return button;
 }
+
+ButtonConfig* read_button_config_from_dialog()
+{
+    ButtonConfig *button_config_ptr = NULL;
+    SAFE_ALLOC(button_config_ptr, ButtonConfig, 1);
+
+    ButtonConfig button_config = DEFAULT_BUTTON;
+
+    // Label
+    gchar *label = read_config_value_as_string("label_entry");
+    strcpy(button_config.label, label);
+    // Width
+    gint width = read_config_value_as_int("width_spin");
+    button_config.dimensions.width = width;
+
+    // Height
+    gint height = read_config_value_as_int("height_spin");
+    button_config.dimensions.height = height;
+
+    // Margin top
+    gint margin_top = read_config_value_as_int("margin_top_spin");
+    button_config.margins.top = margin_top;
+
+    // Margin bottom
+    gint margin_bottom = read_config_value_as_int("margin_bottom_spin");
+    button_config.margins.bottom = margin_bottom;
+
+    // Margin left
+    gint margin_left = read_config_value_as_int("margin_left_spin");
+    button_config.margins.start = margin_left;
+
+    // Margin right
+    gint margin_right = read_config_value_as_int("margin_right_spin");
+    button_config.margins.end = margin_right;
+
+    // HAlign
+    gchar *halign = read_config_value_as_string("halign_combo");
+    if (stricmp(halign, "start") == 0)
+        button_config.halign = GTK_ALIGN_START;
+    else if (stricmp(halign, "end") == 0)
+        button_config.halign = GTK_ALIGN_END;
+    else if (stricmp(halign, "baseline") == 0)
+        button_config.halign = GTK_ALIGN_BASELINE;
+    else if (stricmp(halign, "center") == 0)
+        button_config.halign = GTK_ALIGN_CENTER;
+
+    // VAlign
+    gchar *valign = read_config_value_as_string("valign_combo");
+    if (stricmp(valign, "start") == 0)
+        button_config.valign = GTK_ALIGN_START;
+    else if (stricmp(valign, "end") == 0)
+        button_config.valign = GTK_ALIGN_END;
+    else if (stricmp(valign, "baseline") == 0)
+        button_config.valign = GTK_ALIGN_BASELINE;
+    else if (stricmp(valign, "center") == 0)
+        button_config.valign = GTK_ALIGN_CENTER;
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    button_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    button_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(button_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(button_config.color, text_color);
+
+    button_config_ptr = &button_config;
+    return button_config_ptr;
+}
+
+
+ButtonConfig* read_button_config_from_widget(GtkWidget *widget)
+{
+    ButtonConfig *button_config_ptr = NULL;
+    SAFE_ALLOC(button_config_ptr, ButtonConfig, 1);
+
+    const gchar *label = gtk_button_get_label(GTK_BUTTON(widget));
+    strcpy(button_config_ptr->label, label ? label : "");
+
+    button_config_ptr->is_sensitive = gtk_widget_get_sensitive(widget);
+    button_config_ptr->is_visible = gtk_widget_get_visible(widget);
+
+    const gchar *tooltip = gtk_widget_get_tooltip_text(widget);
+    strcpy(button_config_ptr->tooltip, tooltip ? tooltip : "");
+
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    button_config_ptr->dimensions.width = allocation.width;
+    button_config_ptr->dimensions.height = allocation.height;
+
+    button_config_ptr->hexpand = gtk_widget_get_hexpand(widget);
+    button_config_ptr->vexpand = gtk_widget_get_vexpand(widget);
+
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    button_config_ptr->halign = halign;
+
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    button_config_ptr->valign = valign;
+
+    GtkWidget *image = gtk_button_get_image(GTK_BUTTON(widget));
+    if (image)
+    {
+        const gchar *icon_path = g_object_get_data(G_OBJECT(image), "icon_path");
+        if (icon_path)
+            strcpy(button_config_ptr->icon_path, icon_path);
+    }
+
+    button_config_ptr->always_show_image = gtk_button_get_always_show_image(GTK_BUTTON(widget));
+
+    Margins *margins = widget_get_margins(widget);
+    button_config_ptr->margins = *margins;
+
+    return button_config_ptr;
+}

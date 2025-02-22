@@ -58,13 +58,6 @@ typedef struct
 
 } ViewConfig;
 
-typedef union WIDGET_CONFIG
-{
-    BoxConfig box_config;
-    ButtonConfig button_config;
-    // Add other widget configs here
-} WidgetConfig;
-
 typedef struct VIEW
 {
     GtkWidget *widget;
@@ -72,7 +65,6 @@ typedef struct VIEW
     struct VIEW *child;
     struct VIEW *next;
     ViewConfig *view_config;
-    WidgetConfig *widget_config;
 } View;
 
 #endif

@@ -54,7 +54,7 @@ typedef enum
 
 // Global structure;
 
-View *create_view(GtkWidget *widget, ViewConfig *view_config, WidgetConfig *widget_config);
+View *create_view(GtkWidget *widget, ViewConfig *view_config);
 
 View *add_view(View *view, View *relative, gboolean is_relative_container);
 

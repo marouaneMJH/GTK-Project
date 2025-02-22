@@ -636,7 +636,9 @@ void add_view_to_content_box(GtkWidget *widget)
 View *create_new_box_from_dialog(View *parent_view, gboolean is_relative_container)
 {
 
-    GtkWidget *new_box = create_box(*read_box_config_from_dialog());
+    BoxConfig *box_config = read_box_config_from_dialog();
+    
+    GtkWidget *new_box = create_box(*box_config);
 
     // View config
     View *new_box_view = create_view(new_box, read_view_config_from_dialog());

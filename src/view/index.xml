@@ -1,419 +1,263 @@
 <window
-	id="window_2"
-	title="Second Window"
-	icon_name="folder"
+    id="win1"
+    width="900"
+    height="900"
+    title="GTK controle"
+    icon_name="folder"
+    icon_path="assets\images\paint.png"
+    has_header="true"
+    
 >
-	<scrolled_window
-		id="sw2"
-	>
-		<box
-			id="box2"
-			orientation="vertical"
-			height="700"
-			width="800"
-			bg_color="red"
-		>
 
-			<notebook
-				id="notebook1"
-				bg_color="green"
-				box_expand="false"
-				box_fill="false"
-			>
+    <scrolled_window
+        id="sw1"
+    >
+        <box
+            id="box1"
 
-				<box
-					id="box1A"
-					orientation="vertical"
-					bg_color="blue"
-					tab_label="Box"
-					is_reorderable="true"
-				>
-					<menu_bar
-						id="menu_bar1"
-						bg_color="#999999"
-						text_color="#333333"
-					>
-
-						<menu_item
-							id="menu_item1"
-							label="File"
-						>
-							<menu
-								id="menu1"
-								label="File"
-								reserve_toggle_size="true"
-								active_index="0"
-							>
-								<menu_item
-									id="menu_item1"
-									label="New"
-									onclick="menu_onclick"
-								/>
-								<menu_item
-									id="menu_item1"
-									label="Open"
-									onclick="menu_onclick1"
-								/>
-								<menu_item
-									id="menu_item1"
-									label="Save"
-								/>
-							</menu>
-						</menu_item>
-						<menu_item
-							id="menu_item1"
-							label="Edit"
-						/>
-					</menu_bar>
-
-					<fixed
-					 id="f1"
-					 width="300"
-					 height="300"
-					 >
-						<button
-							id="btn1"
-							position_x="10"
-							position_y="10"
-							width="200"
-							height="60"
-							label="TEST"
-							onclick="print"
-							always_show_image="true"
-							icon_path="./assets/images/programer.jpg"
-							icon_width="25"
-							icon_height="25"
-							icon_position="right"
-						/>
-					</fixed>
-
-					<grid
-						id="grid1"
-						bg_color="#333333"
-						row_spacing="10"
-						column_spacing="10"
-						row_homogeneous="true"
-						column_homogeneous="true"
-					>
-						<button id="bt1" onclick="click1" label="Click 1" row="0" column="0" row_span="1"
-							column_span="1" />
-						<button id="bt2" onclick="click2" label="Click 2" row="1" column="0" row_span="1"
-							column_span="1" />
-					</grid>
-
-				</box>
-
-				<paned
-					id="paned1"
-					orientation="horizontal"
-					position="350"
-					box_expand="false"
-					box_fill="true"
-					bg_color="#333333"
-					tab_label="Paned"
-					is_reorderable="true"
-				>
-					<paned
-						id="bx2"
-						orientation="vertical"
-						paned_order="1"
-						position="70"
-						bg_color="#000000"
-					>
-						<fixed
-							id="fx12"
-							width="300"
-							height="300"
-							paned_order="1"
-							bg_color="green"
-						>
-
-							<button
-								id="btn2"
-								label="Click Me"
-								position_x="10"
-								position_y="50"
-								icon_path="./assets/images/programer.jpg"
-								always_show_image="true"
-								icon_position="top"
-								width="40"
-								height="60"
-							/>
-
-						</fixed>
-
-						<fixed
-							id="fx12"
-							width="300"
-							height="300"
-							paned_order="2"
-						>
-
-							<image
-								id="img1"
-								type="pixbuf"
-								paned_order="2"
-								path="./assets/images/programer.jpg"
-								width="300"
-								height="300"
-								position_x="10"
-								position_y="40"
-							/>
-
-						</fixed>
-					</paned>
-
-					<scrolled_window
-						id="sw2"
-						position_x="0"
-						position_y="0"
-						paned_order="2"
-					>
-						<fixed
-							id="fixed2"
-						>
+        >
 
 
-							<spin_button
-								id="sbtn2"
-								min="1"
-								max="100"
-								position_x="30"
-								position_y="30"
-							/>
+            <box
+                id="conent_box"
+                margin_top="40"
+                margin_left="20"
+                    valign="start"
+                    halign="start"
+                    width="500"
+                    spacing="20"
+            >
+                <paned >
+                <box 
+                    margin_buttom="10"
+                    width="50" >
+                    <label 
+                        label_text=" Vos connaissances de GTK+"
+                    />
+                    <frame 
+                        width="50" >
+                        <box
+                            id="box2"
+                            orientation="horizontal"
+                        >   
 
-							<entry
-								id="entry2"
-								position_x="30"
-								position_y="70"
-								width="150"
-								height="25"
-								placeholder_text="Enter text"
-							/>
+                            <radio_button
+                                id="rbtn1"
+                                label="Faible"
+                            />
 
-							<image
-								id="img2"
-								type="none"
-								width="150"
-								height="150"
-								path="./assets/images/team_working_on_xml.jpeg"
-								position_x="30"
-								position_y="110"
-							/>
+                            <radio_button
+                                id="rbtn2"
+                                label="Moyen"
+                            />
 
-							<radio_button
-								id="rbtn3"
-								label="Option 1"
-								position_x="30"
-								position_y="270"
-								is_group="true"
-								width="150"
-								height="25"
-								tooltip="Hna tooltip"
-							/>
+                            <radio_button
+                                id="rbtn3"
+                                label="Bien"
+                            />
 
-							<radio_button
-								id="rbtn4"
-								label="Option 2"
-								position_x="30"
-								position_y="300"
-								width="150"
-								height="25"
-							/>
+                            <radio_button
+                                id="rbtn4"
+                                label="Tres bien"
+                            />
 
-							<link_button
-								id="linkbtn2"
-								label="Go to Link"
-								uri="https://www.fstm.ac.ma"
-								position_x="30"
-								position_y="330"
-								width="150"
-								height="25"
-							/>
+                        </box>
+                    </frame>
+                
+                </box>
+                </paned>
 
-							<check_button
-								id="chkbtn2"
-								label="Accept Terms"
-								position_x="200"
-								position_y="30"
-								width="150"
-								height="25"
-							/>
+                <box
+                    width="50"
+                    margin_buttom="10"
+                >
+                        <label 
+                            label_text=" Vos connaissances de GTK+"
+                        />
+                        <frame 
+                            width="50" >
+                            <box
+                                id="box2"
+                                orientation="horizontal"
+                            >   
 
-							<separator
-								id="sep2"
-								orientation="vertical"
-								position_x="200"
-								position_y="280"
-								width="150"
-								height="10"
-							/>
+                                <check_button
+                                    id="rbtn1"
+                                    label="Faible"
+                                />
 
-							<separator
-								id="sep2"
-								orientation="vertical"
-								position_x="200"
-								position_y="270"
-								width="150"
-								height="10"
-							/>
+                                <check_button
+                                    id="rbtn2"
+                                    label="Moyen"
+                                />
 
-							<progress_bar
-								id="lbl2"
-								progress_fraction="0.7"
-								position_x="200"
-								position_y="110"
-								is_text_visible="true"
-								text_color="white"
-							/>
+                                <check_button
+                                    id="rbtn3"
+                                    label="Bien"
+                                />
 
-							<switch_button
-								id="lbl2"
-								tooltip="Switch"
-								position_x="160"
-								position_y="200"
-							/>
-							<button
-								id="lbl2"
-								tooltip="Switch"
-								width="200"
-								height="50"
-								position_x="160"
-								position_y="250"
-								label="Clicker ici"
-							/>
-						</fixed>
-					</scrolled_window>
-				</paned>
-			</notebook>
-
-			<scrolled_window
-				id="sw2"
-				width="500"
-				height="600"
-				position_x="0"
-				position_y="0"
-				box_expand="true"
-				box_fill="true"
-			>
-				<fixed
-					id="fixed2"
-					width="400"
-					height="400"
-				>
+                                <check_button
+                                    id="rbtn4"
+                                    label="Tres bien"
+                                />
+                        </box>
+                    </frame>
+                
+                </box>
 
 
-					<spin_button
-						id="sbtn2"
-						min="1"
-						max="100"
-						position_x="30"
-						position_y="30"
-					/>
+                
+                <box 
+                    halign="50"
+                    valign="50"
+                    width="500"
+                    height="200"
+                    margin_buttom="10"
+                >
+                    <label 
+                        label_text="Choix un date"
+                    />
+                    <frame 
+                        width="50"
+                    >
+                        <box
+                            id="box2"
+                            orientation="horizontal"
+                        >   
+                            <label 
+                                label_text="Jour"
+                            />
+                            <combo_text_box
+                                type="day"
+                                has_entry="true"
+                                is_editable="false"
+                                default_value="1"
+                            />
+                            <label 
+                                label_text="Moi"
+                                margin_start="20"
+                            />
 
-					<entry
-						id="entry2"
-						position_x="30"
-						position_y="70"
-						width="150"
-						height="25"
-						placeholder_text="Enter text"
-					/>
+                            <combo_text_box
+                                type="month"
+                                has_entry="true"
+                                is_editable="false"
+                                default_value="0"
+                            />
 
-					<image
-						id="img2"
-						type="none"
-						width="150"
-						height="150"
-						path="./assets/images/team_working_on_xml.jpeg"
-						position_x="30"
-						position_y="110"
-					/>
+                            <label 
+                                label_text="Annee"
+                                margin_start="20"
+                            />
 
-					<radio_button
-						id="rbtn3"
-						label="Option 1"
-						position_x="30"
-						position_y="270"
-						is_group="true"
-						width="150"
-						height="25"
-						tooltip="Hna tooltip"
-					/>
+                            <combo_text_box
+                                type="year"
+                                has_entry="true"
+                                is_editable="false"
+                                default_value="0"
+                            />
+                        </box>
+                    </frame>
 
-					<radio_button
-						id="rbtn4"
-						label="Option 2"
-						position_x="30"
-						position_y="300"
-						width="150"
-						height="25"
-					/>
+                    <fixed 
+                            halign="30"
+                            valign="30"
+                            width="20"
+                            height="20"
+                            margin_top="5"
+                    
+                    >
+                        <combo_text_box 
+                            has_entry="true"
+                            is_editable="false"
+                            default_value="Fair un choix"
+                            default_index="0"
 
-					<link_button
-						id="linkbtn2"
-						label="Go to Link"
-						uri="https://www.fstm.ac.ma"
-						position_x="30"
-						position_y="330"
-						width="150"
-						height="25"
-					/>
+                            option1="option1"
+                            option2="option2"
+                            option3="option3"
 
-					<check_button
-						id="chkbtn2"
-						label="Accept Terms"
-						position_x="200"
-						position_y="30"
-						width="150"
-						height="25"
-					/>
+                            position_x="0"
+                            position_y="0"
+                        />
 
-					<separator
-						id="sep2"
-						orientation="vertical"
-						position_x="200"
-						position_y="280"
-						width="150"
-						height="10"
-					/>
+                    </fixed>
 
-					<separator
-						id="sep2"
-						orientation="vertical"
-						position_x="200"
-						position_y="270"
-						width="150"
-						height="10"
-					/>
+                </box>
 
-					<progress_bar
-						id="lbl2"
-						progress_fraction="0.7"
-						position_x="200"
-						position_y="110"
-						is_text_visible="true"
-						text_color="white"
-					/>
 
-					<switch_button
-						id="lbl2"
-						tooltip="Switch"
-						position_x="160"
-						position_y="200"
-					/>
-					<button
-						id="lbl2"
-						tooltip="Switch"
-						width="200"
-						height="50"
-						position_x="160"
-						position_y="250"
-						label="Clicker ici"
-					/>
-				</fixed>
-			</scrolled_window>
+                <fixed 
+                id="id"
+                >
 
-		</box>
-	</scrolled_window>
+                    <box 
+                        halign="start"
+                        valign="start"
+                        width="400"
+                        position_x="350"
+                        position_y="250"
+                    >
+                        <label 
+                            label_text=" Vos connaissances de GTK+"
+                        />
+                        <frame 
+                            width="50" >
+                            <box
+                                id="box2"
+                                orientation="horizontal"
+                            >   
+
+                                <radio_button
+                                    id="rbtn1"
+                                    label="Faible"
+                                />
+
+                                <radio_button
+                                    id="rbtn2"
+                                    label="Moyen"
+                                />
+
+                                <radio_button
+                                    id="rbtn3"
+                                    label="Bien"
+                                />
+
+                                <radio_button
+                                    id="rbtn4"
+                                    label="Tres bien"
+                                />
+
+                            </box>
+                        </frame>
+                    
+                    </box>
+
+
+                    <box
+                        spacing="10"
+                        orientation="horizontal"
+                        valign="start"
+                        halign="start"
+                         position_x="350"
+                        position_y="350"
+                    >
+                        <button 
+                            label="_Ok"
+                            onclick="sig_dialog"
+                        />
+                    
+                        <button 
+                            label="_Quit"
+                            on_click="sig_generate_xml"
+                        />
+                    
+                    </box>
+
+                </fixed>
+
+            </box>
+
+        
+        </box>
+    </scrolled_window>
 </window>

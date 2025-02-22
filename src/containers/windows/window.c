@@ -238,7 +238,6 @@ void show_window(GtkWidget *window)
     gtk_widget_show_all(GTK_WIDGET(window));
 }
 
-
 gchar *write_window_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)
@@ -275,31 +274,12 @@ gchar *write_window_property(FILE *output_file, View *view, int tabs_number)
     }
 
     // Get the window position
-    GtkWindowPosition position = gtk_window_get_position(window);
-    if (position != GTK_WIN_POS_CENTER) // Check if it's not the default value
+    gint root_x, root_y;
+    gtk_window_get_position(window, &root_x, &root_y);
+    if (root_x != 0 || root_y != 0) // Check if it's not the default position
     {
         print_tabs(output_file, tabs_number + 1);
-        fprintf(output_file, "position=\"%s\"\n", position == GTK_WIN_POS_NONE ? "none" : position == GTK_WIN_POS_CENTER         ? "center"
-                                                                                      : position == GTK_WIN_POS_MOUSE            ? "mouse"
-                                                                                      : position == GTK_WIN_POS_CENTER_ALWAYS    ? "center_always"
-                                                                                      : position == GTK_WIN_POS_CENTER_ON_PARENT ? "center_on_parent"
-                                                                                                                                 : "unknown");
-    }
-
-    // Check if the window is fullscreen
-    gboolean is_fullscreen = gtk_window_is_fullscreen(window);
-    if (is_fullscreen != FALSE) // Check if it's not the default value
-    {
-        print_tabs(output_file, tabs_number + 1);
-        fprintf(output_file, "is_fullscreen=\"%s\"\n", is_fullscreen ? "true" : "false");
-    }
-
-    // Check if the window is maximized
-    gboolean is_maximized = gtk_window_is_maximized(window);
-    if (is_maximized != FALSE) // Check if it's not the default value
-    {
-        print_tabs(output_file, tabs_number + 1);
-        fprintf(output_file, "is_maximized=\"%s\"\n", is_maximized ? "true" : "false");
+        fprintf(output_file, "position=\"%d,%d\"\n", root_x, root_y);
     }
 
     // Check if the window is modal
@@ -324,22 +304,6 @@ gchar *write_window_property(FILE *output_file, View *view, int tabs_number)
     {
         print_tabs(output_file, tabs_number + 1);
         fprintf(output_file, "has_header=\"%s\"\n", has_header ? "true" : "false");
-    }
-
-    // Check if the window is kept above other windows
-    gboolean is_keep_above = gtk_window_get_keep_above(window);
-    if (is_keep_above != FALSE) // Check if it's not the default value
-    {
-        print_tabs(output_file, tabs_number + 1);
-        fprintf(output_file, "is_keep_above=\"%s\"\n", is_keep_above ? "true" : "false");
-    }
-
-    // Check if the window is kept below other windows
-    gboolean is_keep_below = gtk_window_get_keep_below(window);
-    if (is_keep_below != FALSE) // Check if it's not the default value
-    {
-        print_tabs(output_file, tabs_number + 1);
-        fprintf(output_file, "is_keep_below=\"%s\"\n", is_keep_below ? "true" : "false");
     }
 
     // Get the window type hint

@@ -150,13 +150,7 @@ static void sig_destroy(GtkWidget *widget, gpointer data)
     gtk_widget_destroy(window);
 }
 
-static void sig_dialog(GtkWidget *widget, gpointer data)
-{
-    build_app(root_app, NULL, DIALOG_TXT);
-    GtkWidget *dialog = root_dialog_view_global->widget;
 
-    show_dialog(dialog);
-}
 static void sig_generate_xml(GtkWidget *widget, gpointer data)
 {
     build_xml("file.xml");

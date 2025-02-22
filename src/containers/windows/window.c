@@ -237,3 +237,103 @@ void show_window(GtkWidget *window)
 {
     gtk_widget_show_all(GTK_WIDGET(window));
 }
+
+gchar *write_window_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    // Write the widget tag and style configuration (without styling elements)
+    write_widget_tag_style_view_config(output_file, view, "window", tabs_number);
+
+    // Get the GtkWindow from the view
+    GtkWindow *window = GTK_WINDOW(view->widget);
+
+    // Get the title
+    const gchar *title = gtk_window_get_title(window);
+    if (g_strcmp0(title, "Window") != 0) // Check if the title is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "title=\"%s\"\n", title);
+    }
+
+    // Get the icon name
+    const gchar *icon_name = gtk_window_get_icon_name(window);
+    if (g_strcmp0(icon_name, "go-home") != 0) // Check if the icon name is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "icon_name=\"%s\"\n", icon_name);
+    }
+
+    // Check if the window is resizable
+    gboolean is_resizable = gtk_window_get_resizable(window);
+    if (is_resizable != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_resizable=\"%s\"\n", is_resizable ? "true" : "false");
+    }
+
+    // Get the window position
+    gint root_x, root_y;
+    gtk_window_get_position(window, &root_x, &root_y);
+    if (root_x != 0 || root_y != 0) // Check if it's not the default position
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "position=\"%d,%d\"\n", root_x, root_y);
+    }
+
+    // Check if the window is modal
+    gboolean is_modal = gtk_window_get_modal(window);
+    if (is_modal != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_modal=\"%s\"\n", is_modal ? "true" : "false");
+    }
+
+    // Check if the window is decorated
+    gboolean is_decorated = gtk_window_get_decorated(window);
+    if (is_decorated != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_decorated=\"%s\"\n", is_decorated ? "true" : "false");
+    }
+
+    // Check if the window has a header
+    gboolean has_header = gtk_window_get_titlebar(window) != NULL;
+    if (has_header != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "has_header=\"%s\"\n", has_header ? "true" : "false");
+    }
+
+    // Get the window type hint
+    GdkWindowTypeHint hint_type = gtk_window_get_type_hint(window);
+    if (hint_type != GDK_WINDOW_TYPE_HINT_NORMAL) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "hint_type=\"%s\"\n", hint_type == GDK_WINDOW_TYPE_HINT_NORMAL ? "normal" : hint_type == GDK_WINDOW_TYPE_HINT_DIALOG      ? "dialog"
+                                                                                                     : hint_type == GDK_WINDOW_TYPE_HINT_MENU          ? "menu"
+                                                                                                     : hint_type == GDK_WINDOW_TYPE_HINT_TOOLBAR       ? "toolbar"
+                                                                                                     : hint_type == GDK_WINDOW_TYPE_HINT_SPLASHSCREEN  ? "splashscreen"
+                                                                                                     : hint_type == GDK_WINDOW_TYPE_HINT_UTILITY       ? "utility"
+                                                                                                     : hint_type == GDK_WINDOW_TYPE_HINT_DOCK          ? "dock"
+                                                                                                     : hint_type == GDK_WINDOW_TYPE_HINT_DESKTOP       ? "desktop"
+                                                                                                     : hint_type == GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU ? "dropdown_menu"
+                                                                                                     : hint_type == GDK_WINDOW_TYPE_HINT_POPUP_MENU    ? "popup_menu"
+                                                                                                     : hint_type == GDK_WINDOW_TYPE_HINT_TOOLTIP       ? "tooltip"
+                                                                                                     : hint_type == GDK_WINDOW_TYPE_HINT_NOTIFICATION  ? "notification"
+                                                                                                     : hint_type == GDK_WINDOW_TYPE_HINT_COMBO         ? "combo"
+                                                                                                     : hint_type == GDK_WINDOW_TYPE_HINT_DND           ? "dnd"
+                                                                                                                                                       : "unknown");
+    }
+
+    // Get the opacity
+    gdouble opacity = gtk_widget_get_opacity(GTK_WIDGET(window));
+    if (opacity != 1.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "opacity=\"%f\"\n", opacity);
+    }
+
+    return "window";
+}

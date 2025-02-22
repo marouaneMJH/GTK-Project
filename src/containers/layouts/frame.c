@@ -144,3 +144,70 @@ void frame_add_child(GtkWidget *frame, GtkWidget *child)
     // Add the child widget to the frame
     gtk_container_add(GTK_CONTAINER(frame), child);
 }
+
+gchar *write_frame_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    // Write the widget tag and style configuration (without styling elements)
+    write_widget_tag_style_view_config(output_file, view, "frame", tabs_number);
+
+    // Get the GtkFrame from the view
+    GtkFrame *frame = GTK_FRAME(view->widget);
+
+    // Get the label text
+    const gchar *label = gtk_frame_get_label(frame);
+    if (g_strcmp0(label, "\0") != 0) // Check if the label text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "label=\"%s\"\n", label);
+    }
+
+    // Get the label's vertical and horizontal alignment
+    gfloat label_xalign, label_yalign;
+    gtk_frame_get_label_align(frame, &label_xalign, &label_yalign);
+
+    if (label_yalign != 0.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "label_yalign=\"%f\"\n", label_yalign);
+    }
+
+    if (label_xalign != 0.0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "label_xalign=\"%f\"\n", label_xalign);
+    }
+
+    // Get the shadow type
+    GtkShadowType shadow_type = gtk_frame_get_shadow_type(frame);
+    if (shadow_type != GTK_SHADOW_IN) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "shadow_type=\"%s\"\n", shadow_type == GTK_SHADOW_NONE ? "none" : shadow_type == GTK_SHADOW_IN       ? "in"
+                                                                                           : shadow_type == GTK_SHADOW_OUT        ? "out"
+                                                                                           : shadow_type == GTK_SHADOW_ETCHED_IN  ? "etched_in"
+                                                                                           : shadow_type == GTK_SHADOW_ETCHED_OUT ? "etched_out"
+                                                                                                                                  : "unknown");
+    }
+
+    // Get the horizontal expand property
+    gboolean hexpand = gtk_widget_get_hexpand(GTK_WIDGET(frame));
+    if (hexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "hexpand=\"%s\"\n", hexpand ? "true" : "false");
+    }
+
+    // Get the vertical expand property
+    gboolean vexpand = gtk_widget_get_vexpand(GTK_WIDGET(frame));
+    if (vexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "vexpand=\"%s\"\n", vexpand ? "true" : "false");
+    }
+
+    return "frame";
+}
+

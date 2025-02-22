@@ -50,6 +50,11 @@
         view_config->signal.event_type = SIG_ON_BUTTON_PRESS;                    \
         g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
     }                                                                            \
+    else if (g_strcmp0(property, "on_button_release") == 0)                      \
+    {                                                                            \
+        view_config->signal.event_type = SIG_ON_BUTTON_RELEASE;                  \
+        g_strlcpy(view_config->signal.sig_handler, value, MAX_SIGNAL_NAME_SIZE); \
+    }                                                                            \
     else if (g_strcmp0(property, "on_focus_in") == 0)                            \
     {                                                                            \
         view_config->signal.event_type = SIG_ON_FOCUS_IN;                        \

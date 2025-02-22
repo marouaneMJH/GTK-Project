@@ -9,7 +9,7 @@
 /* Default dimensions for image */
 #define DEFAULT_IMAGE_DIMENSIONS \
     {                            \
-        .height = 0,           \
+        .height = 0,             \
         .width = 0}
 
 /* Default margins for image */
@@ -104,5 +104,7 @@ GtkWidget *create_image_from_animation(ImageConfig image_config, GdkPixbufAnimat
  * @return GtkWidget* A pointer to the newly created GtkWidget for the image.
  */
 GtkWidget *create_image_from_pixbuf(char *path, Dimensions dimensions);
+
+gchar *write_image_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

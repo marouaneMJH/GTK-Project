@@ -62,4 +62,6 @@ GtkWidget *create_radio_button(RadioButtonConfig radio_button_config);
 
 void radio_button_set_group(GtkWidget *widget, GtkWidget *group);
 
+gchar *write_radio_button_property(FILE *output_file, View *view, int tabs_number);
+
 #endif

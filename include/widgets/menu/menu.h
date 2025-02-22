@@ -57,4 +57,6 @@ GtkWidget *create_menu(MenuConfig menu_config);
 
 void menu_set_group(GtkWidget *widget, GtkWidget *group);
 
+gchar *write_menu_property(FILE *output_file, View *view, int tabs_number);
+
 #endif

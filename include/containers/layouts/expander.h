@@ -69,4 +69,7 @@ ViewConfig *init_expander_config(FILE *index, ExpanderConfig *expander_config);
 
 GtkWidget *create_expander(ExpanderConfig expander_config);
 
+gchar *write_expander_property(FILE *output_file, View *view, int tabs_number);
+
+
 #endif

@@ -130,3 +130,65 @@ void add_grid(GtkWidget *widget, gint column, gint row, gint column_span, gint r
     else
         gtk_grid_attach(GTK_GRID(widget), widget, column, row, column_span, row_span);
 }
+
+gchar *write_grid_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    // Write the widget tag and style configuration (without styling elements)
+    write_widget_tag_style_view_config(output_file, view, "grid", tabs_number);
+
+    // Get the GtkGrid from the view
+    GtkGrid *grid = GTK_GRID(view->widget);
+
+    // Get the row spacing
+    gint row_spacing = gtk_grid_get_row_spacing(grid);
+    if (row_spacing != 0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "row_spacing=\"%d\"\n", row_spacing);
+    }
+
+    // Get the column spacing
+    gint column_spacing = gtk_grid_get_column_spacing(grid);
+    if (column_spacing != 0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "column_spacing=\"%d\"\n", column_spacing);
+    }
+
+    // Check if the grid columns are homogeneous
+    gboolean column_homogeneous = gtk_grid_get_column_homogeneous(grid);
+    if (column_homogeneous != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "column_homogeneous=\"%s\"\n", column_homogeneous ? "true" : "false");
+    }
+
+    // Check if the grid rows are homogeneous
+    gboolean row_homogeneous = gtk_grid_get_row_homogeneous(grid);
+    if (row_homogeneous != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "row_homogeneous=\"%s\"\n", row_homogeneous ? "true" : "false");
+    }
+
+    // Get the horizontal expand property
+    gboolean hexpand = gtk_widget_get_hexpand(GTK_WIDGET(grid));
+    if (hexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "hexpand=\"%s\"\n", hexpand ? "true" : "false");
+    }
+
+    // Get the vertical expand property
+    gboolean vexpand = gtk_widget_get_vexpand(GTK_WIDGET(grid));
+    if (vexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "vexpand=\"%s\"\n", vexpand ? "true" : "false");
+    }
+
+    return "grid";
+}

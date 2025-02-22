@@ -52,4 +52,7 @@ GtkWidget *create_fixed(FixedConfig fixed_config);
 
 void add_fixed(GtkWidget *widget, gint x, gint y);
 
+gchar *write_fixed_property(FILE *output_file, View *view, int tabs_number);
+
+
 #endif

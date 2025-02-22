@@ -107,3 +107,68 @@ GtkWidget *create_notebook(NotebookConfig notebook_config)
     // gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(notebook), child, TRUE);
     return notebook;
 }
+
+gchar *write_notebook_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    // Write the widget tag and style configuration (without styling elements)
+    write_widget_tag_style_view_config(output_file, view, "notebook", tabs_number);
+
+    // Get the GtkNotebook from the view
+    GtkNotebook *notebook = GTK_NOTEBOOK(view->widget);
+
+    // Get the group name
+    const gchar *group_name = gtk_notebook_get_group_name(notebook);
+    if (g_strcmp0(group_name, "\0") != 0) // Check if the group name is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "group_name=\"%s\"\n", group_name);
+    }
+
+    // Get the current page
+    gint current_page = gtk_notebook_get_current_page(notebook);
+    if (current_page != 0) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "current_page=\"%d\"\n", current_page);
+    }
+
+    // Check if the notebook is scrollable
+    gboolean is_scrollable = gtk_notebook_get_scrollable(notebook);
+    if (is_scrollable != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_scrollable=\"%s\"\n", is_scrollable ? "true" : "false");
+    }
+
+    // Check if the notebook shows a border
+    gboolean show_border = gtk_notebook_get_show_border(notebook);
+    if (show_border != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "show_border=\"%s\"\n", show_border ? "true" : "false");
+    }
+
+    // Check if the notebook shows tabs
+    gboolean show_tabs = gtk_notebook_get_show_tabs(notebook);
+    if (show_tabs != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "show_tabs=\"%s\"\n", show_tabs ? "true" : "false");
+    }
+
+    // Get the tab position
+    GtkPositionType tab_position = gtk_notebook_get_tab_pos(notebook);
+    if (tab_position != GTK_POS_TOP) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "tab_position=\"%s\"\n", tab_position == GTK_POS_LEFT ? "left" : tab_position == GTK_POS_RIGHT ? "right"
+                                                                                          : tab_position == GTK_POS_TOP     ? "top"
+                                                                                          : tab_position == GTK_POS_BOTTOM  ? "bottom"
+                                                                                                                            : "unknown");
+    }
+
+    return "notebook";
+}

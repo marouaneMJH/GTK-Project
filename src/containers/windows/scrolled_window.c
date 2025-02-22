@@ -107,3 +107,13 @@ GtkWidget *create_scrolled_window(ScrolledWindowConfig scrolled_window_config)
 
     return scrolled_window;
 }
+
+gchar *write_scrolled_window_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "scrolled_window", tabs_number);
+
+    return "scrolled_window";
+}

@@ -24,23 +24,23 @@
         .start = 0,                  \
         .end = 0}
 
-#define DEFAULT_COLOR_BUTTON                                     \
-{                                                            \
-        .is_sensitive = TRUE,                                    \
-        .is_visible = TRUE,                                      \
-        .tooltip = "\0",                                         \
-        .dimensions = DEFAULT_COLOR_BUTTON_DIMENSIONS,           \
-        .margins = DEFAULT_COLOR_BUTTON_MARGINS,                 \
-        .hexpand = FALSE,                                        \
-        .vexpand = FALSE,                                        \
-}
+#define DEFAULT_COLOR_BUTTON                           \
+    {                                                  \
+        .is_sensitive = TRUE,                          \
+        .is_visible = TRUE,                            \
+        .tooltip = "\0",                               \
+        .dimensions = DEFAULT_COLOR_BUTTON_DIMENSIONS, \
+        .margins = DEFAULT_COLOR_BUTTON_MARGINS,       \
+        .hexpand = FALSE,                              \
+        .vexpand = FALSE,                              \
+    }
 
 typedef struct
 {
     /* Basic properties */
-    gboolean is_sensitive;                    // Whether the button is clickable or not
-    gboolean is_visible;                      // Whether the button is visible or hidden
-    gchar tooltip[MAX_TOOLTIP_SIZE];          // Tooltip text shown when hovering over the button
+    gboolean is_sensitive;           // Whether the button is clickable or not
+    gboolean is_visible;             // Whether the button is visible or hidden
+    gchar tooltip[MAX_TOOLTIP_SIZE]; // Tooltip text shown when hovering over the button
 
     /* Dimensions and placement */
     Dimensions dimensions; // dimensions of the button
@@ -60,5 +60,7 @@ ViewConfig *init_color_button_config(FILE *index, ColorButtonConfig *color_butto
  * @return[ou] GtkWidget pointer to new coordinate button widget
  */
 GtkWidget *create_color_button(ColorButtonConfig color_button);
+
+gchar *write_color_button_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

@@ -24,10 +24,10 @@
         .is_active = FALSE,                             \
         .state = FALSE,                                 \
         .is_visible = FALSE,                            \
-        .hexpand = FALSE,                                  \
-        .vexpand = FALSE,                                  \
-        .halign = GTK_ALIGN_FILL,                          \
-        .valign = GTK_ALIGN_FILL,                          \
+        .hexpand = FALSE,                               \
+        .vexpand = FALSE,                               \
+        .halign = GTK_ALIGN_FILL,                       \
+        .valign = GTK_ALIGN_FILL,                       \
         .dimensions = DEFAULT_SWITCH_BUTTON_DIMENSIONS, \
         .margins = DEFAULT_SWITCH_BUTTON_MARGINS,       \
         .bg_color = "\0",                               \
@@ -55,5 +55,7 @@ typedef struct
 ViewConfig *init_switch_button_config(FILE *index, SwitchButtonConfig *switch_buttton_config);
 
 GtkWidget *create_switch_button(SwitchButtonConfig switch_button_config);
+
+gchar *write_switch_button_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

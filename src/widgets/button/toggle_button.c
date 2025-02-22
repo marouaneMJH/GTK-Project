@@ -166,3 +166,89 @@ gboolean get_toggle_button_inconsistent(GtkWidget *toggle_button)
 {
     return gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(toggle_button));
 }
+
+gchar *write_toggle_button_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    // Write the widget tag and style configuration (without styling elements)
+    write_widget_tag_style_view_config(output_file, view, "toggle_button", tabs_number);
+
+    // Get the GtkToggleButton from the view
+    GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON(view->widget);
+
+    // Get the label text
+    const gchar *label = gtk_button_get_label(GTK_BUTTON(toggle_button));
+    if (g_strcmp0(label, "") != 0) // Check if the label text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "label=\"%s\"\n", label);
+    }
+
+    // Get the tooltip text
+    const gchar *tooltip = gtk_widget_get_tooltip_text(GTK_WIDGET(toggle_button));
+    if (g_strcmp0(tooltip, "") != 0) // Check if the tooltip text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "tooltip=\"%s\"\n", tooltip);
+    }
+
+    // Check if the toggle button uses mnemonics
+    gboolean is_mnemonic = gtk_button_get_use_underline(GTK_BUTTON(toggle_button));
+    if (is_mnemonic != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_mnemonic=\"%s\"\n", is_mnemonic ? "true" : "false");
+    }
+
+    // Check if the toggle button is active
+    gboolean is_active = gtk_toggle_button_get_active(toggle_button);
+    if (is_active != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_active=\"%s\"\n", is_active ? "true" : "false");
+    }
+
+    // Check if the toggle button is visible
+    gboolean is_visible = gtk_widget_get_visible(GTK_WIDGET(toggle_button));
+    if (is_visible != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_visible=\"%s\"\n", is_visible ? "true" : "false");
+    }
+
+    // Check if the toggle button is in button mode
+    gboolean mode = gtk_toggle_button_get_mode(toggle_button);
+    if (mode != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "mode=\"%s\"\n", mode ? "true" : "false");
+    }
+
+    // Check if the toggle button is in an inconsistent state
+    gboolean is_inconsistent = gtk_toggle_button_get_inconsistent(toggle_button);
+    if (is_inconsistent != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_inconsistent=\"%s\"\n", is_inconsistent ? "true" : "false");
+    }
+
+    // Get the horizontal expand property
+    gboolean hexpand = gtk_widget_get_hexpand(GTK_WIDGET(toggle_button));
+    if (hexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "hexpand=\"%s\"\n", hexpand ? "true" : "false");
+    }
+
+    // Get the vertical expand property
+    gboolean vexpand = gtk_widget_get_vexpand(GTK_WIDGET(toggle_button));
+    if (vexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "vexpand=\"%s\"\n", vexpand ? "true" : "false");
+    }
+
+    return "toggle_button";
+}

@@ -36,6 +36,15 @@ GtkWidget *create_list_box(ListBoxConfig list_box_config)
     // gtk_list_box_set_spacing(GTK_LIST_BOX(list_box), list_box_config.spacing);
     // Set packing
     // gtk_list_box_set_child_packing(GTK_LIST_BOX(list_box), child_widget, is_expand, is_fill, padding, GTK_PACK_START)
-
     return list_box;
+}
+
+gchar *write_list_box_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    write_widget_tag_style_view_config(output_file, view, "list_box", tabs_number);
+
+    return "list_box";
 }

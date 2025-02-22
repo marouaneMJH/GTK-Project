@@ -88,23 +88,29 @@ ViewConfig *configure_button_property(ButtonConfig *button_config, ViewConfig *v
         button_config->margins.end = atoi(value);
 
     // Dimensions
-    if (g_strcmp0(property, "width") == 0)
+    else if (g_strcmp0(property, "width") == 0)
         button_config->dimensions.width = atoi(value);
 
-    if (g_strcmp0(property, "height") == 0)
+    else if (g_strcmp0(property, "height") == 0)
         button_config->dimensions.height = atoi(value);
 
-    if (g_strcmp0(property, "bg_color") == 0)
+    else if (g_strcmp0(property, "bg_color") == 0)
         strcpy(button_config->bg_color, value);
 
-    if (g_strcmp0(property, "color") == 0)
+    else if (g_strcmp0(property, "color") == 0)
         strcpy(button_config->color, value);
 
-    if (g_strcmp0(property, "hexpand") == 0)
+    else if (g_strcmp0(property, "hexpand") == 0)
         button_config->hexpand = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
 
-    if (g_strcmp0(property, "vexpand") == 0)
+    else if (g_strcmp0(property, "vexpand") == 0)
         button_config->vexpand = g_strcmp0(value, "true") == 0 ? TRUE : FALSE;
+
+    else if (g_strcmp0(property, "bg_image") == 0)
+        strcpy(button_config->bg_image, value);
+
+    else if (g_strcmp0(property, "font_size") == 0)
+        button_config->font_size = atoi(value);
 
     // Icon image and icon
 
@@ -118,14 +124,12 @@ ViewConfig *init_button_config(FILE *index, ButtonConfig *button_config)
     return init_generic_config(index, (void *)button_config, (ConfigurePropertyCallback)configure_button_property);
 }
 
-
 GtkWidget *create_button(ButtonConfig button_config)
 {
     GtkWidget *button;
 
     // Create button with or without mnemonic based on use_underline flag
     button = gtk_button_new_with_mnemonic(button_config.label);
-
 
     // Set sensitivity
     gtk_widget_set_sensitive(button, button_config.is_sensitive);
@@ -154,9 +158,17 @@ GtkWidget *create_button(ButtonConfig button_config)
         gtk_button_set_image(GTK_BUTTON(button), image);
         gtk_button_set_image_position(GTK_BUTTON(button), button_config.icon_position);
     }
-     
+
     // to hide button border
     // gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE );
+
+    // Set bg_image
+    if (strcmp(button_config.bg_image, "\0") != 0)
+        widget_set_background_image(button, button_config.bg_image, NULL);
+
+    // Set Font Size
+    if (button_config.font_size != 10)
+        widget_set_font_size(button, button_config.font_size);
 
     // Set alignment
     gtk_widget_set_halign(button, button_config.halign);
@@ -172,4 +184,93 @@ GtkWidget *create_button(ButtonConfig button_config)
     widget_set_margins(button, button_config.margins);
 
     return button;
+}
+
+gchar *write_button_property(FILE *output_file, View *view, int tabs_number)
+{
+    if (!output_file || !view)
+        return "\0";
+
+    // Write the widget tag and style configuration (without styling elements)
+    write_widget_tag_style_view_config(output_file, view, "button", tabs_number);
+
+    // Get the GtkButton from the view
+    GtkButton *button = GTK_BUTTON(view->widget);
+
+    // Get the label text
+    const gchar *label = gtk_button_get_label(button);
+    if (g_strcmp0(label, "Click here") != 0) // Check if the label text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "label=\"%s\"\n", label);
+    }
+
+    // Check if the button is sensitive
+    gboolean is_sensitive = gtk_widget_get_sensitive(GTK_WIDGET(button));
+    if (is_sensitive != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_sensitive=\"%s\"\n", is_sensitive ? "true" : "false");
+    }
+
+    // Check if the button is visible
+    gboolean is_visible = gtk_widget_get_visible(GTK_WIDGET(button));
+    if (is_visible != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "is_visible=\"%s\"\n", is_visible ? "true" : "false");
+    }
+
+    // Get the tooltip text
+    const gchar *tooltip = gtk_widget_get_tooltip_text(GTK_WIDGET(button));
+    if (g_strcmp0(tooltip, "\0") != 0 ) // Check if the tooltip text is not the default
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "tooltip=\"%s\"\n", tooltip);
+    }
+
+    // Get the horizontal expand property
+    gboolean hexpand = gtk_widget_get_hexpand(GTK_WIDGET(button));
+    if (hexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "hexpand=\"%s\"\n", hexpand ? "true" : "false");
+    }
+
+    // Get the vertical expand property
+    gboolean vexpand = gtk_widget_get_vexpand(GTK_WIDGET(button));
+    if (vexpand != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "vexpand=\"%s\"\n", vexpand ? "true" : "false");
+    }
+
+    // Check if the button always shows the image
+    gboolean always_show_image = gtk_button_get_always_show_image(button);
+    if (always_show_image != TRUE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "always_show_image=\"%s\"\n", always_show_image ? "true" : "false");
+    }
+
+    // Check if the button uses underline in the label
+    gboolean use_underline = gtk_button_get_use_underline(button);
+    if (use_underline != FALSE) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "use_underline=\"%s\"\n", use_underline ? "true" : "false");
+    }
+
+    // Get the icon position
+    GtkPositionType icon_position = gtk_button_get_image_position(button);
+    if (icon_position != GTK_POS_LEFT) // Check if it's not the default value
+    {
+        print_tabs(output_file, tabs_number + 1);
+        fprintf(output_file, "icon_position=\"%s\"\n", icon_position == GTK_POS_LEFT ? "left" : icon_position == GTK_POS_RIGHT ? "right"
+                                                                                            : icon_position == GTK_POS_TOP     ? "top"
+                                                                                            : icon_position == GTK_POS_BOTTOM  ? "bottom"
+                                                                                                                               : "unknown");
+    }
+
+    return "button";
 }

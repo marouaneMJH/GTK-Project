@@ -49,6 +49,7 @@ typedef enum
     ToggleButtonTag,
     ColorButtonTag,
     ExpanderTag,
+    EventBoxTag
 } Tags;
 
 // Global structure;

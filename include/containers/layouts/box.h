@@ -73,4 +73,6 @@ ViewConfig *init_box_config(FILE *index, BoxConfig *box_config);
  */
 GtkWidget *create_box(BoxConfig box_config);
 
+gchar *write_box_property(FILE *output_file, View *view, int tabs_number);
+
 #endif

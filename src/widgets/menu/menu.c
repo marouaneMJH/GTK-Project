@@ -123,7 +123,7 @@ gchar *write_menu_property(FILE *output_file, View *view, int tabs_number)
 
     // Get the accelerator path
     const gchar *accel_path = gtk_menu_get_accel_path(menu);
-    if (g_strcmp0(accel_path, "\0") != 0) // Check if the accelerator path is not the default
+    if (accel_path && g_strcmp0(accel_path, "\0") != 0) // Check if the accelerator path is not the default
     {
         print_tabs(output_file, tabs_number + 1);
         fprintf(output_file, "accel_path=\"%s\"\n", accel_path);
@@ -163,7 +163,7 @@ gchar *write_menu_property(FILE *output_file, View *view, int tabs_number)
 
     // Get the tooltip text
     const gchar *tooltip = gtk_widget_get_tooltip_text(GTK_WIDGET(menu));
-    if (g_strcmp0(tooltip, "\0") != 0) // Check if the tooltip text is not the default
+    if (tooltip && g_strcmp0(tooltip, "\0") != 0) // Check if the tooltip text is not the default
     {
         print_tabs(output_file, tabs_number + 1);
         fprintf(output_file, "tooltip=\"%s\"\n", tooltip);
@@ -171,4 +171,3 @@ gchar *write_menu_property(FILE *output_file, View *view, int tabs_number)
 
     return "menu";
 }
-

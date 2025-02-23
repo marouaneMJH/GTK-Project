@@ -190,6 +190,8 @@
         view_config->box_expand = FALSE;                                    \
         view_config->box_fill = FALSE;                                      \
         view_config->box_padding = 0;                                       \
+        view_config->flow_box_order = 0;                                    \
+        view_config->paned_order = 0;                                       \
         view_config->group = NULL;                                          \
         view_config->view_id[0] = '\0';                                     \
         view_config->tab_label[0] = '\0';                                   \

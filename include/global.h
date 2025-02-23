@@ -120,7 +120,7 @@ void widget_set_background_image_without_css(GtkWidget *widget, const gchar *bg_
  */
 void widget_set_margins(GtkWidget *widget, Margins margins);
 
-Margins *widget_get_margins(GtkWidget *widget);
+void widget_get_margins(GtkWidget *widget, Margins *margins);
 
 /**
  * @brief This function set the text color of a widget
@@ -234,7 +234,7 @@ void set_header_bar(GtkWidget *window, const gchar *title, const gchar *icon_pat
 // Readers
 ViewConfig *read_view_config_from_dialog();
 
-gchar *read_config_value_as_string(gchar *view_id);
+const gchar *read_config_value_as_string(gchar *view_id);
 
 gint read_config_value_as_int(gchar *view_id);
 
@@ -247,7 +247,7 @@ gboolean read_config_value_as_boolean(gchar *view_id);
 void write_view_config_to_dialog(ViewConfig *view_config);
 
 
-void write_config_value_as_string(gchar *view_id, gchar *value);
+void write_config_value_as_string(gchar *view_id, const gchar *value);
 
 void write_config_value_as_int(gchar *view_id, gint value);
 

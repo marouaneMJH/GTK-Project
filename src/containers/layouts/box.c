@@ -144,13 +144,13 @@ BoxConfig *read_box_config_from_dialog()
     BoxConfig button_config = DEFAULT_BOX;
 
     // Orientation
-    gchar *selected_orientation = read_config_value_as_string("orientation_combo");
+    const gchar *selected_orientation = read_config_value_as_string("orientation_combo");
     g_print("SELECTED ORIENTATION: ===> %s \n", selected_orientation);
     if (stricmp(selected_orientation, "horizontal") == 0)
         button_config.orientation = GTK_ORIENTATION_HORIZONTAL;
 
     // Baseline
-    gchar *baseline = read_config_value_as_string("baseline_combo");
+    const gchar *baseline = read_config_value_as_string("baseline_combo");
     if (stricmp(selected_orientation, "top") == 0)
         button_config.baseline_position = GTK_BASELINE_POSITION_TOP;
     else if (stricmp(selected_orientation, "bottom") == 0)
@@ -190,7 +190,7 @@ BoxConfig *read_box_config_from_dialog()
     button_config.margins.end = margin_right;
 
     // HAlign
-    gchar *halign = read_config_value_as_string("halign_combo");
+    const gchar *halign = read_config_value_as_string("halign_combo");
     if (stricmp(halign, "start") == 0)
         button_config.halign = GTK_ALIGN_START;
     else if (stricmp(halign, "end") == 0)
@@ -201,7 +201,7 @@ BoxConfig *read_box_config_from_dialog()
         button_config.halign = GTK_ALIGN_CENTER;
 
     // VAlign
-    gchar *valign = read_config_value_as_string("valign_combo");
+    const gchar *valign = read_config_value_as_string("valign_combo");
     if (stricmp(valign, "start") == 0)
         button_config.valign = GTK_ALIGN_START;
     else if (stricmp(valign, "end") == 0)

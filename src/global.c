@@ -30,15 +30,15 @@ GtkStyleContext *get_style_provider_context(GtkWidget *widget, const gchar *bg_c
     {
         // Append background image to the CSS style if provided
         g_string_append_printf(css_builder, "background-image: url('./assets/images/%s'); ", (bg_image && bg_image[0] != '\0') ? bg_image : "none;");
-        
+
         // Append background size to the CSS style if background image is provided
         if ((bg_image && bg_image[0] != '\0'))
             g_string_append_printf(css_builder, "background-size: cover; ");
-        
+
         // Append background color to the CSS style if provided
         if ((bg_color && bg_color[0] != '\0'))
             g_string_append_printf(css_builder, "background-color: %s; ", bg_color);
-        
+
         // Append text color to the CSS style if provided
         if ((color && color[0] != '\0'))
             g_string_append_printf(css_builder, "color: %s; ", color);
@@ -48,7 +48,6 @@ GtkStyleContext *get_style_provider_context(GtkWidget *widget, const gchar *bg_c
 
         // Convert GString to gchar*
         css_style = g_string_free(css_builder, FALSE);
-
     }
     else
     {
@@ -72,12 +71,12 @@ GtkStyleContext *get_style_provider_context(GtkWidget *widget, const gchar *bg_c
 
     // Get the style context of the widget
     GtkStyleContext *context = gtk_widget_get_style_context(widget);
-    
+
     // Add the CSS provider to the widget's style context
     gtk_style_context_add_provider(context,
                                    GTK_STYLE_PROVIDER(css_provider),
                                    GTK_STYLE_PROVIDER_PRIORITY_USER);
-    
+
     // Free the CSS provider after use
     g_object_unref(css_provider);
 
@@ -107,16 +106,15 @@ void widget_set_margins(GtkWidget *widget, Margins margins)
     gtk_widget_set_margin_end(widget, margins.end);
 }
 
-Margins *widget_get_margins(GtkWidget *widget)
+void widget_get_margins(GtkWidget *widget, Margins *margins)
 {
-    Margins *margins = NULL;
-    SAFE_ALLOC(margins, Margins, 1);
+    if (!margins)
+        return;
     margins->top = gtk_widget_get_margin_top(widget);
     margins->bottom = gtk_widget_get_margin_bottom(widget);
     margins->start = gtk_widget_get_margin_start(widget);
     margins->end = gtk_widget_get_margin_end(widget);
 }
-
 
 void widget_set_font_size(GtkWidget *widget, int size)
 {
@@ -135,11 +133,11 @@ void widget_set_font_size(GtkWidget *widget, int size)
     g_object_unref(provider);
 }
 
-
 void widget_set_font_family(GtkWidget *widget, const char *font_family)
 {
     // If font_family is NULL, do nothing
-    if (font_family == NULL) {
+    if (font_family == NULL)
+    {
         return;
     }
 
@@ -279,7 +277,6 @@ gboolean is_character(gchar c)
     return (c > 'A' && c < 'Z') || (c > 'a' && c < 'z');
 }
 
-
 ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCallback configure_property_callback)
 {
     if (!config || !index)
@@ -327,7 +324,6 @@ ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCall
     return view_config;
 }
 
-
 View *find_view_by_id(char *view_id, View *root_view)
 {
     // g_print("PASSED WIDGETS WHILE SEARCHING: %s\n", root_view->view_config->view_id);
@@ -353,7 +349,7 @@ View *find_view_by_id(char *view_id, View *root_view)
 // Function to force width and height using CSS for a widget
 void set_widget_size(GtkWidget *widget, Dimensions dimensions)
 {
-    gtk_widget_set_size_request(widget,dimensions.width,dimensions.height);
+    gtk_widget_set_size_request(widget, dimensions.width, dimensions.height);
     // // Create a CSS provider
     // GtkCssProvider *css_provider = gtk_css_provider_new();
     // GdkScreen *screen = gtk_widget_get_screen(widget);
@@ -367,7 +363,7 @@ void set_widget_size(GtkWidget *widget, Dimensions dimensions)
     //     "  min-height: %dpx; "
     //     "  max-height: %dpx; "
     //     "  height: %dpx; "
-    //     "}", 
+    //     "}",
     //     dimensions.width, dimensions.width, dimensions.width, dimensions.height, dimensions.height, dimensions.height);
 
     // // Load the CSS data into the provider
@@ -375,8 +371,8 @@ void set_widget_size(GtkWidget *widget, Dimensions dimensions)
 
     // // Apply the CSS provider to the widget's style context
     // gtk_style_context_add_provider(
-    //     gtk_widget_get_style_context(widget), 
-    //     GTK_STYLE_PROVIDER(css_provider), 
+    //     gtk_widget_get_style_context(widget),
+    //     GTK_STYLE_PROVIDER(css_provider),
     //     GTK_STYLE_PROVIDER_PRIORITY_USER
     // );
 
@@ -432,7 +428,7 @@ ViewConfig *read_view_config_from_dialog()
     return view_config;
 }
 
-gchar *read_config_value_as_string(gchar *view_id)
+const gchar *read_config_value_as_string(gchar *view_id)
 {
     View *input_view = find_view_by_id(view_id, root_dialog_view_global);
     if (!input_view)
@@ -522,20 +518,21 @@ void write_view_config_to_dialog(ViewConfig *view_config)
     write_config_value_as_string("on_click_entry", view_config->signal.sig_handler);
 }
 
-void write_config_value_as_string(gchar *view_id, gchar *value)
+void write_config_value_as_string(gchar *view_id, const gchar *value)
 {
-    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
-    if (!input_view)
+    View *output_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!output_view)
     {
         g_print("Error: ==> Cannot find the %s\n", view_id);
         return;
     }
-    if (GTK_IS_COMBO_BOX_TEXT(input_view->widget))
-        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(input_view->widget), value);
-    else if (GTK_IS_ENTRY(input_view->widget))
-        gtk_entry_set_text(GTK_ENTRY(input_view->widget), value);
+    g_print("OWIDGET FOUND IS: %s\n", output_view->view_config->view_id);
+    if (GTK_IS_COMBO_BOX_TEXT(output_view->widget))
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(output_view->widget), value);
+    else if (GTK_IS_ENTRY(output_view->widget))
+        gtk_entry_set_text(GTK_ENTRY(output_view->widget), value);
     else
-        g_print("Error: => Widget type not compatible with the expected value\n");
+        g_print("Error: => OWidget type not compatible with the expected value\n");
 }
 
 void write_config_value_as_int(gchar *view_id, gint value)
@@ -579,4 +576,3 @@ void write_config_value_as_boolean(gchar *view_id, gboolean value)
     else
         g_print("Error: => Widget type not compatible with the expected value\n");
 }
-

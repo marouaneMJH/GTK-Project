@@ -1036,7 +1036,7 @@
         >
 
             <button
-                id="btn1"
+                id="apply_btn"
                 label="Apply"
                 box_expand="true"
                 box_fill="true"
@@ -1046,7 +1046,7 @@
             />
 
             <button
-                id="btn1"
+                id="cancel_btn"
                 label="Cancel"
                 box_expand="true"
                 box_fill="true"

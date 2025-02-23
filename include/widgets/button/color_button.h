@@ -33,6 +33,8 @@
         .margins = DEFAULT_COLOR_BUTTON_MARGINS,       \
         .hexpand = FALSE,                              \
         .vexpand = FALSE,                              \
+        .halign = GTK_ALIGN_FILL,                      \
+        .valign = GTK_ALIGN_FILL,                      \
     }
 
 typedef struct
@@ -45,9 +47,10 @@ typedef struct
     /* Dimensions and placement */
     Dimensions dimensions; // dimensions of the button
     Margins margins;       // margin of the button
-    gboolean hexpand;      // If the button expands in its container (horizontal)
-    gboolean vexpand;      // If the button expands in its container (vertical)
-
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
 } ColorButtonConfig;
 
 ViewConfig *init_color_button_config(FILE *index, ColorButtonConfig *color_button_config);

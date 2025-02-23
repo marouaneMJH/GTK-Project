@@ -26,17 +26,26 @@
         .bg_color = "#ffffff",              \
         .border_radius = 0,                 \
         .margins = DEFAULT_OVERLAY_MARGINS, \
+        .hexpand = FALSE,                       \
+        .vexpand = FALSE,                       \
+        .halign = GTK_ALIGN_FILL,               \
+        .valign = GTK_ALIGN_FILL,               \
         .bg_image[0] = '\0',                \
         .dimensions = DEFAULT_OVERLAY_DIMENSIONS}
 
 typedef struct
 {
     gdouble opacity;
+    gint border_radius;
+
     gchar bg_color[MAX_COLOR_SIZE];
     gchar bg_image[MAX_ICON_PATH_SIZE];
-    gint border_radius;
     Margins margins;
     Dimensions dimensions;
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
 } OverlayConfig;
 
 /**

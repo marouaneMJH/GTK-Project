@@ -15,7 +15,7 @@
 
         <label
             id="title_label"
-            label_text="Frame properties"
+            label_text="Stack properties"
             yalign="0.5"
             font_size="18"
             box_expand="true"
@@ -74,6 +74,7 @@
 
 
                         </box>
+
                         <box
                             orientation="horizontal"
                             spacing="10"
@@ -85,99 +86,108 @@
                         >
                             <label
                                 id="label11"
-                                label_text="Label"
+                                label_text="Transition duration"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
                             />
-                            <entry
-                                id="label_entry"
-                                placeholder_text="eg: Info"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                        </box>
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            margin_left="10"
-                            margin_right="10"
-                            box_expand="true"
-                            box_fill="true"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="label_xalign_label"
-                                label_text="Top"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
+
                             <spin_button
-                                id="label_xalign_spin"
+                                id="transition_duration_spin"
                                 initial_value="0"
                                 min="0"
                                 max="10000"
-                                is_digits="true"
                                 box_expand="true"
                                 box_fill="true"
                             />
                         </box>
+
                         <box
                             orientation="horizontal"
                             spacing="10"
-                            margin_left="10"
-                            margin_right="10"
                             box_expand="true"
                             box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
                             homogeneous="true"
                         >
                             <label
-                                id="label_yalign_label"
-                                label_text="Top"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                            <spin_button
-                                id="label_yalign_spin"
-                                initial_value="0"
-                                min="0"
-                                max="10000"
-                                is_digits="true"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                        </box>
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            margin_left="10"
-                            margin_right="10"
-                            box_expand="true"
-                            box_fill="true"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="shadow_type_label"
-                                label_text="Top"
+                                id="label11"
+                                label_text="Transition type"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
                             />
                             <combo_text_box
-                                id="shadow_type_combo"
+                                id="transition_type_combo"
                                 default_index="0"
-                                option1="In (default)"
-                                option2="Out"
-                                option3="Etched In"
-                                option4="Etched Out"
-                                option5="None"
+                                option1="Cross fade (default)"
+                                option2="Slide left"
+                                option3="Slide right"
+                                option4="Slide up"
+                                option5="Slide down"
                                 box_expand="true"
                                 box_fill="true"
                             />
 
                         </box>
+
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            margin_bottom="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="homogeneous_label"
+                                label_text="Homogeneous"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <switch_button
+                                id="homogeneous_switch"
+                                box_expand="true"
+                                box_fill="true"
+                                margin_right="20"
+                                halign="end"
+                            />
+
+                        </box>
+               
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            margin_bottom="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="transition_label"
+                                label_text="Transition"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <switch_button
+                                id="transition_switch"
+                                box_expand="true"
+                                box_fill="true"
+                                margin_right="20"
+                                halign="end"
+                            />
+
+                        </box>
+
                     </box>
 
                 </frame>
@@ -999,17 +1009,17 @@
         >
 
             <button
-                id="btn1"
+                id="apply_btn"
                 label="Apply"
                 box_expand="true"
                 box_fill="true"
                 icon_path="./assets/images/icons/approve.png"
-                param_1="box"
+                param_1="button"
                 on_click="sig_create_new_view"
             />
 
             <button
-                id="btn1"
+                id="cancel_btn"
                 label="Cancel"
                 box_expand="true"
                 box_fill="true"

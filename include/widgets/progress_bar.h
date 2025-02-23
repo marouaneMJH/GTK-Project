@@ -42,14 +42,19 @@
 typedef struct
 {
     gchar text[MAX_PROGRESS_BAR_TEXT_SIZE]; ///< The text displayed in the progress bar
-    Dimensions dimensions;                  ///< The dimensions of the progress bar
-    Margins margins;                        ///< The margins of the progress bar
     gdouble progress_fraction;              ///< The fraction of the progress bar (0.0 to 1.0)
     gdouble progress_pulse_step;            ///< The pulse step of the progress bar
     gboolean is_text_visible;               ///< Whether the text is visible or hidden
     gboolean is_inverted;                   ///< Whether the progress bar is inverted
     PangoEllipsizeMode ellipsize;           ///< The ellipsize mode of the progress bar
     gboolean opacity;                       ///< The opacity of the progress bar (0.0 to 1.0)
+    
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
+    Dimensions dimensions;                  ///< The dimensions of the progress bar
+    Margins margins;                        ///< The margins of the progress bar
     gchar bg_color[MAX_COLOR_SIZE];         ///< The background color of the progress bar
     gchar text_color[MAX_COLOR_SIZE];       ///< The text color of the progress bar
 } ProgressBarConfig;

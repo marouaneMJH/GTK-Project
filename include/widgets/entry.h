@@ -47,6 +47,10 @@
         .progress_fraction = 0,                 \
         .progress_pulse_step = 0,               \
         .activates_default = FALSE,             \
+        .hexpand = FALSE,                       \
+        .vexpand = FALSE,                       \
+        .halign = GTK_ALIGN_FILL,               \
+        .valign = GTK_ALIGN_FILL,               \
         .has_frame = TRUE,                      \
         .has_delete_icon = FALSE}
 
@@ -69,21 +73,26 @@ typedef struct
     gboolean has_delete_icon;         // Whether the entry has a delete icon
     gboolean has_frame;               // Whether the entry has a frame
     gdouble opacity;                  // Opacity of the entry (0.0 to 1.0)
-    gchar bg_color[MAX_COLOR_SIZE];   // Background color (e.g., "\0")
-    gchar text_color[MAX_COLOR_SIZE]; // Text color (e.g., "#000000")
-
+    
     /* Text handling */
     gboolean overwrite_mode; // Whether the entry is in overwrite mode
     gint max_length;         // Maximum length of the text
     gfloat alignment;        // Alignment of the text (0.0 to 1.0)
-
+    
     /* Progress and completion */
     GtkEntryCompletion *completion; // Completion object for auto-completion
     gdouble progress_fraction;      // Fraction of progress (0.0 to 1.0)
     gdouble progress_pulse_step;    // Step size for progress pulse
-
+    
     /* Activation */
     gboolean activates_default; // Whether the entry activates the default widget when Enter is pressed
+
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
+    gchar bg_color[MAX_COLOR_SIZE];   // Background color (e.g., "\0")
+    gchar text_color[MAX_COLOR_SIZE]; // Text color (e.g., "#000000")
 
 } EntryConfig;
 

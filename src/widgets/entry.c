@@ -82,6 +82,30 @@ ViewConfig *configure_entry_property(EntryConfig *entry_config, ViewConfig *view
             entry_config->purpose = GTK_INPUT_PURPOSE_PIN;
     }
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            entry_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            entry_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            entry_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            entry_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            entry_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            entry_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            entry_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            entry_config->halign = GTK_ALIGN_FILL;
+    }
+
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
@@ -172,6 +196,14 @@ GtkWidget *create_entry(EntryConfig entry_config)
     g_print("Entry bg color: %s\n", entry_config.bg_color);
     widget_set_colors(GTK_WIDGET(entry), entry_config.bg_color, entry_config.text_color);
     widget_set_margins(GTK_WIDGET(entry), entry_config.margins);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(entry, entry_config.hexpand);
+    gtk_widget_set_vexpand(entry, entry_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(entry, entry_config.halign);
+    gtk_widget_set_valign(entry, entry_config.valign);
 
     // To look at later:
     // gtk_entry_set_cursor_hadjustment(GTK_ENTRY(Myentry), hadjustment);

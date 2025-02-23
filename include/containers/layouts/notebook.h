@@ -28,6 +28,10 @@
         .tab_position = GTK_POS_TOP,               \
         .margins = DEFAULT_NOTEBOOK_MARGINS,       \
         .dimensions = DEFAULT_NOTEBOOK_DIMENSIONS, \
+        .hexpand = FALSE,                       \
+        .vexpand = FALSE,                       \
+        .halign = GTK_ALIGN_FILL,               \
+        .valign = GTK_ALIGN_FILL,               \
         .bg_color = "\0",                          \
         .text_color = "\0"}
 
@@ -50,6 +54,11 @@ typedef struct
 
     // Position of tabs
     GtkPositionType tab_position;
+
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
 
     Margins margins;
 

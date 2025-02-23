@@ -366,6 +366,8 @@ static void sig_properties_dialog(GtkWidget *widget, gpointer data)
         build_app(root_app, NULL, NOTEBOOK_PROPERTIES_DIALOG_TXT);
     else if (g_strcmp0(param_array->params[0], "button") == 0)
         build_app(root_app, NULL, BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "entry") == 0)
+        build_app(root_app, NULL, ENTRY_PROPERTIES_DIALOG_TXT);
 
     GtkWidget *dialog = root_dialog_view_global->widget;
 
@@ -434,6 +436,7 @@ void set_current_button_config_to_dialog(ButtonConfig *button_config)
 {
     // Label
     write_config_value_as_string("label_entry", button_config->label);
+    
     // Width
     write_config_value_as_int("width_spin", button_config->dimensions.width);
 
@@ -675,10 +678,123 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
     if (update_mode)
     {
         g_print("UPDATE MODE\n");
-        update_widget_config(param_array->params[0], NULL);
+        if (g_strcmp0(param_array->params[0], "box") == 0)
+        {
+        }
+        else if (g_strcmp0(param_array->params[0], "fixed") == 0)
+        {
+        }
+        // else if (g_strcmp0(param_array->params[0], "flowbox") == 0)
+        // {
+        //     parent_view = create_new_flowbox_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "frame") == 0)
+        // {
+        //     parent_view = create_new_frame_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "grid") == 0)
+        // {
+        //     parent_view = create_new_grid_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "notebook") == 0)
+        // {
+        //     parent_view = create_new_notebook_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "overlay") == 0)
+        // {
+        //     parent_view = create_new_overlay_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "paned") == 0)
+        // {
+        //     parent_view = create_new_paned_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "stack") == 0)
+        // {
+        //     parent_view = create_new_stack_from_dialog(parent_view, is_relative_container);
+        // }
+        else if (g_strcmp0(param_array->params[0], "button") == 0)
+        {
+            update_button_config();
+        }
+        // else if (g_strcmp0(param_array->params[0], "check_button") == 0)
+        // {
+        //     parent_view = create_new_check_button_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "color_button") == 0)
+        // {
+        //     parent_view = create_new_color_button_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "link_button") == 0)
+        // {
+        //     parent_view = create_new_link_button_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "radio_button") == 0)
+        // {
+        //     parent_view = create_new_radio_button_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "spin_button") == 0)
+        // {
+        //     parent_view = create_new_spin_button_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "switch_button") == 0)
+        // {
+        //     parent_view = create_new_switch_button_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "toggle_button") == 0)
+        // {
+        //     parent_view = create_new_toggle_button_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "menu_bar") == 0)
+        // {
+        //     parent_view = create_new_menu_bar_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "menu_item") == 0)
+        // {
+        //     parent_view = create_new_menu_item_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "menu") == 0)
+        // {
+        //     parent_view = create_new_menu_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "entry") == 0)
+        // {
+        //     parent_view = create_new_entry_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "image") == 0)
+        // {
+        //     parent_view = create_new_image_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "label") == 0)
+        // {
+        //     parent_view = create_new_label_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "progress_bar") == 0)
+        // {
+        //     parent_view = create_new_progress_bar_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "separator") == 0)
+        // {
+        //     parent_view = create_new_separator_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "text_area") == 0)
+        // {
+        //     parent_view = create_new_text_area_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "combo_text_box") == 0)
+        // {
+        //     parent_view = create_new_combo_text_box_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "event_box") == 0)
+        // {
+        //     parent_view = create_new_event_box_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "expander") == 0)
+        // {
+        //     parent_view = create_new_expander_from_dialog(parent_view, is_relative_container);
+        // }
         update_mode = FALSE;
     }
-    else 
+    else
     {
         g_print("NORMAL MODE\n");
         if (g_strcmp0(param_array->params[0], "box") == 0)
@@ -686,119 +802,143 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
             parent_view = create_new_box_from_dialog(parent_view, is_relative_container);
             is_relative_container = TRUE;
         }
-        else if (g_strcmp0(param_array->params[0], "fixed") == 0)
-        {
-            parent_view = create_new_fixed_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "flowbox") == 0)
-        {
-            parent_view = create_new_flowbox_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "frame") == 0)
-        {
-            parent_view = create_new_frame_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "grid") == 0)
-        {
-            parent_view = create_new_grid_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "notebook") == 0)
-        {
-            parent_view = create_new_notebook_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "overlay") == 0)
-        {
-            parent_view = create_new_overlay_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "paned") == 0)
-        {
-            parent_view = create_new_paned_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "stack") == 0)
-        {
-            parent_view = create_new_stack_from_dialog(parent_view, is_relative_container);
-        }
+        // else if (g_strcmp0(param_array->params[0], "fixed") == 0)
+        // {
+        //     parent_view = create_new_fixed_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = TRUE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "flowbox") == 0)
+        // {
+        //     parent_view = create_new_flowbox_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = TRUE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "frame") == 0)
+        // {
+        //     parent_view = create_new_frame_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = TRUE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "grid") == 0)
+        // {
+        //     parent_view = create_new_grid_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = TRUE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "notebook") == 0)
+        // {
+        //     parent_view = create_new_notebook_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = TRUE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "overlay") == 0)
+        // {
+        //     parent_view = create_new_overlay_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = TRUE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "paned") == 0)
+        // {
+        //     parent_view = create_new_paned_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = TRUE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "stack") == 0)
+        // {
+        //     parent_view = create_new_stack_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = TRUE;
+        // }
         else if (g_strcmp0(param_array->params[0], "button") == 0)
         {
             parent_view = create_new_button_from_dialog(parent_view, is_relative_container);
             is_relative_container = FALSE;
         }
-        else if (g_strcmp0(param_array->params[0], "check_button") == 0)
-        {
-            parent_view = create_new_check_button_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "color_button") == 0)
-        {
-            parent_view = create_new_color_button_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "link_button") == 0)
-        {
-            parent_view = create_new_link_button_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "radio_button") == 0)
-        {
-            parent_view = create_new_radio_button_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "spin_button") == 0)
-        {
-            parent_view = create_new_spin_button_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "switch_button") == 0)
-        {
-            parent_view = create_new_switch_button_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "toggle_button") == 0)
-        {
-            parent_view = create_new_toggle_button_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "menu_bar") == 0)
-        {
-            parent_view = create_new_menu_bar_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "menu_item") == 0)
-        {
-            parent_view = create_new_menu_item_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "menu") == 0)
-        {
-            parent_view = create_new_menu_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "entry") == 0)
-        {
-            parent_view = create_new_entry_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "image") == 0)
-        {
-            parent_view = create_new_image_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "label") == 0)
-        {
-            parent_view = create_new_label_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "progress_bar") == 0)
-        {
-            parent_view = create_new_progress_bar_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "separator") == 0)
-        {
-            parent_view = create_new_separator_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "text_area") == 0)
-        {
-            parent_view = create_new_text_area_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "combo_text_box") == 0)
-        {
-            parent_view = create_new_combo_text_box_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "event_box") == 0)
-        {
-            parent_view = create_new_event_box_from_dialog(parent_view, is_relative_container);
-        }
-        else if (g_strcmp0(param_array->params[0], "expander") == 0)
-        {
-            parent_view = create_new_expander_from_dialog(parent_view, is_relative_container);
-        }
+        // else if (g_strcmp0(param_array->params[0], "check_button") == 0)
+        // {
+        //     parent_view = create_new_check_button_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = FALSE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "color_button") == 0)
+        // {
+        //     parent_view = create_new_color_button_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = FALSE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "link_button") == 0)
+        // {
+        //     parent_view = create_new_link_button_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = FALSE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "radio_button") == 0)
+        // {
+        //     parent_view = create_new_radio_button_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = FALSE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "spin_button") == 0)
+        // {
+        //     parent_view = create_new_spin_button_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = FALSE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "switch_button") == 0)
+        // {
+        //     parent_view = create_new_switch_button_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = FALSE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "toggle_button") == 0)
+        // {
+        //     parent_view = create_new_toggle_button_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "menu_bar") == 0)
+        // {
+        //     parent_view = create_new_menu_bar_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = TRUE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "menu_item") == 0)
+        // {
+        //     parent_view = create_new_menu_item_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = FALSE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "menu") == 0)
+        // {
+        //     parent_view = create_new_menu_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = TRUE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "entry") == 0)
+        // {
+        //     parent_view = create_new_entry_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = FALSE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "image") == 0)
+        // {
+        //     parent_view = create_new_image_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = FALSE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "label") == 0)
+        // {
+        //     parent_view = create_new_label_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "progress_bar") == 0)
+        // {
+        //     parent_view = create_new_progress_bar_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = FALSE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "separator") == 0)
+        // {
+        //     parent_view = create_new_separator_from_dialog(parent_view, is_relative_container);
+        // }
+        // else if (g_strcmp0(param_array->params[0], "text_area") == 0)
+        // {
+        //     parent_view = create_new_text_area_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = FALSE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "combo_text_box") == 0)
+        // {
+        //     parent_view = create_new_combo_text_box_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = FALSE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "event_box") == 0)
+        // {
+        //     parent_view = create_new_event_box_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = TRUE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "expander") == 0)
+        // {
+        //     parent_view = create_new_expander_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = TRUE;
+        // }
 
         add_view_to_content_box(parent_view);
         gtk_widget_show_all(root_view_global->widget);
@@ -806,7 +946,6 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
     g_print("PARENT ==========> %s \n", parent_view->parent->view_config->view_id);
     sig_destroy_dialog(widget, NULL);
 }
-
 
 void connect_signals(View *view)
 {

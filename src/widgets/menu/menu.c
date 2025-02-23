@@ -57,6 +57,30 @@ ViewConfig *configure_menu_property(MenuConfig *menu_config, ViewConfig *view_co
         // TODO: advanced feature to be done later
     }
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            menu_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            menu_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            menu_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            menu_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            menu_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            menu_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            menu_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            menu_config->halign = GTK_ALIGN_FILL;
+    }
+
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
@@ -101,6 +125,14 @@ GtkWidget *create_menu(MenuConfig menu_config)
     widget_set_colors(menu, menu_config.bg_color, menu_config.text_color);
 
     widget_set_margins(menu, menu_config.margins);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(menu, menu_config.hexpand);
+    gtk_widget_set_vexpand(menu, menu_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(menu, menu_config.halign);
+    gtk_widget_set_valign(menu, menu_config.valign);
 
     return menu;
 }
@@ -171,4 +203,3 @@ gchar *write_menu_property(FILE *output_file, View *view, int tabs_number)
 
     return "menu";
 }
-

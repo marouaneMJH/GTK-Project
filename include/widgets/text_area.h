@@ -17,13 +17,17 @@
 typedef struct
 {
     gint font_size;                   // Font size for text
-    gchar text_color[MAX_COLOR_SIZE]; // Text color
-    gchar bg_color[MAX_COLOR_SIZE];   // Background color
+
     gboolean is_editable;             // Editable state
     GtkWrapMode wrap_mode;            // Wrap mode for text
-
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
     // dimensions
     Dimensions dimensions;
+    gchar text_color[MAX_COLOR_SIZE]; // Text color
+    gchar bg_color[MAX_COLOR_SIZE];   // Background color
 } TextAreaConfig;
 
 /**

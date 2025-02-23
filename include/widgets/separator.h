@@ -32,9 +32,9 @@ typedef struct
     gchar tooltip[MAX_TOOLTIP_SIZE];
     GtkOrientation orientation;
     gboolean is_visible;
+    
     gboolean hexpand;
     gboolean vexpand;
-
     GtkAlign halign;
     GtkAlign valign;
 

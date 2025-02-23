@@ -78,6 +78,29 @@ ViewConfig *configure_radio_button_property(RadioButtonConfig *radio_button_conf
     if (g_strcmp0(property, "text_color") == 0)
         strcpy(radio_button_config->text_color, value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            radio_button_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            radio_button_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            radio_button_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            radio_button_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            radio_button_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            radio_button_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            radio_button_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            radio_button_config->halign = GTK_ALIGN_FILL;
+    }
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
@@ -178,6 +201,14 @@ GtkWidget *create_radio_button(RadioButtonConfig radio_button_config)
     // GdkRGBA bg_color;
     // gdk_rgba_parse(&bg_color, "#ff00ff");
     // gtk_widget_override_background_color(GTK_WIDGET(rb2), GTK_STATE_FLAG_NORMAL, &bg_color);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(radio_button, radio_button_config.hexpand);
+    gtk_widget_set_vexpand(radio_button, radio_button_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(radio_button, radio_button_config.halign);
+    gtk_widget_set_valign(radio_button, radio_button_config.valign);
 
     return radio_button;
 }

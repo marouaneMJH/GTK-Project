@@ -63,14 +63,15 @@ typedef struct
     /* Dimensions and placement */
     Dimensions dimensions; // dimensions of the button
     Margins margins;       // margin of the button
-    gboolean hexpand;      // If the button expands in its container (horizontal)
-    gboolean vexpand;      // If the button expands in its container (vertical)
-
+    
     gchar icon_path[MAX_ICON_PATH_SIZE]; // Path to the icon image file
     Dimensions icon_dimensions;          // Dimensions of the icon image
-
+    
+    gboolean hexpand;      // If the button expands in its container (horizontal)
+    gboolean vexpand;      // If the button expands in its container (vertical)
     GtkAlign halign;               // Horizontal alignment of the button label
     GtkAlign valign;               // Vertical alignment of the button label
+
     gboolean always_show_image;    // Whether to always show the image
     gboolean use_underline;        // Whether to use underline in the button label
     GtkPositionType icon_position; // Whether to use underline in the button label

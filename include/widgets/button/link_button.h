@@ -25,6 +25,10 @@
         .is_visited = FALSE,                          \
         .dimensions = DEFAULT_LINK_BUTTON_DIMENSIONS, \
         .margins = DEFAULT_LINK_BUTTON_MARGIN,        \
+        .hexpand = FALSE,                       \
+        .vexpand = FALSE,                       \
+        .halign = GTK_ALIGN_FILL,               \
+        .valign = GTK_ALIGN_FILL,               \
         .bg_color = "\0",                             \
         .text_color = "\0"}
 
@@ -35,6 +39,12 @@ typedef struct
     gchar label[MAX_BUTTON_LABEL_SIZE];
     gchar tooltip[MAX_TOOLTIP_SIZE];
     gboolean is_visited;
+
+
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
     Dimensions dimensions;
     Margins margins;
     gchar bg_color[MAX_COLOR_SIZE];

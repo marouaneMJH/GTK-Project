@@ -30,6 +30,10 @@
         .tooltip = "\0",                       \
         .dimensions = DEFAULT_MENU_DIMENSIONS, \
         .margins = DEFAULT_MENU_MARGIN,        \
+        .hexpand = FALSE,                       \
+        .vexpand = FALSE,                       \
+        .halign = GTK_ALIGN_FILL,               \
+        .valign = GTK_ALIGN_FILL,               \
         .bg_color = "\0",                      \
         .text_color = "\0"}
 // .margin = DEFAULT_MENU_MARGIN,
@@ -44,6 +48,11 @@ typedef struct
     guint monitor_num;            // Associate the monitor in multiple monitors setup
     GdkScreen *screen;            // Associate to the parent screen or else
     gchar tooltip[MAX_TOOLTIP_SIZE];
+    
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
     Dimensions dimensions;
     Margins margins;
     gchar bg_color[MAX_COLOR_SIZE];

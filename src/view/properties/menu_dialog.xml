@@ -15,7 +15,7 @@
 
         <label
             id="title_label"
-            label_text="Frame properties"
+            label_text="Menu properties"
             yalign="0.5"
             font_size="18"
             box_expand="true"
@@ -49,6 +49,7 @@
                         id="bx"
                         spacing="10"
                     >
+
                         <box
                             orientation="horizontal"
                             spacing="10"
@@ -74,6 +75,7 @@
 
 
                         </box>
+
                         <box
                             orientation="horizontal"
                             spacing="10"
@@ -85,99 +87,197 @@
                         >
                             <label
                                 id="label11"
-                                label_text="Label"
+                                label_text="Tooltip"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
                             />
                             <entry
-                                id="label_entry"
-                                placeholder_text="eg: Info"
+                                id="tooltip_entry"
+                                placeholder_text="eg: tooltip"
                                 box_expand="true"
                                 box_fill="true"
                             />
                         </box>
+
                         <box
                             orientation="horizontal"
                             spacing="10"
-                            margin_left="10"
-                            margin_right="10"
                             box_expand="true"
                             box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            margin_bottom="10"
                             homogeneous="true"
                         >
                             <label
-                                id="label_xalign_label"
-                                label_text="Top"
+                                id="plabel"
+                                label_text="Reserve toggle size"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
                             />
+
+                            <switch_button
+                                id="reserve_toggle_size_switch"
+                                box_expand="true"
+                                box_fill="true"
+                                margin_right="20"
+                                halign="end"
+                            />
+
+                        </box>
+
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            margin_bottom="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="plabel"
+                                label_text="Active index"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
                             <spin_button
-                                id="label_xalign_spin"
+                                id="active_index_spin"
                                 initial_value="0"
                                 min="0"
                                 max="10000"
-                                is_digits="true"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                        </box>
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            margin_left="10"
-                            margin_right="10"
-                            box_expand="true"
-                            box_fill="true"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="label_yalign_label"
-                                label_text="Top"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                            <spin_button
-                                id="label_yalign_spin"
-                                initial_value="0"
-                                min="0"
-                                max="10000"
-                                is_digits="true"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                        </box>
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            margin_left="10"
-                            margin_right="10"
-                            box_expand="true"
-                            box_fill="true"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="shadow_type_label"
-                                label_text="Top"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                            <combo_text_box
-                                id="shadow_type_combo"
-                                default_index="0"
-                                option1="In (default)"
-                                option2="Out"
-                                option3="Etched In"
-                                option4="Etched Out"
-                                option5="None"
                                 box_expand="true"
                                 box_fill="true"
                             />
 
                         </box>
+
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            margin_bottom="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="plabel"
+                                label_text="Monitor number"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <spin_button
+                                id="monitor_num_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                        </box>
+
+                    </box>
+
+                </frame>
+
+                <!-- Signal config -->
+                <frame
+                    id="btn1"
+                    label="Signals"
+                    margin_left="10"
+                    margin_right="10"
+                    box_expand="true"
+                    box_fill="true"
+                >
+                    <box
+                        id="bx"
+                        spacing="10"
+                    >
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="onClick"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                            <entry
+                                id="on_click_entry"
+                                placeholder_text="eg: sig_show_dialog"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="onActivate"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                            <entry
+                                id="on_activate_entry"
+                                placeholder_text="eg: sig_show_dialog"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            margin_bottom="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="onChange"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                            <entry
+                                id="on_change_entry"
+                                placeholder_text="eg: sig_show_dialog"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+
+                        <!-- TODO: Complete other signals -->
+
+
                     </box>
 
                 </frame>
@@ -978,6 +1078,31 @@
                             />
 
                         </box>
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            margin_bottom="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="bg_image_label"
+                                label_text="Background image"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                            <entry
+                                id="bg_image_entry"
+                                placeholder_text="eg: programer.jpg"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                        </box>
                     </box>
 
                 </frame> <!--
@@ -999,17 +1124,17 @@
         >
 
             <button
-                id="btn1"
+                id="apply_btn"
                 label="Apply"
                 box_expand="true"
                 box_fill="true"
                 icon_path="./assets/images/icons/approve.png"
-                param_1="box"
+                param_1="button"
                 on_click="sig_create_new_view"
             />
 
             <button
-                id="btn1"
+                id="cancel_btn"
                 label="Cancel"
                 box_expand="true"
                 box_fill="true"

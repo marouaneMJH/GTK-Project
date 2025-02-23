@@ -207,10 +207,6 @@ void apply_button_config_changes(GtkWidget *button, ButtonConfig button_config)
     if (button_config.dimensions.width > 0 || button_config.dimensions.height > 0)
         gtk_widget_set_size_request(button, button_config.dimensions.width, button_config.dimensions.height);
 
-    // Set expand property
-    gtk_widget_set_hexpand(button, button_config.hexpand);
-    gtk_widget_set_vexpand(button, button_config.vexpand);
-
     // Set icon if provided
     if (button_config.icon_path[0] != '\0')
     {
@@ -235,6 +231,10 @@ void apply_button_config_changes(GtkWidget *button, ButtonConfig button_config)
     gtk_widget_set_halign(button, button_config.halign);
     gtk_widget_set_valign(button, button_config.valign);
 
+    // Set expand property
+    gtk_widget_set_hexpand(button, button_config.hexpand);
+    gtk_widget_set_vexpand(button, button_config.vexpand);
+
     // Control whether to always show the image
     gtk_button_set_always_show_image(GTK_BUTTON(button), button_config.always_show_image);
 
@@ -257,6 +257,57 @@ ButtonConfig *read_button_config_from_dialog()
     // Label
     const gchar *label = read_config_value_as_string("label_entry");
     strcpy(button_config.label, label);
+
+    // Tooltip
+    const gchar *tooltip = read_config_value_as_string("tooltip_entry");
+    strcpy(button_config.tooltip, tooltip);
+
+    // Icon path
+    const gchar *icon_path = read_config_value_as_string("icon_path_entry");
+    strcpy(button_config.icon_path, icon_path);
+
+    // Icon position
+    const gchar *icon_position = read_config_value_as_string("icon_position_combo");
+    if (stricmp(icon_position, "top") == 0)
+        button_config.icon_position = GTK_POS_TOP;
+    else if (stricmp(icon_position, "bottom") == 0)
+        button_config.icon_position = GTK_POS_BOTTOM;
+    else if (stricmp(icon_position, "left") == 0)
+        button_config.icon_position = GTK_POS_LEFT;
+    else if (stricmp(icon_position, "right") == 0)
+        button_config.icon_position = GTK_POS_RIGHT;
+
+    // Always show image
+    gboolean always_show_image = read_config_value_as_boolean("always_show_image_switch");
+    button_config.always_show_image = always_show_image;
+
+    // Font size
+    gint font_size = read_config_value_as_int("font_size_spin");
+    if (font_size > 0)
+        button_config.font_size = font_size;
+
+    // Icon width
+    gint icon_width = read_config_value_as_int("icon_width_spin");
+    if (icon_width > 0)
+        button_config.icon_dimensions.width = icon_width;
+
+    // Icon height
+    gint icon_height = read_config_value_as_int("icon_height_spin");
+    if (icon_height > 0)
+        button_config.icon_dimensions.height = icon_height;
+
+    // Sensitivity
+    gboolean is_sensitive = read_config_value_as_boolean("sensitive_switch");
+    button_config.is_sensitive = is_sensitive;
+
+    // Visibility
+    gboolean is_visible = read_config_value_as_boolean("visible_switch");
+    button_config.is_visible = is_visible;
+
+    // Use underline
+    gboolean use_underline = read_config_value_as_boolean("use_underline_switch");
+    button_config.use_underline = use_underline;
+
     // Width
     gint width = read_config_value_as_int("width_spin");
     button_config.dimensions.width = width;

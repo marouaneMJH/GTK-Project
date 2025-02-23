@@ -52,6 +52,30 @@ ViewConfig *configure_flow_box_property(FlowBoxConfig *flow_box_config, ViewConf
     if (g_strcmp0(property, "height") == 0)
         flow_box_config->dimensions.height = atoi(value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            flow_box_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            flow_box_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            flow_box_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            flow_box_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            flow_box_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            flow_box_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            flow_box_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            flow_box_config->halign = GTK_ALIGN_FILL;
+    }
+
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
@@ -97,6 +121,14 @@ GtkWidget *create_flow_box(FlowBoxConfig flow_box_config)
     // Set dimensions
     if (flow_box_config.dimensions.width > 0 || flow_box_config.dimensions.height)
         gtk_widget_set_size_request(flow_box, flow_box_config.dimensions.width, flow_box_config.dimensions.height);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(flow_box, flow_box_config.hexpand);
+    gtk_widget_set_vexpand(flow_box, flow_box_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(flow_box, flow_box_config.halign);
+    gtk_widget_set_valign(flow_box, flow_box_config.valign);
 
     // Set colors
     widget_set_colors(flow_box, flow_box_config.bg_color, flow_box_config.text_color);

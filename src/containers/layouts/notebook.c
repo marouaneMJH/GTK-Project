@@ -58,6 +58,30 @@ ViewConfig *configure_notebook_property(NotebookConfig *notebook_config, ViewCon
     if (g_strcmp0(property, "text_color") == 0)
         strcpy(notebook_config->text_color, value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            notebook_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            notebook_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            notebook_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            notebook_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            notebook_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            notebook_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            notebook_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            notebook_config->halign = GTK_ALIGN_FILL;
+    }
+
     // Icon image and icon
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
@@ -101,6 +125,14 @@ GtkWidget *create_notebook(NotebookConfig notebook_config)
 
     // Set margins
     widget_set_margins(notebook, notebook_config.margins);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(notebook, notebook_config.hexpand);
+    gtk_widget_set_vexpand(notebook, notebook_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(notebook, notebook_config.halign);
+    gtk_widget_set_valign(notebook, notebook_config.valign);
 
     // gtk_notebook_set_tab_detachable(GTK_NOTEBOOK(notebook), child, TRUE);
     // gtk_notebook_set_menu_label(GTK_NOTEBOOK(notebook), child, label);

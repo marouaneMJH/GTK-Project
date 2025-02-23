@@ -60,6 +60,30 @@ ViewConfig *configure_stack_property(StackConfig *stack_config, ViewConfig *view
     else if (g_strcmp0(property, "margin_right") == 0)
         stack_config->margins.end = atoi(value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            stack_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            stack_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            stack_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            stack_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            stack_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            stack_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            stack_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            stack_config->halign = GTK_ALIGN_FILL;
+    }
+
     // Store additional properties in view_config (if needed)
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
@@ -98,6 +122,14 @@ GtkWidget *create_stack(StackConfig stack_config)
 
     // Set margins
     widget_set_margins(stack, stack_config.margins);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(stack, stack_config.hexpand);
+    gtk_widget_set_vexpand(stack, stack_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(stack, stack_config.halign);
+    gtk_widget_set_valign(stack, stack_config.valign);
 
     return stack;
 }

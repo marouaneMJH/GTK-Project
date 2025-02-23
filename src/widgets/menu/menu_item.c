@@ -50,6 +50,29 @@ ViewConfig *configure_menu_item_property(MenuItemConfig *menu_item_config, ViewC
     if (g_strcmp0(property, "text_color") == 0)
         strcpy(menu_item_config->text_color, value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            menu_item_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            menu_item_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            menu_item_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            menu_item_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            menu_item_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            menu_item_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            menu_item_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            menu_item_config->halign = GTK_ALIGN_FILL;
+    }
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
@@ -101,6 +124,14 @@ GtkWidget *create_menu_item(MenuItemConfig menu_item_config)
     widget_set_colors(menu_item, menu_item_config.bg_color, menu_item_config.text_color);
 
     widget_set_margins(menu_item, menu_item_config.margins);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(menu_item, menu_item_config.hexpand);
+    gtk_widget_set_vexpand(menu_item, menu_item_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(menu_item, menu_item_config.halign);
+    gtk_widget_set_valign(menu_item, menu_item_config.valign);
 
     return menu_item;
 }

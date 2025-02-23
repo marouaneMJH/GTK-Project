@@ -50,6 +50,30 @@ ViewConfig *configure_menu_bar_property(MenuBarConfig *menu_bar_config, ViewConf
     if (g_strcmp0(property, "text_color") == 0)
         strcpy(menu_bar_config->text_color, value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            menu_bar_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            menu_bar_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            menu_bar_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            menu_bar_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            menu_bar_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            menu_bar_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            menu_bar_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            menu_bar_config->halign = GTK_ALIGN_FILL;
+    }
+
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
@@ -82,6 +106,14 @@ GtkWidget *create_menu_bar(MenuBarConfig menu_bar_config)
     widget_set_colors(menu_bar, menu_bar_config.bg_color, menu_bar_config.text_color);
 
     widget_set_margins(menu_bar, menu_bar_config.margins);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(menu_bar, menu_bar_config.hexpand);
+    gtk_widget_set_vexpand(menu_bar, menu_bar_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(menu_bar, menu_bar_config.halign);
+    gtk_widget_set_valign(menu_bar, menu_bar_config.valign);
 
     return menu_bar;
 }

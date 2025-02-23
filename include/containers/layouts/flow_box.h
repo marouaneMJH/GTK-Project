@@ -28,6 +28,10 @@
         .vadjustment = NULL,                       \
         .margins = DEFAULT_FLOW_BOX_MARGINS,       \
         .dimensions = DEFAULT_FLOW_BOX_DIMENSIONS, \
+        .hexpand = FALSE,                       \
+        .vexpand = FALSE,                       \
+        .halign = GTK_ALIGN_FILL,               \
+        .valign = GTK_ALIGN_FILL,               \
         .bg_color = "\0",                          \
         .text_color = "\0"}
 
@@ -44,6 +48,11 @@ typedef struct
 
     GtkAdjustment *hadjustment;
     GtkAdjustment *vadjustment;
+
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
 
     Margins margins;
 

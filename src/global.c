@@ -393,7 +393,7 @@ ViewConfig *read_view_config_from_dialog()
     SAFE_ALLOC(view_config, ViewConfig, 1);
     DFEAULT_VIEW_CONFIG(view_config);
 
-    gchar *view_id = read_config_value_as_string("view_id_entry");
+    const gchar *view_id = read_config_value_as_string("view_id_entry");
     strcpy(view_config->view_id, view_id);
 
     // Box config
@@ -406,7 +406,7 @@ ViewConfig *read_view_config_from_dialog()
     gint box_padding = read_config_value_as_int("box_padding_spin");
     view_config->box_padding = box_padding;
 
-    gchar *pack_direction = read_config_value_as_string("pack_direction_combo");
+    const gchar *pack_direction = read_config_value_as_string("pack_direction_combo");
     if (stricmp(pack_direction, "end") == 0)
         view_config->pack_direction = 0;
     else
@@ -422,7 +422,7 @@ ViewConfig *read_view_config_from_dialog()
 
     // Signals config
     // OnClick
-    gchar *sig_on_click_handler = read_config_value_as_string("on_click_entry");
+    const gchar *sig_on_click_handler = read_config_value_as_string("on_click_entry");
     view_config->signal.event_type = SIG_ON_CLICK;
     g_strlcpy(view_config->signal.sig_handler, sig_on_click_handler, MAX_SIGNAL_NAME_SIZE);
     return view_config;

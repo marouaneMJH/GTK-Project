@@ -40,6 +40,30 @@ ViewConfig *configure_color_button_property(ColorButtonConfig *color_button_conf
     if (g_strcmp0(property, "height") == 0)
         color_button_config->dimensions.height = atoi(value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            color_button_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            color_button_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            color_button_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            color_button_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            color_button_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            color_button_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            color_button_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            color_button_config->halign = GTK_ALIGN_FILL;
+    }
+
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
@@ -72,9 +96,13 @@ GtkWidget *create_color_button(ColorButtonConfig color_button_config)
     if (color_button_config.dimensions.width > 0 || color_button_config.dimensions.height > 0)
         set_widget_size(color_button, color_button_config.dimensions);
 
-    // Set expand property
+    // Enable or disable cells expand (the parent should be expandable; not important)
     gtk_widget_set_hexpand(color_button, color_button_config.hexpand);
     gtk_widget_set_vexpand(color_button, color_button_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(color_button, color_button_config.halign);
+    gtk_widget_set_valign(color_button, color_button_config.valign);
 
     // Set margins
     widget_set_margins(color_button, color_button_config.margins);

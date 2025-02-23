@@ -44,6 +44,30 @@ ViewConfig *configure_overlay_property(OverlayConfig *overlay_config, ViewConfig
     else if (g_strcmp0(property, "opacity") == 0)
         overlay_config->opacity = atof(value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            overlay_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            overlay_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            overlay_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            overlay_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            overlay_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            overlay_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            overlay_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            overlay_config->halign = GTK_ALIGN_FILL;
+    }
+
     // configure default properties
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
@@ -70,6 +94,15 @@ GtkWidget *create_overlay(OverlayConfig overlay_config)
         overlay_config.margins.end ||
         overlay_config.margins.start)
         widget_set_margins(overlay, overlay_config.margins);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(overlay, overlay_config.hexpand);
+    gtk_widget_set_vexpand(overlay, overlay_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(overlay, overlay_config.halign);
+    gtk_widget_set_valign(overlay, overlay_config.valign);
+
     return overlay;
 }
 

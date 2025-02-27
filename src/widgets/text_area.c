@@ -41,6 +41,30 @@ ViewConfig *configure_text_area_property(TextAreaConfig *text_area_config, ViewC
             text_area_config->wrap_mode = GTK_WRAP_WORD_CHAR;
     }
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            text_area_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            text_area_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            text_area_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            text_area_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            text_area_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            text_area_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            text_area_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            text_area_config->halign = GTK_ALIGN_FILL;
+    }
+
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
@@ -70,6 +94,14 @@ GtkWidget *create_text_area(TextAreaConfig text_area)
     gtk_container_add(GTK_CONTAINER(scrolled_window), text_view);
     if (text_area.dimensions.width > 0 && text_area.dimensions.height > 0)
         set_widget_size(scrolled_window, text_area.dimensions);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(text_view, text_area.hexpand);
+    gtk_widget_set_vexpand(text_view, text_area.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(text_view, text_area.halign);
+    gtk_widget_set_valign(text_view, text_area.valign);
 
     return scrolled_window;
 }

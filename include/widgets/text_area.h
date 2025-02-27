@@ -11,15 +11,20 @@
         .bg_color = "\0",           \
         .is_editable = TRUE,        \
         .wrap_mode = GTK_WRAP_WORD, \
+        .hexpand = FALSE,           \
+        .vexpand = FALSE,           \
+        .halign = GTK_ALIGN_FILL,   \
+        .valign = GTK_ALIGN_FILL,   \
         .dimensions.width = 0,      \
         .dimensions.height = 0}
 
 typedef struct
 {
-    gint font_size;                   // Font size for text
+    gint font_size; // Font size for text
 
-    gboolean is_editable;             // Editable state
-    GtkWrapMode wrap_mode;            // Wrap mode for text
+    gboolean is_editable;  // Editable state
+    GtkWrapMode wrap_mode; // Wrap mode for text
+
     gboolean hexpand;
     gboolean vexpand;
     GtkAlign halign;

@@ -15,7 +15,7 @@
 
         <label
             id="title_label"
-            label_text="Entry properties"
+            label_text="Label properties"
             yalign="0.5"
             font_size="18"
             box_expand="true"
@@ -86,13 +86,13 @@
                         >
                             <label
                                 id="label11"
-                                label_text="Text"
+                                label_text="Label text"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
                             />
                             <entry
-                                id="text_entry"
+                                id="label_text_entry"
                                 placeholder_text="eg: Hello wrold"
                                 box_expand="true"
                                 box_fill="true"
@@ -110,14 +110,14 @@
                         >
                             <label
                                 id="label11"
-                                label_text="Placeholder text"
+                                label_text="Font family (optional)"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
                             />
                             <entry
-                                id="placeholder_text_entry"
-                                placeholder_text="eg: Saisir votre nom"
+                                id="font_family_entry"
+                                placeholder_text="eg: Arial"
                                 box_expand="true"
                                 box_fill="true"
                             />
@@ -135,149 +135,7 @@
                         >
                             <label
                                 id="properties_label"
-                                label_text="Visible"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-
-                            <switch_button
-                                id="visible_switch"
-                                box_expand="true"
-                                box_fill="true"
-                                margin_right="20"
-                                halign="end"
-                                state="true"
-                            />
-
-                        </box>
-
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            box_expand="true"
-                            box_fill="true"
-                            margin_left="10"
-                            margin_right="10"
-                            margin_bottom="10"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="frame_label"
-                                label_text="Has frame"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-
-                            <switch_button
-                                id="has_frame_switch"
-                                box_expand="true"
-                                box_fill="true"
-                                margin_right="20"
-                                halign="end"
-                                is_active="true"
-                            />
-
-                        </box>
-
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            box_expand="true"
-                            box_fill="true"
-                            margin_left="10"
-                            margin_right="10"
-                            margin_bottom="10"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="has_delete_icon_label"
-                                label_text="Active"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-
-                            <switch_button
-                                id="has_delete_icon_switch"
-                                box_expand="true"
-                                box_fill="true"
-                                margin_right="20"
-                                halign="end"
-                            />
-
-                        </box>
-
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            box_expand="true"
-                            box_fill="true"
-                            margin_left="10"
-                            margin_right="10"
-                            margin_bottom="10"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="overwrite_mode_label"
-                                label_text="Visible"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-
-                            <switch_button
-                                id="overwrite_mode_switch"
-                                box_expand="true"
-                                box_fill="true"
-                                margin_right="20"
-                                halign="end"
-                            />
-
-                        </box>
-
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            box_expand="true"
-                            box_fill="true"
-                            margin_left="10"
-                            margin_right="10"
-                            margin_bottom="10"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="activates_default_label"
-                                label_text="Activates default"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-
-                            <switch_button
-                                id="activates_default_switch"
-                                box_expand="true"
-                                box_fill="true"
-                                margin_right="20"
-                                halign="end"
-                            />
-
-                        </box>
-
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            box_expand="true"
-                            box_fill="true"
-                            margin_left="10"
-                            margin_right="10"
-                            margin_bottom="10"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="visible_label"
-                                label_text="Visible"
+                                label_text="Markup"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
@@ -290,6 +148,91 @@
                                 margin_right="20"
                                 halign="end"
                             />
+
+                        </box>
+
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            margin_bottom="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="prop_label"
+                                label_text="Underline"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <switch_button
+                                id="underline_switch"
+                                box_expand="true"
+                                box_fill="true"
+                                margin_right="20"
+                                halign="end"
+                            />
+
+                        </box>
+
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            margin_bottom="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="wrape_label"
+                                label_text="Wrap"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <switch_button
+                                id="wrap_switch"
+                                box_expand="true"
+                                box_fill="true"
+                                margin_right="20"
+                                halign="end"
+                            />
+
+                        </box>
+
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            margin_bottom="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="selectable_label"
+                                label_text="Selectable"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <switch_button
+                                id="selectable_switch"
+                                box_expand="true"
+                                box_fill="true"
+                                margin_right="20"
+                                halign="end"
+                            />
+
                         </box>
 
                         <box
@@ -304,21 +247,19 @@
                         >
                             <label
                                 id="type_label"
-                                label_text="Type"
+                                label_text="Justify type"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
                             />
 
                             <combo_text_box
-                                id="type_combo"
+                                id="jtype_combo"
                                 default_index="0"
-                                option1="Free form (default)"
-                                option2="Number"
-                                option3="Email"
-                                option4="Name"
-                                option5="Password"
-                                option6="Pin"
+                                option1="Center (default)"
+                                option2="Left"
+                                option3="Right"
+                                option4="Fill"
                                 box_expand="true"
                                 box_fill="true"
                             />
@@ -336,15 +277,46 @@
                             homogeneous="true"
                         >
                             <label
-                                id="max_length_label"
-                                label_text="Max length"
+                                id="ellipsize_label"
+                                label_text="Ellipsize"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <combo_text_box
+                                id="ellipsize_combo"
+                                default_index="0"
+                                option1="None (default)"
+                                option2="Start"
+                                option3="Middle"
+                                option4="End"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                        </box>
+
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            margin_bottom="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="prop_label"
+                                label_text="Font size"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
                             />
 
                             <spin_button
-                                id="max_length_spin"
+                                id="font_size_spin"
                                 initial_value="0"
                                 min="0"
                                 max="10000"
@@ -364,15 +336,15 @@
                             homogeneous="true"
                         >
                             <label
-                                id="opacity_label"
-                                label_text="Opacity"
+                                id="proper_label"
+                                label_text="X Align"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
                             />
 
                             <spin_button
-                                id="opacity_spin"
+                                id="xalign_spin"
                                 initial_value="0"
                                 min="0"
                                 max="10000"
@@ -393,8 +365,8 @@
                             homogeneous="true"
                         >
                             <label
-                                id="alignment_label"
-                                label_text="Alignment"
+                                id="proper_label"
+                                label_text="Y Align"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
@@ -402,64 +374,6 @@
 
                             <spin_button
                                 id="alignment_spin"
-                                initial_value="0"
-                                min="0"
-                                max="10000"
-                                box_expand="true"
-                                box_fill="true"
-                                is_digits="true"
-                            />
-                        </box>
-
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            box_expand="true"
-                            box_fill="true"
-                            margin_left="10"
-                            margin_right="10"
-                            margin_bottom="10"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="progress_fraction_label"
-                                label_text="Progress fraction"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-
-                            <spin_button
-                                id="progress_fraction_spin"
-                                initial_value="0"
-                                min="0"
-                                max="10000"
-                                box_expand="true"
-                                box_fill="true"
-                                is_digits="true"
-                            />
-                        </box>
-
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            box_expand="true"
-                            box_fill="true"
-                            margin_left="10"
-                            margin_right="10"
-                            margin_bottom="10"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="progress_pulse_step_label"
-                                label_text="Progress pulse step"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-
-                            <spin_button
-                                id="progress_pulse_step_spin"
                                 initial_value="0"
                                 min="0"
                                 max="10000"
@@ -959,77 +873,6 @@
 
                 </frame> <!--
                 ./View Config-->
-
-
-                <!-- Dimensions -->
-                <frame
-                    id="btn1"
-                    label="Dimensions"
-                    margin_left="10"
-                    margin_right="10"
-                    box_expand="true"
-                    box_fill="true"
-                >
-                    <box
-                        id="bx"
-                        spacing="10"
-                    >
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            margin_left="10"
-                            margin_right="10"
-                            box_expand="true"
-                            box_fill="true"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="width_label"
-                                label_text="Width"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                            <spin_button
-                                id="width_spin"
-                                initial_value="0"
-                                min="0"
-                                max="10000"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                        </box>
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            box_expand="true"
-                            box_fill="true"
-                            margin_left="10"
-                            margin_right="10"
-                            margin_bottom="10"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="height_label"
-                                label_text="Height"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                            <spin_button
-                                id="height_spin"
-                                initial_value="0"
-                                min="0"
-                                max="10000"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-
-                        </box>
-                    </box>
-
-                </frame> <!--
-                ./Dimensions -->
 
                 <!-- Margins -->
                 <frame

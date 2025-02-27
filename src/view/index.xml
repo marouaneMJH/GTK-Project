@@ -140,7 +140,7 @@
                                     row="0"
                                     column="1"
                                     icon_path="./assets/images/icons/container_bw.png"
-                                    on_click="sig_hello"
+                                    on_click="sig_properties_dialog"
                                     param_1="fixed"
                                 />
 
@@ -242,6 +242,8 @@
                                     row="0"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="menu_bar"
                                 />
 
                                 <button
@@ -251,6 +253,8 @@
                                     row="0"
                                     column="1"
                                     icon_path="./assets/images/icons/open-menu.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="menu"
                                 />
 
                                 <button
@@ -260,6 +264,8 @@
                                     row="1"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="menu_item"
                                 />
 
                             </grid>
@@ -294,6 +300,8 @@
                                     row="0"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="label"
                                 />
 
                                 <button
@@ -303,6 +311,8 @@
                                     row="0"
                                     column="1"
                                     icon_path="./assets/images/icons/open-menu.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="link_button"
                                 />
 
                                 <button
@@ -334,6 +344,8 @@
                                     row="2"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="switch_button"
                                 />
 
                                 <button
@@ -343,6 +355,8 @@
                                     row="2"
                                     column="1"
                                     icon_path="./assets/images/icons/open-menu.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="toggle_button"
                                 />
 
                                 <button
@@ -352,6 +366,8 @@
                                     row="3"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="radio_button"
                                 />
 
                                 <button
@@ -361,6 +377,8 @@
                                     row="3"
                                     column="1"
                                     icon_path="./assets/images/icons/open-menu.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="check_button"
                                 />
 
                                 <button
@@ -370,6 +388,8 @@
                                     row="4"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="text_area"
                                 />
 
                                 <button
@@ -379,6 +399,8 @@
                                     row="4"
                                     column="1"
                                     icon_path="./assets/images/icons/open-menu.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="spin_button"
                                 />
 
                                 <button
@@ -388,6 +410,8 @@
                                     row="5"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="progress_bar"
                                 />
 
                                 <button
@@ -397,6 +421,8 @@
                                     row="5"
                                     column="1"
                                     icon_path="./assets/images/icons/open-menu.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="separator"
                                 />
 
                                 <button
@@ -406,6 +432,8 @@
                                     row="6"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
+                                    on_click="sig_properties_dialog"
+                                    param_1="image"
                                 />
 
                             </grid>

@@ -23,10 +23,14 @@
 /* Default image configuration */
 #define DEFAULT_IMAGE                           \
     {                                           \
-        .type = IMAGE_FILE,                     \
+        .type = IMAGE_PIXBUF,                   \
         .path = "\0",                           \
         .dimensions = DEFAULT_IMAGE_DIMENSIONS, \
         .margins = DEFAULT_IMAGE_MARGINS,       \
+        .hexpand = FALSE,                       \
+        .vexpand = FALSE,                       \
+        .halign = GTK_ALIGN_FILL,               \
+        .valign = GTK_ALIGN_FILL,               \
         .opacity = 1,                           \
     }
 
@@ -37,14 +41,14 @@ typedef struct
 {
     ImageConfigType type;            // The type of the image (e.g., file, icon, etc.)
     gchar path[MAX_IMAGE_PATH_SIZE]; // The path of the image file
-   
+
     gboolean hexpand;
     gboolean vexpand;
     GtkAlign halign;
     GtkAlign valign;
-    Dimensions dimensions;           // The dimensions of the image
-    Margins margins;                 // The margins around the image
-    gdouble opacity;                 // The opacity of the image (0.0 to 1.0)
+    Dimensions dimensions; // The dimensions of the image
+    Margins margins;       // The margins around the image
+    gdouble opacity;       // The opacity of the image (0.0 to 1.0)
 
 } ImageConfig;
 

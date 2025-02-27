@@ -36,32 +36,34 @@
 
 typedef struct
 {
-    gint font_size;
     /* Text Content */
     gchar label_text[MAX_LABEL_TEXT_SIZE]; // Pointer for dynamic text allocation
+    gchar font_family[MAX_FONT_FAMILY_SIZE]; // font family style
+    
     gboolean is_markup;                    // Parse and render Pango markup
     gboolean is_underline;                 // Mnemonic support for underline
-
+    
     /* Appearance */
     GtkJustification jtype;                  // Text alignment (left, right, center)
     PangoEllipsizeMode ellipsize;            // Ellipsization mode
-    Margins margins;                         // Margins
+    
     gboolean is_wrap;                        // Enable word wrap
-    gchar text_color[MAX_COLOR_SIZE];        // Text color
-    gchar bg_color[MAX_COLOR_SIZE];          // Background color
-    gchar font_family[MAX_FONT_FAMILY_SIZE]; // font family style
-
+    gboolean is_selectable; // Text can be copied by user
+    
+    gint font_size;
     gfloat xalign; // aligne text to display on line start
     gfloat yalign;
-
+    
     gboolean hexpand;
     gboolean vexpand;
-
+    
     GtkAlign halign;
     GtkAlign valign;
-
+    
     /* Behavior */
-    gboolean is_selectable; // Text can be copied by user
+    Margins margins;                         // Margins
+    gchar text_color[MAX_COLOR_SIZE];        // Text color
+    gchar bg_color[MAX_COLOR_SIZE];          // Background color
 
 } LabelConfig;
 

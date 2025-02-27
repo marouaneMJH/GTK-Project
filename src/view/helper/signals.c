@@ -352,22 +352,62 @@ static void sig_properties_dialog(GtkWidget *widget, gpointer data)
         build_app(root_app, NULL, BOX_PROPERTIES_DIALOG_TXT);
     else if (g_strcmp0(param_array->params[0], "fixed") == 0)
         build_app(root_app, NULL, FIXED_PROPERTIES_DIALOG_TXT);
-    else if (g_strcmp0(param_array->params[0], "grid") == 0)
-        build_app(root_app, NULL, GRID_PROPERTIES_DIALOG_TXT);
-    else if (g_strcmp0(param_array->params[0], "paned") == 0)
-        build_app(root_app, NULL, PANED_PROPERTIES_DIALOG_TXT);
-    else if (g_strcmp0(param_array->params[0], "frame") == 0)
-        build_app(root_app, NULL, FRAME_PROPERTIES_DIALOG_TXT);
     else if (g_strcmp0(param_array->params[0], "flowbox") == 0)
         build_app(root_app, NULL, FLOWBOX_PROPERTIES_DIALOG_TXT);
-    else if (g_strcmp0(param_array->params[0], "overlay") == 0)
-        build_app(root_app, NULL, OVERLAY_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "frame") == 0)
+        build_app(root_app, NULL, FRAME_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "grid") == 0)
+        build_app(root_app, NULL, GRID_PROPERTIES_DIALOG_TXT);
     else if (g_strcmp0(param_array->params[0], "notebook") == 0)
         build_app(root_app, NULL, NOTEBOOK_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "overlay") == 0)
+        build_app(root_app, NULL, OVERLAY_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "paned") == 0)
+        build_app(root_app, NULL, PANED_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "stack") == 0)
+        build_app(root_app, NULL, STACK_PROPERTIES_DIALOG_TXT);
     else if (g_strcmp0(param_array->params[0], "button") == 0)
         build_app(root_app, NULL, BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "check_button") == 0)
+        build_app(root_app, NULL, CHECK_BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "color_button") == 0)
+        build_app(root_app, NULL, COLOR_BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "link_button") == 0)
+        build_app(root_app, NULL, LINK_BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "radio_button") == 0)
+        build_app(root_app, NULL, RADIO_BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "spin_button") == 0)
+        build_app(root_app, NULL, SPIN_BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "switch_button") == 0)
+        build_app(root_app, NULL, SWITCH_BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "toggle_button") == 0)
+        build_app(root_app, NULL, TOGGLE_BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "menu_bar") == 0)
+        build_app(root_app, NULL, MENU_BAR_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "menu_item") == 0)
+        build_app(root_app, NULL, MENU_ITEM_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "menu") == 0)
+        build_app(root_app, NULL, MENU_PROPERTIES_DIALOG_TXT);
     else if (g_strcmp0(param_array->params[0], "entry") == 0)
         build_app(root_app, NULL, ENTRY_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "image") == 0)
+        build_app(root_app, NULL, IMAGE_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "label") == 0)
+        build_app(root_app, NULL, LABEL_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "progress_bar") == 0)
+        build_app(root_app, NULL, PROGRESS_BAR_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "separator") == 0)
+        build_app(root_app, NULL, SEPARATOR_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "text_area") == 0)
+        build_app(root_app, NULL, TEXT_AREA_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "combo_text_box") == 0)
+        build_app(root_app, NULL, COMBO_TEXT_BOX_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "event_box") == 0)
+        build_app(root_app, NULL, EVENT_BOX_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "expander") == 0)
+        build_app(root_app, NULL, EXPANDER_PROPERTIES_DIALOG_TXT);
+    // else if (g_strcmp0(param_array->params[0], "list_box") == 0)
+    //     build_app(root_app, NULL, LIST_BOX_PROPERTIES_DIALOG_TXT);
 
     GtkWidget *dialog = root_dialog_view_global->widget;
 
@@ -389,13 +429,13 @@ static void remove_widget_from_graph(GtkWidget *widget, gpointer data)
         if (g_strcmp0(temp->child->view_config->view_id, view_id) == 0)
         {
             g_print("REMOVE CHILD\n");
-            // TODO: remove the child
+            // remove the child
             temp->child = temp->child->next;
         }
         else
         {
             g_print("REMOVE BROTHER\n");
-            // TODO: Search the previous of the trget and remove it
+            // Search the previous of the trget and remove it
             temp = temp->child;
             while (temp->next)
             {

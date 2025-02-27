@@ -49,6 +49,30 @@ ViewConfig *configure_image_property(ImageConfig *image_config, ViewConfig *view
     if (g_strcmp0(property, "height") == 0)
         image_config->dimensions.height = atoi(value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            image_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            image_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            image_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            image_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            image_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            image_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            image_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            image_config->halign = GTK_ALIGN_FILL;
+    }
+
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
@@ -99,6 +123,14 @@ GtkWidget *create_image(ImageConfig image_config)
     gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
     gtk_widget_set_opacity(image, image_config.opacity);
     widget_set_margins(image, image_config.margins);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(image, image_config.hexpand);
+    gtk_widget_set_vexpand(image, image_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(image, image_config.halign);
+    gtk_widget_set_valign(image, image_config.valign);
 
     return image;
 }

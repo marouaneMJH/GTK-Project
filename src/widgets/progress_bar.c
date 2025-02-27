@@ -68,6 +68,30 @@ ViewConfig *configure_progress_bar_property(ProgressBarConfig *progress_bar_conf
     if (g_strcmp0(property, "text_color") == 0)
         strcpy(progress_bar_config->text_color, value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            progress_bar_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            progress_bar_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            progress_bar_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            progress_bar_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            progress_bar_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            progress_bar_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            progress_bar_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            progress_bar_config->halign = GTK_ALIGN_FILL;
+    }
+
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
@@ -102,6 +126,14 @@ GtkWidget *create_progress_bar(ProgressBarConfig progress_bar_config)
     widget_set_colors(progress_bar, progress_bar_config.bg_color, progress_bar_config.text_color);
 
     widget_set_margins(progress_bar, progress_bar_config.margins);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(progress_bar, progress_bar_config.hexpand);
+    gtk_widget_set_vexpand(progress_bar, progress_bar_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(progress_bar, progress_bar_config.halign);
+    gtk_widget_set_valign(progress_bar, progress_bar_config.valign);
 
     return progress_bar;
 }

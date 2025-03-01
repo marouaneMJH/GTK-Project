@@ -6,6 +6,8 @@
 View *create_new_box_from_dialog(View *parent_view, gboolean is_relative_container)
 {
     BoxConfig *box_config = read_box_config_from_dialog();
+    g_print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><\n");
+    g_print("%s\n", box_config->bg_color);
     GtkWidget *new_box = create_box(*box_config);
     View *new_box_view = create_view(new_box, read_view_config_from_dialog());
     g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
@@ -13,55 +15,55 @@ View *create_new_box_from_dialog(View *parent_view, gboolean is_relative_contain
     return new_box_view;
 }
 
-// View *create_new_fixed_from_dialog(View *parent_view, gboolean is_relative_container)
-// {
-//     FixedConfig *fixed_config = read_fixed_config_from_dialog();
-//     GtkWidget *new_fixed = create_fixed(*fixed_config);
-//     View *new_fixed_view = create_view(new_fixed, read_view_config_from_dialog());
-//     g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
-//     add_view(new_fixed_view, parent_view, is_relative_container);
-//     return new_fixed_view;
-// }
+View *create_new_fixed_from_dialog(View *parent_view, gboolean is_relative_container)
+{
+    FixedConfig *fixed_config = read_fixed_config_from_dialog();
+    GtkWidget *new_fixed = create_fixed(*fixed_config);
+    View *new_fixed_view = create_view(new_fixed, read_view_config_from_dialog());
+    g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
+    add_view(new_fixed_view, parent_view, is_relative_container);
+    return new_fixed_view;
+}
 
-// View *create_new_flowbox_from_dialog(View *parent_view, gboolean is_relative_container)
-// {
-//     FlowBoxConfig *flowbox_config = read_flowbox_config_from_dialog();
-//     GtkWidget *new_flowbox = create_flowbox(*flowbox_config);
-//     View *new_flowbox_view = create_view(new_flowbox, read_view_config_from_dialog());
-//     g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
-//     add_view(new_flowbox_view, parent_view, is_relative_container);
-//     return new_flowbox_view;
-// }
+View *create_new_flow_box_from_dialog(View *parent_view, gboolean is_relative_container)
+{
+    FlowBoxConfig *flowbox_config = read_flow_box_config_from_dialog();
+    GtkWidget *new_flowbox = create_flow_box(*flowbox_config);
+    View *new_flowbox_view = create_view(new_flowbox, read_view_config_from_dialog());
+    g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
+    add_view(new_flowbox_view, parent_view, is_relative_container);
+    return new_flowbox_view;
+}
 
-// View *create_new_frame_from_dialog(View *parent_view, gboolean is_relative_container)
-// {
-//     FrameConfig *frame_config = read_frame_config_from_dialog();
-//     GtkWidget *new_frame = create_frame(*frame_config);
-//     View *new_frame_view = create_view(new_frame, read_view_config_from_dialog());
-//     g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
-//     add_view(new_frame_view, parent_view, is_relative_container);
-//     return new_frame_view;
-// }
+View *create_new_frame_from_dialog(View *parent_view, gboolean is_relative_container)
+{
+    FrameConfig *frame_config = read_frame_config_from_dialog();
+    GtkWidget *new_frame = create_frame(*frame_config);
+    View *new_frame_view = create_view(new_frame, read_view_config_from_dialog());
+    g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
+    add_view(new_frame_view, parent_view, is_relative_container);
+    return new_frame_view;
+}
 
-// View *create_new_grid_from_dialog(View *parent_view, gboolean is_relative_container)
-// {
-//     GridConfig *grid_config = read_grid_config_from_dialog();
-//     GtkWidget *new_grid = create_grid(*grid_config);
-//     View *new_grid_view = create_view(new_grid, read_view_config_from_dialog());
-//     g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
-//     add_view(new_grid_view, parent_view, is_relative_container);
-//     return new_grid_view;
-// }
+View *create_new_grid_from_dialog(View *parent_view, gboolean is_relative_container)
+{
+    GridConfig *grid_config = read_grid_config_from_dialog();
+    GtkWidget *new_grid = create_grid(*grid_config);
+    View *new_grid_view = create_view(new_grid, read_view_config_from_dialog());
+    g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
+    add_view(new_grid_view, parent_view, is_relative_container);
+    return new_grid_view;
+}
 
-// View *create_new_notebook_from_dialog(View *parent_view, gboolean is_relative_container)
-// {
-//     NotebookConfig *notebook_config = read_notebook_config_from_dialog();
-//     GtkWidget *new_notebook = create_notebook(*notebook_config);
-//     View *new_notebook_view = create_view(new_notebook, read_view_config_from_dialog());
-//     g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
-//     add_view(new_notebook_view, parent_view, is_relative_container);
-//     return new_notebook_view;
-// }
+View *create_new_notebook_from_dialog(View *parent_view, gboolean is_relative_container)
+{
+    NotebookConfig *notebook_config = read_notebook_config_from_dialog();
+    GtkWidget *new_notebook = create_notebook(*notebook_config);
+    View *new_notebook_view = create_view(new_notebook, read_view_config_from_dialog());
+    g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
+    add_view(new_notebook_view, parent_view, is_relative_container);
+    return new_notebook_view;
+}
 
 // View *create_new_overlay_from_dialog(View *parent_view, gboolean is_relative_container)
 // {

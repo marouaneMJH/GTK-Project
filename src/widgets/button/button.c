@@ -267,15 +267,7 @@ ButtonConfig *read_button_config_from_dialog()
     strcpy(button_config.icon_path, icon_path);
 
     // Icon position
-    const gchar *icon_position = read_config_value_as_string("icon_position_combo");
-    if (stricmp(icon_position, "top") == 0)
-        button_config.icon_position = GTK_POS_TOP;
-    else if (stricmp(icon_position, "bottom") == 0)
-        button_config.icon_position = GTK_POS_BOTTOM;
-    else if (stricmp(icon_position, "left") == 0)
-        button_config.icon_position = GTK_POS_LEFT;
-    else if (stricmp(icon_position, "right") == 0)
-        button_config.icon_position = GTK_POS_RIGHT;
+    button_config.icon_position = read_position_config("icon_position_combo", GTK_POS_RIGHT);
 
     // Always show image
     gboolean always_show_image = read_config_value_as_boolean("always_show_image_switch");
@@ -308,51 +300,23 @@ ButtonConfig *read_button_config_from_dialog()
     gboolean use_underline = read_config_value_as_boolean("use_underline_switch");
     button_config.use_underline = use_underline;
 
-    // Width
-    gint width = read_config_value_as_int("width_spin");
-    button_config.dimensions.width = width;
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    button_config.dimensions.width = dimensions->width;
+    button_config.dimensions.height = dimensions->height;
 
-    // Height
-    gint height = read_config_value_as_int("height_spin");
-    button_config.dimensions.height = height;
-
-    // Margin top
-    gint margin_top = read_config_value_as_int("margin_top_spin");
-    button_config.margins.top = margin_top;
-
-    // Margin bottom
-    gint margin_bottom = read_config_value_as_int("margin_bottom_spin");
-    button_config.margins.bottom = margin_bottom;
-
-    // Margin left
-    gint margin_left = read_config_value_as_int("margin_left_spin");
-    button_config.margins.start = margin_left;
-
-    // Margin right
-    gint margin_right = read_config_value_as_int("margin_right_spin");
-    button_config.margins.end = margin_right;
+    // Margins
+    Margins *margins = read_margins_config();
+    button_config.margins.top = margins->top;
+    button_config.margins.bottom = margins->bottom;
+    button_config.margins.start = margins->start;
+    button_config.margins.end = margins->end;
 
     // HAlign
-    const gchar *halign = read_config_value_as_string("halign_combo");
-    if (stricmp(halign, "start") == 0)
-        button_config.halign = GTK_ALIGN_START;
-    else if (stricmp(halign, "end") == 0)
-        button_config.halign = GTK_ALIGN_END;
-    else if (stricmp(halign, "baseline") == 0)
-        button_config.halign = GTK_ALIGN_BASELINE;
-    else if (stricmp(halign, "center") == 0)
-        button_config.halign = GTK_ALIGN_CENTER;
+    button_config.halign = read_align_config("halign_combo");
 
     // VAlign
-    const gchar *valign = read_config_value_as_string("valign_combo");
-    if (stricmp(valign, "start") == 0)
-        button_config.valign = GTK_ALIGN_START;
-    else if (stricmp(valign, "end") == 0)
-        button_config.valign = GTK_ALIGN_END;
-    else if (stricmp(valign, "baseline") == 0)
-        button_config.valign = GTK_ALIGN_BASELINE;
-    else if (stricmp(valign, "center") == 0)
-        button_config.valign = GTK_ALIGN_CENTER;
+    button_config.valign = read_align_config("valign_combo");
 
     // HExpand
     gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
@@ -370,7 +334,7 @@ ButtonConfig *read_button_config_from_dialog()
     const gchar *text_color = read_config_value_as_string("color_entry");
     strcpy(button_config.color, text_color);
 
-    button_config_ptr = &button_config;
+    memcpy(button_config_ptr, &button_config, sizeof(ButtonConfig));
     return button_config_ptr;
 }
 

@@ -131,6 +131,65 @@ void add_grid(GtkWidget *widget, gint column, gint row, gint column_span, gint r
         gtk_grid_attach(GTK_GRID(widget), widget, column, row, column_span, row_span);
 }
 
+GridConfig *read_grid_config_from_dialog()
+{
+    GridConfig *grid_config_ptr = NULL;
+    SAFE_ALLOC(grid_config_ptr, GridConfig, 1);
+
+    GridConfig grid_config = DEFAULT_GRID;
+
+    // Column homogeneous
+    gboolean column_homogeneous = read_config_value_as_boolean("column_homogeneous_switch");
+    grid_config.column_homogeneous = column_homogeneous;
+
+    // Row homogeneous
+    gboolean row_homogeneous = read_config_value_as_boolean("row_homogeneous_switch");
+    grid_config.row_homogeneous = row_homogeneous;
+
+    // Column spacing
+    grid_config.column_spacing = read_config_value_as_int("column_spacing_spin");
+
+    // Row spacing
+    grid_config.row_spacing = read_config_value_as_int("row_spacing_spin");
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    grid_config.dimensions.width = dimensions->width;
+    grid_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    grid_config.margins.top = margins->top;
+    grid_config.margins.bottom = margins->bottom;
+    grid_config.margins.start = margins->start;
+    grid_config.margins.end = margins->end;
+
+    // HAlign
+    grid_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    grid_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    grid_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    grid_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(grid_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(grid_config.text_color, text_color);
+
+    memcpy(grid_config_ptr, &grid_config, sizeof(GridConfig));
+    return grid_config_ptr;
+}
+
 gchar *write_grid_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

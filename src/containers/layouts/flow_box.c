@@ -139,6 +139,78 @@ GtkWidget *create_flow_box(FlowBoxConfig flow_box_config)
     return flow_box;
 }
 
+FlowBoxConfig *read_flow_box_config_from_dialog()
+{
+    FlowBoxConfig *flow_box_config_ptr = NULL;
+    SAFE_ALLOC(flow_box_config_ptr, FlowBoxConfig, 1);
+
+    FlowBoxConfig flow_box_config = DEFAULT_FLOW_BOX;
+
+    // Min children per line
+    flow_box_config.min_childern_per_line = read_config_value_as_int("min_spin");
+
+    // Max children per line
+    flow_box_config.max_childern_per_line = read_config_value_as_int("max_spin");
+
+    // Column spacing
+    flow_box_config.column_spacing = read_config_value_as_int("column_spacing_spin");
+
+    // Row spacing
+    flow_box_config.row_spacing = read_config_value_as_int("row_spacing_spin");
+
+    // Homogeneous
+    gboolean is_homogeneous = read_config_value_as_boolean("homogeneous_switch");
+    flow_box_config.is_homogeneous = is_homogeneous;
+
+    // Selection mode
+    const gchar *selection_mode = read_config_value_as_string("selection_mode_combo");
+    if (g_strcmp0(selection_mode, "none") == 0)
+        flow_box_config.selection_mode = GTK_SELECTION_NONE;
+    else if (g_strcmp0(selection_mode, "browse") == 0)
+        flow_box_config.selection_mode = GTK_SELECTION_BROWSE;
+    else if (g_strcmp0(selection_mode, "multiple") == 0)
+        flow_box_config.selection_mode = GTK_SELECTION_MULTIPLE;
+    else
+        flow_box_config.selection_mode = GTK_SELECTION_SINGLE;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    flow_box_config.dimensions.width = dimensions->width;
+    flow_box_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    flow_box_config.margins.top = margins->top;
+    flow_box_config.margins.bottom = margins->bottom;
+    flow_box_config.margins.start = margins->start;
+    flow_box_config.margins.end = margins->end;
+
+    // HAlign
+    flow_box_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    flow_box_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    flow_box_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    flow_box_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(flow_box_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(flow_box_config.text_color, text_color);
+
+    memcpy(flow_box_config_ptr, &flow_box_config, sizeof(FlowBoxConfig));
+    return flow_box_config_ptr;
+}
+
 gchar *write_flow_box_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

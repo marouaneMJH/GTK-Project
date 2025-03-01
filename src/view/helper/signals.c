@@ -366,6 +366,8 @@ static void sig_properties_dialog(GtkWidget *widget, gpointer data)
         build_app(root_app, NULL, PANED_PROPERTIES_DIALOG_TXT);
     else if (g_strcmp0(param_array->params[0], "stack") == 0)
         build_app(root_app, NULL, STACK_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "scrolled_window") == 0)
+        build_app(root_app, NULL, SCROLLED_WINDOW_PROPERTIES_DIALOG_TXT);
     else if (g_strcmp0(param_array->params[0], "button") == 0)
         build_app(root_app, NULL, BUTTON_PROPERTIES_DIALOG_TXT);
     else if (g_strcmp0(param_array->params[0], "check_button") == 0)
@@ -476,7 +478,7 @@ void set_current_button_config_to_dialog(ButtonConfig *button_config)
 {
     // Label
     write_config_value_as_string("label_entry", button_config->label);
-    
+
     // Width
     write_config_value_as_int("width_spin", button_config->dimensions.width);
 
@@ -613,75 +615,8 @@ void add_view_to_content_box(View *view)
 void update_button_config()
 {
     g_print("UPDATING BUTTON WIDGET\n");
-    ButtonConfig button_config = DEFAULT_BUTTON;
 
-    // Label
-    const gchar *label = read_config_value_as_string("label_entry");
-    strcpy(button_config.label, label);
-    // Width
-    gint width = read_config_value_as_int("width_spin");
-    button_config.dimensions.width = width;
-
-    // Height
-    gint height = read_config_value_as_int("height_spin");
-    button_config.dimensions.height = height;
-
-    // Margin top
-    gint margin_top = read_config_value_as_int("margin_top_spin");
-    button_config.margins.top = margin_top;
-
-    // Margin bottom
-    gint margin_bottom = read_config_value_as_int("margin_bottom_spin");
-    button_config.margins.bottom = margin_bottom;
-
-    // Margin left
-    gint margin_left = read_config_value_as_int("margin_left_spin");
-    button_config.margins.start = margin_left;
-
-    // Margin right
-    gint margin_right = read_config_value_as_int("margin_right_spin");
-    button_config.margins.end = margin_right;
-
-    // HAlign
-    const gchar *halign = read_config_value_as_string("halign_combo");
-    if (stricmp(halign, "start") == 0)
-        button_config.halign = GTK_ALIGN_START;
-    else if (stricmp(halign, "end") == 0)
-        button_config.halign = GTK_ALIGN_END;
-    else if (stricmp(halign, "baseline") == 0)
-        button_config.halign = GTK_ALIGN_BASELINE;
-    else if (stricmp(halign, "center") == 0)
-        button_config.halign = GTK_ALIGN_CENTER;
-
-    // VAlign
-    const gchar *valign = read_config_value_as_string("valign_combo");
-    if (stricmp(valign, "start") == 0)
-        button_config.valign = GTK_ALIGN_START;
-    else if (stricmp(valign, "end") == 0)
-        button_config.valign = GTK_ALIGN_END;
-    else if (stricmp(valign, "baseline") == 0)
-        button_config.valign = GTK_ALIGN_BASELINE;
-    else if (stricmp(valign, "center") == 0)
-        button_config.valign = GTK_ALIGN_CENTER;
-
-    // HExpand
-    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
-    button_config.hexpand = hexpand;
-
-    // VExpand
-    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
-    button_config.vexpand = vexpand;
-
-    // Background color
-    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
-    strcpy(button_config.bg_color, bg_color);
-
-    // Text color
-    const gchar *text_color = read_config_value_as_string("color_entry");
-    strcpy(button_config.color, text_color);
-
-    // TODO: FIX THIS LATER (read_button_config_from_dialog() is not working => label gives undefined behavior)
-    // ButtonConfig *button_config = read_button_config_from_dialog();
+    ButtonConfig *button_config = read_button_config_from_dialog();
 
     ViewConfig *view_config = read_view_config_from_dialog();
 
@@ -690,10 +625,32 @@ void update_button_config()
     if (target_view)
     {
         g_print("BTN FOUND\n");
-        g_print("NEW BTN LABEL: %s\n", button_config.label);
-        apply_button_config_changes(target_view->widget, button_config);
+        g_print("NEW BTN LABEL: %s\n", button_config->label);
+        apply_button_config_changes(target_view->widget, *button_config);
         target_view->view_config = view_config;
     }
+}
+
+gboolean check_relative_container(GtkWidget *widget)
+{
+    gint scop_back = read_config_value_as_int("scope_back_spin");
+    if (scop_back > 0)
+    {
+        for (int i = 0; i < scop_back; i++)
+            parent_view = parent_view->parent;
+        return FALSE;
+    }
+
+    if (GTK_IS_BOX(widget) ||
+        GTK_IS_FIXED(widget) ||
+        GTK_IS_FRAME(widget) ||
+        GTK_IS_SCROLLED_WINDOW(widget) ||
+        GTK_IS_FLOW_BOX(widget) ||
+        GTK_IS_OVERLAY(widget) ||
+        GTK_IS_GRID(widget) ||
+        GTK_IS_PANED(widget))
+        return TRUE;
+    return FALSE;
 }
 
 static void sig_create_new_view(GtkWidget *widget, gpointer data)
@@ -840,33 +797,27 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
         if (g_strcmp0(param_array->params[0], "box") == 0)
         {
             parent_view = create_new_box_from_dialog(parent_view, is_relative_container);
-            is_relative_container = TRUE;
         }
-        // else if (g_strcmp0(param_array->params[0], "fixed") == 0)
-        // {
-        //     parent_view = create_new_fixed_from_dialog(parent_view, is_relative_container);
-        //     is_relative_container = TRUE;
-        // }
-        // else if (g_strcmp0(param_array->params[0], "flowbox") == 0)
-        // {
-        //     parent_view = create_new_flowbox_from_dialog(parent_view, is_relative_container);
-        //     is_relative_container = TRUE;
-        // }
-        // else if (g_strcmp0(param_array->params[0], "frame") == 0)
-        // {
-        //     parent_view = create_new_frame_from_dialog(parent_view, is_relative_container);
-        //     is_relative_container = TRUE;
-        // }
-        // else if (g_strcmp0(param_array->params[0], "grid") == 0)
-        // {
-        //     parent_view = create_new_grid_from_dialog(parent_view, is_relative_container);
-        //     is_relative_container = TRUE;
-        // }
-        // else if (g_strcmp0(param_array->params[0], "notebook") == 0)
-        // {
-        //     parent_view = create_new_notebook_from_dialog(parent_view, is_relative_container);
-        //     is_relative_container = TRUE;
-        // }
+        else if (g_strcmp0(param_array->params[0], "fixed") == 0)
+        {
+            parent_view = create_new_fixed_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "flow_box") == 0)
+        {
+            parent_view = create_new_flow_box_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "frame") == 0)
+        {
+            parent_view = create_new_frame_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "grid") == 0)
+        {
+            parent_view = create_new_grid_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "notebook") == 0)
+        {
+            parent_view = create_new_notebook_from_dialog(parent_view, is_relative_container);
+        }
         // else if (g_strcmp0(param_array->params[0], "overlay") == 0)
         // {
         //     parent_view = create_new_overlay_from_dialog(parent_view, is_relative_container);
@@ -885,7 +836,7 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
         else if (g_strcmp0(param_array->params[0], "button") == 0)
         {
             parent_view = create_new_button_from_dialog(parent_view, is_relative_container);
-            is_relative_container = FALSE;
+            is_relative_container = check_relative_container(parent_view->widget);
         }
         // else if (g_strcmp0(param_array->params[0], "check_button") == 0)
         // {
@@ -979,7 +930,7 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
         //     parent_view = create_new_expander_from_dialog(parent_view, is_relative_container);
         //     is_relative_container = TRUE;
         // }
-
+        is_relative_container = check_relative_container(parent_view->widget);
         add_view_to_content_box(parent_view);
         gtk_widget_show_all(root_view_global->widget);
     }

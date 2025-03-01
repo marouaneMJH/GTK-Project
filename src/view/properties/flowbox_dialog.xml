@@ -71,8 +71,32 @@
                                 box_expand="true"
                                 box_fill="true"
                             />
+                        </box>
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Scope back"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
 
-
+                            <spin_button
+                                id="scope_back_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
                         </box>
                         <box
                             orientation="horizontal"
@@ -100,6 +124,60 @@
                                 box_fill="true"
                             />
                         </box>
+
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Column spacing"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <spin_button
+                                id="column_spacing_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Row spacing"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <spin_button
+                                id="row_spacing_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+
                         <box
                             orientation="horizontal"
                             spacing="10"
@@ -133,7 +211,6 @@
                             box_fill="true"
                             margin_left="10"
                             margin_right="10"
-                            margin_bottom="10"
                             homogeneous="true"
                         >
                             <label
@@ -162,6 +239,7 @@
                             box_fill="true"
                             margin_left="10"
                             margin_right="10"
+                            margin_bottom="10"
                             homogeneous="true"
                         >
                             <label
@@ -1103,7 +1181,7 @@
                 box_expand="true"
                 box_fill="true"
                 icon_path="./assets/images/icons/approve.png"
-                param_1="box"
+                param_1="flow_box"
                 on_click="sig_create_new_view"
             />
 

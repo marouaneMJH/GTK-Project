@@ -29,9 +29,9 @@
         .vexpand = FALSE,                                  \
         .halign = GTK_ALIGN_FILL,                          \
         .valign = GTK_ALIGN_FILL,                          \
-        .bg_color = "\0",                                  \
-        .text_color = "\0",                                \
-        .bg_image = "\0"}
+        .bg_color[0] = '\0',                                  \
+        .text_color[0] = '\0',                                \
+        .bg_image[0] = '\0'}
 
 typedef struct
 {

@@ -145,6 +145,72 @@ void frame_add_child(GtkWidget *frame, GtkWidget *child)
     gtk_container_add(GTK_CONTAINER(frame), child);
 }
 
+FrameConfig *read_frame_config_from_dialog()
+{
+    FrameConfig *frame_config_ptr = NULL;
+    SAFE_ALLOC(frame_config_ptr, FrameConfig, 1);
+
+    FrameConfig frame_config = DEFAULT_FRAME;
+
+    // Label
+    const gchar *label = read_config_value_as_string("label_entry");
+    strcpy(frame_config.label, label);
+
+    // Shadow type
+    const gchar *shadow_type = read_config_value_as_string("shadow_type_combo");
+    if (g_strcmp0(shadow_type, "none") == 0)
+        frame_config.shadow_type = GTK_SHADOW_NONE;
+    else if (g_strcmp0(shadow_type, "out") == 0)
+        frame_config.shadow_type = GTK_SHADOW_OUT;
+    else if (g_strcmp0(shadow_type, "etched_in") == 0)
+        frame_config.shadow_type = GTK_SHADOW_ETCHED_IN;
+    else if (g_strcmp0(shadow_type, "etched_out") == 0)
+        frame_config.shadow_type = GTK_SHADOW_ETCHED_OUT;
+    else
+        frame_config.shadow_type = GTK_SHADOW_IN;
+
+    // Label alignment
+    frame_config.label_xalign = (gfloat) read_config_value_as_double("label_xalign_spin");
+    frame_config.label_yalign = (gfloat) read_config_value_as_double("label_yalign_spin");
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    frame_config.dimensions.width = dimensions->width;
+    frame_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    frame_config.margins.top = margins->top;
+    frame_config.margins.bottom = margins->bottom;
+    frame_config.margins.start = margins->start;
+    frame_config.margins.end = margins->end;
+
+    // HAlign
+    frame_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    frame_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    frame_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    frame_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(frame_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(frame_config.text_color, text_color);
+
+    memcpy(frame_config_ptr, &frame_config, sizeof(FrameConfig));
+    return frame_config_ptr;
+}
+
 gchar *write_frame_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)
@@ -210,4 +276,3 @@ gchar *write_frame_property(FILE *output_file, View *view, int tabs_number)
 
     return "frame";
 }
-

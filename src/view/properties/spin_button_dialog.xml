@@ -72,8 +72,33 @@
                                 box_expand="true"
                                 box_fill="true"
                             />
+                        </box>
 
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Scope back"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
 
+                            <spin_button
+                                id="scope_back_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
                         </box>
                       
                         <box
@@ -83,7 +108,6 @@
                             box_fill="true"
                             margin_left="10"
                             margin_right="10"
-                            margin_bottom="10"
                             homogeneous="true"
                         >
                             <label
@@ -112,7 +136,6 @@
                             box_fill="true"
                             margin_left="10"
                             margin_right="10"
-                            margin_bottom="10"
                             homogeneous="true"
                         >
                             <label
@@ -140,7 +163,6 @@
                             box_fill="true"
                             margin_left="10"
                             margin_right="10"
-                            margin_bottom="10"
                             homogeneous="true"
                         >
                             <label
@@ -168,7 +190,6 @@
                             box_fill="true"
                             margin_left="10"
                             margin_right="10"
-                            margin_bottom="10"
                             homogeneous="true"
                         >
                             <label
@@ -196,7 +217,6 @@
                             box_fill="true"
                             margin_left="10"
                             margin_right="10"
-                            margin_bottom="10"
                             homogeneous="true"
                         >
                             <label
@@ -224,7 +244,6 @@
                             box_fill="true"
                             margin_left="10"
                             margin_right="10"
-                            margin_bottom="10"
                             homogeneous="true"
                         >
                             <label

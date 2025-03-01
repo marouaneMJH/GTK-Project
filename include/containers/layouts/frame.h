@@ -75,6 +75,8 @@ GtkWidget *create_frame(FrameConfig frame_config);
 
 void frame_add_child(GtkWidget *frame, GtkWidget *child);
 
+FrameConfig *read_frame_config_from_dialog();
+
 gchar *write_frame_property(FILE *output_file, View *view, int tabs_number);
 
 

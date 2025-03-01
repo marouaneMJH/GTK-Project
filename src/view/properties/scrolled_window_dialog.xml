@@ -15,7 +15,7 @@
 
         <label
             id="title_label"
-            label_text="Paned properties"
+            label_text="ScrolledWindow properties"
             yalign="0.5"
             font_size="18"
             box_expand="true"
@@ -38,7 +38,7 @@
 
                 <!-- Main config (Core) -->
                 <frame
-                    id="btn1"
+                    id="btn12"
                     label="Core"
                     margin_left="10"
                     margin_right="10"
@@ -111,20 +111,21 @@
                         >
                             <label
                                 id="label11"
-                                label_text="Position"
+                                label_text="Horizontal policy"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
                             />
-
-                            <spin_button
-                                id="position_spin"
-                                initial_value="0"
-                                min="0"
-                                max="10000"
+                            <combo_text_box
+                                id="h_scrollbar_policy_combo"
+                                default_index="0"
+                                option1="Automatic (default)"
+                                option2="Always"
+                                option3="Never"
                                 box_expand="true"
                                 box_fill="true"
                             />
+
                         </box>
 
                         <box
@@ -139,16 +140,17 @@
                         >
                             <label
                                 id="label11"
-                                label_text="Orientation"
+                                label_text="Vertical policy"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
                             />
                             <combo_text_box
-                                id="orientation_combo"
+                                id="v_scrollbar_policy_combo"
                                 default_index="0"
-                                option1="Vertical (default)"
-                                option2="Horizontal"
+                                option1="Automatic (default)"
+                                option2="Always"
+                                option3="Never"
                                 box_expand="true"
                                 box_fill="true"
                             />
@@ -161,7 +163,7 @@
 
                 <!-- View Config -->
                 <frame
-                    id="btn1"
+                    id="btn13"
                     label="View config"
                     margin_left="10"
                     margin_right="10"
@@ -557,7 +559,7 @@
 
                 <!-- Dimensions -->
                 <frame
-                    id="btn1"
+                    id="btn14"
                     label="Dimensions"
                     margin_left="10"
                     margin_right="10"
@@ -627,7 +629,7 @@
 
                 <!-- Margins -->
                 <frame
-                    id="btn1"
+                    id="btn51"
                     label="Margins"
                     margin_left="10"
                     margin_right="10"
@@ -747,7 +749,7 @@
 
                 <!-- Alignment -->
                 <frame
-                    id="btn1"
+                    id="btn16"
                     label="Alignment"
                     margin_left="10"
                     margin_right="10"
@@ -826,7 +828,7 @@
 
                 <!-- Expand -->
                 <frame
-                    id="btn1"
+                    id="btn17"
                     label="Expand"
                     margin_left="10"
                     margin_right="10"
@@ -897,7 +899,7 @@
 
                 <!-- Colors -->
                 <frame
-                    id="btn1"
+                    id="btn18"
                     label="Colors"
                     margin_left="10"
                     margin_right="10"
@@ -955,6 +957,7 @@
                             />
 
                         </box>
+
                     </box>
 
                 </frame> <!--
@@ -976,17 +979,17 @@
         >
 
             <button
-                id="apply_btn"
+                id="btn19"
                 label="Apply"
                 box_expand="true"
                 box_fill="true"
                 icon_path="./assets/images/icons/approve.png"
-                param_1="button"
+                param_1="box"
                 on_click="sig_create_new_view"
             />
 
             <button
-                id="cancel_btn"
+                id="btn10"
                 label="Cancel"
                 box_expand="true"
                 box_fill="true"

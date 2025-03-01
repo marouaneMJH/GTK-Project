@@ -78,6 +78,8 @@ ViewConfig *init_notebook_config(FILE *index, NotebookConfig *notebook_config);
  */
 GtkWidget *create_notebook(NotebookConfig notebook_config);
 
+NotebookConfig *read_notebook_config_from_dialog();
+
 gchar *write_notebook_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

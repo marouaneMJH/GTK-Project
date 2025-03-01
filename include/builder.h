@@ -15,7 +15,7 @@
 #define NOTEBOOK_PROPERTIES_DIALOG_TXT "./src/view/properties/notebook_dialog.xml"
 #define BUTTON_PROPERTIES_DIALOG_TXT "./src/view/properties/button_dialog.xml"
 #define ENTRY_PROPERTIES_DIALOG_TXT "./src/view/properties/entry_dialog.xml"
-// #define SCROLLED_WINDOW_PROPERTIES_DIALOG_TXT "./src/view/properties/scrolled_window_dialog.xml"
+#define SCROLLED_WINDOW_PROPERTIES_DIALOG_TXT "./src/view/properties/scrolled_window_dialog.xml"
 #define STACK_PROPERTIES_DIALOG_TXT "./src/view/properties/stack_dialog.xml"
 #define LABEL_PROPERTIES_DIALOG_TXT "./src/view/properties/label_dialog.xml"
 #define SEPARATOR_PROPERTIES_DIALOG_TXT "./src/view/properties/separator_dialog.xml"

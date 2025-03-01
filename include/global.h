@@ -242,6 +242,14 @@ gdouble read_config_value_as_double(gchar *view_id);
 
 gboolean read_config_value_as_boolean(gchar *view_id);
 
+GtkAlign read_align_config(gchar* input_combo);
+
+GtkPositionType read_position_config(gchar *input_combo, GtkPositionType default_position);
+
+Dimensions* read_dimensions_config();
+
+Margins *read_margins_config();
+
 // Writers
 
 void write_view_config_to_dialog(ViewConfig *view_config);

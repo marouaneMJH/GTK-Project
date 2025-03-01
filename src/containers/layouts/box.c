@@ -137,101 +137,97 @@ GtkWidget *create_box(BoxConfig box_config)
 
 BoxConfig *read_box_config_from_dialog()
 {
-
     BoxConfig *box_config_ptr = NULL;
     SAFE_ALLOC(box_config_ptr, BoxConfig, 1);
 
-    BoxConfig button_config = DEFAULT_BOX;
+    BoxConfig box_config = DEFAULT_BOX;
 
     // Orientation
     const gchar *selected_orientation = read_config_value_as_string("orientation_combo");
-    g_print("SELECTED ORIENTATION: ===> %s \n", selected_orientation);
-    if (stricmp(selected_orientation, "horizontal") == 0)
-        button_config.orientation = GTK_ORIENTATION_HORIZONTAL;
+    if (selected_orientation) {
+        g_print("SELECTED ORIENTATION: ===> %s \n", selected_orientation);
+        if (stricmp(selected_orientation, "horizontal") == 0)
+            box_config.orientation = GTK_ORIENTATION_HORIZONTAL;
+    }
 
     // Baseline
     const gchar *baseline = read_config_value_as_string("baseline_combo");
-    if (stricmp(selected_orientation, "top") == 0)
-        button_config.baseline_position = GTK_BASELINE_POSITION_TOP;
-    else if (stricmp(selected_orientation, "bottom") == 0)
-        button_config.baseline_position = GTK_BASELINE_POSITION_BOTTOM;
+    if (baseline) {
+        if (stricmp(baseline, "top") == 0)
+            box_config.baseline_position = GTK_BASELINE_POSITION_TOP;
+        else if (stricmp(baseline, "bottom") == 0)
+            box_config.baseline_position = GTK_BASELINE_POSITION_BOTTOM;
+    }
 
     // Spacing
     gint spacing = read_config_value_as_int("spacing_spin");
     g_print("SELECTED SPACING: ===> %d \n", spacing);
-    button_config.spacing = spacing;
+    box_config.spacing = spacing;
 
     // Homogeneous
     gboolean homogeneous = read_config_value_as_boolean("homogeneous_switch");
-    button_config.homogeneous = homogeneous;
+    box_config.homogeneous = homogeneous;
 
     // Width
     gint width = read_config_value_as_int("width_spin");
-    button_config.dimensions.width = width;
+    box_config.dimensions.width = width;
 
     // Height
     gint height = read_config_value_as_int("height_spin");
-    button_config.dimensions.height = height;
+    box_config.dimensions.height = height;
 
     // Margin top
     gint margin_top = read_config_value_as_int("margin_top_spin");
-    button_config.margins.top = margin_top;
+    box_config.margins.top = margin_top;
 
     // Margin bottom
     gint margin_bottom = read_config_value_as_int("margin_bottom_spin");
-    button_config.margins.bottom = margin_bottom;
+    box_config.margins.bottom = margin_bottom;
 
     // Margin left
     gint margin_left = read_config_value_as_int("margin_left_spin");
-    button_config.margins.start = margin_left;
+    box_config.margins.start = margin_left;
 
     // Margin right
     gint margin_right = read_config_value_as_int("margin_right_spin");
-    button_config.margins.end = margin_right;
+    box_config.margins.end = margin_right;
 
     // HAlign
-    const gchar *halign = read_config_value_as_string("halign_combo");
-    if (stricmp(halign, "start") == 0)
-        button_config.halign = GTK_ALIGN_START;
-    else if (stricmp(halign, "end") == 0)
-        button_config.halign = GTK_ALIGN_END;
-    else if (stricmp(halign, "baseline") == 0)
-        button_config.halign = GTK_ALIGN_BASELINE;
-    else if (stricmp(halign, "center") == 0)
-        button_config.halign = GTK_ALIGN_CENTER;
+    box_config.halign = read_align_config("halign_combo");
 
     // VAlign
-    const gchar *valign = read_config_value_as_string("valign_combo");
-    if (stricmp(valign, "start") == 0)
-        button_config.valign = GTK_ALIGN_START;
-    else if (stricmp(valign, "end") == 0)
-        button_config.valign = GTK_ALIGN_END;
-    else if (stricmp(valign, "baseline") == 0)
-        button_config.valign = GTK_ALIGN_BASELINE;
-    else if (stricmp(valign, "center") == 0)
-        button_config.valign = GTK_ALIGN_CENTER;
+    box_config.valign = read_align_config("valign_combo");
 
     // HExpand
     gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
-    button_config.hexpand = hexpand;
+    box_config.hexpand = hexpand;
 
     // VExpand
     gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
-    button_config.vexpand = vexpand;
+    box_config.vexpand = vexpand;
 
     // Background color
     const gchar *bg_color = read_config_value_as_string("bg_color_entry");
-    strcpy(button_config.bg_color, bg_color);
+    if (bg_color) {
+        strncpy(box_config.bg_color, bg_color, sizeof(box_config.bg_color) - 1);
+        box_config.bg_color[sizeof(box_config.bg_color) - 1] = '\0'; // Ensure null termination
+    }
 
     // Text color
     const gchar *text_color = read_config_value_as_string("color_entry");
-    strcpy(button_config.text_color, text_color);
+    if (text_color) {
+        strncpy(box_config.text_color, text_color, sizeof(box_config.text_color) - 1);
+        box_config.text_color[sizeof(box_config.text_color) - 1] = '\0';
+    }
 
     // Background image
     const gchar *bg_image = read_config_value_as_string("bg_image_entry");
-    strcpy(button_config.bg_image, bg_image);
+    if (bg_image) {
+        strncpy(box_config.bg_image, bg_image, sizeof(box_config.bg_image) - 1);
+        box_config.bg_image[sizeof(box_config.bg_image) - 1] = '\0';
+    }
 
-    box_config_ptr = &button_config;
+    memcpy(box_config_ptr, &box_config, sizeof(BoxConfig));
     return box_config_ptr;
 }
 

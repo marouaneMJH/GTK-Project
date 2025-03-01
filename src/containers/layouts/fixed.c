@@ -100,6 +100,52 @@ void add_fixed(GtkWidget *widget, gint x, gint y)
     gtk_fixed_put(GTK_FIXED(widget), widget, x, y);
 }
 
+FixedConfig *read_fixed_config_from_dialog()
+{
+    FixedConfig *fixed_config_ptr = NULL;
+    SAFE_ALLOC(fixed_config_ptr, FixedConfig, 1);
+
+    FixedConfig fixed_config = DEFAULT_FIXED;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    fixed_config.dimensions.width = dimensions->width;
+    fixed_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    fixed_config.margins.top = margins->top;
+    fixed_config.margins.bottom = margins->bottom;
+    fixed_config.margins.start = margins->start;
+    fixed_config.margins.end = margins->end;
+
+    // HAlign
+    fixed_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    fixed_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    fixed_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    fixed_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(fixed_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(fixed_config.text_color, text_color);
+
+    memcpy(fixed_config_ptr, &fixed_config, sizeof(FixedConfig));
+    return fixed_config_ptr;
+}
+
+
 gchar *write_fixed_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

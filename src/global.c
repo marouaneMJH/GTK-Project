@@ -418,13 +418,25 @@ ViewConfig *read_view_config_from_dialog()
     position = read_config_value_as_int("position_y_spin");
     view_config->position_y = position;
 
+
+    // Notebook config
+    const gchar *tab_label = read_config_value_as_string("tab_label_entry");
+    g_strlcpy(view_config->tab_label, tab_label, MAX_LABEL_SIZE);
+
+    gboolean is_reorderable = read_config_value_as_boolean("is_reorderable_switch");
+    view_config->is_reorderable = is_reorderable;
+
     // TODO: Complete other view config properties
 
     // Signals config
     // OnClick
     const gchar *sig_on_click_handler = read_config_value_as_string("on_click_entry");
-    view_config->signal.event_type = SIG_ON_CLICK;
-    g_strlcpy(view_config->signal.sig_handler, sig_on_click_handler, MAX_SIGNAL_NAME_SIZE);
+    if (sig_on_click_handler)
+    {
+        view_config->signal.event_type = SIG_ON_CLICK;
+        g_strlcpy(view_config->signal.sig_handler, sig_on_click_handler, MAX_SIGNAL_NAME_SIZE);
+    }
+
     return view_config;
 }
 
@@ -487,6 +499,75 @@ gboolean read_config_value_as_boolean(gchar *view_id)
 
     g_print("Error: => Widget type not compatible with the expected value\n");
     return false;
+}
+
+GtkAlign read_align_config(gchar *input_combo)
+{
+    const gchar *valign = read_config_value_as_string(input_combo);
+    if (valign)
+    {
+        if (stricmp(valign, "start") == 0)
+            return GTK_ALIGN_START;
+        else if (stricmp(valign, "end") == 0)
+            return GTK_ALIGN_END;
+        else if (stricmp(valign, "baseline") == 0)
+            return GTK_ALIGN_BASELINE;
+        else if (stricmp(valign, "center") == 0)
+            return GTK_ALIGN_CENTER;
+        else
+            return GTK_ALIGN_FILL;
+    }
+}
+
+GtkPositionType read_position_config(gchar *input_combo, GtkPositionType default_position)
+{
+    const gchar *icon_position = read_config_value_as_string(input_combo);
+    if (stricmp(icon_position, "top") == 0)
+        return GTK_POS_TOP;
+    else if (stricmp(icon_position, "bottom") == 0)
+        return GTK_POS_BOTTOM;
+    else if (stricmp(icon_position, "left") == 0)
+        return GTK_POS_LEFT;
+    else if (stricmp(icon_position, "right") == 0)
+        return GTK_POS_RIGHT;
+    else
+        return default_position;
+}
+
+Dimensions *read_dimensions_config()
+{
+    Dimensions *dimensions;
+    SAFE_ALLOC(dimensions, Dimensions, 1);
+    gint width = read_config_value_as_int("width_spin");
+    gint height = read_config_value_as_int("height_spin");
+    dimensions->width = width;
+    dimensions->height = height;
+
+    return dimensions;
+}
+
+Margins *read_margins_config()
+{
+    Margins *margins;
+    SAFE_ALLOC(margins, Margins, 1);
+
+    // Margin top
+    gint margin_top = read_config_value_as_int("margin_top_spin");
+    margins->top = margin_top;
+
+    // Margin bottom
+    gint margin_bottom = read_config_value_as_int("margin_bottom_spin");
+    margins->bottom = margin_bottom;
+
+    // Margin left
+    gint margin_left = read_config_value_as_int("margin_left_spin");
+    margins->start = margin_left;
+
+    // Margin right
+    gint margin_right = read_config_value_as_int("margin_right_spin");
+    margins->end = margin_right;
+
+    return margins;
 }
 
 // Writers

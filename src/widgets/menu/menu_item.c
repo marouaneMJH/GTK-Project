@@ -136,6 +136,76 @@ GtkWidget *create_menu_item(MenuItemConfig menu_item_config)
     return menu_item;
 }
 
+MenuItemConfig *read_menu_item_config_from_dialog()
+{
+    MenuItemConfig *menu_item_config_ptr = NULL;
+    SAFE_ALLOC(menu_item_config_ptr, MenuItemConfig, 1);
+
+    MenuItemConfig menu_item_config = DEFAULT_MENU_ITEM;
+
+    // Label
+    const gchar *label = read_config_value_as_string("label_entry");
+    strcpy(menu_item_config.label, label);
+
+    // Tooltip
+    const gchar *tooltip = read_config_value_as_string("tooltip_entry");
+    strcpy(menu_item_config.tooltip, tooltip);
+
+    // Accel Path
+    // const gchar *accel_path = read_config_value_as_string("accel_path_entry");
+    // strcpy(menu_item_config.accel_path, accel_path);
+
+    // Is Mnemonic
+    gboolean is_mnemonic = read_config_value_as_boolean("mnemonic_switch");
+    menu_item_config.is_memonic = is_mnemonic;
+
+    // Use Underline
+    gboolean use_underline = read_config_value_as_boolean("use_underline_switch");
+    menu_item_config.use_underline = use_underline;
+
+    // Reserve Indicator
+    gboolean reserve_indicator = read_config_value_as_boolean("reserve_indicator_switch");
+    menu_item_config.reserve_indicator = reserve_indicator;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    menu_item_config.dimensions.width = dimensions->width;
+    menu_item_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    menu_item_config.margins.top = margins->top;
+    menu_item_config.margins.bottom = margins->bottom;
+    menu_item_config.margins.start = margins->start;
+    menu_item_config.margins.end = margins->end;
+
+    // HAlign
+    menu_item_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    menu_item_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    menu_item_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    menu_item_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(menu_item_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(menu_item_config.text_color, text_color);
+
+    memcpy(menu_item_config_ptr, &menu_item_config, sizeof(MenuItemConfig));
+    return menu_item_config_ptr;
+}
+
+
 gchar *write_menu_item_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

@@ -110,6 +110,56 @@ GtkWidget *create_color_button(ColorButtonConfig color_button_config)
     return color_button;
 }
 
+ColorButtonConfig *read_color_button_config_from_dialog()
+{
+    ColorButtonConfig *color_button_config_ptr = NULL;
+    SAFE_ALLOC(color_button_config_ptr, ColorButtonConfig, 1);
+
+    ColorButtonConfig color_button_config = DEFAULT_COLOR_BUTTON;
+
+    // Tooltip
+    const gchar *tooltip = read_config_value_as_string("tooltip_entry");
+    strcpy(color_button_config.tooltip, tooltip);
+
+    // Sensitivity
+    gboolean is_sensitive = read_config_value_as_boolean("sensitive_switch");
+    color_button_config.is_sensitive = is_sensitive;
+
+    // Visibility
+    gboolean is_visible = read_config_value_as_boolean("visible_switch");
+    color_button_config.is_visible = is_visible;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    color_button_config.dimensions.width = dimensions->width;
+    color_button_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    color_button_config.margins.top = margins->top;
+    color_button_config.margins.bottom = margins->bottom;
+    color_button_config.margins.start = margins->start;
+    color_button_config.margins.end = margins->end;
+
+    // HAlign
+    color_button_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    color_button_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    color_button_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    color_button_config.vexpand = vexpand;
+
+    memcpy(color_button_config_ptr, &color_button_config, sizeof(ColorButtonConfig));
+    return color_button_config_ptr;
+}
+
+
 gchar *write_color_button_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

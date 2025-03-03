@@ -110,6 +110,7 @@ ViewConfig *init_radio_button_config(FILE *index, RadioButtonConfig *radio_butto
 {
     return init_generic_config(index, (void *)radio_button_config, (ConfigurePropertyCallback)configure_radio_button_property);
 }
+
 GtkWidget *create_radio_button(RadioButtonConfig radio_button_config)
 {
     GtkWidget *radio_button = NULL;
@@ -217,6 +218,91 @@ void radio_button_set_group(GtkWidget *widget, GtkWidget *group)
 {
     gtk_radio_button_set_group(GTK_RADIO_BUTTON(widget), gtk_radio_button_get_group(GTK_RADIO_BUTTON(group)));
 }
+
+RadioButtonConfig *read_radio_button_config_from_dialog()
+{
+    RadioButtonConfig *radio_button_config_ptr = NULL;
+    SAFE_ALLOC(radio_button_config_ptr, RadioButtonConfig, 1);
+
+    RadioButtonConfig radio_button_config = DEFAULT_RADIO_BUTTON;
+
+    // Label
+    const gchar *label = read_config_value_as_string("label_entry");
+    strcpy(radio_button_config.label, label);
+
+    // Icon name
+    const gchar *icon_name = read_config_value_as_string("icon_name_entry");
+    strcpy(radio_button_config.icon_name, icon_name);
+
+    // Tooltip
+    const gchar *tooltip = read_config_value_as_string("tooltip_entry");
+    strcpy(radio_button_config.tooltip, tooltip);
+
+    // Is group
+    gboolean is_group = read_config_value_as_boolean("group_switch");
+    radio_button_config.is_group = is_group;
+
+    // Is mnemonic
+    gboolean is_mnemonic = read_config_value_as_boolean("mnemonic_switch");
+    radio_button_config.is_mnemonic = is_mnemonic;
+
+    // Is selected
+    gboolean is_selected = read_config_value_as_boolean("selected_switch");
+    radio_button_config.is_selected = is_selected;
+
+    // Is button mode
+    gboolean is_button_mode = read_config_value_as_boolean("button_mode_switch");
+    radio_button_config.is_button_mode = is_button_mode;
+
+    // Is inconsistent
+    gboolean is_inconsistent = read_config_value_as_boolean("inconsistent_switch");
+    radio_button_config.is_inconsistent = is_inconsistent;
+
+    // Use underline
+    gboolean use_underline = read_config_value_as_boolean("use_underline_switch");
+    radio_button_config.use_underline = use_underline;
+
+    // Icon position
+    radio_button_config.icon_position = read_position_config("icon_position_combo", GTK_POS_LEFT);
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    radio_button_config.dimensions.width = dimensions->width;
+    radio_button_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    radio_button_config.margins.top = margins->top;
+    radio_button_config.margins.bottom = margins->bottom;
+    radio_button_config.margins.start = margins->start;
+    radio_button_config.margins.end = margins->end;
+
+    // HAlign
+    radio_button_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    radio_button_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    radio_button_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    radio_button_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(radio_button_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(radio_button_config.text_color, text_color);
+
+    memcpy(radio_button_config_ptr, &radio_button_config, sizeof(RadioButtonConfig));
+    return radio_button_config_ptr;
+}
+
 
 gchar *write_radio_button_property(FILE *output_file, View *view, int tabs_number)
 {

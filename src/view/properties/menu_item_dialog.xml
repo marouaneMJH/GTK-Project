@@ -101,6 +101,33 @@
                             />
                         </box>
 
+                        
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="submenu_label"
+                                label_text="Has submenu"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <switch_button
+                                id="has_submenu_switch"
+                                box_expand="true"
+                                box_fill="true"
+                                margin_right="20"
+                                halign="end"
+                            />
+                        </box>
+
                         <box
                             orientation="horizontal"
                             spacing="10"
@@ -520,7 +547,7 @@
                             />
 
                             <combo_text_box
-                                id="orientation_combo"
+                                id="paned_order_combo"
                                 default_index="0"
                                 option1="First"
                                 option2="Second"
@@ -715,6 +742,140 @@
                                 halign="end"
                             />
 
+                        </box>
+
+                        <!-- Menu config -->
+
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Menu orientation"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <combo_text_box
+                                id="menu_orientation_combo"
+                                default_index="0"
+                                option1="vertical"
+                                option2="horizontal"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Menu top"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <spin_button
+                                id="menu_top_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Menu bottom"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <spin_button
+                                id="menu_bottom_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Menu left"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <spin_button
+                                id="menu_left_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Menu right"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <spin_button
+                                id="menu_right_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
                         </box>
 
                     </box>
@@ -1174,7 +1335,7 @@
                 box_expand="true"
                 box_fill="true"
                 icon_path="./assets/images/icons/approve.png"
-                param_1="button"
+                param_1="menu_item"
                 on_click="sig_create_new_view"
             />
 

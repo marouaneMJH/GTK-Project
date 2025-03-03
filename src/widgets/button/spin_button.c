@@ -86,6 +86,7 @@ ViewConfig *init_spin_button_config(FILE *index, SpinButtonConfig *spin_button_c
 {
     return init_generic_config(index, (void *)spin_button_config, (ConfigurePropertyCallback)configure_spin_button_property);
 }
+
 GtkWidget *create_spin_button(SpinButtonConfig spin_button_config)
 {
     GtkAdjustment *w_adj = gtk_adjustment_new(
@@ -131,6 +132,76 @@ gdouble get_spin_button_value(GtkWidget *spin_widget)
     g_signal_connect(spin_widget, "value-changed", G_CALLBACK(get_button_value_call_back), NULL); // Connect callback
     return gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_widget));
 }
+
+SpinButtonConfig *read_spin_button_config_from_dialog()
+{
+    SpinButtonConfig *spin_button_config_ptr = NULL;
+    SAFE_ALLOC(spin_button_config_ptr, SpinButtonConfig, 1);
+
+    SpinButtonConfig spin_button_config = DEFAULT_SPIN_BUTTON;
+
+    // Minimum value
+    spin_button_config.min = read_config_value_as_double("min_spin");
+    
+    // Maximum value
+    spin_button_config.max = read_config_value_as_double("max_spin");
+    
+    
+    // Step value
+    spin_button_config.step = read_config_value_as_double("step_spin");
+    
+    // Initial value
+    spin_button_config.initial_value = read_config_value_as_double("initial_value_spin");
+    
+    // Decimal places
+    spin_button_config.decimal = read_config_value_as_int("decimal_spin");
+
+    // Is numeric
+    gboolean is_numeric = read_config_value_as_boolean("numeric_switch");
+    spin_button_config.is_numeric = is_numeric;
+
+    // Is digits
+    gboolean is_digits = read_config_value_as_boolean("digits_switch");
+    spin_button_config.is_digits = is_digits;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    spin_button_config.dimensions.width = dimensions->width;
+    spin_button_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    spin_button_config.margins.top = margins->top;
+    spin_button_config.margins.bottom = margins->bottom;
+    spin_button_config.margins.start = margins->start;
+    spin_button_config.margins.end = margins->end;
+
+    // HAlign
+    spin_button_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    spin_button_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    spin_button_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    spin_button_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(spin_button_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(spin_button_config.text_color, text_color);
+
+    memcpy(spin_button_config_ptr, &spin_button_config, sizeof(SpinButtonConfig));
+    return spin_button_config_ptr;
+}
+
 
 gchar *write_spin_button_property(FILE *output_file, View *view, int tabs_number)
 {

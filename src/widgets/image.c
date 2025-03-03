@@ -82,6 +82,7 @@ ViewConfig *init_image_config(FILE *index, ImageConfig *image_config)
 {
     return init_generic_config(index, (void *)image_config, (ConfigurePropertyCallback)configure_image_property);
 }
+
 GtkWidget *create_image(ImageConfig image_config)
 {
 
@@ -170,6 +171,68 @@ GtkWidget *create_image_from_pixbuf(char *path, Dimensions dimensions)
     g_object_unref(scaled_pixbuf);
 
     return image;
+}
+
+ImageConfig *read_image_config_from_dialog()
+{
+    ImageConfig *image_config_ptr = NULL;
+    SAFE_ALLOC(image_config_ptr, ImageConfig, 1);
+
+    ImageConfig image_config = DEFAULT_IMAGE;
+
+    // Image type
+    const gchar *type = read_config_value_as_string("type_combo");
+    if (stricmp(type, "icon") == 0)
+        image_config.type = IMAGE_ICON;
+    else if (stricmp(type, "icon_name") == 0)
+        image_config.type = IMAGE_ICON_NAME;
+    else if (stricmp(type, "file") == 0)
+        image_config.type = IMAGE_FILE;
+    else if (stricmp(type, "animation") == 0)
+        image_config.type = IMAGE_ANIMATION;
+    else if (stricmp(type, "resource") == 0)
+        image_config.type = IMAGE_RESOURCE;
+    else if (stricmp(type, "empty") == 0)
+        image_config.type = IMAGE_EMPTY;
+    else
+        image_config.type = IMAGE_PIXBUF;
+
+    // Image path
+    const gchar *path = read_config_value_as_string("path_entry");
+    strcpy(image_config.path, path);
+
+    // Opacity
+    const gdouble opacity = read_config_value_as_double("opacity_spin");
+    image_config.opacity = opacity;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    image_config.dimensions.width = dimensions->width;
+    image_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    image_config.margins.top = margins->top;
+    image_config.margins.bottom = margins->bottom;
+    image_config.margins.start = margins->start;
+    image_config.margins.end = margins->end;
+
+    // HAlign
+    image_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    image_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    image_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    image_config.vexpand = vexpand;
+
+    memcpy(image_config_ptr, &image_config, sizeof(ImageConfig));
+    return image_config_ptr;
 }
 
 gchar *write_image_property(FILE *output_file, View *view, int tabs_number)

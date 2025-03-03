@@ -6,6 +6,12 @@
 #define MAX_LABEL_TEXT_SIZE 1024
 /* Default values for label configuration */
 
+/*  default values */
+#define DEFAULT_LABEL_DIMENSIONS \
+    {                             \
+        .height = 0,              \
+        .width = 0}
+
 // Default Margins
 #define DEFAULT_LABEL_MARGINS { \
     .top = 0,                   \
@@ -22,6 +28,7 @@
         .jtype = GTK_JUSTIFY_CENTER,       \
         .ellipsize = PANGO_ELLIPSIZE_NONE, \
         .margins = DEFAULT_LABEL_MARGINS,  \
+        .dimensions = DEFAULT_LABEL_DIMENSIONS,  \
         .hexpand = FALSE,                  \
         .vexpand = FALSE,                  \
         .halign = GTK_ALIGN_FILL,          \
@@ -65,6 +72,8 @@ typedef struct
     gchar text_color[MAX_COLOR_SIZE];        // Text color
     gchar bg_color[MAX_COLOR_SIZE];          // Background color
 
+    Dimensions dimensions;
+
 } LabelConfig;
 
 ViewConfig *configure_label_property(LabelConfig *label_config, ViewConfig *view_config, gchar *property, gchar *value);
@@ -78,6 +87,8 @@ ViewConfig *init_label_config(FILE *index, LabelConfig *label_config);
 
 // function to creat lable widget
 GtkWidget *create_label(LabelConfig label);
+
+LabelConfig *read_label_config_from_dialog();
 
 gchar *write_label_property(FILE *output_file, View *view, int tabs_number);
 

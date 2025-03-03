@@ -41,6 +41,7 @@ typedef struct
 {
     ImageConfigType type;            // The type of the image (e.g., file, icon, etc.)
     gchar path[MAX_IMAGE_PATH_SIZE]; // The path of the image file
+    gdouble opacity;       // The opacity of the image (0.0 to 1.0)
 
     gboolean hexpand;
     gboolean vexpand;
@@ -48,7 +49,6 @@ typedef struct
     GtkAlign valign;
     Dimensions dimensions; // The dimensions of the image
     Margins margins;       // The margins around the image
-    gdouble opacity;       // The opacity of the image (0.0 to 1.0)
 
 } ImageConfig;
 
@@ -113,6 +113,8 @@ GtkWidget *create_image_from_animation(ImageConfig image_config, GdkPixbufAnimat
  * @return GtkWidget* A pointer to the newly created GtkWidget for the image.
  */
 GtkWidget *create_image_from_pixbuf(char *path, Dimensions dimensions);
+
+ImageConfig *read_image_config_from_dialog();
 
 gchar *write_image_property(FILE *output_file, View *view, int tabs_number);
 

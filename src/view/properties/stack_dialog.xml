@@ -410,7 +410,7 @@
                             />
 
                             <combo_text_box
-                                id="orientation_combo"
+                                id="paned_order_combo"
                                 default_index="0"
                                 option1="First"
                                 option2="Second"
@@ -996,6 +996,7 @@
                             box_fill="true"
                             margin_left="10"
                             margin_right="10"
+                            margin_bottom="10"
                             homogeneous="true"
                         >
                             <label
@@ -1039,7 +1040,7 @@
                 box_expand="true"
                 box_fill="true"
                 icon_path="./assets/images/icons/approve.png"
-                param_1="button"
+                param_1="stack"
                 on_click="sig_create_new_view"
             />
 

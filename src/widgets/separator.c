@@ -76,6 +76,7 @@ ViewConfig *init_separator_config(FILE *index, SeparatorConfig *separator_config
 {
     return init_generic_config(index, (void *)separator_config, (ConfigurePropertyCallback)configure_separator_property);
 }
+
 GtkWidget *create_separator(SeparatorConfig separator_config)
 {
 
@@ -104,6 +105,58 @@ GtkWidget *create_separator(SeparatorConfig separator_config)
     gtk_widget_set_valign(separator, separator_config.valign);
 
     return separator;
+}
+
+SeparatorConfig *read_separator_config_from_dialog()
+{
+    SeparatorConfig *separator_config_ptr = NULL;
+    SAFE_ALLOC(separator_config_ptr, SeparatorConfig, 1);
+
+    SeparatorConfig separator_config = DEFAULT_SEPARATOR;
+
+    // Tooltip
+    const gchar *tooltip = read_config_value_as_string("tooltip_entry");
+    strcpy(separator_config.tooltip, tooltip);
+
+    // Orientation
+    const gchar *orientation = read_config_value_as_string("orientation_combo");
+    if (stricmp(orientation, "horizontal") == 0)
+        separator_config.orientation = GTK_ORIENTATION_HORIZONTAL;
+    else
+        separator_config.orientation = GTK_ORIENTATION_VERTICAL;
+
+    // Visibility
+    gboolean is_visible = read_config_value_as_boolean("visible_switch");
+    separator_config.is_visible = is_visible;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    separator_config.dimensions.width = dimensions->width;
+    separator_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    separator_config.margins.top = margins->top;
+    separator_config.margins.bottom = margins->bottom;
+    separator_config.margins.start = margins->start;
+    separator_config.margins.end = margins->end;
+
+    // HAlign
+    separator_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    separator_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    separator_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    separator_config.vexpand = vexpand;
+
+    memcpy(separator_config_ptr, &separator_config, sizeof(SeparatorConfig));
+    return separator_config_ptr;
 }
 
 gchar *write_separator_property(FILE *output_file, View *view, int tabs_number)

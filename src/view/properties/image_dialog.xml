@@ -116,10 +116,38 @@
                                 box_fill="true"
                             />
                             <entry
-                                id="label_entry"
+                                id="path_entry"
                                 placeholder_text="eg: programer.jpg"
                                 box_expand="true"
                                 box_fill="true"
+                            />
+                        </box>
+
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Opacity"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <spin_button
+                                id="opacity_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                                is_digits="true"
                             />
                         </box>
 
@@ -351,7 +379,7 @@
                             />
 
                             <combo_text_box
-                                id="orientation_combo"
+                                id="paned_order_combo"
                                 default_index="0"
                                 option1="First"
                                 option2="Second"
@@ -1005,7 +1033,7 @@
                 box_expand="true"
                 box_fill="true"
                 icon_path="./assets/images/icons/approve.png"
-                param_1="button"
+                param_1="image"
                 on_click="sig_create_new_view"
             />
 

@@ -134,6 +134,73 @@ GtkWidget *create_stack(StackConfig stack_config)
     return stack;
 }
 
+StackConfig *read_stack_config_from_dialog()
+{
+    StackConfig *stack_config_ptr = NULL;
+    SAFE_ALLOC(stack_config_ptr, StackConfig, 1);
+
+    StackConfig stack_config = DEFAULT_STACK;
+
+    // Homogeneous
+    stack_config.is_homogeneous = read_config_value_as_boolean("is_homogeneous_switch");
+
+    // Transition enabled
+    stack_config.is_transition_enabled = read_config_value_as_boolean("is_transition_enabled_switch");
+
+    // Transition duration
+    stack_config.transition_duration = read_config_value_as_int("transition_duration_spin");
+
+    // Transition type
+    const gchar *transition_type = read_config_value_as_string("transition_type_combo");
+    if (stricmp(transition_type, "slide left") == 0)
+        stack_config.transition_type = GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT;
+    else if (stricmp(transition_type, "slide right") == 0)
+        stack_config.transition_type = GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT;
+    else if (stricmp(transition_type, "slide up") == 0)
+        stack_config.transition_type = GTK_STACK_TRANSITION_TYPE_SLIDE_UP;
+    else if (stricmp(transition_type, "slide down") == 0)
+        stack_config.transition_type = GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN;
+    else
+        stack_config.transition_type = GTK_STACK_TRANSITION_TYPE_CROSSFADE;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    stack_config.dimensions.width = dimensions->width;
+    stack_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    stack_config.margins.top = margins->top;
+    stack_config.margins.bottom = margins->bottom;
+    stack_config.margins.start = margins->start;
+    stack_config.margins.end = margins->end;
+
+    // HAlign
+    stack_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    stack_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    stack_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    stack_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(stack_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(stack_config.text_color, text_color);
+
+    memcpy(stack_config_ptr, &stack_config, sizeof(StackConfig));
+    return stack_config_ptr;
+}
+
 gchar *write_stack_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

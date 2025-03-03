@@ -106,6 +106,58 @@ GtkWidget *create_overlay(OverlayConfig overlay_config)
     return overlay;
 }
 
+OverlayConfig *read_overlay_config_from_dialog()
+{
+    OverlayConfig *overlay_config_ptr = NULL;
+    SAFE_ALLOC(overlay_config_ptr, OverlayConfig, 1);
+
+    OverlayConfig overlay_config = DEFAULT_OVERLAY;
+
+    // Opacity
+    overlay_config.opacity = read_config_value_as_double("opacity_spin");
+    
+    // Border radius
+    overlay_config.border_radius = read_config_value_as_int("border_radius_spin");
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    overlay_config.dimensions.width = dimensions->width;
+    overlay_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    overlay_config.margins.top = margins->top;
+    overlay_config.margins.bottom = margins->bottom;
+    overlay_config.margins.start = margins->start;
+    overlay_config.margins.end = margins->end;
+
+    // HAlign
+    overlay_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    overlay_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    overlay_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    overlay_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(overlay_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *bg_image = read_config_value_as_string("bg_image_entry");
+    strcpy(overlay_config.bg_image, bg_image);
+
+    memcpy(overlay_config_ptr, &overlay_config, sizeof(OverlayConfig));
+    return overlay_config_ptr;
+}
+
+
 gchar *write_overlay_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

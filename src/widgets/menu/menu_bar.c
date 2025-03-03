@@ -118,6 +118,66 @@ GtkWidget *create_menu_bar(MenuBarConfig menu_bar_config)
     return menu_bar;
 }
 
+MenuBarConfig *read_menu_bar_config_from_dialog()
+{
+    MenuBarConfig *menu_bar_config_ptr = NULL;
+    SAFE_ALLOC(menu_bar_config_ptr, MenuBarConfig, 1);
+
+    MenuBarConfig menu_bar_config = DEFAULT_MENU_BAR;
+
+    // Pack direction
+    const gchar *orientation = read_config_value_as_string("pack_direction_combo");
+    if (stricmp(orientation, "RTL") == 0)
+        menu_bar_config.pack_direction = GTK_PACK_DIRECTION_RTL;
+    else if (stricmp(orientation, "TTB") == 0)
+        menu_bar_config.pack_direction = GTK_PACK_DIRECTION_TTB;
+    else if (stricmp(orientation, "BTT") == 0)
+        menu_bar_config.pack_direction = GTK_PACK_DIRECTION_BTT;
+    else
+        menu_bar_config.pack_direction = GTK_PACK_DIRECTION_LTR;
+
+    // Tooltip
+    const gchar *tooltip = read_config_value_as_string("tooltip_entry");
+    strcpy(menu_bar_config.tooltip, tooltip);
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    menu_bar_config.dimensions.width = dimensions->width;
+    menu_bar_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    menu_bar_config.margins.top = margins->top;
+    menu_bar_config.margins.bottom = margins->bottom;
+    menu_bar_config.margins.start = margins->start;
+    menu_bar_config.margins.end = margins->end;
+
+    // HAlign
+    menu_bar_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    menu_bar_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    menu_bar_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    menu_bar_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(menu_bar_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(menu_bar_config.text_color, text_color);
+
+    memcpy(menu_bar_config_ptr, &menu_bar_config, sizeof(MenuBarConfig));
+    return menu_bar_config_ptr;
+}
+
 gchar *write_menu_bar_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

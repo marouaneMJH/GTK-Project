@@ -134,6 +134,72 @@ GtkWidget *create_check_button(CheckButtonConfig check_button_config)
     return check_button;
 }
 
+CheckButtonConfig *read_check_button_config_from_dialog()
+{
+    CheckButtonConfig *check_button_config_ptr = NULL;
+    SAFE_ALLOC(check_button_config_ptr, CheckButtonConfig, 1);
+
+    CheckButtonConfig check_button_config = DEFAULT_CHECK_BUTTON;
+
+    // Label
+    const gchar *label = read_config_value_as_string("label_entry");
+    strcpy(check_button_config.label, label);
+
+    // Tooltip
+    const gchar *tooltip = read_config_value_as_string("tooltip_entry");
+    strcpy(check_button_config.tooltip, tooltip);
+
+    // Active state
+    gboolean is_active = read_config_value_as_boolean("active_switch");
+    check_button_config.is_active = is_active;
+
+    // Inconsistent state
+    gboolean is_inconsistent = read_config_value_as_boolean("inconsistent_switch");
+    check_button_config.is_inconsistent = is_inconsistent;
+
+    // Use underline
+    gboolean use_underline = read_config_value_as_boolean("underline_switch");
+    check_button_config.use_underline = use_underline;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    check_button_config.dimensions.width = dimensions->width;
+    check_button_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    check_button_config.margins.top = margins->top;
+    check_button_config.margins.bottom = margins->bottom;
+    check_button_config.margins.start = margins->start;
+    check_button_config.margins.end = margins->end;
+
+    // HAlign
+    check_button_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    check_button_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    check_button_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    check_button_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(check_button_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(check_button_config.text_color, text_color);
+
+    memcpy(check_button_config_ptr, &check_button_config, sizeof(CheckButtonConfig));
+    return check_button_config_ptr;
+}
+
+
 gchar *write_check_button_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

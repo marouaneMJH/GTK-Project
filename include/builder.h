@@ -8,7 +8,7 @@
 #define BOX_PROPERTIES_DIALOG_TXT "./src/view/properties/box_dialog.xml"
 #define FIXED_PROPERTIES_DIALOG_TXT "./src/view/properties/fixed_dialog.xml"
 #define GRID_PROPERTIES_DIALOG_TXT "./src/view/properties/grid_dialog.xml"
-#define FLOWBOX_PROPERTIES_DIALOG_TXT "./src/view/properties/flowbox_dialog.xml"
+#define FLOW_BOX_PROPERTIES_DIALOG_TXT "./src/view/properties/flow_box_dialog.xml"
 #define PANED_PROPERTIES_DIALOG_TXT "./src/view/properties/paned_dialog.xml"
 #define FRAME_PROPERTIES_DIALOG_TXT "./src/view/properties/frame_dialog.xml"
 #define OVERLAY_PROPERTIES_DIALOG_TXT "./src/view/properties/overlay_dialog.xml"

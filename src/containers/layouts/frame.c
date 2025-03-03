@@ -158,13 +158,13 @@ FrameConfig *read_frame_config_from_dialog()
 
     // Shadow type
     const gchar *shadow_type = read_config_value_as_string("shadow_type_combo");
-    if (g_strcmp0(shadow_type, "none") == 0)
+    if (stricmp(shadow_type, "none") == 0)
         frame_config.shadow_type = GTK_SHADOW_NONE;
-    else if (g_strcmp0(shadow_type, "out") == 0)
+    else if (stricmp(shadow_type, "out") == 0)
         frame_config.shadow_type = GTK_SHADOW_OUT;
-    else if (g_strcmp0(shadow_type, "etched_in") == 0)
+    else if (stricmp(shadow_type, "etched in") == 0)
         frame_config.shadow_type = GTK_SHADOW_ETCHED_IN;
-    else if (g_strcmp0(shadow_type, "etched_out") == 0)
+    else if (stricmp(shadow_type, "etched out") == 0)
         frame_config.shadow_type = GTK_SHADOW_ETCHED_OUT;
     else
         frame_config.shadow_type = GTK_SHADOW_IN;

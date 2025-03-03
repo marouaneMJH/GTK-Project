@@ -330,7 +330,7 @@
                             />
 
                             <switch_button
-                                id="is_editable_switch"
+                                id="editable_switch"
                                 box_expand="true"
                                 box_fill="true"
                                 margin_right="20"
@@ -824,7 +824,7 @@
                             />
 
                             <combo_text_box
-                                id="orientation_combo"
+                                id="paned_order_combo"
                                 default_index="0"
                                 option1="First"
                                 option2="Second"
@@ -1454,7 +1454,7 @@
                 box_expand="true"
                 box_fill="true"
                 icon_path="./assets/images/icons/approve.png"
-                param_1="box"
+                param_1="combo_text_box"
                 on_click="sig_create_new_view"
             />
 

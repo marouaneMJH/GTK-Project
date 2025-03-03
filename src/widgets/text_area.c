@@ -106,6 +106,70 @@ GtkWidget *create_text_area(TextAreaConfig text_area)
     return scrolled_window;
 }
 
+TextAreaConfig *read_text_area_config_from_dialog()
+{
+    TextAreaConfig *text_area_config_ptr = NULL;
+    SAFE_ALLOC(text_area_config_ptr, TextAreaConfig, 1);
+
+    TextAreaConfig text_area_config = DEFAULT_TEXT_AREA;
+
+    // Font size
+    gint font_size = read_config_value_as_int("font_size_spin");
+    text_area_config.font_size = font_size;
+
+    // Wrap mode
+    const gchar *wrap_mode = read_config_value_as_string("wrap_mode_combo");
+    if (stricmp(wrap_mode, "none") == 0)
+        text_area_config.wrap_mode = GTK_WRAP_NONE;
+    else if (stricmp(wrap_mode, "word") == 0)
+        text_area_config.wrap_mode = GTK_WRAP_WORD;
+    else if (stricmp(wrap_mode, "word char") == 0)
+        text_area_config.wrap_mode = GTK_WRAP_WORD_CHAR;
+    else
+        text_area_config.wrap_mode = GTK_WRAP_CHAR;
+
+    // Editable
+    gboolean is_editable = read_config_value_as_boolean("editable_switch");
+    text_area_config.is_editable = is_editable;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    text_area_config.dimensions.width = dimensions->width;
+    text_area_config.dimensions.height = dimensions->height;
+
+    // // Margins
+    // Margins *margins = read_margins_config();
+    // text_area_config.margins.top = margins->top;
+    // text_area_config.margins.bottom = margins->bottom;
+    // text_area_config.margins.start = margins->start;
+    // text_area_config.margins.end = margins->end;
+
+    // HAlign
+    text_area_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    text_area_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    text_area_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    text_area_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(text_area_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(text_area_config.text_color, text_color);
+
+    memcpy(text_area_config_ptr, &text_area_config, sizeof(TextAreaConfig));
+    return text_area_config_ptr;
+}
+
 gchar *write_text_area_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

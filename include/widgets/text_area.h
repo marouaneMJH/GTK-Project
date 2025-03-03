@@ -60,6 +60,8 @@ ViewConfig *init_text_area_config(FILE *index, TextAreaConfig *text_area_config)
  */
 GtkWidget *create_text_area(TextAreaConfig text_area);
 
+TextAreaConfig *read_text_area_config_from_dialog();
+
 gchar *write_text_area_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

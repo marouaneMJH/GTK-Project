@@ -71,6 +71,8 @@ ViewConfig *init_check_button_config(FILE *index, CheckButtonConfig *check_butto
  */
 GtkWidget *create_check_button(CheckButtonConfig check_button_config);
 
+CheckButtonConfig *read_check_button_config_from_dialog();
+
 gchar *write_check_button_property(FILE *output_file, View *view, int tabs_number);
 
 #endif // CHECK_BUTTON_H

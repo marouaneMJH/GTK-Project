@@ -41,6 +41,7 @@ typedef struct
     gboolean is_active;
     gboolean is_visible;
     gboolean state;
+
     gboolean hexpand;
     gboolean vexpand;
     GtkAlign halign;
@@ -55,6 +56,8 @@ typedef struct
 ViewConfig *init_switch_button_config(FILE *index, SwitchButtonConfig *switch_buttton_config);
 
 GtkWidget *create_switch_button(SwitchButtonConfig switch_button_config);
+
+SwitchButtonConfig *read_switch_button_config_from_dialog();
 
 gchar *write_switch_button_property(FILE *output_file, View *view, int tabs_number);
 

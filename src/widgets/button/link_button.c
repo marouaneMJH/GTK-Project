@@ -114,6 +114,68 @@ GtkWidget *create_link_button(LinkButtonConfig link_button_config)
     return link_button;
 }
 
+LinkButtonConfig *read_link_button_config_from_dialog()
+{
+    LinkButtonConfig *link_button_config_ptr = NULL;
+    SAFE_ALLOC(link_button_config_ptr, LinkButtonConfig, 1);
+
+    LinkButtonConfig link_button_config = DEFAULT_LINK_BUTTON;
+
+    // URI
+    const gchar *uri = read_config_value_as_string("uri_entry");
+    strcpy(link_button_config.uri, uri);
+
+    // Label
+    const gchar *label = read_config_value_as_string("label_entry");
+    strcpy(link_button_config.label, label);
+
+    // Tooltip
+    const gchar *tooltip = read_config_value_as_string("tooltip_entry");
+    strcpy(link_button_config.tooltip, tooltip);
+
+    // Visited state
+    gboolean is_visited = read_config_value_as_boolean("visited_switch");
+    link_button_config.is_visited = is_visited;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    link_button_config.dimensions.width = dimensions->width;
+    link_button_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    link_button_config.margins.top = margins->top;
+    link_button_config.margins.bottom = margins->bottom;
+    link_button_config.margins.start = margins->start;
+    link_button_config.margins.end = margins->end;
+
+    // HAlign
+    link_button_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    link_button_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    link_button_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    link_button_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(link_button_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(link_button_config.text_color, text_color);
+
+    memcpy(link_button_config_ptr, &link_button_config, sizeof(LinkButtonConfig));
+    return link_button_config_ptr;
+}
+
+
 gchar *write_link_button_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

@@ -62,6 +62,8 @@ ViewConfig *init_overlay_config(FILE *index, OverlayConfig *overlay_config);
  */
 GtkWidget *create_overlay(OverlayConfig overlay_config);
 
+OverlayConfig *read_overlay_config_from_dialog();
+
 gchar *write_overlay_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

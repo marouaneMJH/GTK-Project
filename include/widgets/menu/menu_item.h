@@ -62,6 +62,8 @@ GtkWidget *create_menu_item(MenuItemConfig menu_item_config);
 
 void menu_item_set_submenu(GtkWidget *widget, GtkWidget *group);
 
+MenuItemConfig *read_menu_item_config_from_dialog();
+
 gchar *write_menu_item_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

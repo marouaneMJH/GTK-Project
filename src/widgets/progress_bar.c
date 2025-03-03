@@ -138,6 +138,83 @@ GtkWidget *create_progress_bar(ProgressBarConfig progress_bar_config)
     return progress_bar;
 }
 
+ProgressBarConfig *read_progress_bar_config_from_dialog()
+{
+    ProgressBarConfig *progress_bar_config_ptr = NULL;
+    SAFE_ALLOC(progress_bar_config_ptr, ProgressBarConfig, 1);
+
+    ProgressBarConfig progress_bar_config = DEFAULT_PROGRESS_BAR;
+
+    // Progress fraction
+    progress_bar_config.progress_fraction = read_config_value_as_double("progress_fraction_spin");
+
+    // Pulse step
+    progress_bar_config.progress_pulse_step = read_config_value_as_double("progress_pulse_step_spin");
+
+    // Text
+    const gchar *text = read_config_value_as_string("text_entry");
+    strcpy(progress_bar_config.text, text);
+
+    // Text visibility
+    gboolean is_text_visible = read_config_value_as_boolean("text_visible_switch");
+    progress_bar_config.is_text_visible = is_text_visible;
+
+    // Inverted
+    gboolean is_inverted = read_config_value_as_boolean("inverted_switch");
+    progress_bar_config.is_inverted = is_inverted;
+
+    // Ellipsize
+    const gchar *ellipsize = read_config_value_as_string("ellipsize_combo");
+    if (stricmp(ellipsize, "middle") == 0)
+        progress_bar_config.ellipsize = PANGO_ELLIPSIZE_MIDDLE;
+    else if (stricmp(ellipsize, "start") == 0)
+        progress_bar_config.ellipsize = PANGO_ELLIPSIZE_START;
+    else if (stricmp(ellipsize, "none") == 0)
+        progress_bar_config.ellipsize = PANGO_ELLIPSIZE_NONE;
+    else
+        progress_bar_config.ellipsize = PANGO_ELLIPSIZE_END;
+
+    // Opacity
+    progress_bar_config.opacity = read_config_value_as_double("opacity_spin");
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    progress_bar_config.dimensions.width = dimensions->width;
+    progress_bar_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    progress_bar_config.margins.top = margins->top;
+    progress_bar_config.margins.bottom = margins->bottom;
+    progress_bar_config.margins.start = margins->start;
+    progress_bar_config.margins.end = margins->end;
+
+    // HAlign
+    progress_bar_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    progress_bar_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    progress_bar_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    progress_bar_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(progress_bar_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(progress_bar_config.text_color, text_color);
+
+    memcpy(progress_bar_config_ptr, &progress_bar_config, sizeof(ProgressBarConfig));
+    return progress_bar_config_ptr;
+}
+
 gchar *write_progress_bar_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

@@ -75,6 +75,13 @@ ViewConfig *configure_label_property(LabelConfig *label_config, ViewConfig *view
     else if (g_strcmp0(property, "margin_end") == 0)
         label_config->margins.end = atoi(value);
 
+    // Dimensions
+    else if (g_strcmp0(property, "width") == 0)
+        label_config->dimensions.width = atoi(value);
+
+    else if (g_strcmp0(property, "height") == 0)
+        label_config->dimensions.height = atoi(value);
+
     if (g_strcmp0(property, "valign") == 0)
     {
         if (g_strcmp0(value, "center") == 0)
@@ -154,7 +161,114 @@ GtkWidget *create_label(LabelConfig label_config)
     // apply font family
     if (label_config.font_family[0] != '\0')
         widget_set_font_family(label_widget, label_config.font_family);
+
+    if (label_config.dimensions.width > 0 || label_config.dimensions.height > 0)
+        gtk_widget_set_size_request(label_widget, label_config.dimensions.width, label_config.dimensions.height);
+
     return label_widget;
+}
+
+LabelConfig *read_label_config_from_dialog()
+{
+    LabelConfig *label_config_ptr = NULL;
+    SAFE_ALLOC(label_config_ptr, LabelConfig, 1);
+
+    LabelConfig label_config = DEFAULT_LABEL;
+
+    // Label text
+    const gchar *label_text = read_config_value_as_string("label_text_entry");
+    strcpy(label_config.label_text, label_text);
+
+    // Is markup
+    // gboolean is_markup = read_config_value_as_boolean("markup_switch");
+    // label_config.is_markup = is_markup;
+
+    // Is underline
+    gboolean is_underline = read_config_value_as_boolean("underline_switch");
+    label_config.is_underline = is_underline;
+
+    // Font size
+    gint font_size = read_config_value_as_int("font_size_spin");
+    label_config.font_size = font_size;
+
+    // Justification type
+    const gchar *jtype = read_config_value_as_string("jtype_combo");
+    if (stricmp(jtype, "left") == 0)
+        label_config.jtype = GTK_JUSTIFY_LEFT;
+    else if (stricmp(jtype, "right") == 0)
+        label_config.jtype = GTK_JUSTIFY_RIGHT;
+    else if (stricmp(jtype, "fill") == 0)
+        label_config.jtype = GTK_JUSTIFY_FILL;
+    else
+        label_config.jtype = GTK_JUSTIFY_CENTER;
+
+    // Ellipsize mode
+    const gchar *ellipsize = read_config_value_as_string("ellipsize_combo");
+    if (stricmp(ellipsize, "start") == 0)
+        label_config.ellipsize = PANGO_ELLIPSIZE_START;
+    else if (stricmp(ellipsize, "middle") == 0)
+        label_config.ellipsize = PANGO_ELLIPSIZE_MIDDLE;
+    else if (stricmp(ellipsize, "end") == 0)
+        label_config.ellipsize = PANGO_ELLIPSIZE_END;
+    else
+        label_config.ellipsize = PANGO_ELLIPSIZE_NONE;
+
+    // Is wrap
+    gboolean is_wrap = read_config_value_as_boolean("wrap_switch");
+    label_config.is_wrap = is_wrap;
+
+    // Is selectable
+    gboolean is_selectable = read_config_value_as_boolean("selectable_switch");
+    label_config.is_selectable = is_selectable;
+
+    // Font family
+    const gchar *font_family = read_config_value_as_string("font_family_entry");
+    strcpy(label_config.font_family, font_family);
+
+    // XAlign
+    gfloat xalign = (gfloat) read_config_value_as_double("xalign_spin");
+    label_config.xalign = xalign;
+
+    // YAlign
+    gfloat yalign = (gfloat) read_config_value_as_double("yalign_spin");
+    label_config.yalign = yalign;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    label_config.dimensions.width = dimensions->width;
+    label_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    label_config.margins.top = margins->top;
+    label_config.margins.bottom = margins->bottom;
+    label_config.margins.start = margins->start;
+    label_config.margins.end = margins->end;
+
+    // HAlign
+    label_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    label_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    label_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    label_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(label_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(label_config.text_color, text_color);
+
+    memcpy(label_config_ptr, &label_config, sizeof(LabelConfig));
+    return label_config_ptr;
 }
 
 gchar *write_label_property(FILE *output_file, View *view, int tabs_number)

@@ -141,6 +141,7 @@ void email_field_handler(GtkEntry *entry, const gchar *text, gint length)
         }
     }
 }
+
 void on_icon_press(GtkEntry *entry, gpointer user_data)
 {
 
@@ -238,6 +239,114 @@ GtkWidget *create_entry(EntryConfig entry_config)
 
 //     return completion;
 // }
+
+EntryConfig *read_entry_config_from_dialog()
+{
+    EntryConfig *entry_config_ptr = NULL;
+    SAFE_ALLOC(entry_config_ptr, EntryConfig, 1);
+
+    EntryConfig entry_config = DEFAULT_ENTRY;
+
+    // Text
+    const gchar *text = read_config_value_as_string("text_entry");
+    strcpy(entry_config.text, text);
+
+    // Placeholder text
+    const gchar *placeholder_text = read_config_value_as_string("placeholder_text_entry");
+    strcpy(entry_config.placeholder_text, placeholder_text);
+
+    // Visibility
+    gboolean is_visible = read_config_value_as_boolean("visible_switch");
+    entry_config.is_visible = is_visible;
+
+    // Has frame
+    gboolean has_frame = read_config_value_as_boolean("has_frame_switch");
+    entry_config.has_frame = has_frame;
+
+    // Has delete icon
+    gboolean has_delete_icon = read_config_value_as_boolean("has_delete_icon_switch");
+    entry_config.has_delete_icon = has_delete_icon;
+
+    // Overwrite mode
+    gboolean overwrite_mode = read_config_value_as_boolean("overwrite_mode_switch");
+    entry_config.overwrite_mode = overwrite_mode;
+
+    // Max length
+    gint max_length = read_config_value_as_int("max_length_spin");
+    entry_config.max_length = max_length;
+
+    // Alignment
+    gfloat alignment = (gfloat)read_config_value_as_double("alignment_spin");
+    entry_config.alignment = alignment;
+
+    // Progress fraction
+    gfloat progress_fraction = (gfloat)read_config_value_as_double("progress_fraction_spin");
+    entry_config.progress_fraction = progress_fraction;
+
+    // Progress pulse step
+    gfloat progress_pulse_step = (gfloat)read_config_value_as_double("progress_pulse_step_spin");
+    entry_config.progress_pulse_step = progress_pulse_step;
+
+    // Activates default
+    gboolean activates_default = read_config_value_as_boolean("activates_default_switch");
+    entry_config.activates_default = activates_default;
+
+    // Opacity
+    gfloat opacity = (gfloat)read_config_value_as_double("opacity_spin");
+    entry_config.opacity = opacity;
+
+    // Input purpose
+    const gchar *purpose = read_config_value_as_string("type_combo");
+    if (stricmp(purpose, "number") == 0)
+        entry_config.purpose = GTK_INPUT_PURPOSE_NUMBER;
+    else if (stricmp(purpose, "email") == 0)
+        entry_config.purpose = GTK_INPUT_PURPOSE_EMAIL;
+    else if (stricmp(purpose, "name") == 0)
+        entry_config.purpose = GTK_INPUT_PURPOSE_NAME;
+    else if (stricmp(purpose, "password") == 0)
+        entry_config.purpose = GTK_INPUT_PURPOSE_PASSWORD;
+    else if (stricmp(purpose, "pin") == 0)
+        entry_config.purpose = GTK_INPUT_PURPOSE_PIN;
+    else
+        entry_config.purpose = GTK_INPUT_PURPOSE_FREE_FORM;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    entry_config.dimensions.width = dimensions->width;
+    entry_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    entry_config.margins.top = margins->top;
+    entry_config.margins.bottom = margins->bottom;
+    entry_config.margins.start = margins->start;
+    entry_config.margins.end = margins->end;
+
+    // HAlign
+    entry_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    entry_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    entry_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    entry_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(entry_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(entry_config.text_color, text_color);
+
+    memcpy(entry_config_ptr, &entry_config, sizeof(EntryConfig));
+    return entry_config_ptr;
+}
 
 gchar *write_entry_property(FILE *output_file, View *view, int tabs_number)
 {

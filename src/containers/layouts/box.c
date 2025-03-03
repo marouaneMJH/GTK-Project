@@ -145,7 +145,6 @@ BoxConfig *read_box_config_from_dialog()
     // Orientation
     const gchar *selected_orientation = read_config_value_as_string("orientation_combo");
     if (selected_orientation) {
-        g_print("SELECTED ORIENTATION: ===> %s \n", selected_orientation);
         if (stricmp(selected_orientation, "horizontal") == 0)
             box_config.orientation = GTK_ORIENTATION_HORIZONTAL;
     }
@@ -161,7 +160,6 @@ BoxConfig *read_box_config_from_dialog()
 
     // Spacing
     gint spacing = read_config_value_as_int("spacing_spin");
-    g_print("SELECTED SPACING: ===> %d \n", spacing);
     box_config.spacing = spacing;
 
     // Homogeneous

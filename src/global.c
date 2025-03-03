@@ -418,13 +418,41 @@ ViewConfig *read_view_config_from_dialog()
     position = read_config_value_as_int("position_y_spin");
     view_config->position_y = position;
 
-
     // Notebook config
     const gchar *tab_label = read_config_value_as_string("tab_label_entry");
     g_strlcpy(view_config->tab_label, tab_label, MAX_LABEL_SIZE);
+    view_config->is_reorderable = read_config_value_as_boolean("is_reorderable_switch");
 
-    gboolean is_reorderable = read_config_value_as_boolean("is_reorderable_switch");
-    view_config->is_reorderable = is_reorderable;
+    // Grid config
+    view_config->row = read_config_value_as_int("row_spin");
+    view_config->column = read_config_value_as_int("column_spin");
+
+    gint row_span = read_config_value_as_int("row_span_spin");
+    view_config->row_span = row_span == 0 ? 1 : row_span;
+    gint column_span = read_config_value_as_int("column_span_spin");
+    view_config->column_span = column_span == 0 ? 1 : column_span;
+
+    // Paned config
+    const gchar *paned_order = read_config_value_as_string("paned_order_combo");
+    if (stricmp(paned_order, "First") == 0)
+        view_config->paned_order = 1;
+    else
+        view_config->paned_order = 2;
+
+    // Menu config
+    const gchar *menu_orientation_value = read_config_value_as_string("menu_orientation_combo");
+    if (menu_orientation_value)
+        g_strlcpy(view_config->menu_orientation, menu_orientation_value, MAX_LABEL_SIZE);
+
+    gint menu_top = read_config_value_as_int("menu_top_spin");
+    gint menu_bottom = read_config_value_as_int("menu_bottom_spin");
+    gint menu_left = read_config_value_as_int("menu_left_spin");
+    gint menu_right = read_config_value_as_int("menu_right_spin");
+
+    view_config->menu_top = menu_top;
+    view_config->menu_bottom = menu_bottom == 0 ? 1 : menu_bottom;
+    view_config->menu_left = menu_left;
+    view_config->menu_right = menu_right == 0 ? 1 : menu_right;
 
     // TODO: Complete other view config properties
 

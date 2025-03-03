@@ -89,6 +89,8 @@ static void get_button_value_call_back(GtkWidget *spin_button, gpointer val);
  */
 gdouble get_spin_button_value(GtkWidget *spin_widget);
 
+SpinButtonConfig *read_spin_button_config_from_dialog();
+
 gchar *write_spin_button_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

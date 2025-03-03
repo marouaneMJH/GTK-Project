@@ -105,6 +105,8 @@ ViewConfig *init_entry_config(FILE *index, EntryConfig *entry_config);
  */
 GtkWidget *create_entry(EntryConfig entry_data);
 
+EntryConfig *read_entry_config_from_dialog();
+
 gchar *write_entry_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

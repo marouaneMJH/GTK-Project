@@ -66,6 +66,8 @@ ViewConfig *init_link_button_config(FILE *index, LinkButtonConfig *link_button_c
  */
 GtkWidget *create_link_button(LinkButtonConfig config);
 
+LinkButtonConfig *read_link_button_config_from_dialog();
+
 gchar *write_link_button_property(FILE *output_file, View *view, int tabs_number);
 
 #endif // LINK_BUTTON_H

@@ -114,6 +114,65 @@ GtkWidget *create_paned(PanedConfig paned_config)
 
     return paned;
 }
+
+PanedConfig *read_paned_config_from_dialog()
+{
+    PanedConfig *paned_config_ptr = NULL;
+    SAFE_ALLOC(paned_config_ptr, PanedConfig, 1);
+
+    PanedConfig paned_config = DEFAULT_PANED;
+
+    // Orientation
+    const gchar *orientation = read_config_value_as_string("orientation_combo");
+    if (stricmp(orientation, "vertical") == 0)
+        paned_config.orientation = GTK_ORIENTATION_VERTICAL;
+    else
+        paned_config.orientation = GTK_ORIENTATION_HORIZONTAL;
+
+    // Position
+    paned_config.position = read_config_value_as_int("position_spin");
+
+    // Is Wide
+    paned_config.is_wide = read_config_value_as_boolean("is_wide_switch");
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    paned_config.dimensions.width = dimensions->width;
+    paned_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    paned_config.margins.top = margins->top;
+    paned_config.margins.bottom = margins->bottom;
+    paned_config.margins.start = margins->start;
+    paned_config.margins.end = margins->end;
+
+    // HAlign
+    paned_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    paned_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    paned_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    paned_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(paned_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(paned_config.text_color, text_color);
+
+    memcpy(paned_config_ptr, &paned_config, sizeof(PanedConfig));
+    return paned_config_ptr;
+}
+
 gchar *write_paned_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

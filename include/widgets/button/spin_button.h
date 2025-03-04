@@ -31,8 +31,8 @@
         .halign = GTK_ALIGN_FILL,             \
         .valign = GTK_ALIGN_FILL,             \
         .is_numeric = TRUE,                   \
-        .bg_color = "\0",                     \
-        .text_color = "\0",                   \
+        .bg_color[0] = '\0',                     \
+        .text_color[0] = '\0',                   \
         .is_digits = FALSE}
 
 typedef struct

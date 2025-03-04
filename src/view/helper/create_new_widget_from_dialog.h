@@ -3,6 +3,18 @@
 
 #include "./../../../include/builder.h"
 
+
+
+View *create_new_scrolled_window_from_dialog(View *parent_view, gboolean is_relative_container)
+{
+    ScrolledWindowConfig *scrolled_window_config = read_scrolled_window_config_from_dialog();
+    GtkWidget *new_scrolled_window = create_scrolled_window(*scrolled_window_config);
+    View *new_scrolled_window_view = create_view(new_scrolled_window, read_view_config_from_dialog());
+    g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
+    add_view(new_scrolled_window_view, parent_view, is_relative_container);
+    return new_scrolled_window_view;
+}
+
 View *create_new_box_from_dialog(View *parent_view, gboolean is_relative_container)
 {
     BoxConfig *box_config = read_box_config_from_dialog();

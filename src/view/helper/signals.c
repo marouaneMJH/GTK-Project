@@ -338,6 +338,98 @@ static void sig_dialog(GtkWidget *widget, gpointer data)
     show_dialog(dialog);
 }
 
+// This function check if the previous widget is a container or not
+gboolean check_relative_container(GtkWidget *widget)
+{
+    if (GTK_IS_BOX(widget) ||
+        GTK_IS_FIXED(widget) ||
+        GTK_IS_FRAME(widget) ||
+        GTK_IS_SCROLLED_WINDOW(widget) ||
+        GTK_IS_FLOW_BOX(widget) ||
+        GTK_IS_OVERLAY(widget) ||
+        GTK_IS_GRID(widget) ||
+        GTK_IS_PANED(widget) ||
+        GTK_IS_STACK(widget) ||
+        GTK_IS_NOTEBOOK(widget) ||
+        GTK_IS_MENU_BAR(widget) ||
+        // GTK_IS_MENU_ITEM(widget) ||
+        GTK_IS_MENU(widget))
+        return TRUE;
+    return FALSE;
+}
+
+void display_available_scopes_in_combo(GtkWidget *scope_combo, View *current)
+{
+    static gboolean is_menu_bar = FALSE;
+    if (!current)
+    {
+        current = find_view_by_id("viewer", root_view_global);
+        if (!current)
+        {
+            g_print("Error: ==> cannot find viewer\n");
+            return;
+        }
+
+        if (stricmp(current->view_config->view_id, "viewer") == 0)
+            current = current->child;
+    }
+
+    if (GTK_IS_MENU_BAR(current))
+        is_menu_bar = TRUE;
+
+    g_print("PARENT SCOPE: %s\n", current->view_config->view_id);
+    if (check_relative_container(current->widget) || GTK_IS_MENU_ITEM(current->widget))
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(scope_combo), current->view_config->view_id);
+
+    if (is_menu_bar && !(GTK_IS_MENU_BAR(current->widget) || GTK_IS_MENU(current->widget) || GTK_IS_MENU_ITEM(current->widget)))
+    {
+        is_menu_bar = FALSE;
+        return;
+    }
+
+    if (current->child)
+        display_available_scopes_in_combo(scope_combo, current->child);
+    if (current->next)
+        display_available_scopes_in_combo(scope_combo, current->next);
+}
+
+void set_available_scopes(const gchar *widget_type)
+{
+    View *scope_combo = find_view_by_id("scope_back_combo", root_dialog_view_global);
+    if (!scope_combo)
+    {
+        g_print("Error: ==> cannot find scop_back_combo\n");
+        return;
+    }
+
+    GtkWidget *combo_text_box = scope_combo->widget;
+
+    int option_id = 0;
+
+    if (!parent_view)
+        return;
+
+    View *temp = parent_view;
+    g_print("WIDGET TYPE: %s\n", widget_type);
+
+    if (stricmp(widget_type, "menu_item") == 0 || stricmp(widget_type, "menu") == 0)
+    {
+        while (!GTK_IS_MENU_BAR(temp->widget))
+            temp = temp->parent;
+        display_available_scopes_in_combo(combo_text_box, temp);
+        // while (!GTK_IS_MENU_BAR(temp->widget))
+        // {
+        //     g_print("PARENT SCOPE: %s\n", temp->view_config->view_id);
+        //     if (!GTK_IS_MENU(temp->widget))
+        //         gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_text_box), temp->view_config->view_id);
+        //     temp = temp->parent;
+        // }
+        // gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_text_box), temp->view_config->view_id);
+    }
+    else
+        display_available_scopes_in_combo(combo_text_box, NULL);
+}
+
 // Set view config from the dialog
 static void sig_properties_dialog(GtkWidget *widget, gpointer data)
 {
@@ -412,6 +504,8 @@ static void sig_properties_dialog(GtkWidget *widget, gpointer data)
     //     build_app(root_app, NULL, LIST_BOX_PROPERTIES_DIALOG_TXT);
 
     GtkWidget *dialog = root_dialog_view_global->widget;
+
+    set_available_scopes(param_array->params[0]);
 
     show_dialog(dialog);
 }
@@ -632,34 +726,73 @@ void update_button_config()
 }
 
 // This function check the scope before insert a new element for example MenuItem with Menu or MenuBar
-void check_scop_back()
+gboolean check_scope_back(View *root)
 {
-    gint scop_back = read_config_value_as_int("scope_back_spin");
-    if (scop_back > 0)
-    {
-        for (int i = 0; i < scop_back; i++)
-            parent_view = parent_view->parent;
-    }
-}
+    const gchar *scope_back = read_config_value_as_string("scope_back_combo");
+    // if (scope_back > 0)
+    // {
+    //     for (int i = 0; i < scope_back; i++)
+    //         parent_view = parent_view->parent;
+    // }
 
-// This function check if the previous widget is a container or not
-gboolean check_relative_container(GtkWidget *widget)
-{
-    if (GTK_IS_BOX(widget) ||
-        GTK_IS_FIXED(widget) ||
-        GTK_IS_FRAME(widget) ||
-        GTK_IS_SCROLLED_WINDOW(widget) ||
-        GTK_IS_FLOW_BOX(widget) ||
-        GTK_IS_OVERLAY(widget) ||
-        GTK_IS_GRID(widget) ||
-        GTK_IS_PANED(widget) ||
-        GTK_IS_STACK(widget) ||
-        GTK_IS_NOTEBOOK(widget) ||
-        GTK_IS_MENU_BAR(widget) ||
-        // GTK_IS_MENU_ITEM(widget) ||
-        GTK_IS_MENU(widget))
+    g_print("SCOPE BACK: %s\n", scope_back);
+    if (stricmp(scope_back, "Current (Default)") == 0)
         return TRUE;
-    return FALSE;
+
+    if (!root)
+    {
+        root = find_view_by_id("viewer", root_view_global);
+        if (!root)
+        {
+            g_print("Error: ==> cannot find the viewer");
+            return FALSE;
+        }
+    }
+
+    g_print("TRACE MI: %s \n", root->view_config->view_id);
+    if (stricmp(root->parent->view_config->view_id, scope_back) != 0)
+    {
+        // Menu item case
+        if (!root->child && GTK_IS_MENU_ITEM(root->widget) && stricmp(root->view_config->view_id, scope_back) == 0)
+        {
+            is_relative_container = TRUE;
+            parent_view = root;
+            return TRUE;
+        }
+
+        if (root->next)
+            return check_scope_back(root->next);
+
+        if (root->child)
+            return check_scope_back(root->child);
+
+        return FALSE;
+    }
+    else
+    {
+        while (root->next)
+            root = root->next;
+
+        is_relative_container = FALSE;
+        parent_view = root;
+        return TRUE;
+    }
+
+    // if (stricmp(scope_back, "Previous") == 0)
+    // {
+    //     if (GTK_IS_MENU_BAR(parent_view->parent->widget))
+    //         return;
+    //     parent_view = parent_view->parent;
+    //     return;
+    // }
+
+    // if (parent_view)
+    // {
+    //     while (stricmp(parent_view->view_config->view_id, scope_back) != 0 && stricmp(parent_view->parent->view_config->view_id, "viewer") != 0)
+    //     {
+    //         parent_view = parent_view->parent;
+    //     }
+    // }
 }
 
 static void sig_create_new_view(GtkWidget *widget, gpointer data)
@@ -804,10 +937,14 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
     {
         g_print("NORMAL MODE\n");
         g_print("PARENT BEFORE ==========> %s \n", parent_view->view_config->view_id);
-        check_scop_back();
+        check_scope_back(viewer);
         if (g_strcmp0(param_array->params[0], "box") == 0)
         {
             parent_view = create_new_box_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "scrolled_window") == 0)
+        {
+            parent_view = create_new_scrolled_window_from_dialog(parent_view, is_relative_container);
         }
         else if (g_strcmp0(param_array->params[0], "fixed") == 0)
         {
@@ -930,8 +1067,9 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
             // Menu item case
             gboolean has_submenu = read_config_value_as_boolean("has_submenu_switch");
             if (has_submenu)
-                is_relative_container = TRUE;   
+                is_relative_container = TRUE;
         }
+        // print_graph_to_debug(viewer);
         add_view_to_content_box(parent_view);
         gtk_widget_show_all(root_view_global->widget);
     }

@@ -388,14 +388,15 @@ void set_widget_size(GtkWidget *widget, Dimensions dimensions)
 
 ViewConfig *read_view_config_from_dialog()
 {
+    static int wid_index = 1;
     // View config
     ViewConfig *view_config = NULL;
     SAFE_ALLOC(view_config, ViewConfig, 1);
     DFEAULT_VIEW_CONFIG(view_config);
 
     const gchar *view_id = read_config_value_as_string("view_id_entry");
-    strcpy(view_config->view_id, view_id);
-
+    strcpy(view_config->view_id, g_strconcat("wid-", g_strdup_printf("%d", wid_index++), "-", view_config->view_id, view_id, NULL));
+    
     // Box config
     gboolean box_expand = read_config_value_as_boolean("box_expand_switch");
     view_config->box_expand = box_expand;

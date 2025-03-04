@@ -174,8 +174,8 @@ ProgressBarConfig *read_progress_bar_config_from_dialog()
     else
         progress_bar_config.ellipsize = PANGO_ELLIPSIZE_END;
 
-    // Opacity
-    progress_bar_config.opacity = read_config_value_as_double("opacity_spin");
+    // // Opacity
+    // progress_bar_config.opacity = read_config_value_as_double("opacity_spin");
 
     // Dimensions
     Dimensions *dimensions = read_dimensions_config();

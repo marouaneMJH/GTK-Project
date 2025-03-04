@@ -184,7 +184,7 @@ ImageConfig *read_image_config_from_dialog()
     const gchar *type = read_config_value_as_string("type_combo");
     if (stricmp(type, "icon") == 0)
         image_config.type = IMAGE_ICON;
-    else if (stricmp(type, "icon_name") == 0)
+    else if (stricmp(type, "icon name") == 0)
         image_config.type = IMAGE_ICON_NAME;
     else if (stricmp(type, "file") == 0)
         image_config.type = IMAGE_FILE;
@@ -201,9 +201,9 @@ ImageConfig *read_image_config_from_dialog()
     const gchar *path = read_config_value_as_string("path_entry");
     strcpy(image_config.path, path);
 
-    // Opacity
-    const gdouble opacity = read_config_value_as_double("opacity_spin");
-    image_config.opacity = opacity;
+    // Opacity (Spin button for opacity not working)
+    // const gdouble opacity = read_config_value_as_double("opacity_spin");
+    // image_config.opacity = opacity;
 
     // Dimensions
     Dimensions *dimensions = read_dimensions_config();

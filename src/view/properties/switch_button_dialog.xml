@@ -90,11 +90,10 @@
                                 box_fill="true"
                             />
 
-                            <spin_button
-                                id="scope_back_spin"
-                                initial_value="0"
-                                min="0"
-                                max="10000"
+                            <combo_text_box
+                                id="scope_back_combo"
+                                default_index="0"
+                                option1="Current (Default)"
                                 box_expand="true"
                                 box_fill="true"
                             />

@@ -23,7 +23,7 @@
 /* Default progress bar configuration */
 #define DEFAULT_PROGRESS_BAR                           \
     {                                                  \
-        .text = "\0",                                  \
+        .text[0] = '\0',                                  \
         .dimensions = DEFAULT_PROGRESS_BAR_DIMENSIONS, \
         .margins = DEFAULT_PROGRESS_BAR_MARGINS,       \
         .progress_fraction = 0,                        \
@@ -36,8 +36,8 @@
         .halign = GTK_ALIGN_FILL,                      \
         .valign = GTK_ALIGN_FILL,                      \
         .opacity = 1,                                  \
-        .bg_color = "\0",                              \
-        .text_color = "\0",                            \
+        .bg_color[0] = '\0',                           \
+        .text_color[0] = '\0',                         \
     }
 
 /**
@@ -51,7 +51,7 @@ typedef struct
     gboolean is_text_visible;               ///< Whether the text is visible or hidden
     gboolean is_inverted;                   ///< Whether the progress bar is inverted
     PangoEllipsizeMode ellipsize;           ///< The ellipsize mode of the progress bar
-    gdouble opacity;                       ///< The opacity of the progress bar (0.0 to 1.0)
+    gdouble opacity;                        ///< The opacity of the progress bar (0.0 to 1.0)
 
     gboolean hexpand;
     gboolean vexpand;

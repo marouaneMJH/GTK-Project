@@ -64,6 +64,8 @@ ViewConfig *init_scrolled_window_config(FILE *index, ScrolledWindowConfig *scrol
 
 GtkWidget *create_scrolled_window(ScrolledWindowConfig scrolled_window_config);
 
+ScrolledWindowConfig *read_scrolled_window_config_from_dialog();
+
 gchar *write_scrolled_window_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

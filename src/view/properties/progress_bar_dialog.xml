@@ -90,11 +90,10 @@
                                 box_fill="true"
                             />
 
-                            <spin_button
-                                id="scope_back_spin"
-                                initial_value="0"
-                                min="0"
-                                max="10000"
+                            <combo_text_box
+                                id="scope_back_combo"
+                                default_index="0"
+                                option1="Current (Default)"
                                 box_expand="true"
                                 box_fill="true"
                             />
@@ -174,7 +173,7 @@
                                 box_fill="true"
                                 margin_right="20"
                                 halign="end"
-                                is_active="true"
+                                state="true"
                             />
                         </box>
 
@@ -208,7 +207,7 @@
 
                         </box>
 
-                        <box
+                        <!-- <box
                             orientation="horizontal"
                             spacing="10"
                             box_expand="true"
@@ -219,7 +218,7 @@
                         >
                             <label
                                 id="opacity_label"
-                                label_text="Opacity"
+                                label_text="Opacity (%)"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
@@ -234,7 +233,7 @@
                                 box_fill="true"
                                 is_digits="true"
                             />
-                        </box>
+                        </box> -->
 
                         <box
                             orientation="horizontal"
@@ -255,9 +254,9 @@
 
                             <spin_button
                                 id="progress_fraction_spin"
-                                initial_value="0"
+                                initial_value="0.1"
                                 min="0"
-                                max="10000"
+                                max="1"
                                 box_expand="true"
                                 box_fill="true"
                                 is_digits="true"
@@ -284,9 +283,9 @@
 
                             <spin_button
                                 id="progress_pulse_step_spin"
-                                initial_value="0"
+                                initial_value="0.1"
                                 min="0"
-                                max="10000"
+                                max="1"
                                 box_expand="true"
                                 box_fill="true"
                                 is_digits="true"

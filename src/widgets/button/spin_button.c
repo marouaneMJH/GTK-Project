@@ -142,17 +142,16 @@ SpinButtonConfig *read_spin_button_config_from_dialog()
 
     // Minimum value
     spin_button_config.min = read_config_value_as_double("min_spin");
-    
+
     // Maximum value
     spin_button_config.max = read_config_value_as_double("max_spin");
-    
-    
+
     // Step value
     spin_button_config.step = read_config_value_as_double("step_spin");
-    
+
     // Initial value
     spin_button_config.initial_value = read_config_value_as_double("initial_value_spin");
-    
+
     // Decimal places
     spin_button_config.decimal = read_config_value_as_int("decimal_spin");
 
@@ -201,7 +200,6 @@ SpinButtonConfig *read_spin_button_config_from_dialog()
     memcpy(spin_button_config_ptr, &spin_button_config, sizeof(SpinButtonConfig));
     return spin_button_config_ptr;
 }
-
 
 gchar *write_spin_button_property(FILE *output_file, View *view, int tabs_number)
 {

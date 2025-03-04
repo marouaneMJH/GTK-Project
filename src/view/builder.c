@@ -311,6 +311,21 @@ gboolean is_container_view(FILE *index)
     return FALSE;
 }
 
+void read_comment(FILE *index)
+{
+    char c;
+    while ((c = fgetc(index)) != '-')
+        ;
+    if (fgetc(index) != '-')
+    {
+        fseek(index, -1, SEEK_CUR);
+        read_comment(index);
+    } else if (fgetc(index) != '>') {
+        fseek(index, -2, SEEK_CUR);
+        read_comment(index);
+    }
+}
+
 View *build_app(GtkApplication *app, View *root_view, const gchar *file_path)
 {
     printf("Building app\n");
@@ -358,8 +373,7 @@ View *build_app(GtkApplication *app, View *root_view, const gchar *file_path)
             }
             else if (next_char == '!')
             {
-                while ((c = fgetc(index)) != '>')
-                    ;
+                read_comment(index);
                 continue;
             }
             else

@@ -292,8 +292,8 @@ EntryConfig *read_entry_config_from_dialog()
     entry_config.activates_default = activates_default;
 
     // Opacity
-    gfloat opacity = (gfloat)read_config_value_as_double("opacity_spin");
-    entry_config.opacity = opacity;
+    // gfloat opacity = (gfloat)read_config_value_as_double("opacity_spin");
+    // entry_config.opacity = opacity;
 
     // Input purpose
     const gchar *purpose = read_config_value_as_string("type_combo");

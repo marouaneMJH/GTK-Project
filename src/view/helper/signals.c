@@ -372,6 +372,9 @@ void display_available_scopes_in_combo(GtkWidget *scope_combo, View *current)
 
         if (stricmp(current->view_config->view_id, "viewer") == 0)
             current = current->child;
+
+        if (!current)
+            return;
     }
 
     if (GTK_IS_MENU_BAR(current))
@@ -510,6 +513,18 @@ static void sig_properties_dialog(GtkWidget *widget, gpointer data)
     show_dialog(dialog);
 }
 
+void destroy_subgraph(View *root)
+{
+    if (root->next)
+        destroy_subgraph(root->next);
+    if (root->child)
+        destroy_subgraph(root->child);
+
+    gtk_widget_destroy(root->widget);
+    g_free(root->view_config);
+    g_free(root);
+}
+
 // TODO: Complete is_relative_container constraint later
 static void remove_widget_from_graph(GtkWidget *widget, gpointer data)
 {
@@ -545,17 +560,16 @@ static void remove_widget_from_graph(GtkWidget *widget, gpointer data)
             }
         }
         g_print("CHECK PARENT\n");
-        // TODO: if the child is a container the whole sub-graph should be removed
-        if (parent_view == target)
+        if (parent_view == target || check_relative_container(temp->widget))
         {
             parent_view = temp;
+            is_relative_container = check_relative_container(parent_view->widget);
             g_print("PARENT AFTER REMOVE: %s\n", parent_view->view_config->view_id);
         }
 
+        if (target->child)
+            destroy_subgraph(target->child);
         gtk_widget_destroy(target->widget);
-
-        // TODO: Adapte it for each widget
-        is_relative_container = TRUE;
 
         free(target->view_config);
         free(target);
@@ -700,7 +714,8 @@ void add_view_to_content_box(View *view)
     if (content_box_view)
     {
         g_print("PARENT-VIEW: %s\n", parent_view->view_config->view_id);
-        g_signal_connect(G_OBJECT(content_btn), "clicked", G_CALLBACK(update_widget_config), NULL);
+        // g_signal_connect(G_OBJECT(content_btn), "clicked", G_CALLBACK(update_widget_config), NULL);
+        g_signal_connect(G_OBJECT(content_btn), "clicked", G_CALLBACK(remove_widget_from_graph), NULL);
         gtk_box_pack_end(GTK_BOX(content_box_view->widget), content_btn, TRUE, FALSE, 0);
     }
 }

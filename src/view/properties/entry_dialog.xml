@@ -342,7 +342,7 @@
                             />
                         </box>
 
-                        <box
+                        <!-- <box
                             orientation="horizontal"
                             spacing="10"
                             box_expand="true"
@@ -368,7 +368,7 @@
                                 box_fill="true"
                                 is_digits="true"
                             />
-                        </box>
+                        </box> -->
 
                         <box
                             orientation="horizontal"

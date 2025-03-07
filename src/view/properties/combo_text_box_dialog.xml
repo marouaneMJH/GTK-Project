@@ -92,7 +92,6 @@
                             <combo_text_box
                                 id="scope_back_combo"
                                 default_index="0"
-                                option1="Current (Default)"
                                 box_expand="true"
                                 box_fill="true"
                             />

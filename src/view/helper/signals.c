@@ -407,14 +407,20 @@ void set_available_scopes(const gchar *widget_type)
 
     GtkWidget *combo_text_box = scope_combo->widget;
 
-    int option_id = 0;
-
     if (!parent_view)
+    {
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_text_box), "Default");
+        gtk_combo_box_set_active(GTK_COMBO_BOX(combo_text_box), 0);
         return;
+    }
 
     View *temp = parent_view;
     g_print("WIDGET TYPE: %s\n", widget_type);
 
+    const gchar *current_scope = g_strconcat(parent_view->view_config->view_id, " (Default)", NULL);
+    g_print("CURENT SCOPE: %s\n", current_scope);
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_text_box), current_scope);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(combo_text_box), 0);
     if (stricmp(widget_type, "menu_item") == 0 || stricmp(widget_type, "menu") == 0)
     {
         while (!GTK_IS_MENU_BAR(temp->widget))
@@ -525,7 +531,6 @@ void destroy_subgraph(View *root)
     g_free(root);
 }
 
-// TODO: Complete is_relative_container constraint later
 static void remove_widget_from_graph(GtkWidget *widget, gpointer data)
 {
     const gchar *view_id = gtk_button_get_label(GTK_BUTTON(widget));
@@ -685,23 +690,27 @@ static void update_widget_config(GtkWidget *widget, gpointer data)
 
     GtkWidget *dialog = NULL;
 
-    if (target_view)
+    if (!target_view)
     {
-        if (GTK_IS_BOX(target_view->widget))
-        {
-        }
-        else if (GTK_IS_BUTTON(target_view->widget))
-        {
-            ButtonConfig *button_config = read_button_config_from_widget(target_view->widget);
-            build_app(root_app, NULL, BUTTON_PROPERTIES_DIALOG_TXT);
-            dialog = root_dialog_view_global->widget;
-            set_current_button_config_to_dialog(button_config);
-            set_current_view_config_to_dialog(target_view->view_config);
-        }
-
-        update_mode = TRUE;
-        show_dialog(dialog);
+        g_print("TARGET IS NOT FOUND\n");
+        return;
     }
+
+    if (GTK_IS_BOX(target_view->widget))
+    {
+    }
+    else if (GTK_IS_BUTTON(target_view->widget))
+    {
+        ButtonConfig *button_config = read_button_config_from_widget(target_view->widget);
+        build_app(root_app, NULL, BUTTON_PROPERTIES_DIALOG_TXT);
+        dialog = root_dialog_view_global->widget;
+        set_current_button_config_to_dialog(button_config);
+        set_current_view_config_to_dialog(target_view->view_config);
+        set_available_scopes(target_view->view_config->view_id);
+    }
+
+    update_mode = TRUE;
+    show_dialog(dialog);
 }
 
 void add_view_to_content_box(View *view)
@@ -714,10 +723,48 @@ void add_view_to_content_box(View *view)
     if (content_box_view)
     {
         g_print("PARENT-VIEW: %s\n", parent_view->view_config->view_id);
-        // g_signal_connect(G_OBJECT(content_btn), "clicked", G_CALLBACK(update_widget_config), NULL);
-        g_signal_connect(G_OBJECT(content_btn), "clicked", G_CALLBACK(remove_widget_from_graph), NULL);
+        g_signal_connect(G_OBJECT(content_btn), "clicked", G_CALLBACK(update_widget_config), NULL);
+        // g_signal_connect(G_OBJECT(content_btn), "clicked", G_CALLBACK(remove_widget_from_graph), NULL);
         gtk_box_pack_end(GTK_BOX(content_box_view->widget), content_btn, TRUE, FALSE, 0);
     }
+}
+
+void rebuild_graph(View **temp_root, View *view, View *updated_view, gchar *view_id, gboolean relative_container)
+{
+    if (!view || !updated_view)
+        return;
+
+    // Ref the widget to prevent destruction
+    g_object_ref(view->widget);
+
+    // Remove from parent
+    gtk_container_remove(GTK_CONTAINER(gtk_widget_get_parent(view->widget)), view->widget);
+
+    View *new_view = create_view(view->widget, view->view_config);
+    if (g_strcmp0(view->view_config->view_id, view_id))
+    {
+        (*temp_root) = add_view(new_view, (*temp_root), relative_container);
+        g_print("Old view is done: %s\n", (*temp_root)->view_config->view_id);
+    }
+    else
+    {
+        (*temp_root) = add_view(updated_view, (*temp_root), relative_container);
+        g_print("Updated view is done: %s\n", (*temp_root)->view_config->view_id);
+        (*temp_root)->view_config->box_expand ? g_print("BOX EXPAND ====> TRUE\n") : g_print("BOX EXPAND ====> FALSE\n");
+    }
+
+    // Unref after adding
+    // g_object_unref(view->widget);
+
+    g_print("Add is done: %s\n", (*temp_root)->view_config->view_id);
+
+    relative_container = check_relative_container((*temp_root)->widget);
+
+    if (view->child)
+        rebuild_graph(temp_root, view->child, updated_view, view_id, relative_container);
+
+    if (view->next)
+        rebuild_graph(temp_root, view->next, updated_view, view_id, relative_container);
 }
 
 // TODO: complete this function with the new logic
@@ -725,20 +772,65 @@ void update_button_config()
 {
     g_print("UPDATING BUTTON WIDGET\n");
 
+    View *viewer = find_view_by_id("viewer", root_view_global);
+    if (!viewer)
+    {
+        g_print("ERROR: ==> cannot find the viewer\n");
+        return;
+    }
+
     ButtonConfig *button_config = read_button_config_from_dialog();
 
-    ViewConfig *view_config = read_view_config_from_dialog();
+    ViewConfig *view_config = read_view_config_from_dialog(TRUE);
 
-    g_print("BTN LOOKING FOR %s\n", view_config->view_id);
-    View *target_view = find_view_by_id(view_config->view_id, root_view_global);
-    if (target_view)
+    GtkWidget *button_widget = create_button(*button_config);
+
+    View *updated_button_view = create_view(button_widget, view_config);
+
+    if (!viewer->child)
     {
-        g_print("BTN FOUND\n");
-        g_print("NEW BTN LABEL: %s\n", button_config->label);
-        apply_button_config_changes(target_view->widget, *button_config);
-        target_view->view_config = view_config;
+        g_print("ERROR: ==> VIEWER HAS NO CHILD\n");
+        return;
     }
+
+    View *temp_root = NULL;
+    rebuild_graph(&temp_root, viewer->child, updated_button_view, view_config->view_id, check_relative_container(viewer->widget));
+
+    if (!temp_root)
+    {
+        g_print("ERROR: ==> TEMP ROOT NOT COMPLETED\n");
+        return;
+    }
+
+    parent_view = temp_root;
+
+    // TODO: Add the the new graph to viewer
+    g_print("DEBUG: ==> TEMP ROOT TREE\n");
+    while (temp_root->parent)
+        temp_root = temp_root->parent;
+    add_view(temp_root, viewer, TRUE);
+    print_graph_to_debug(viewer);
+    gtk_widget_show_all(gtk_widget_get_toplevel(temp_root->widget));
 }
+
+// void update_button_config_first_appoach()
+// {
+//     g_print("UPDATING BUTTON WIDGET\n");
+
+//     ButtonConfig *button_config = read_button_config_from_dialog();
+
+//     ViewConfig *view_config = read_view_config_from_dialog();
+
+//     g_print("BTN LOOKING FOR %s\n", view_config->view_id);
+//     View *target_view = find_view_by_id(view_config->view_id, root_view_global);
+//     if (target_view)
+//     {
+//         g_print("BTN FOUND\n");
+//         g_print("NEW BTN LABEL: %s\n", button_config->label);
+//         apply_button_config_changes(target_view->widget, *button_config);
+//         target_view->view_config = view_config;
+//     }
+// }
 
 // This function check the scope before insert a new element for example MenuItem with Menu or MenuBar
 gboolean check_scope_back(View *root)

@@ -232,7 +232,7 @@ void set_header_bar(GtkWidget *window, const gchar *title, const gchar *icon_pat
 
 
 // Readers
-ViewConfig *read_view_config_from_dialog();
+ViewConfig *read_view_config_from_dialog(gboolean update_mode);
 
 const gchar *read_config_value_as_string(gchar *view_id);
 

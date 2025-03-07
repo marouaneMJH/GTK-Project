@@ -151,7 +151,7 @@ void on_icon_press(GtkEntry *entry, gpointer user_data)
 GtkWidget *create_entry(EntryConfig entry_config)
 {
 
-    g_print("=============================================\n");
+    // g_print("=============================================\n");
     GtkWidget *entry = gtk_entry_new();
 
     if (entry_config.has_delete_icon)
@@ -176,7 +176,7 @@ GtkWidget *create_entry(EntryConfig entry_config)
         gtk_entry_set_visibility(GTK_ENTRY(entry), FALSE);
 
     gtk_entry_set_max_length(GTK_ENTRY(entry), entry_config.max_length);
-    g_print("Entry max length: %d\n", entry_config.max_length);
+    // g_print("Entry max length: %d\n", entry_config.max_length);
     if (entry_config.dimensions.height > 0 || entry_config.dimensions.width > 0)
         gtk_widget_set_size_request(entry, entry_config.dimensions.width, entry_config.dimensions.height);
 
@@ -194,7 +194,7 @@ GtkWidget *create_entry(EntryConfig entry_config)
     if (entry_config.completion)
         gtk_entry_set_completion(GTK_ENTRY(entry), entry_config.completion);
 
-    g_print("Entry bg color: %s\n", entry_config.bg_color);
+    // g_print("Entry bg color: %s\n", entry_config.bg_color);
     widget_set_colors(GTK_WIDGET(entry), entry_config.bg_color, entry_config.text_color);
     widget_set_margins(GTK_WIDGET(entry), entry_config.margins);
 

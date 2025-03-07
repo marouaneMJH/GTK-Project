@@ -108,4 +108,6 @@ static void sig_color_btn_friend_color(GtkWidget *widget, gpointer data);
 
 /*** Start Color Button ***/
 
+
+void set_available_scopes(const gchar *widget_type);
 #endif

@@ -689,3 +689,22 @@ void write_config_value_as_boolean(gchar *view_id, gboolean value)
     else
         g_print("Error: => Widget type not compatible with the expected value\n");
 }
+
+
+// Testing
+void print_graph_to_debug(View *root)
+{
+    if (!root)
+        return;
+
+    if (root->parent)
+        g_print("WIDGET: ===> %s => PARENT ==> %s\n", root->view_config->view_id, root->parent->view_config->view_id);
+    else
+        g_print("WIDGET: ===> %s => PARENT ==> ROOT\n", root->view_config->view_id);
+    if (root->next)
+        g_print("Has next: %s\n", root->next->view_config->view_id);
+    if (root->child)
+        g_print("Has child: %s\n", root->child->view_config->view_id);
+    print_graph_to_debug(root->child);
+    print_graph_to_debug(root->next);
+}

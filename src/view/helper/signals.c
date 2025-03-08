@@ -2,6 +2,7 @@
 #include "./../../../include/widgets/view/signals.h"
 #include "./../../../include/widgets/view/view.h"
 #include "./create_new_widget_from_dialog.h"
+#include "./update_widget_from_dialog.h"
 
 static View *parent_view = NULL;
 static gboolean is_relative_container = TRUE;
@@ -17,23 +18,6 @@ typedef struct
     gchar params[PARAM_COUNT][MAX_SIGNAL_NAME_SIZE]; // First function parameter
 
 } ParamNode;
-
-void print_graph_to_debug(View *root)
-{
-    if (!root)
-        return;
-
-    if (root->parent)
-        g_print("WIDGET: ===> %s => PARENT ==> %s\n", root->view_config->view_id, root->parent->view_config->view_id);
-    else
-        g_print("WIDGET: ===> %s => PARENT ==> ROOT\n", root->view_config->view_id);
-    if (root->next)
-        g_print("Has next: %s\n", root->next->view_config->view_id);
-    if (root->child)
-        g_print("Has child: %s\n", root->child->view_config->view_id);
-    print_graph_to_debug(root->child);
-    print_graph_to_debug(root->next);
-}
 
 // debug for test
 
@@ -409,31 +393,24 @@ void set_available_scopes(const gchar *widget_type)
 
     if (!parent_view)
     {
-        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_text_box), "Default");
-        gtk_combo_box_set_active(GTK_COMBO_BOX(combo_text_box), 0);
+        // gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_text_box), "Default");
+        // gtk_combo_box_set_active(GTK_COMBO_BOX(combo_text_box), 0);
+        g_print("First element has no scope back\n");
         return;
     }
 
     View *temp = parent_view;
     g_print("WIDGET TYPE: %s\n", widget_type);
 
-    const gchar *current_scope = g_strconcat(parent_view->view_config->view_id, " (Default)", NULL);
-    g_print("CURENT SCOPE: %s\n", current_scope);
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_text_box), current_scope);
-    gtk_combo_box_set_active(GTK_COMBO_BOX(combo_text_box), 0);
+    // const gchar *current_scope = g_strconcat(parent_view->view_config->view_id, " (Default)", NULL);
+    // g_print("CURENT SCOPE: %s\n", current_scope);
+    // gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_text_box), current_scope);
+    // gtk_combo_box_set_active(GTK_COMBO_BOX(combo_text_box), 0);
     if (stricmp(widget_type, "menu_item") == 0 || stricmp(widget_type, "menu") == 0)
     {
         while (!GTK_IS_MENU_BAR(temp->widget))
             temp = temp->parent;
         display_available_scopes_in_combo(combo_text_box, temp);
-        // while (!GTK_IS_MENU_BAR(temp->widget))
-        // {
-        //     g_print("PARENT SCOPE: %s\n", temp->view_config->view_id);
-        //     if (!GTK_IS_MENU(temp->widget))
-        //         gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_text_box), temp->view_config->view_id);
-        //     temp = temp->parent;
-        // }
-        // gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_text_box), temp->view_config->view_id);
     }
     else
         display_available_scopes_in_combo(combo_text_box, NULL);
@@ -531,6 +508,77 @@ void destroy_subgraph(View *root)
     g_free(root);
 }
 
+// This function check the scope before insert a new element for example MenuItem with Menu or MenuBar
+gboolean check_scope_back(View *root)
+{
+    const gchar *scope_back = read_config_value_as_string("scope_back_combo");
+
+    g_print("SCOPE BACK: %s\n", scope_back);
+
+    // If it is the default one don't change anything
+    if (stricmp(scope_back, "Default") == 0)
+        return TRUE;
+
+    // check the root if it is fixed on the viewer at the first time or not
+    if (!root)
+    {
+        root = find_view_by_id("viewer", root_view_global);
+        if (!root)
+        {
+            g_print("Error: ==> cannot find the viewer");
+            return FALSE;
+        }
+    }
+
+    g_print("TRACE MI: %s \n", root->view_config->view_id);
+
+    // If I didn't found the scope target yet
+    if (stricmp(root->parent->view_config->view_id, scope_back) != 0)
+    {
+        // Menu item case
+        if (!root->child && GTK_IS_MENU_ITEM(root->widget) && stricmp(root->view_config->view_id, scope_back) == 0)
+        {
+            parent_view = root;
+            is_relative_container = TRUE;
+            return TRUE;
+        }
+
+        gboolean result = FALSE;
+        if (root->next)
+            result = check_scope_back(root->next);
+
+        if (root->child && !result)
+            result = check_scope_back(root->child);
+
+        if (stricmp(root->view_config->view_id, scope_back) == 0 && !result)
+        {
+            parent_view = root;
+            is_relative_container = TRUE;
+            if (root)
+            {
+                g_print("I FOUND THE NEW PARENT FIRST VIEW %s\n", parent_view->view_config->view_id);
+            }
+            return TRUE;
+        }
+    }
+    else
+    {
+        while (root->next)
+            root = root->next;
+
+        parent_view = root;
+        is_relative_container = FALSE;
+
+        if (root)
+        {
+            g_print("I FOUND THE NEW PARENT VIEW %s\n", parent_view->view_config->view_id);
+        }
+        return TRUE;
+    }
+    return FALSE;
+}
+
+// Remove a widget from the graph and the subgraph if exists
 static void remove_widget_from_graph(GtkWidget *widget, gpointer data)
 {
     const gchar *view_id = gtk_button_get_label(GTK_BUTTON(widget));
@@ -587,93 +635,6 @@ static void remove_widget_from_graph(GtkWidget *widget, gpointer data)
     print_graph_to_debug(root_v);
 }
 
-void set_current_button_config_to_dialog(ButtonConfig *button_config)
-{
-    // Label
-    write_config_value_as_string("label_entry", button_config->label);
-
-    // Width
-    write_config_value_as_int("width_spin", button_config->dimensions.width);
-
-    // Height
-    write_config_value_as_int("height_spin", button_config->dimensions.height);
-
-    // Margin top
-    write_config_value_as_int("margin_top_spin", button_config->margins.top);
-
-    // Margin bottom
-    write_config_value_as_int("margin_bottom_spin", button_config->margins.bottom);
-
-    // Margin left
-    write_config_value_as_int("margin_left_spin", button_config->margins.start);
-
-    // Margin right
-    write_config_value_as_int("margin_right_spin", button_config->margins.end);
-
-    // HAlign
-    gchar *halign = NULL;
-    switch (button_config->halign)
-    {
-    case GTK_ALIGN_START:
-        halign = "start";
-        break;
-    case GTK_ALIGN_END:
-        halign = "end";
-        break;
-    case GTK_ALIGN_BASELINE:
-        halign = "baseline";
-        break;
-    case GTK_ALIGN_CENTER:
-        halign = "center";
-        break;
-    default:
-        halign = "center";
-        break;
-    }
-    write_config_value_as_string("halign_combo", halign);
-
-    // VAlign
-    gchar *valign = NULL;
-    switch (button_config->valign)
-    {
-    case GTK_ALIGN_START:
-        valign = "start";
-        break;
-    case GTK_ALIGN_END:
-        valign = "end";
-        break;
-    case GTK_ALIGN_BASELINE:
-        valign = "baseline";
-        break;
-    case GTK_ALIGN_CENTER:
-        valign = "center";
-        break;
-    default:
-        valign = "center";
-        break;
-    }
-    write_config_value_as_string("valign_combo", valign);
-
-    // HExpand
-    write_config_value_as_boolean("hexpand_switch", button_config->hexpand);
-
-    // VExpand
-    write_config_value_as_boolean("vexpand_switch", button_config->vexpand);
-
-    // Background color
-    write_config_value_as_string("bg_color_entry", button_config->bg_color);
-
-    // Text color
-    write_config_value_as_string("color_entry", button_config->color);
-}
-
-void set_current_view_config_to_dialog(ViewConfig *view_config)
-{
-    if (!view_config)
-        return;
-    write_view_config_to_dialog(view_config);
-}
-
 static void update_widget_config(GtkWidget *widget, gpointer data)
 {
 
@@ -698,15 +659,12 @@ static void update_widget_config(GtkWidget *widget, gpointer data)
 
     if (GTK_IS_BOX(target_view->widget))
     {
+        // dialog = prepare_update_box_config(target_view);
     }
+
     else if (GTK_IS_BUTTON(target_view->widget))
     {
-        ButtonConfig *button_config = read_button_config_from_widget(target_view->widget);
-        build_app(root_app, NULL, BUTTON_PROPERTIES_DIALOG_TXT);
-        dialog = root_dialog_view_global->widget;
-        set_current_button_config_to_dialog(button_config);
-        set_current_view_config_to_dialog(target_view->view_config);
-        set_available_scopes(target_view->view_config->view_id);
+        dialog = prepare_update_button_config(target_view);
     }
 
     update_mode = TRUE;
@@ -729,179 +687,6 @@ void add_view_to_content_box(View *view)
     }
 }
 
-void rebuild_graph(View **temp_root, View *view, View *updated_view, gchar *view_id, gboolean relative_container)
-{
-    if (!view || !updated_view)
-        return;
-
-    // Ref the widget to prevent destruction
-    g_object_ref(view->widget);
-
-    // Remove from parent
-    gtk_container_remove(GTK_CONTAINER(gtk_widget_get_parent(view->widget)), view->widget);
-
-    View *new_view = create_view(view->widget, view->view_config);
-    if (g_strcmp0(view->view_config->view_id, view_id))
-    {
-        (*temp_root) = add_view(new_view, (*temp_root), relative_container);
-        g_print("Old view is done: %s\n", (*temp_root)->view_config->view_id);
-    }
-    else
-    {
-        (*temp_root) = add_view(updated_view, (*temp_root), relative_container);
-        g_print("Updated view is done: %s\n", (*temp_root)->view_config->view_id);
-        (*temp_root)->view_config->box_expand ? g_print("BOX EXPAND ====> TRUE\n") : g_print("BOX EXPAND ====> FALSE\n");
-    }
-
-    // Unref after adding
-    // g_object_unref(view->widget);
-
-    g_print("Add is done: %s\n", (*temp_root)->view_config->view_id);
-
-    relative_container = check_relative_container((*temp_root)->widget);
-
-    if (view->child)
-        rebuild_graph(temp_root, view->child, updated_view, view_id, relative_container);
-
-    if (view->next)
-        rebuild_graph(temp_root, view->next, updated_view, view_id, relative_container);
-}
-
-// TODO: complete this function with the new logic
-void update_button_config()
-{
-    g_print("UPDATING BUTTON WIDGET\n");
-
-    View *viewer = find_view_by_id("viewer", root_view_global);
-    if (!viewer)
-    {
-        g_print("ERROR: ==> cannot find the viewer\n");
-        return;
-    }
-
-    ButtonConfig *button_config = read_button_config_from_dialog();
-
-    ViewConfig *view_config = read_view_config_from_dialog(TRUE);
-
-    GtkWidget *button_widget = create_button(*button_config);
-
-    View *updated_button_view = create_view(button_widget, view_config);
-
-    if (!viewer->child)
-    {
-        g_print("ERROR: ==> VIEWER HAS NO CHILD\n");
-        return;
-    }
-
-    View *temp_root = NULL;
-    rebuild_graph(&temp_root, viewer->child, updated_button_view, view_config->view_id, check_relative_container(viewer->widget));
-
-    if (!temp_root)
-    {
-        g_print("ERROR: ==> TEMP ROOT NOT COMPLETED\n");
-        return;
-    }
-
-    parent_view = temp_root;
-
-    // TODO: Add the the new graph to viewer
-    g_print("DEBUG: ==> TEMP ROOT TREE\n");
-    while (temp_root->parent)
-        temp_root = temp_root->parent;
-    add_view(temp_root, viewer, TRUE);
-    print_graph_to_debug(viewer);
-    gtk_widget_show_all(gtk_widget_get_toplevel(temp_root->widget));
-}
-
-// void update_button_config_first_appoach()
-// {
-//     g_print("UPDATING BUTTON WIDGET\n");
-
-//     ButtonConfig *button_config = read_button_config_from_dialog();
-
-//     ViewConfig *view_config = read_view_config_from_dialog();
-
-//     g_print("BTN LOOKING FOR %s\n", view_config->view_id);
-//     View *target_view = find_view_by_id(view_config->view_id, root_view_global);
-//     if (target_view)
-//     {
-//         g_print("BTN FOUND\n");
-//         g_print("NEW BTN LABEL: %s\n", button_config->label);
-//         apply_button_config_changes(target_view->widget, *button_config);
-//         target_view->view_config = view_config;
-//     }
-// }
-
-// This function check the scope before insert a new element for example MenuItem with Menu or MenuBar
-gboolean check_scope_back(View *root)
-{
-    const gchar *scope_back = read_config_value_as_string("scope_back_combo");
-    // if (scope_back > 0)
-    // {
-    //     for (int i = 0; i < scope_back; i++)
-    //         parent_view = parent_view->parent;
-    // }
-
-    g_print("SCOPE BACK: %s\n", scope_back);
-    if (stricmp(scope_back, "Current (Default)") == 0)
-        return TRUE;
-
-    if (!root)
-    {
-        root = find_view_by_id("viewer", root_view_global);
-        if (!root)
-        {
-            g_print("Error: ==> cannot find the viewer");
-            return FALSE;
-        }
-    }
-
-    g_print("TRACE MI: %s \n", root->view_config->view_id);
-    if (stricmp(root->parent->view_config->view_id, scope_back) != 0)
-    {
-        // Menu item case
-        if (!root->child && GTK_IS_MENU_ITEM(root->widget) && stricmp(root->view_config->view_id, scope_back) == 0)
-        {
-            is_relative_container = TRUE;
-            parent_view = root;
-            return TRUE;
-        }
-
-        if (root->next)
-            return check_scope_back(root->next);
-
-        if (root->child)
-            return check_scope_back(root->child);
-
-        return FALSE;
-    }
-    else
-    {
-        while (root->next)
-            root = root->next;
-
-        is_relative_container = FALSE;
-        parent_view = root;
-        return TRUE;
-    }
-
-    // if (stricmp(scope_back, "Previous") == 0)
-    // {
-    //     if (GTK_IS_MENU_BAR(parent_view->parent->widget))
-    //         return;
-    //     parent_view = parent_view->parent;
-    //     return;
-    // }
-
-    // if (parent_view)
-    // {
-    //     while (stricmp(parent_view->view_config->view_id, scope_back) != 0 && stricmp(parent_view->parent->view_config->view_id, "viewer") != 0)
-    //     {
-    //         parent_view = parent_view->parent;
-    //     }
-    // }
-}
-
 static void sig_create_new_view(GtkWidget *widget, gpointer data)
 {
     View *viewer = find_view_by_id("viewer", root_view_global);
@@ -921,6 +706,8 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
         return;
     }
 
+    check_scope_back(viewer);
+    g_print("PARENT AFTER CHECK ==========> %s \n", parent_view->view_config->view_id);
     if (update_mode)
     {
         g_print("UPDATE MODE\n");
@@ -960,7 +747,7 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
         // }
         else if (g_strcmp0(param_array->params[0], "button") == 0)
         {
-            update_button_config();
+            parent_view = update_button_config();
         }
         // else if (g_strcmp0(param_array->params[0], "check_button") == 0)
         // {
@@ -1044,7 +831,6 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
     {
         g_print("NORMAL MODE\n");
         g_print("PARENT BEFORE ==========> %s \n", parent_view->view_config->view_id);
-        check_scope_back(viewer);
         if (g_strcmp0(param_array->params[0], "box") == 0)
         {
             parent_view = create_new_box_from_dialog(parent_view, is_relative_container);

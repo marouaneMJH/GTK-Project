@@ -262,4 +262,8 @@ void write_config_value_as_int(gchar *view_id, gint value);
 void write_config_value_as_double(gchar *view_id, gdouble value);
 
 void write_config_value_as_boolean(gchar *view_id, gboolean value);
+
+// Testing
+void print_graph_to_debug(View *root);
+
 #endif

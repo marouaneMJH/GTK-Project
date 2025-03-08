@@ -50,6 +50,7 @@
                         spacing="10"
                     >
                         <box
+                            id="view_id_box"
                             orientation="horizontal"
                             spacing="10"
                             box_expand="true"
@@ -59,7 +60,7 @@
                             homogeneous="true"
                         >
                             <label
-                                id="label11"
+                                id="view_id_label"
                                 label_text="View ID"
                                 yalign="0.5"
                                 box_expand="true"

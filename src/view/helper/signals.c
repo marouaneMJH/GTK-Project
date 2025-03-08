@@ -706,8 +706,6 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
         return;
     }
 
-    check_scope_back(viewer);
-    g_print("PARENT AFTER CHECK ==========> %s \n", parent_view->view_config->view_id);
     if (update_mode)
     {
         g_print("UPDATE MODE\n");
@@ -831,6 +829,8 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
     {
         g_print("NORMAL MODE\n");
         g_print("PARENT BEFORE ==========> %s \n", parent_view->view_config->view_id);
+        check_scope_back(viewer);
+        g_print("PARENT AFTER CHECK ==========> %s \n", parent_view->view_config->view_id);
         if (g_strcmp0(param_array->params[0], "box") == 0)
         {
             parent_view = create_new_box_from_dialog(parent_view, is_relative_container);

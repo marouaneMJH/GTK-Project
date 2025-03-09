@@ -259,7 +259,7 @@ gchar *write_window_property(FILE *output_file, View *view, int tabs_number)
 
     // Get the icon name
     const gchar *icon_name = gtk_window_get_icon_name(window);
-    if (g_strcmp0(icon_name, "go-home") != 0) // Check if the icon name is not the default
+    if (icon_name && g_strcmp0(icon_name, "go-home") != 0) // Check if the icon name is not the default
     {
         print_tabs(output_file, tabs_number + 1);
         fprintf(output_file, "icon_name=\"%s\"\n", icon_name);

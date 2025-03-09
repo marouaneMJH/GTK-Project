@@ -145,7 +145,215 @@ void write_widget_style(FILE *output_file, GtkWidget *widget, int tabs_number)
     }
 }
 
+void write_widget_view_config(FILE *output_file, View *view, int tabs_number)
+{
+    if (view->view_config->position_x)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "position_x=\"%d\"\n", view->view_config->position_x);
+    }
+    if (view->view_config->position_y)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "position_y=\"%d\"\n", view->view_config->position_y);
+    }
+    if (view->view_config->pack_direction != 1)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "pack_direction=\"%d\"\n", view->view_config->pack_direction);
+    }
 
+    if (view->view_config->box_expand)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "box_expand=\"true\"\n");
+    }
+    if (view->view_config->box_fill)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "box_fill=\"true\"\n");
+    }
+    if (view->view_config->box_padding)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "box_padding=\"%d\"\n", view->view_config->box_padding);
+    }
+    if (view->view_config->flow_box_order)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "flow_box_order=\"%d\"\n", view->view_config->flow_box_order);
+    }
+    if (view->view_config->paned_order)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "paned_order=\"%d\"\n", view->view_config->paned_order);
+    }
+    if (g_strcmp0(view->view_config->tab_label, "\0"))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "tab_label=\"%s\"\n", view->view_config->tab_label);
+    }
+    if (!view->view_config->is_reorderable)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "is_reorderable=\"false\"\n");
+    }
+    if (view->view_config->row)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "row=\"%d\"\n", view->view_config->row);
+    }
+    if (view->view_config->column)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "column=\"%d\"\n", view->view_config->column);
+    }
+    if (view->view_config->row_span != 1)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "row_span=\"%d\"\n", view->view_config->row_span);
+    }
+    if (view->view_config->column_span != 1)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "column_span=\"%d\"\n", view->view_config->column_span);
+    }
+    if (g_strcmp0(view->view_config->menu_orientation, "vertical"))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "menu_orientation=\"%s\"\n", view->view_config->menu_orientation);
+    }
+
+    if (view->view_config->menu_top)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "menu_top=\"%d\"\n", view->view_config->menu_top);
+    }
+    if (view->view_config->menu_bottom != 1)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "menu_bottom=\"%d\"\n", view->view_config->menu_bottom);
+    }
+    if (view->view_config->menu_left)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "menu_left=\"%d\"\n", view->view_config->menu_bottom);
+    }
+    if (view->view_config->menu_right)
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "menu_right=\"%d\"\n", view->view_config->menu_right);
+    }
+}
+
+void write_widget_signale(FILE *output_file, View *view, int tabs_number)
+{
+    // check if there is a signal to add
+    if (view->view_config->signal.event_type == SIG_NONE || view->view_config->signal.event_type == SIG_LAST)
+        return;
+
+    switch (view->view_config->signal.event_type)
+    {
+    case SIG_ON_CLICK:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_click=");
+        break;
+    case SIG_ON_TOGGLE:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_toggle=");
+        break;
+    case SIG_ON_CHANGE:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_change=");
+        break;
+    case SIG_ON_ACTIVATE:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_activate=");
+        break;
+    case SIG_ON_DELETE_EVENT:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_delete_event=");
+        break;
+    case SIG_ON_DESTROY:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_destroy=");
+        break;
+    case SIG_ON_VALUE_CHANGED:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_value_changed=");
+        break;
+    case SIG_ON_ROW_ACTIVATED:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_row_activated=");
+        break;
+    case SIG_ON_KEY_PRESS:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_key_press=");
+        break;
+    case SIG_ON_KEY_RELEASE:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_key_release=");
+        break;
+    case SIG_ON_BUTTON_PRESS:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_button_press=");
+        break;
+    case SIG_ON_BUTTON_RELEASE:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_button_release=");
+        break;
+    case SIG_ON_MOTION_NOTIFY:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_motion_notify=");
+        break;
+    case SIG_ON_FOCUS_IN:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_focus_in=");
+        break;
+    case SIG_ON_FOCUS_OUT:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_focus_out=");
+        break;
+    case SIG_ON_SWITCH_PAGE:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_switch_page=");
+        break;
+    case SIG_ON_SELECTION_CHANGED:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_selection_changed=");
+        break;
+    case SIG_ON_POPUP_MENU:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_popup_menu=");
+        break;
+    case SIG_ON_SCROLL:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_scroll=");
+        break;
+    case SIG_ON_ENTER_NOTIFY:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_enter_notify=");
+        break;
+    case SIG_ON_LEAVE_NOTIFY:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_leave_notify=");
+        break;
+    case SIG_ON_RESPONSE:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_response=");
+        break;
+    case SIG_ON_COLOR_SET:
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "on_color_set=");
+        break;
+    default:
+        // No action for SIG_NONE, SIG_LAST, or unknown signals
+        return;
+        break;
+    }
+
+    fprintf(output_file, "\"%s\"", view->view_config->signal.sig_handler);
+}
 void write_widget_tag_style_view_config(FILE *output_file, View *view, gchar *tag, int tabs_number)
 {
     // print the tag
@@ -156,9 +364,11 @@ void write_widget_tag_style_view_config(FILE *output_file, View *view, gchar *ta
     print_tabs(output_file, tabs_number + 1);
     fprintf(output_file, "id=\"%s\"\n", view->view_config->view_id);
 
-    // print the style 
+    // print the style
     write_widget_style(output_file, view->widget, tabs_number + 1);
 
     // print the view config
     // todo finish the view config
+    write_widget_view_config(output_file, view, tabs_number + 1);
+    write_widget_signale(output_file, view, tabs_number + 1);
 }

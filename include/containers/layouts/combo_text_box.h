@@ -108,14 +108,12 @@ typedef struct
 {
     // Basic properties
     GPtrArray *options;      // Array of ComboTextBoxOption (list of options)
-    Dimensions dimensions;   // Widget dimensions (width & height)
-    Margins margins;         // Widget margins
     gboolean has_entry;      // Whether to allow text input
     gchar *placeholder_text; // Placeholder text inside the entry
     gchar *default_value;    // Default value inside the entry if exist
     gint default_index;      // default index
     gint wrap_width;         //  how many column shown
-
+    
     // Behavior properties
     gboolean popup_fixed_width; // Whether popup should match combo width
     gint popup_shown_rows;      // Maximum number of visible rows in dropdown
@@ -124,10 +122,12 @@ typedef struct
 
     gboolean hexpand;
     gboolean vexpand;
-
+    
     GtkAlign halign;
     GtkAlign valign;
-
+    Dimensions dimensions;   // Widget dimensions (width & height)
+    Margins margins;         // Widget margins
+    
     // Style properties
     ComboTextBoxStyle style; // Background, text color, font, etc.
 
@@ -214,6 +214,8 @@ void combo_text_box_remove(GtkComboBoxText *combo_text_box, gint index);
  * @param text The text of the new option.
  */
 void combo_text_box_insert(GtkComboBoxText *combo_text_box, gint index, const gchar *id, const gchar *text);
+
+ComboTextBoxConfig *read_combo_text_box_config_from_dialog();
 
 gchar *write_combo_text_box_property(FILE *output_file, View *view, int tabs_number);
 

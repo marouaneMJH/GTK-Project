@@ -1,6 +1,13 @@
 #include "./../../../include/builder.h"
 #include "./../../../include/widgets/view/signals.h"
 #include "./../../../include/widgets/view/view.h"
+#include "./create_new_widget_from_dialog.h"
+#include "./../../../include/widgets/View/widget_update.h"
+
+static View *parent_view = NULL;
+static gboolean is_relative_container = TRUE;
+
+static gboolean update_mode = FALSE;
 
 /**
  * @brief structure for handle signales parametres
@@ -16,13 +23,15 @@ typedef struct
 
 gboolean sig_hello(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
-    if (event->type == GDK_BUTTON_PRESS)
-    {
-        g_print("Label clicked! Button %d at (%.2f, %.2f)\n",
-                event->button, event->x, event->y);
-        // Return TRUE to indicate the event was handled.
-        return TRUE;
-    }
+    g_print("\nsignale: hello\n");
+    // print_graph_to_debug(root_view_global);
+    // if (event->type == GDK_BUTTON_PRESS)
+    // {
+    //     g_print("Label clicked! Button %d at (%.2f, %.2f)\n",
+    //             event->button, event->x, event->y);
+    //     // Return TRUE to indicate the event was handled.
+    //     return TRUE;
+    // }
     return FALSE;
 }
 
@@ -313,13 +322,107 @@ static void sig_dialog(GtkWidget *widget, gpointer data)
     show_dialog(dialog);
 }
 
+// This function check if the previous widget is a container or not
+gboolean check_relative_container(GtkWidget *widget)
+{
+    if (GTK_IS_BOX(widget) ||
+        GTK_IS_FIXED(widget) ||
+        GTK_IS_FRAME(widget) ||
+        GTK_IS_SCROLLED_WINDOW(widget) ||
+        GTK_IS_FLOW_BOX(widget) ||
+        GTK_IS_OVERLAY(widget) ||
+        GTK_IS_GRID(widget) ||
+        GTK_IS_PANED(widget) ||
+        GTK_IS_STACK(widget) ||
+        GTK_IS_NOTEBOOK(widget) ||
+        GTK_IS_MENU_BAR(widget) ||
+        // GTK_IS_MENU_ITEM(widget) ||
+        GTK_IS_MENU(widget))
+        return TRUE;
+    return FALSE;
+}
+
+void display_available_scopes_in_combo(GtkWidget *scope_combo, View *current)
+{
+    static gboolean is_menu_bar = FALSE;
+    if (!current)
+    {
+        current = find_view_by_id("viewer", root_view_global);
+        if (!current)
+        {
+            g_print("Error: ==> cannot find viewer\n");
+            return;
+        }
+
+        if (stricmp(current->view_config->view_id, "viewer") == 0)
+            current = current->child;
+
+        if (!current)
+            return;
+    }
+
+    if (GTK_IS_MENU_BAR(current))
+        is_menu_bar = TRUE;
+
+    g_print("PARENT SCOPE: %s\n", current->view_config->view_id);
+    if (check_relative_container(current->widget) || GTK_IS_MENU_ITEM(current->widget))
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(scope_combo), current->view_config->view_id);
+
+    if (is_menu_bar && !(GTK_IS_MENU_BAR(current->widget) || GTK_IS_MENU(current->widget) || GTK_IS_MENU_ITEM(current->widget)))
+    {
+        is_menu_bar = FALSE;
+        return;
+    }
+
+    if (current->child)
+        display_available_scopes_in_combo(scope_combo, current->child);
+    if (current->next)
+        display_available_scopes_in_combo(scope_combo, current->next);
+}
+
+void set_available_scopes(const gchar *widget_type)
+{
+    View *scope_combo = find_view_by_id("scope_back_combo", root_dialog_view_global);
+    if (!scope_combo)
+    {
+        g_print("Error: ==> cannot find scop_back_combo\n");
+        return;
+    }
+
+    GtkWidget *combo_text_box = scope_combo->widget;
+
+    if (!parent_view)
+    {
+        // gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_text_box), "Default");
+        // gtk_combo_box_set_active(GTK_COMBO_BOX(combo_text_box), 0);
+        g_print("First element has no scope back\n");
+        return;
+    }
+
+    View *temp = parent_view;
+    g_print("WIDGET TYPE: %s\n", widget_type);
+
+    // const gchar *current_scope = g_strconcat(parent_view->view_config->view_id, " (Default)", NULL);
+    // g_print("CURENT SCOPE: %s\n", current_scope);
+    // gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_text_box), current_scope);
+    // gtk_combo_box_set_active(GTK_COMBO_BOX(combo_text_box), 0);
+    if (stricmp(widget_type, "menu_item") == 0 || stricmp(widget_type, "menu") == 0)
+    {
+        while (!GTK_IS_MENU_BAR(temp->widget))
+            temp = temp->parent;
+        display_available_scopes_in_combo(combo_text_box, temp);
+    }
+    else
+        display_available_scopes_in_combo(combo_text_box, NULL);
+}
+
 // Set view config from the dialog
 static void sig_properties_dialog(GtkWidget *widget, gpointer data)
 {
     ParamNode *param_array = (ParamNode *)data;
     if (!param_array)
     {
-        g_print("\nError: sig_change_friend_bg_color(), passing argument.\n");
+        g_print("\nError: ==> passing argument.\n");
         return;
     }
 
@@ -327,361 +430,370 @@ static void sig_properties_dialog(GtkWidget *widget, gpointer data)
         build_app(root_app, NULL, BOX_PROPERTIES_DIALOG_TXT);
     else if (g_strcmp0(param_array->params[0], "fixed") == 0)
         build_app(root_app, NULL, FIXED_PROPERTIES_DIALOG_TXT);
-    else if (g_strcmp0(param_array->params[0], "grid") == 0)
-        build_app(root_app, NULL, GRID_PROPERTIES_DIALOG_TXT);
-    else if (g_strcmp0(param_array->params[0], "paned") == 0)
-        build_app(root_app, NULL, PANED_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "flow_box") == 0)
+        build_app(root_app, NULL, FLOW_BOX_PROPERTIES_DIALOG_TXT);
     else if (g_strcmp0(param_array->params[0], "frame") == 0)
         build_app(root_app, NULL, FRAME_PROPERTIES_DIALOG_TXT);
-    else if (g_strcmp0(param_array->params[0], "flowbox") == 0)
-        build_app(root_app, NULL, FLOWBOX_PROPERTIES_DIALOG_TXT);
-    else if (g_strcmp0(param_array->params[0], "overlay") == 0)
-        build_app(root_app, NULL, OVERLAY_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "grid") == 0)
+        build_app(root_app, NULL, GRID_PROPERTIES_DIALOG_TXT);
     else if (g_strcmp0(param_array->params[0], "notebook") == 0)
         build_app(root_app, NULL, NOTEBOOK_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "overlay") == 0)
+        build_app(root_app, NULL, OVERLAY_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "paned") == 0)
+        build_app(root_app, NULL, PANED_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "stack") == 0)
+        build_app(root_app, NULL, STACK_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "scrolled_window") == 0)
+        build_app(root_app, NULL, SCROLLED_WINDOW_PROPERTIES_DIALOG_TXT);
     else if (g_strcmp0(param_array->params[0], "button") == 0)
         build_app(root_app, NULL, BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "check_button") == 0)
+        build_app(root_app, NULL, CHECK_BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "color_button") == 0)
+        build_app(root_app, NULL, COLOR_BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "link_button") == 0)
+        build_app(root_app, NULL, LINK_BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "radio_button") == 0)
+        build_app(root_app, NULL, RADIO_BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "spin_button") == 0)
+        build_app(root_app, NULL, SPIN_BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "switch_button") == 0)
+        build_app(root_app, NULL, SWITCH_BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "toggle_button") == 0)
+        build_app(root_app, NULL, TOGGLE_BUTTON_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "menu_bar") == 0)
+        build_app(root_app, NULL, MENU_BAR_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "menu_item") == 0)
+        build_app(root_app, NULL, MENU_ITEM_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "menu") == 0)
+        build_app(root_app, NULL, MENU_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "entry") == 0)
+        build_app(root_app, NULL, ENTRY_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "image") == 0)
+        build_app(root_app, NULL, IMAGE_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "label") == 0)
+        build_app(root_app, NULL, LABEL_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "progress_bar") == 0)
+        build_app(root_app, NULL, PROGRESS_BAR_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "separator") == 0)
+        build_app(root_app, NULL, SEPARATOR_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "text_area") == 0)
+        build_app(root_app, NULL, TEXT_AREA_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "combo_text_box") == 0)
+        build_app(root_app, NULL, COMBO_TEXT_BOX_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "event_box") == 0)
+        build_app(root_app, NULL, EVENT_BOX_PROPERTIES_DIALOG_TXT);
+    else if (g_strcmp0(param_array->params[0], "expander") == 0)
+        build_app(root_app, NULL, EXPANDER_PROPERTIES_DIALOG_TXT);
+    // else if (g_strcmp0(param_array->params[0], "list_box") == 0)
+    //     build_app(root_app, NULL, LIST_BOX_PROPERTIES_DIALOG_TXT);
 
     GtkWidget *dialog = root_dialog_view_global->widget;
+
+    set_available_scopes(param_array->params[0]);
 
     show_dialog(dialog);
 }
 
-// Readers
-gchar *read_config_value_as_string(gchar *view_id)
+void destroy_subgraph(View *root)
 {
-    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
-    if (!input_view)
-    {
-        g_print("Error: ==> Cannot find the %s\n", view_id);
-        return NULL;
-    }
-    if (GTK_IS_COMBO_BOX(input_view->widget))
-        return gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(input_view->widget));
-    else if (GTK_IS_ENTRY(input_view->widget))
-        return gtk_entry_get_text(GTK_ENTRY(input_view->widget));
-    g_print("Error: => Widget type not compatible with the expected value\n");
-    return NULL;
+    if (root->next)
+        destroy_subgraph(root->next);
+    if (root->child)
+        destroy_subgraph(root->child);
+
+    gtk_widget_destroy(root->widget);
+    g_free(root->view_config);
+    g_free(root);
 }
 
-gint read_config_value_as_int(gchar *view_id)
+// This function check the scope before insert a new element for example MenuItem with Menu or MenuBar
+gboolean check_scope_back(View *root)
 {
-    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
-    if (!input_view)
+    const gchar *scope_back = read_config_value_as_string("scope_back_combo");
+
+    g_print("SCOPE BACK: %s\n", scope_back);
+
+    // If it is the default one don't change anything
+    if (stricmp(scope_back, "Default") == 0)
+        return TRUE;
+
+    // check the root if it is fixed on the viewer at the first time or not
+    if (!root)
     {
-        g_print("Error: ==> Cannot find the %s\n", view_id);
-        return 0;
+        root = find_view_by_id("viewer", root_view_global);
+        if (!root)
+        {
+            g_print("Error: ==> cannot find the viewer");
+            return FALSE;
+        }
     }
-    if (GTK_IS_SPIN_BUTTON(input_view->widget))
-        return gtk_spin_button_get_value(GTK_SPIN_BUTTON(input_view->widget));
 
-    g_print("Error: => Widget type not compatible with the expected value\n");
-    return 0;
-}
+    g_print("TRACE MI: %s \n", root->view_config->view_id);
 
-gdouble read_config_value_as_double(gchar *view_id)
-{
-    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
-    if (!input_view)
+    // If I didn't found the scope target yet
+    if (stricmp(root->parent->view_config->view_id, scope_back) != 0)
     {
-        g_print("Error: ==> Cannot find the %s\n", view_id);
-        return 0;
+        // Menu item case
+        if (!root->child && GTK_IS_MENU_ITEM(root->widget) && stricmp(root->view_config->view_id, scope_back) == 0)
+        {
+            parent_view = root;
+            is_relative_container = TRUE;
+            return TRUE;
+        }
+
+        gboolean result = FALSE;
+        if (root->next)
+            result = check_scope_back(root->next);
+
+        if (root->child && !result)
+            result = check_scope_back(root->child);
+
+        if (stricmp(root->view_config->view_id, scope_back) == 0 && !result)
+        {
+            parent_view = root;
+            is_relative_container = TRUE;
+            if (root)
+            {
+                g_print("I FOUND THE NEW PARENT FIRST VIEW %s\n", parent_view->view_config->view_id);
+            }
+            return TRUE;
+        }
     }
-    if (GTK_IS_SPIN_BUTTON(input_view->widget))
-        return gtk_spin_button_get_value(GTK_SPIN_BUTTON(input_view->widget));
-
-    g_print("Error: => Widget type not compatible with the expected value\n");
-    return 0;
-}
-
-gboolean read_config_value_as_boolean(gchar *view_id)
-{
-    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
-    if (!input_view)
-    {
-        g_print("Error: ==> Cannot find the %s\n", view_id);
-        return false;
-    }
-    if (GTK_IS_SWITCH(input_view->widget))
-        return gtk_switch_get_active(GTK_SWITCH(input_view->widget));
-
-    g_print("Error: => Widget type not compatible with the expected value\n");
-    return false;
-}
-
-// Create a new box view config dynamically
-View *create_new_box_from_dialog(View *parent_view, gboolean is_relative_container)
-{
-    BoxConfig button_config = DEFAULT_BOX;
-
-    // Orientation
-    gchar *selected_orientation = read_config_value_as_string("orientation_combo");
-    g_print("SELECTED ORIENTATION: ===> %s \n", selected_orientation);
-    if (stricmp(selected_orientation, "horizontal") == 0)
-        button_config.orientation = GTK_ORIENTATION_HORIZONTAL;
-
-    // Spacing
-    gint spacing = read_config_value_as_int("spacing_spin");
-    g_print("SELECTED SPACING: ===> %d \n", spacing);
-    button_config.spacing = spacing;
-
-    // Width
-    gint width = read_config_value_as_int("width_spin");
-    button_config.dimensions.width = width;
-
-    // Height
-    gint height = read_config_value_as_int("height_spin");
-    button_config.dimensions.height = height;
-
-    // Margin top
-    gint margin_top = read_config_value_as_int("margin_top_spin");
-    button_config.margins.top = margin_top;
-
-    // Margin bottom
-    gint margin_bottom = read_config_value_as_int("margin_bottom_spin");
-    button_config.margins.bottom = margin_bottom;
-
-    // Margin left
-    gint margin_left = read_config_value_as_int("margin_left_spin");
-    button_config.margins.start = margin_left;
-
-    // Margin right
-    gint margin_right = read_config_value_as_int("margin_right_spin");
-    button_config.margins.end = margin_right;
-
-    // Baseline
-    gchar *baseline = read_config_value_as_string("baseline_combo");
-    if (stricmp(selected_orientation, "top") == 0)
-        button_config.baseline_position = GTK_BASELINE_POSITION_TOP;
-    else if (stricmp(selected_orientation, "bottom") == 0)
-        button_config.baseline_position = GTK_BASELINE_POSITION_BOTTOM;
-
-    // HAlign
-    gchar *halign = read_config_value_as_string("halign_combo");
-    if (stricmp(halign, "start") == 0)
-        button_config.halign = GTK_ALIGN_START;
-    else if (stricmp(halign, "end") == 0)
-        button_config.halign = GTK_ALIGN_END;
-    else if (stricmp(halign, "baseline") == 0)
-        button_config.halign = GTK_ALIGN_BASELINE;
-    else if (stricmp(halign, "center") == 0)
-        button_config.halign = GTK_ALIGN_CENTER;
-
-    // VAlign
-    gchar *valign = read_config_value_as_string("valign_combo");
-    if (stricmp(valign, "start") == 0)
-        button_config.valign = GTK_ALIGN_START;
-    else if (stricmp(valign, "end") == 0)
-        button_config.valign = GTK_ALIGN_END;
-    else if (stricmp(valign, "baseline") == 0)
-        button_config.valign = GTK_ALIGN_BASELINE;
-    else if (stricmp(valign, "center") == 0)
-        button_config.valign = GTK_ALIGN_CENTER;
-
-    // Homogeneous
-    gboolean homogeneous = read_config_value_as_boolean("homogeneous_switch");
-    button_config.homogeneous = homogeneous;
-
-    // HExpand
-    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
-    button_config.hexpand = hexpand;
-
-    // VExpand
-    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
-    button_config.vexpand = vexpand;
-
-    // Background color
-    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
-    strcpy(button_config.bg_color, bg_color);
-
-    // Text color
-    const gchar *text_color = read_config_value_as_string("color_entry");
-    strcpy(button_config.text_color, text_color);
-
-    // Background image
-    const gchar *bg_image = read_config_value_as_string("bg_image_entry");
-    strcpy(button_config.bg_image, bg_image);
-
-    GtkWidget *new_box = create_box(button_config);
-
-    // View config
-    ViewConfig *view_config = NULL;
-    SAFE_ALLOC(view_config, ViewConfig, 1);
-    DFEAULT_VIEW_CONFIG(view_config);
-
-    gchar *view_id = read_config_value_as_string("view_id_entry");
-    strcpy(view_config->view_id, view_id);
-
-    // Box config
-    gboolean box_expand = read_config_value_as_boolean("box_expand_switch");
-    view_config->box_expand = box_expand;
-
-    gboolean box_fill = read_config_value_as_boolean("box_fill_switch");
-    view_config->box_fill = box_fill;
-
-    gint box_padding = read_config_value_as_int("box_padding_spin");
-    view_config->box_padding = box_padding;
-
-    gchar *pack_direction = read_config_value_as_string("pack_direction_combo");
-    if (stricmp(pack_direction, "end") == 0)
-        view_config->pack_direction = 0;
     else
-        view_config->pack_direction = 1;
+    {
+        while (root->next)
+            root = root->next;
 
-    // Fixed config
-    gint position = read_config_value_as_int("position_x_spin");
-    view_config->position_x = position;
-    position = read_config_value_as_int("position_y_spin");
-    view_config->position_y = position;
+        parent_view = root;
+        is_relative_container = FALSE;
 
-    // TODO: Complete other view config properties
-
-    // Signals config
-    // OnClick
-    gchar *sig_on_click_handler = read_config_value_as_string("on_click_entry");
-    view_config->signal.event_type = SIG_ON_BUTTON_PRESS;
-    g_strlcpy(view_config->signal.sig_handler, sig_on_click_handler, MAX_SIGNAL_NAME_SIZE);
-
-    View *new_box_view = create_view(new_box, view_config);
-
-    g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
-    add_view(new_box_view, parent_view, is_relative_container);
-
-    return new_box_view;
+        if (root)
+        {
+            g_print("I FOUND THE NEW PARENT VIEW %s\n", parent_view->view_config->view_id);
+        }
+        return TRUE;
+    }
+    return FALSE;
 }
 
-// Create a new button view config dynamically
-View *create_new_button_from_dialog(View *parent_view, gboolean is_relative_container)
+// Remove a widget from the graph and the subgraph if exists
+static void remove_widget_from_graph(GtkWidget *widget, gpointer data)
 {
-    ButtonConfig button_config = DEFAULT_BUTTON;
+    const gchar *view_id = gtk_button_get_label(GTK_BUTTON(widget));
+    View *target = find_view_by_id((gchar *)view_id, root_view_global);
+    View *temp = NULL;
 
-    // Label
-    gchar *label = read_config_value_as_string("label_entry");
-    strcpy(button_config.label, label);
-    // Width
-    gint width = read_config_value_as_int("width_spin");
-    button_config.dimensions.width = width;
+    if (target)
+    {
+        temp = target->parent;
 
-    // Height
-    gint height = read_config_value_as_int("height_spin");
-    button_config.dimensions.height = height;
+        g_print("TEMP: %s\n", temp->view_config->view_id);
+        if (g_strcmp0(temp->child->view_config->view_id, view_id) == 0)
+        {
+            g_print("REMOVE CHILD\n");
+            // remove the child
+            temp->child = temp->child->next;
+        }
+        else
+        {
+            g_print("REMOVE BROTHER\n");
+            // Search the previous of the trget and remove it
+            temp = temp->child;
+            while (temp->next)
+            {
+                if (g_strcmp0(temp->next->view_config->view_id, view_id) == 0)
+                {
+                    temp->next = temp->next->next;
+                    break;
+                }
+                else
+                    temp = temp->next;
+            }
+        }
+        g_print("CHECK PARENT\n");
+        if (parent_view == target || check_relative_container(temp->widget))
+        {
+            parent_view = temp;
+            is_relative_container = check_relative_container(parent_view->widget);
+            g_print("PARENT AFTER REMOVE: %s\n", parent_view->view_config->view_id);
+        }
 
-    // Margin top
-    gint margin_top = read_config_value_as_int("margin_top_spin");
-    button_config.margins.top = margin_top;
+        if (target->child)
+            destroy_subgraph(target->child);
+        gtk_widget_destroy(target->widget);
 
-    // Margin bottom
-    gint margin_bottom = read_config_value_as_int("margin_bottom_spin");
-    button_config.margins.bottom = margin_bottom;
+        free(target->view_config);
+        free(target);
+    }
 
-    // Margin left
-    gint margin_left = read_config_value_as_int("margin_left_spin");
-    button_config.margins.start = margin_left;
+    // gtk_widget_destroy(target->widget);
+    gtk_widget_destroy(widget);
 
-    // Margin right
-    gint margin_right = read_config_value_as_int("margin_right_spin");
-    button_config.margins.end = margin_right;
+    View *root_v = find_view_by_id("viewer", root_view_global);
+    print_graph_to_debug(root_v);
+}
 
-    // HAlign
-    gchar *halign = read_config_value_as_string("halign_combo");
-    if (stricmp(halign, "start") == 0)
-        button_config.halign = GTK_ALIGN_START;
-    else if (stricmp(halign, "end") == 0)
-        button_config.halign = GTK_ALIGN_END;
-    else if (stricmp(halign, "baseline") == 0)
-        button_config.halign = GTK_ALIGN_BASELINE;
-    else if (stricmp(halign, "center") == 0)
-        button_config.halign = GTK_ALIGN_CENTER;
+static void update_widget_config(GtkWidget *widget, gpointer data)
+{
 
-    // VAlign
-    gchar *valign = read_config_value_as_string("valign_combo");
-    if (stricmp(valign, "start") == 0)
-        button_config.valign = GTK_ALIGN_START;
-    else if (stricmp(valign, "end") == 0)
-        button_config.valign = GTK_ALIGN_END;
-    else if (stricmp(valign, "baseline") == 0)
-        button_config.valign = GTK_ALIGN_BASELINE;
-    else if (stricmp(valign, "center") == 0)
-        button_config.valign = GTK_ALIGN_CENTER;
+    // TODO: Update widget config
+    // Steps:
+    // 1 - Get the view id
+    // 2 - Find the view by id
+    // 3 - Read the current config from the widget
+    // 3 - Read new view config from the dialog
+    // 4 - Update the view config
 
-    // HExpand
-    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
-    button_config.hexpand = hexpand;
+    const gchar *view_id = gtk_button_get_label(GTK_BUTTON(widget));
+    View *target_view = find_view_by_id((gchar *)view_id, root_view_global);
 
-    // VExpand
-    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
-    button_config.vexpand = vexpand;
+    GtkWidget *dialog = NULL;
 
-    // Background color
-    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
-    strcpy(button_config.bg_color, bg_color);
+    if (!target_view)
+    {
+        g_print("TARGET IS NOT FOUND\n");
+        return;
+    }
 
-    // Text color
-    const gchar *text_color = read_config_value_as_string("color_entry");
-    strcpy(button_config.color, text_color);
+    if (GTK_IS_BOX(target_view->widget))
+    {
+        dialog = prepare_update_box_config(target_view);
+    }
+    else if (GTK_IS_SCROLLED_WINDOW(target_view->widget))
+    {
+        dialog = prepare_update_scrolled_window_config(target_view);
+    }
+    else if (GTK_IS_FIXED(target_view->widget))
+    {
+        dialog = prepare_update_fixed_config(target_view);
+    }
+    else if (GTK_IS_FLOW_BOX(target_view->widget))
+    {
+        dialog = prepare_update_flow_box_config(target_view);
+    }
+    else if (GTK_IS_FRAME(target_view->widget))
+    {
+        dialog = prepare_update_frame_config(target_view);
+    }
+    else if (GTK_IS_GRID(target_view->widget))
+    {
+        dialog = prepare_update_grid_config(target_view);
+    }
+    else if (GTK_IS_NOTEBOOK(target_view->widget))
+    {
+        dialog = prepare_update_notebook_config(target_view);
+    }
+    else if (GTK_IS_OVERLAY(target_view->widget))
+    {
+        dialog = prepare_update_overlay_config(target_view);
+    }
+    else if (GTK_IS_PANED(target_view->widget))
+    {
+        dialog = prepare_update_paned_config(target_view);
+    }
+    else if (GTK_IS_STACK(target_view->widget))
+    {
+        dialog = prepare_update_stack_config(target_view);
+    }
+    else if (GTK_IS_CHECK_BUTTON(target_view->widget) && !GTK_IS_RADIO_BUTTON(target_view->widget))
+    {
+        dialog = prepare_update_check_button_config(target_view);
+    }
+    else if (GTK_IS_COLOR_BUTTON(target_view->widget) && !GTK_IS_LINK_BUTTON(target_view->widget))
+    {
+        dialog = prepare_update_color_button_config(target_view);
+    }
+    else if (GTK_IS_LINK_BUTTON(target_view->widget) && !GTK_IS_COLOR_BUTTON(target_view->widget))
+    {
+        dialog = prepare_update_link_button_config(target_view);
+    }
+    else if (GTK_IS_RADIO_BUTTON(target_view->widget))
+    {
+        dialog = prepare_update_radio_button_config(target_view);
+    }
+    else if (GTK_IS_SPIN_BUTTON(target_view->widget) && !GTK_IS_COLOR_BUTTON(target_view->widget) && !GTK_IS_SWITCH(target_view->widget))
+    {
+        dialog = prepare_update_spin_button_config(target_view);
+    }
+    else if (GTK_IS_SWITCH(target_view->widget) && !GTK_IS_TOGGLE_BUTTON(target_view->widget))
+    {
+        dialog = prepare_update_switch_button_config(target_view);
+    }
+    else if (GTK_IS_BUTTON(target_view->widget) && !GTK_IS_TOGGLE_BUTTON(target_view->widget))
+    {
+        dialog = prepare_update_button_config(target_view);
+    }
+    else if (GTK_IS_TOGGLE_BUTTON(target_view->widget))
+    {
+        g_print("TOGGLE PREP\n");
+        dialog = prepare_update_toggle_button_config(target_view);
+    }
+    else if (GTK_IS_MENU_BAR(target_view->widget))
+    {
+        dialog = prepare_update_menu_bar_config(target_view);
+    }
+    else if (GTK_IS_MENU_ITEM(target_view->widget))
+    {
+        dialog = prepare_update_menu_item_config(target_view);
+    }
+    else if (GTK_IS_MENU(target_view->widget))
+    {
+        dialog = prepare_update_menu_config(target_view);
+    }
+    else if (GTK_IS_ENTRY(target_view->widget))
+    {
+        dialog = prepare_update_entry_config(target_view);
+    }
+    else if (GTK_IS_IMAGE(target_view->widget))
+    {
+        dialog = prepare_update_image_config(target_view);
+    }
+    else if (GTK_IS_LABEL(target_view->widget))
+    {
+        dialog = prepare_update_label_config(target_view);
+    }
+    else if (GTK_IS_PROGRESS_BAR(target_view->widget))
+    {
+        dialog = prepare_update_progress_bar_config(target_view);
+    }
+    else if (GTK_IS_SEPARATOR(target_view->widget))
+    {
+        dialog = prepare_update_separator_config(target_view);
+    }
+    else if (GTK_IS_TEXT_VIEW(target_view->widget))
+    {
+        // dialog = prepare_update_text_area_config(target_view);
+    }
+    else if (GTK_IS_COMBO_BOX_TEXT(target_view->widget))
+    {
+        // dialog = prepare_update_combo_text_box_config(target_view);
+    }
 
-    GtkWidget *new_button = create_button(button_config);
+    update_mode = TRUE;
+    if (dialog)
+        show_dialog(dialog);
+}
 
-    // View config
-    ViewConfig *view_config = NULL;
-    SAFE_ALLOC(view_config, ViewConfig, 1);
-    DFEAULT_VIEW_CONFIG(view_config);
+void add_view_to_content_box(View *view)
+{
+    ButtonConfig content_btn_config = DEFAULT_BUTTON;
+    strcpy(content_btn_config.label, parent_view->view_config->view_id);
+    GtkWidget *content_btn = create_button(content_btn_config);
 
-    gchar *view_id = read_config_value_as_string("view_id_entry");
-    strcpy(view_config->view_id, view_id);
-
-    // Box config
-    gboolean box_expand = read_config_value_as_boolean("box_expand_switch");
-    view_config->box_expand = box_expand;
-
-    gboolean box_fill = read_config_value_as_boolean("box_fill_switch");
-    view_config->box_fill = box_fill;
-
-    gint box_padding = read_config_value_as_int("box_padding_spin");
-    view_config->box_padding = box_padding;
-
-    gchar *pack_direction = read_config_value_as_string("pack_direction_combo");
-    if (stricmp(pack_direction, "end") == 0)
-        view_config->pack_direction = 0;
-    else
-        view_config->pack_direction = 1;
-
-    // Fixed config
-    gint position = read_config_value_as_int("position_x_spin");
-    view_config->position_x = position;
-    position = read_config_value_as_int("position_y_spin");
-    view_config->position_y = position;
-
-    // TODO: Complete other view config properties
-
-    // Signals config
-    // OnClick
-    gchar *sig_on_click_handler = read_config_value_as_string("on_click_entry");
-    view_config->signal.event_type = SIG_ON_CLICK;
-    g_strlcpy(view_config->signal.sig_handler, sig_on_click_handler, MAX_SIGNAL_NAME_SIZE);
-
-    View *new_button_view = create_view(new_button, view_config);
-
-    g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
-
-    add_view(new_button_view, parent_view, is_relative_container);
-
-    return new_button_view;
+    View *content_box_view = find_view_by_id("content_box", root_view_global);
+    if (content_box_view)
+    {
+        g_print("PARENT-VIEW: %s\n", parent_view->view_config->view_id);
+        g_signal_connect(G_OBJECT(content_btn), "clicked", G_CALLBACK(update_widget_config), NULL);
+        // g_signal_connect(G_OBJECT(content_btn), "clicked", G_CALLBACK(remove_widget_from_graph), NULL);
+        gtk_box_pack_end(GTK_BOX(content_box_view->widget), content_btn, TRUE, FALSE, 0);
+    }
 }
 
 static void sig_create_new_view(GtkWidget *widget, gpointer data)
 {
-
-    static View *parent_view = NULL;
-    static gboolean is_relative_container = TRUE;
-
-    // TODO: Add the new widget to viewer
-    // Steps:
-    // 1 - Get viewer
-    // 2 - Read config from root dialog for each widget
-    // 3 - Create the view basing on the config
-    // 4 - Add the view a new view graph (or exist one except the main)
-
     View *viewer = find_view_by_id("viewer", root_view_global);
     root_crud_ui = viewer;
 
@@ -701,41 +813,278 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
         return;
     }
 
-    if (g_strcmp0(param_array->params[0], "box") == 0)
+    if (update_mode)
     {
-        parent_view = create_new_box_from_dialog(parent_view, is_relative_container);
-        is_relative_container = TRUE;
-        g_print("PARENT VIEW AFTER ===============> %s \n", parent_view->view_config->view_id);
-        gtk_widget_show_all(root_view_global->widget);
+        g_print("UPDATE MODE\n");
+        if (g_strcmp0(param_array->params[0], "scrolled_window") == 0)
+        {
+            parent_view = update_scrolled_window_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "box") == 0)
+        {
+            parent_view = update_box_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "fixed") == 0)
+        {
+            parent_view = update_fixed_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "box") == 0)
+        {
+            parent_view = update_box_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "fixed") == 0)
+        {
+            parent_view = update_fixed_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "flow_box") == 0)
+        {
+            parent_view = update_flow_box_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "frame") == 0)
+        {
+            parent_view = update_frame_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "grid") == 0)
+        {
+            parent_view = update_grid_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "notebook") == 0)
+        {
+            parent_view = update_notebook_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "overlay") == 0)
+        {
+            parent_view = update_overlay_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "paned") == 0)
+        {
+            parent_view = update_paned_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "stack") == 0)
+        {
+            parent_view = update_stack_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "button") == 0)
+        {
+            parent_view = update_button_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "check_button") == 0)
+        {
+            parent_view = update_check_button_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "color_button") == 0)
+        {
+            parent_view = update_color_button_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "link_button") == 0)
+        {
+            parent_view = update_link_button_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "radio_button") == 0)
+        {
+            parent_view = update_radio_button_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "spin_button") == 0)
+        {
+            parent_view = update_spin_button_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "switch_button") == 0)
+        {
+            parent_view = update_switch_button_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "toggle_button") == 0)
+        {
+            parent_view = update_toggle_button_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "menu_bar") == 0)
+        {
+            parent_view = update_menu_bar_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "menu_item") == 0)
+        {
+            parent_view = update_menu_item_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "menu") == 0)
+        {
+            parent_view = update_menu_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "entry") == 0)
+        {
+            parent_view = update_entry_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "image") == 0)
+        {
+            parent_view = update_image_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "label") == 0)
+        {
+            parent_view = update_label_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "progress_bar") == 0)
+        {
+            parent_view = update_progress_bar_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "separator") == 0)
+        {
+            parent_view = update_separator_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "text_area") == 0)
+        {
+            // parent_view = update_text_area_config();
+        }
+        else if (g_strcmp0(param_array->params[0], "combo_text_box") == 0)
+        {
+            // parent_view = update_combo_text_box_config();
+        }
+        update_mode = FALSE;
     }
-    else if (g_strcmp0(param_array->params[0], "fixed") == 0)
+    else
     {
-    }
-    else if (g_strcmp0(param_array->params[0], "grid") == 0)
-        build_app(root_app, NULL, GRID_PROPERTIES_DIALOG_TXT);
-    else if (g_strcmp0(param_array->params[0], "paned") == 0)
-        build_app(root_app, NULL, PANED_PROPERTIES_DIALOG_TXT);
-    else if (g_strcmp0(param_array->params[0], "frame") == 0)
-        build_app(root_app, NULL, FRAME_PROPERTIES_DIALOG_TXT);
-    else if (g_strcmp0(param_array->params[0], "flowbox") == 0)
-        build_app(root_app, NULL, FLOWBOX_PROPERTIES_DIALOG_TXT);
-    else if (g_strcmp0(param_array->params[0], "overlay") == 0)
-        build_app(root_app, NULL, OVERLAY_PROPERTIES_DIALOG_TXT);
-    else if (g_strcmp0(param_array->params[0], "notebook") == 0)
-        build_app(root_app, NULL, NOTEBOOK_PROPERTIES_DIALOG_TXT);
-    else if (g_strcmp0(param_array->params[0], "button") == 0)
-    {
-        parent_view = create_new_button_from_dialog(parent_view, is_relative_container);
-        is_relative_container = FALSE;
+        g_print("NORMAL MODE\n");
+        g_print("PARENT BEFORE ==========> %s \n", parent_view->view_config->view_id);
+        check_scope_back(viewer);
+        g_print("PARENT AFTER CHECK ==========> %s \n", parent_view->view_config->view_id);
+        if (g_strcmp0(param_array->params[0], "box") == 0)
+        {
+            parent_view = create_new_box_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "scrolled_window") == 0)
+        {
+            parent_view = create_new_scrolled_window_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "fixed") == 0)
+        {
+            parent_view = create_new_fixed_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "flow_box") == 0)
+        {
+            parent_view = create_new_flow_box_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "frame") == 0)
+        {
+            parent_view = create_new_frame_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "grid") == 0)
+        {
+            parent_view = create_new_grid_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "notebook") == 0)
+        {
+            parent_view = create_new_notebook_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "overlay") == 0)
+        {
+            parent_view = create_new_overlay_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "paned") == 0)
+        {
+            parent_view = create_new_paned_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "stack") == 0)
+        {
+            parent_view = create_new_stack_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "button") == 0)
+        {
+            parent_view = create_new_button_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "check_button") == 0)
+        {
+            parent_view = create_new_check_button_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "color_button") == 0)
+        {
+            parent_view = create_new_color_button_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "link_button") == 0)
+        {
+            parent_view = create_new_link_button_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "radio_button") == 0)
+        {
+            parent_view = create_new_radio_button_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "spin_button") == 0)
+        {
+            parent_view = create_new_spin_button_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "switch_button") == 0)
+        {
+            parent_view = create_new_switch_button_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "toggle_button") == 0)
+        {
+            parent_view = create_new_toggle_button_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "menu_bar") == 0)
+        {
+            parent_view = create_new_menu_bar_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "menu_item") == 0)
+        {
+            parent_view = create_new_menu_item_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "menu") == 0)
+        {
+            parent_view = create_new_menu_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "entry") == 0)
+        {
+            parent_view = create_new_entry_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "image") == 0)
+        {
+            parent_view = create_new_image_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "label") == 0)
+        {
+            parent_view = create_new_label_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "progress_bar") == 0)
+        {
+            parent_view = create_new_progress_bar_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "separator") == 0)
+        {
+            parent_view = create_new_separator_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "text_area") == 0)
+        {
+            parent_view = create_new_text_area_from_dialog(parent_view, is_relative_container);
+        }
+        else if (g_strcmp0(param_array->params[0], "combo_text_box") == 0)
+        {
+            parent_view = create_new_combo_text_box_from_dialog(parent_view, is_relative_container);
+        }
+        // else if (g_strcmp0(param_array->params[0], "event_box") == 0)
+        // {
+        //     parent_view = create_new_event_box_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = TRUE;
+        // }
+        // else if (g_strcmp0(param_array->params[0], "expander") == 0)
+        // {
+        //     parent_view = create_new_expander_from_dialog(parent_view, is_relative_container);
+        //     is_relative_container = TRUE;
+        // }
+        // print_graph_to_debug(viewer);
+        add_view_to_content_box(parent_view);
         gtk_widget_show_all(root_view_global->widget);
     }
 
-    g_print("PARENT ==========> %s \n", parent_view->parent->view_config->view_id);
+    is_relative_container = check_relative_container(parent_view->widget);
 
+    if (GTK_IS_MENU_ITEM(parent_view->widget))
+    {
+        // Menu item case
+        gboolean has_submenu = read_config_value_as_boolean("has_submenu_switch");
+        if (has_submenu)
+            is_relative_container = TRUE;
+    }
+    g_print("PARENT VIEW AFTER ==========> %s \n", parent_view->view_config->view_id);
     sig_destroy_dialog(widget, NULL);
 }
 
-void connect_signales(View *view)
+void connect_signals(View *view)
 {
     // Exit the function if no signale triggered
     if (view->view_config->signal.event_type == SIG_NONE)

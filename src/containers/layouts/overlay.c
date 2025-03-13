@@ -44,6 +44,30 @@ ViewConfig *configure_overlay_property(OverlayConfig *overlay_config, ViewConfig
     else if (g_strcmp0(property, "opacity") == 0)
         overlay_config->opacity = atof(value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            overlay_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            overlay_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            overlay_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            overlay_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            overlay_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            overlay_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            overlay_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            overlay_config->halign = GTK_ALIGN_FILL;
+    }
+
     // configure default properties
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
@@ -70,7 +94,119 @@ GtkWidget *create_overlay(OverlayConfig overlay_config)
         overlay_config.margins.end ||
         overlay_config.margins.start)
         widget_set_margins(overlay, overlay_config.margins);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(overlay, overlay_config.hexpand);
+    gtk_widget_set_vexpand(overlay, overlay_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(overlay, overlay_config.halign);
+    gtk_widget_set_valign(overlay, overlay_config.valign);
+
     return overlay;
+}
+
+OverlayConfig *read_overlay_config_from_dialog()
+{
+    OverlayConfig *overlay_config_ptr = NULL;
+    SAFE_ALLOC(overlay_config_ptr, OverlayConfig, 1);
+
+    OverlayConfig overlay_config = DEFAULT_OVERLAY;
+
+    // Opacity
+    overlay_config.opacity = read_config_value_as_double("opacity_spin");
+    
+    // Border radius
+    overlay_config.border_radius = read_config_value_as_int("border_radius_spin");
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    overlay_config.dimensions.width = dimensions->width;
+    overlay_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    overlay_config.margins.top = margins->top;
+    overlay_config.margins.bottom = margins->bottom;
+    overlay_config.margins.start = margins->start;
+    overlay_config.margins.end = margins->end;
+
+    // HAlign
+    overlay_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    overlay_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    overlay_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    overlay_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(overlay_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *bg_image = read_config_value_as_string("bg_image_entry");
+    strcpy(overlay_config.bg_image, bg_image);
+
+    memcpy(overlay_config_ptr, &overlay_config, sizeof(OverlayConfig));
+    return overlay_config_ptr;
+}
+
+OverlayConfig *read_overlay_config_from_widget(GtkWidget *widget)
+{
+    OverlayConfig *overlay_config_ptr = NULL;
+    SAFE_ALLOC(overlay_config_ptr, OverlayConfig, 1);
+
+    OverlayConfig overlay_config = DEFAULT_OVERLAY;
+
+    // Opacity
+    overlay_config.opacity = gtk_widget_get_opacity(widget);
+
+    // Border radius
+   
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    overlay_config.dimensions.width = allocation.width;
+    overlay_config.dimensions.height = allocation.height;
+
+    // Expand
+    overlay_config.hexpand = gtk_widget_get_hexpand(widget);
+    overlay_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    overlay_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    overlay_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    overlay_config.margins = margins;
+
+    gchar *property_value = NULL;
+
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(overlay_config.bg_color, property_value);
+
+    // Background image
+    property_value = read_bg_image_from_widget(widget);
+    if (property_value)
+        strcpy(overlay_config.bg_image, property_value);
+
+    memcpy(overlay_config_ptr, &overlay_config, sizeof(OverlayConfig));
+
+    return overlay_config_ptr;
 }
 
 gchar *write_overlay_property(FILE *output_file, View *view, int tabs_number)

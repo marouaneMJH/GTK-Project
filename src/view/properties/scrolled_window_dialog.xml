@@ -15,7 +15,7 @@
 
         <label
             id="title_label"
-            label_text="Box properties"
+            label_text="ScrolledWindow properties"
             yalign="0.5"
             font_size="18"
             box_expand="true"
@@ -36,8 +36,9 @@
                 spacing="10"
             >
 
+                <!-- Main config (Core) -->
                 <frame
-                    id="btn1"
+                    id="btn12"
                     label="Core"
                     margin_left="10"
                     margin_right="10"
@@ -49,6 +50,32 @@
                         spacing="10"
                     >
                         <box
+                            id="view_id_box"
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="view_id_label"
+                                label_text="View ID"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                            <entry
+                                id="view_id_entry"
+                                placeholder_text="eg: widget_id"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+
+                        <box
+                            id="scope_back_box"
                             orientation="horizontal"
                             spacing="10"
                             box_expand="true"
@@ -59,20 +86,19 @@
                         >
                             <label
                                 id="label11"
-                                label_text="Orientation"
+                                label_text="Scope back"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
                             />
+
                             <combo_text_box
-                                id="combo1"
+                                id="scope_back_combo"
                                 default_index="0"
-                                option1="Vertical (default)"
-                                option2="Horizontal"
+                                option1="Default"
                                 box_expand="true"
                                 box_fill="true"
                             />
-
                         </box>
 
                         <box
@@ -86,44 +112,17 @@
                         >
                             <label
                                 id="label11"
-                                label_text="Spacing"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-
-                            <spin_button
-                                id="spacing_spin"
-                                initial_value="0"
-                                min="0"
-                                max="10000"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                        </box>
-
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            box_expand="true"
-                            box_fill="true"
-                            margin_left="10"
-                            margin_right="10"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="label11"
-                                label_text="Baseline"
+                                label_text="Horizontal policy"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
                             />
                             <combo_text_box
-                                id="combo1"
+                                id="h_scrollbar_policy_combo"
                                 default_index="0"
-                                option1="Center (default)"
-                                option2="Top"
-                                option3="Bottom"
+                                option1="Automatic (default)"
+                                option2="Always"
+                                option3="Never"
                                 box_expand="true"
                                 box_fill="true"
                             />
@@ -141,15 +140,410 @@
                             homogeneous="true"
                         >
                             <label
-                                id="homogeneous_label"
-                                label_text="Homogeneous"
+                                id="label11"
+                                label_text="Vertical policy"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                            <combo_text_box
+                                id="v_scrollbar_policy_combo"
+                                default_index="0"
+                                option1="Automatic (default)"
+                                option2="Always"
+                                option3="Never"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                        </box>
+
+                    </box>
+
+                </frame>
+
+                <!-- View Config -->
+                <frame
+                    id="btn13"
+                    label="View config"
+                    margin_left="10"
+                    margin_right="10"
+                    box_expand="true"
+                    box_fill="true"
+                >
+                    <box
+                        id="bx"
+                        spacing="10"
+                    >
+
+                        <!-- Box config -->
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Box expand"
                                 yalign="0.5"
                                 box_expand="true"
                                 box_fill="true"
                             />
 
                             <switch_button
-                                id="homogeneous_switch"
+                                id="box_expand_switch"
+                                box_expand="true"
+                                box_fill="true"
+                                margin_right="20"
+                                halign="end"
+                            />
+
+                        </box>
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Box fill"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <switch_button
+                                id="box_fill_switch"
+                                box_expand="true"
+                                box_fill="true"
+                                margin_right="20"
+                                halign="end"
+                            />
+
+                        </box>
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Box padding"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <spin_button
+                                id="box_padding_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Pack direction"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <combo_text_box
+                                id="pack_direction_combo"
+                                default_index="0"
+                                option1="Start (default)"
+                                option2="End"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+
+                        <!-- Fixed config -->
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="PositionX"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <spin_button
+                                id="position_x_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="PositionY"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <spin_button
+                                id="position_y_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+
+                        <!-- Paned config -->
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Paned order"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <combo_text_box
+                                id="paned_order_combo"
+                                default_index="0"
+                                option1="First"
+                                option2="Second"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+
+                        <!-- Grid config -->
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Row"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <spin_button
+                                id="row_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Column"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <spin_button
+                                id="column_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Row span"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <spin_button
+                                id="row_span_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Column span"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <spin_button
+                                id="column_span_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+
+                        <!-- FlowBox config -->
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="FlowBox order"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <spin_button
+                                id="flowbox_order_spin"
+                                initial_value="0"
+                                min="0"
+                                max="10000"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                        </box>
+
+                        <!-- Notebook config -->
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Tab label"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <entry
+                                id="tab_label_entry"
+                                placeholder_text="eg: Tab 1"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                        </box>
+                        <box
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            margin_bottom="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Reorderable"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <switch_button
+                                id="is_reorderable_switch"
                                 box_expand="true"
                                 box_fill="true"
                                 margin_right="20"
@@ -158,13 +552,15 @@
 
                         </box>
 
-
                     </box>
 
-                </frame>
+                </frame> <!--
+                ./View Config-->
 
+
+                <!-- Dimensions -->
                 <frame
-                    id="btn1"
+                    id="btn14"
                     label="Dimensions"
                     margin_left="10"
                     margin_right="10"
@@ -229,10 +625,12 @@
                         </box>
                     </box>
 
-                </frame>
+                </frame> <!--
+                ./Dimensions -->
 
+                <!-- Margins -->
                 <frame
-                    id="btn1"
+                    id="btn51"
                     label="Margins"
                     margin_left="10"
                     margin_right="10"
@@ -347,10 +745,12 @@
                         </box>
                     </box>
 
-                </frame>
+                </frame> <!--
+                ./ Margins -->
 
+                <!-- Alignment -->
                 <frame
-                    id="btn1"
+                    id="btn16"
                     label="Alignment"
                     margin_left="10"
                     margin_right="10"
@@ -424,10 +824,12 @@
                         </box>
                     </box>
 
-                </frame>
+                </frame> <!--
+                ./Alignment -->
 
+                <!-- Expand -->
                 <frame
-                    id="btn1"
+                    id="btn17"
                     label="Expand"
                     margin_left="10"
                     margin_right="10"
@@ -483,7 +885,7 @@
                             />
 
                             <switch_button
-                                id="hexpand_switch"
+                                id="vexpand_switch"
                                 box_expand="true"
                                 box_fill="true"
                                 margin_right="20"
@@ -493,10 +895,12 @@
                         </box>
                     </box>
 
-                </frame>
+                </frame> <!--
+                ./Expand -->
 
+                <!-- Colors -->
                 <frame
-                    id="btn1"
+                    id="btn18"
                     label="Colors"
                     margin_left="10"
                     margin_right="10"
@@ -537,6 +941,7 @@
                             box_fill="true"
                             margin_left="10"
                             margin_right="10"
+                            margin_bottom="10"
                             homogeneous="true"
                         >
                             <label
@@ -554,38 +959,16 @@
                             />
 
                         </box>
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            box_expand="true"
-                            box_fill="true"
-                            margin_left="10"
-                            margin_right="10"
-                            margin_bottom="10"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="bg_image_label"
-                                label_text="Background image"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                            <entry
-                                id="bg_image_entry"
-                                placeholder_text="eg: programer.jpg"
-                                box_expand="true"
-                                box_fill="true"
-                            />
 
-                        </box>
                     </box>
 
-                </frame>
+                </frame> <!--
+                ./Colors -->
 
             </box>
         </scrolled_window>
 
+        <!-- Apply buttons -->
         <box
             orientation="horizontal"
             spacing="10"
@@ -598,23 +981,26 @@
         >
 
             <button
-                id="btn1"
+                id="btn19"
                 label="Apply"
                 box_expand="true"
                 box_fill="true"
                 icon_path="./assets/images/icons/approve.png"
+                param_1="scrolled_window"
+                on_click="sig_create_new_view"
             />
 
             <button
-                id="btn1"
+                id="btn10"
                 label="Cancel"
                 box_expand="true"
                 box_fill="true"
                 icon_path="./assets/images/icons/no-entry.png"
+                on_click="sig_destroy_dialog"
             />
 
 
-        </box>
-    </box>
+        </box><!-- ./Apply buttons -->
 
+    </box>
 </dialog>

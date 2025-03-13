@@ -32,9 +32,9 @@ typedef struct
     gchar tooltip[MAX_TOOLTIP_SIZE];
     GtkOrientation orientation;
     gboolean is_visible;
+    
     gboolean hexpand;
     gboolean vexpand;
-
     GtkAlign halign;
     GtkAlign valign;
 
@@ -45,6 +45,10 @@ typedef struct
 ViewConfig *init_separator_config(FILE *index, SeparatorConfig *separator_config);
 
 GtkWidget *create_separator(SeparatorConfig separator_config);
+
+SeparatorConfig *read_separator_config_from_dialog();
+
+SeparatorConfig *read_separator_config_from_widget(GtkWidget *widget);
 
 gchar *write_separator_property(FILE *output_file, View *view, int tabs_number);
 

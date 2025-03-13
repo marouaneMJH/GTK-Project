@@ -88,6 +88,10 @@ GtkStyleContext *get_style_provider_context(GtkWidget *widget, const gchar *bg_c
 // Function to set both background and text colors for a widget
 void widget_set_colors(GtkWidget *widget, const gchar *bg_color, const gchar *color)
 {
+    if (bg_color)
+        g_object_set_data(G_OBJECT(widget), "bg_color", g_strdup(bg_color));
+    if (color)
+        g_object_set_data(G_OBJECT(widget), "text_color", g_strdup(color));
     // Add a CSS class to the widget's style context with the specified colors
     gtk_style_context_add_class(get_style_provider_context(widget, bg_color, color, NULL), "style");
 }
@@ -95,6 +99,10 @@ void widget_set_colors(GtkWidget *widget, const gchar *bg_color, const gchar *co
 // Function to set a background image for a widget
 void widget_set_background_image(GtkWidget *widget, const gchar *bg_image, const gchar *color)
 {
+    if (bg_image)
+        g_object_set_data(G_OBJECT(widget), "bg_image", g_strdup(bg_image));
+    if (color)
+        g_object_set_data(G_OBJECT(widget), "text_color", g_strdup(color));
     // Add a CSS class to the widget's style context with the specified background image
     gtk_style_context_add_class(get_style_provider_context(widget, NULL, color, bg_image), "style");
 }
@@ -105,6 +113,16 @@ void widget_set_margins(GtkWidget *widget, Margins margins)
     gtk_widget_set_margin_bottom(widget, margins.bottom);
     gtk_widget_set_margin_start(widget, margins.start);
     gtk_widget_set_margin_end(widget, margins.end);
+}
+
+void widget_get_margins(GtkWidget *widget, Margins *margins)
+{
+    if (!margins)
+        return;
+    margins->top = gtk_widget_get_margin_top(widget);
+    margins->bottom = gtk_widget_get_margin_bottom(widget);
+    margins->start = gtk_widget_get_margin_start(widget);
+    margins->end = gtk_widget_get_margin_end(widget);
 }
 
 void widget_set_font_size(GtkWidget *widget, int size)
@@ -349,4 +367,514 @@ void set_widget_size(GtkWidget *widget, Dimensions dimensions)
     // // Clean up
     // g_free(css);
     // g_object_unref(css_provider);
+}
+
+// Readers
+
+ViewConfig *read_view_config_from_dialog(gboolean update_mode)
+{
+    static int wid_index = 1;
+    // View config
+    ViewConfig *view_config = NULL;
+    SAFE_ALLOC(view_config, ViewConfig, 1);
+    DFEAULT_VIEW_CONFIG(view_config);
+
+    const gchar *view_id = read_config_value_as_string("view_id_entry");
+    if (!update_mode)
+        strcpy(view_config->view_id, g_strconcat("wid-", g_strdup_printf("%d", wid_index++), "-", view_config->view_id, view_id, NULL));
+    else
+        strcpy(view_config->view_id, view_id);
+
+    // Box config
+    gboolean box_expand = read_config_value_as_boolean("box_expand_switch");
+    view_config->box_expand = box_expand;
+
+    gboolean box_fill = read_config_value_as_boolean("box_fill_switch");
+    view_config->box_fill = box_fill;
+
+    gint box_padding = read_config_value_as_int("box_padding_spin");
+    view_config->box_padding = box_padding;
+
+    const gchar *pack_direction = read_config_value_as_string("pack_direction_combo");
+    if (stricmp(pack_direction, "end") == 0)
+        view_config->pack_direction = 0;
+    else
+        view_config->pack_direction = 1;
+
+    // Fixed config
+    gint position = read_config_value_as_int("position_x_spin");
+    view_config->position_x = position;
+    position = read_config_value_as_int("position_y_spin");
+    view_config->position_y = position;
+
+    // Notebook config
+    const gchar *tab_label = read_config_value_as_string("tab_label_entry");
+    g_strlcpy(view_config->tab_label, tab_label, MAX_LABEL_SIZE);
+    view_config->is_reorderable = read_config_value_as_boolean("is_reorderable_switch");
+
+    // Grid config
+    view_config->row = read_config_value_as_int("row_spin");
+    view_config->column = read_config_value_as_int("column_spin");
+
+    gint row_span = read_config_value_as_int("row_span_spin");
+    view_config->row_span = row_span == 0 ? 1 : row_span;
+    gint column_span = read_config_value_as_int("column_span_spin");
+    view_config->column_span = column_span == 0 ? 1 : column_span;
+
+    // Paned config
+    const gchar *paned_order = read_config_value_as_string("paned_order_combo");
+    if (stricmp(paned_order, "First") == 0)
+        view_config->paned_order = 1;
+    else
+        view_config->paned_order = 2;
+
+    // Menu config
+    const gchar *menu_orientation_value = read_config_value_as_string("menu_orientation_combo");
+    if (menu_orientation_value)
+        g_strlcpy(view_config->menu_orientation, menu_orientation_value, MAX_LABEL_SIZE);
+
+    gint menu_top = read_config_value_as_int("menu_top_spin");
+    gint menu_bottom = read_config_value_as_int("menu_bottom_spin");
+    gint menu_left = read_config_value_as_int("menu_left_spin");
+    gint menu_right = read_config_value_as_int("menu_right_spin");
+
+    view_config->menu_top = menu_top;
+    view_config->menu_bottom = menu_bottom == 0 ? 1 : menu_bottom;
+    view_config->menu_left = menu_left;
+    view_config->menu_right = menu_right == 0 ? 1 : menu_right;
+
+    // TODO: Complete other view config properties
+
+    // Signals config
+    // OnClick
+    const gchar *sig_on_click_handler = read_config_value_as_string("on_click_entry");
+    if (sig_on_click_handler)
+    {
+        view_config->signal.event_type = SIG_ON_CLICK;
+        g_strlcpy(view_config->signal.sig_handler, sig_on_click_handler, MAX_SIGNAL_NAME_SIZE);
+    }
+
+    return view_config;
+}
+
+const gchar *read_config_value_as_string(gchar *view_id)
+{
+    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!input_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return NULL;
+    }
+    if (GTK_IS_COMBO_BOX(input_view->widget))
+        return gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(input_view->widget));
+    else if (GTK_IS_ENTRY(input_view->widget))
+        return gtk_entry_get_text(GTK_ENTRY(input_view->widget));
+    g_print("Error: => Widget type not compatible with the expected value\n");
+    return NULL;
+}
+
+gint read_config_value_as_int(gchar *view_id)
+{
+    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!input_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return 0;
+    }
+    if (GTK_IS_SPIN_BUTTON(input_view->widget))
+        return gtk_spin_button_get_value(GTK_SPIN_BUTTON(input_view->widget));
+
+    g_print("Error: => Widget type not compatible with the expected value\n");
+    return 0;
+}
+
+gdouble read_config_value_as_double(gchar *view_id)
+{
+    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!input_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return 0;
+    }
+    if (GTK_IS_SPIN_BUTTON(input_view->widget))
+        return gtk_spin_button_get_value(GTK_SPIN_BUTTON(input_view->widget));
+
+    g_print("Error: => Widget type not compatible with the expected value\n");
+    return 0;
+}
+
+gboolean read_config_value_as_boolean(gchar *view_id)
+{
+    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!input_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return false;
+    }
+    if (GTK_IS_SWITCH(input_view->widget))
+        return gtk_switch_get_active(GTK_SWITCH(input_view->widget));
+
+    g_print("Error: => Widget type not compatible with the expected value\n");
+    return false;
+}
+
+GtkAlign read_align_config(gchar *input_combo)
+{
+    const gchar *align_text = read_config_value_as_string(input_combo);
+    if (align_text)
+    {
+        if (stricmp(align_text, "start") == 0)
+            return GTK_ALIGN_START;
+        else if (stricmp(align_text, "end") == 0)
+            return GTK_ALIGN_END;
+        else if (stricmp(align_text, "baseline") == 0)
+            return GTK_ALIGN_BASELINE;
+        else if (stricmp(align_text, "center") == 0)
+            return GTK_ALIGN_CENTER;
+        else
+            return GTK_ALIGN_FILL;
+    }
+}
+
+GtkPositionType read_position_config(gchar *input_combo, GtkPositionType default_position)
+{
+    const gchar *icon_position = read_config_value_as_string(input_combo);
+    if (stricmp(icon_position, "top") == 0)
+        return GTK_POS_TOP;
+    else if (stricmp(icon_position, "bottom") == 0)
+        return GTK_POS_BOTTOM;
+    else if (stricmp(icon_position, "left") == 0)
+        return GTK_POS_LEFT;
+    else if (stricmp(icon_position, "right") == 0)
+        return GTK_POS_RIGHT;
+    else
+        return default_position;
+}
+
+Dimensions *read_dimensions_config()
+{
+    Dimensions *dimensions;
+    SAFE_ALLOC(dimensions, Dimensions, 1);
+    gint width = read_config_value_as_int("width_spin");
+    gint height = read_config_value_as_int("height_spin");
+    dimensions->width = width;
+    dimensions->height = height;
+
+    return dimensions;
+}
+
+Margins *read_margins_config()
+{
+    Margins *margins;
+    SAFE_ALLOC(margins, Margins, 1);
+
+    // Margin top
+    gint margin_top = read_config_value_as_int("margin_top_spin");
+    margins->top = margin_top;
+
+    // Margin bottom
+    gint margin_bottom = read_config_value_as_int("margin_bottom_spin");
+    margins->bottom = margin_bottom;
+
+    // Margin left
+    gint margin_left = read_config_value_as_int("margin_left_spin");
+    margins->start = margin_left;
+
+    // Margin right
+    gint margin_right = read_config_value_as_int("margin_right_spin");
+    margins->end = margin_right;
+
+    return margins;
+}
+
+gchar *read_text_color_from_widget(GtkWidget *widget)
+{
+
+    return g_object_get_data(G_OBJECT(widget), "text_color");
+
+    // This approach also works
+    // GtkStyleContext *context = gtk_widget_get_style_context(widget);
+    // GdkRGBA fg_rgba;
+
+    // // Get the widget's foreground color (for the normal state)
+    // gtk_style_context_get_color(context, GTK_STATE_FLAG_NORMAL, &fg_rgba);
+    // guint fg_r = (guint)(fg_rgba.red * 255);
+    // guint fg_g = (guint)(fg_rgba.green * 255);
+    // guint fg_b = (guint)(fg_rgba.blue * 255);
+    // gchar *fg_hex = NULL; // Format: "#RRGGBB"
+    // SAFE_ALLOC(fg_hex, gchar, 8);
+
+    // sprintf(fg_hex, "#%02X%02X%02X", fg_r, fg_g, fg_b);
+
+    // return fg_hex;
+}
+
+gchar *read_bg_color_from_widget(GtkWidget *widget)
+{
+
+    return g_object_get_data(G_OBJECT(widget), "bg_color");
+
+    // This approach also works
+    // if (!widget)
+    //     return NULL;
+
+    // GtkStyleContext *context = gtk_widget_get_style_context(widget);
+    // GValue bg_value = G_VALUE_INIT;
+
+    // // Get background color property
+    // gtk_style_context_get_property(context, "background-color", GTK_STATE_FLAG_NORMAL, &bg_value);
+
+    // // Check if GValue contains a GdkRGBA
+    // if (G_VALUE_HOLDS(&bg_value, GDK_TYPE_RGBA))
+    // {
+    //     // Get the GdkRGBA from the GValue
+    //     const GdkRGBA *bg_rgba = g_value_get_boxed(&bg_value);
+
+    //     // Convert color to hex
+    //     gchar *bg_hex = g_strdup_printf("#%02X%02X%02X",
+    //                                     (guint)(bg_rgba->red * 255),
+    //                                     (guint)(bg_rgba->green * 255),
+    //                                     (guint)(bg_rgba->blue * 255));
+
+    //     g_value_unset(&bg_value); // Free GValue memory
+    //     return bg_hex;
+    // }
+
+    // g_value_unset(&bg_value); // Free GValue memory
+    // return NULL;              // Return NULL if no color is found
+}
+
+gchar *read_bg_image_from_widget(GtkWidget *widget)
+{
+    return g_object_get_data(G_OBJECT(widget), "bg_image");
+}
+
+// Writers
+
+void write_view_config_to_dialog(ViewConfig *view_config)
+{
+    if (!view_config)
+        return;
+
+    // View config
+    write_config_value_as_string("view_id_entry", view_config->view_id);
+
+    // Box config
+    write_config_value_as_boolean("box_expand_switch", view_config->box_expand);
+    write_config_value_as_boolean("box_fill_switch", view_config->box_fill);
+    write_config_value_as_int("box_padding_spin", view_config->box_padding);
+
+    write_config_value_as_combo_index("pack_direction_combo", view_config->pack_direction == 0 ? 1 : 0);
+    // write_config_value_as_string("pack_direction_combo", pack_direction);
+
+    // Fixed config
+    write_config_value_as_int("position_x_spin", view_config->position_x);
+    write_config_value_as_int("position_y_spin", view_config->position_y);
+
+    // TODO: Complete other view config properties
+
+    // Signals config
+    // OnClick
+    write_config_value_as_string("on_click_entry", view_config->signal.sig_handler);
+}
+
+void write_config_value_as_combo_index(gchar *view_id, int index)
+{
+    View *output_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!output_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return;
+    }
+    if (GTK_IS_COMBO_BOX_TEXT(output_view->widget))
+    {
+        gtk_combo_box_set_active(GTK_COMBO_BOX(output_view->widget), index);
+    }
+}
+
+void write_config_value_as_string(gchar *view_id, const gchar *value)
+{
+    View *output_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!output_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return;
+    }
+    if (!value)
+    {
+        g_print("Error: ==> The value is null\n");
+        return;
+    }
+    g_print("OWIDGET FOUND IS: %s\n", output_view->view_config->view_id);
+    if (GTK_IS_COMBO_BOX_TEXT(output_view->widget))
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(output_view->widget), value);
+    else if (GTK_IS_ENTRY(output_view->widget))
+        gtk_entry_set_text(GTK_ENTRY(output_view->widget), value);
+    else
+        g_print("Error: => OWidget type not compatible with the expected value\n");
+}
+
+void write_config_value_as_int(gchar *view_id, gint value)
+{
+    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!input_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return;
+    }
+    if (GTK_IS_SPIN_BUTTON(input_view->widget))
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(input_view->widget), value);
+    else
+        g_print("Error: => Widget type not compatible with the expected value\n");
+}
+
+void write_config_value_as_double(gchar *view_id, gdouble value)
+{
+    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!input_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return;
+    }
+    if (GTK_IS_SPIN_BUTTON(input_view->widget))
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(input_view->widget), value);
+    else
+        g_print("Error: => Widget type not compatible with the expected value\n");
+}
+
+void write_config_value_as_boolean(gchar *view_id, gboolean value)
+{
+    View *input_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!input_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return;
+    }
+    if (GTK_IS_SWITCH(input_view->widget))
+        gtk_switch_set_active(GTK_SWITCH(input_view->widget), value);
+    else
+        g_print("Error: => Widget type not compatible with the expected value\n");
+}
+
+void write_align_config(GtkAlign halign, GtkAlign valign)
+{
+    // VAlign
+    gint index = 0;
+    switch (halign)
+    {
+    case GTK_ALIGN_FILL:
+        index = 0;
+        break;
+    case GTK_ALIGN_CENTER:
+        index = 1;
+        break;
+    case GTK_ALIGN_START:
+        index = 2;
+        break;
+    case GTK_ALIGN_END:
+        index = 3;
+        break;
+    case GTK_ALIGN_BASELINE:
+        index = 4;
+        break;
+    default:
+        index = 0;
+        break;
+    }
+    write_config_value_as_combo_index("halign_combo", index);
+
+    switch (valign)
+    {
+    case GTK_ALIGN_FILL:
+        index = 0;
+        break;
+    case GTK_ALIGN_CENTER:
+        index = 1;
+        break;
+    case GTK_ALIGN_START:
+        index = 2;
+        break;
+    case GTK_ALIGN_END:
+        index = 3;
+        break;
+    case GTK_ALIGN_BASELINE:
+        index = 4;
+        break;
+    default:
+        index = 0;
+        break;
+    }
+
+    write_config_value_as_combo_index("valign_combo", index);
+}
+
+void write_position_config(gchar *output_combo, GtkPositionType position)
+{
+    gint index = 0;
+    switch (position)
+    {
+    case GTK_BASELINE_POSITION_CENTER:
+        index = 0;
+        break;
+    case GTK_BASELINE_POSITION_TOP:
+        index = 1;
+        break;
+    case GTK_BASELINE_POSITION_BOTTOM:
+        index = 2;
+        break;
+    default:
+        index = 0;
+        break;
+    }
+    write_config_value_as_combo_index(output_combo, index);
+}
+
+void write_dimensions_config(Dimensions dimensions)
+{
+    // Width
+    write_config_value_as_int("width_spin", dimensions.width);
+
+    // Height
+    write_config_value_as_int("height_spin", dimensions.height);
+}
+
+void write_margins_config(Margins margins)
+{
+    // Margins
+    write_config_value_as_int("margin_top_spin", margins.top);
+    write_config_value_as_int("margin_bottom_spin", margins.bottom);
+    write_config_value_as_int("margin_left_spin", margins.start);
+    write_config_value_as_int("margin_right_spin", margins.end);
+}
+
+void write_expand_config(gboolean hexpand, gboolean vexpand)
+{
+    // HExpand
+    write_config_value_as_boolean("hexpand_switch", hexpand);
+
+    // VExpand
+    write_config_value_as_boolean("vexpand_switch", vexpand);
+}
+
+void write_orientation_config(gchar *output_combo, GtkOrientation orientation)
+{
+    write_config_value_as_combo_index(output_combo, orientation == GTK_ORIENTATION_VERTICAL ? 0 : 1);
+}
+
+// Testing
+void print_graph_to_debug(View *root)
+{
+    if (!root)
+        return;
+
+    if (root->parent)
+        g_print("WIDGET: ===> %s => PARENT ==> %s\n", root->view_config->view_id, root->parent->view_config->view_id);
+    else
+        g_print("WIDGET: ===> %s => PARENT ==> ROOT\n", root->view_config->view_id);
+    if (root->next)
+        g_print("Has next: %s\n", root->next->view_config->view_id);
+    if (root->child)
+        g_print("Has child: %s\n", root->child->view_config->view_id);
+    print_graph_to_debug(root->child);
+    print_graph_to_debug(root->next);
 }

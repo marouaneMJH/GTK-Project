@@ -136,6 +136,126 @@ GtkWidget *create_switch_button(SwitchButtonConfig switch_button_config)
     return switch_button;
 }
 
+SwitchButtonConfig *read_switch_button_config_from_dialog()
+{
+    SwitchButtonConfig *switch_button_config_ptr = NULL;
+    SAFE_ALLOC(switch_button_config_ptr, SwitchButtonConfig, 1);
+
+    SwitchButtonConfig switch_button_config = DEFAULT_SWITCH_BUTTON;
+
+    // Tooltip
+    const gchar *tooltip = read_config_value_as_string("tooltip_entry");
+    strcpy(switch_button_config.tooltip, tooltip);
+
+    // Visibility
+    gboolean is_visible = read_config_value_as_boolean("visible_switch");
+    switch_button_config.is_visible = is_visible;
+
+    // Active state
+    gboolean is_active = read_config_value_as_boolean("active_switch");
+    switch_button_config.is_active = is_active;
+
+    // State
+    gboolean state = read_config_value_as_boolean("state_switch");
+    switch_button_config.state = state;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    switch_button_config.dimensions.width = dimensions->width;
+    switch_button_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    switch_button_config.margins.top = margins->top;
+    switch_button_config.margins.bottom = margins->bottom;
+    switch_button_config.margins.start = margins->start;
+    switch_button_config.margins.end = margins->end;
+
+    // HAlign
+    switch_button_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    switch_button_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    switch_button_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    switch_button_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(switch_button_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(switch_button_config.text_color, text_color);
+
+    memcpy(switch_button_config_ptr, &switch_button_config, sizeof(SwitchButtonConfig));
+    return switch_button_config_ptr;
+}
+
+SwitchButtonConfig *read_switch_button_config_from_widget(GtkWidget *widget)
+{
+    SwitchButtonConfig *switch_button_config_ptr = NULL;
+    SAFE_ALLOC(switch_button_config_ptr, SwitchButtonConfig, 1);
+
+    SwitchButtonConfig switch_button_config = DEFAULT_SWITCH_BUTTON;
+
+    // Tooltip
+    const gchar *tooltip = gtk_widget_get_tooltip_text(widget);
+    strcpy(switch_button_config.tooltip, tooltip ? tooltip : "");
+
+    // Visibility
+    switch_button_config.is_visible = gtk_widget_get_visible(widget);
+
+    // Active state
+    switch_button_config.is_active = gtk_switch_get_active(GTK_SWITCH(widget));
+
+    // State
+    switch_button_config.state = gtk_switch_get_state(GTK_SWITCH(widget));
+   
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    switch_button_config.dimensions.width = allocation.width;
+    switch_button_config.dimensions.height = allocation.height;
+
+    // Expand
+    switch_button_config.hexpand = gtk_widget_get_hexpand(widget);
+    switch_button_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    switch_button_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    switch_button_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    switch_button_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(switch_button_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(switch_button_config.text_color, property_value);
+
+    memcpy(switch_button_config_ptr, &switch_button_config, sizeof(SwitchButtonConfig));
+
+    return switch_button_config_ptr;
+}
+
 gchar *write_switch_button_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

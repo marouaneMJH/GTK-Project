@@ -17,11 +17,11 @@ View *create_view(GtkWidget *widget, ViewConfig *view_config)
     view->child = NULL;
     view->parent = NULL;
     view->next = NULL;
-    view->view_config = view_config;
     view->widget = widget;
+    view->view_config = view_config;
 
     /* Connect to the view widget if existe */
-    connect_signales(view);
+    connect_signals(view);
 
     return view;
 }
@@ -155,6 +155,22 @@ int get_view_index(gchar *widget_tag) // Why FILE *index
     return -1;
 }
 
+static int concurence = 0;
+int check_view_id_existance(View *root, gchar *view_id)
+{
+
+    if (!root)
+        return 0;
+
+    if (g_strcmp0(root->view_config->view_id, view_id) == 0)
+        concurence++;
+
+    check_view_id_existance(root->child, view_id);
+    check_view_id_existance(root->next, view_id);
+
+    return concurence;
+}
+
 View *add_view(View *view, View *relative, gboolean is_relative_container)
 {
     if (!view)
@@ -164,6 +180,15 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
     {
         g_print("Relative view is null\n");
         return view;
+    }
+
+    // Check if the view id is not repeated
+    concurence = 0;
+    if (check_view_id_existance(root_view_global, view->view_config->view_id) > 0)
+    {
+        g_print("==========================================================\n");
+        g_print("# Error: view_id (%s) is repeated.\n", view->view_config->view_id);
+        g_print("==========================================================\n");
     }
 
     // Group radio buttons
@@ -263,7 +288,6 @@ View *add_view(View *view, View *relative, gboolean is_relative_container)
     }
     else
     {
-        // printf("RELATIVE PARENT %s IS NOT A CONTAINER FOR: %s\n", relative->view_config->view_id, view->view_config->view_id);
         view->parent = relative->parent;
         relative->next = view;
 
@@ -285,6 +309,21 @@ gboolean is_container_view(FILE *index)
         return TRUE;
 
     return FALSE;
+}
+
+void read_comment(FILE *index)
+{
+    char c;
+    while ((c = fgetc(index)) != '-')
+        ;
+    if (fgetc(index) != '-')
+    {
+        fseek(index, -1, SEEK_CUR);
+        read_comment(index);
+    } else if (fgetc(index) != '>') {
+        fseek(index, -2, SEEK_CUR);
+        read_comment(index);
+    }
 }
 
 View *build_app(GtkApplication *app, View *root_view, const gchar *file_path)
@@ -334,8 +373,7 @@ View *build_app(GtkApplication *app, View *root_view, const gchar *file_path)
             }
             else if (next_char == '!')
             {
-                while ((c = fgetc(index)) != '>')
-                    ;
+                read_comment(index);
                 continue;
             }
             else

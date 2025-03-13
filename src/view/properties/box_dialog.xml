@@ -50,6 +50,7 @@
                         spacing="10"
                     >
                         <box
+                            id="view_id_box"
                             orientation="horizontal"
                             spacing="10"
                             box_expand="true"
@@ -59,7 +60,7 @@
                             homogeneous="true"
                         >
                             <label
-                                id="label11"
+                                id="view_id_label"
                                 label_text="View ID"
                                 yalign="0.5"
                                 box_expand="true"
@@ -74,6 +75,35 @@
 
 
                         </box>
+                        <box
+                            id="scope_back_box"
+                            orientation="horizontal"
+                            spacing="10"
+                            box_expand="true"
+                            box_fill="true"
+                            margin_left="10"
+                            margin_right="10"
+                            homogeneous="true"
+                        >
+                            <label
+                                id="label11"
+                                label_text="Scope back"
+                                yalign="0.5"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+
+                            <combo_text_box
+                                id="scope_back_combo"
+                                default_index="0"
+                                option1="Default"
+                                box_expand="true"
+                                box_fill="true"
+                            />
+                            <!-- option1="Current (Default)" -->
+
+                        </box>
+
                         <box
                             orientation="horizontal"
                             spacing="10"
@@ -474,7 +504,7 @@
                             />
 
                             <combo_text_box
-                                id="orientation_combo"
+                                id="paned_order_combo"
                                 default_index="0"
                                 option1="First"
                                 option2="Second"

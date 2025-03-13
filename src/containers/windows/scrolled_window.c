@@ -81,6 +81,7 @@ ViewConfig *init_scrolled_window_config(FILE *index, ScrolledWindowConfig *scrol
 {
     return init_generic_config(index, (void *)scrolled_window_config, (ConfigurePropertyCallback)configure_scrolled_window_property);
 }
+
 // Function to create a scrolled window with specified scrollbar policies
 GtkWidget *create_scrolled_window(ScrolledWindowConfig scrolled_window_config)
 {
@@ -106,6 +107,119 @@ GtkWidget *create_scrolled_window(ScrolledWindowConfig scrolled_window_config)
     widget_set_margins(scrolled_window, scrolled_window_config.margins);
 
     return scrolled_window;
+}
+
+ScrolledWindowConfig *read_scrolled_window_config_from_dialog()
+{
+    ScrolledWindowConfig *scrolled_window_config_ptr = NULL;
+    SAFE_ALLOC(scrolled_window_config_ptr, ScrolledWindowConfig, 1);
+
+    ScrolledWindowConfig scrolled_window_config = DEFAULT_SCROLLED_WINDOW;
+
+    // Horizontal scrollbar policy
+    const gchar *h_policy = read_config_value_as_string("h_scrollbar_policy_combo");
+    if (g_strcmp0(h_policy, "never") == 0)
+        scrolled_window_config.h_policy = GTK_POLICY_NEVER;
+    else if (g_strcmp0(h_policy, "always") == 0)
+        scrolled_window_config.h_policy = GTK_POLICY_ALWAYS;
+    else
+        scrolled_window_config.h_policy = GTK_POLICY_AUTOMATIC;
+
+    // Vertical scrollbar policy
+    const gchar *v_policy = read_config_value_as_string("v_scrollbar_policy_combo");
+    if (g_strcmp0(v_policy, "never") == 0)
+        scrolled_window_config.v_policy = GTK_POLICY_NEVER;
+    else if (g_strcmp0(v_policy, "always") == 0)
+        scrolled_window_config.v_policy = GTK_POLICY_ALWAYS;
+    else
+        scrolled_window_config.v_policy = GTK_POLICY_AUTOMATIC;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    scrolled_window_config.dimensions.width = dimensions->width;
+    scrolled_window_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    scrolled_window_config.margins.top = margins->top;
+    scrolled_window_config.margins.bottom = margins->bottom;
+    scrolled_window_config.margins.start = margins->start;
+    scrolled_window_config.margins.end = margins->end;
+
+    // HAlign
+    scrolled_window_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    scrolled_window_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    scrolled_window_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    scrolled_window_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(scrolled_window_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(scrolled_window_config.text_color, text_color);
+
+    memcpy(scrolled_window_config_ptr, &scrolled_window_config, sizeof(ScrolledWindowConfig));
+    return scrolled_window_config_ptr;
+}
+
+ScrolledWindowConfig *read_scrolled_window_config_from_widget(GtkWidget *widget)
+{
+    ScrolledWindowConfig *scrolled_window_config_ptr = NULL;
+    SAFE_ALLOC(scrolled_window_config_ptr, ScrolledWindowConfig, 1);
+
+    ScrolledWindowConfig scrolled_window_config = DEFAULT_SCROLLED_WINDOW;
+
+    // Scrollbar policy
+    gtk_scrolled_window_get_policy(GTK_SCROLLED_WINDOW(widget), &scrolled_window_config.h_policy, &scrolled_window_config.v_policy);
+
+
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    scrolled_window_config.dimensions.width = allocation.width;
+    scrolled_window_config.dimensions.height = allocation.height;
+
+    // Expand
+    scrolled_window_config.hexpand = gtk_widget_get_hexpand(widget);
+    scrolled_window_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    scrolled_window_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    scrolled_window_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    scrolled_window_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(scrolled_window_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(scrolled_window_config.text_color, property_value);
+
+    memcpy(scrolled_window_config_ptr, &scrolled_window_config, sizeof(ScrolledWindowConfig));
+
+    return scrolled_window_config_ptr;
 }
 
 gchar *write_scrolled_window_property(FILE *output_file, View *view, int tabs_number)

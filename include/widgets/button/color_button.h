@@ -33,6 +33,8 @@
         .margins = DEFAULT_COLOR_BUTTON_MARGINS,       \
         .hexpand = FALSE,                              \
         .vexpand = FALSE,                              \
+        .halign = GTK_ALIGN_FILL,                      \
+        .valign = GTK_ALIGN_FILL,                      \
     }
 
 typedef struct
@@ -45,9 +47,10 @@ typedef struct
     /* Dimensions and placement */
     Dimensions dimensions; // dimensions of the button
     Margins margins;       // margin of the button
-    gboolean hexpand;      // If the button expands in its container (horizontal)
-    gboolean vexpand;      // If the button expands in its container (vertical)
-
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
 } ColorButtonConfig;
 
 ViewConfig *init_color_button_config(FILE *index, ColorButtonConfig *color_button_config);
@@ -60,6 +63,10 @@ ViewConfig *init_color_button_config(FILE *index, ColorButtonConfig *color_butto
  * @return[ou] GtkWidget pointer to new coordinate button widget
  */
 GtkWidget *create_color_button(ColorButtonConfig color_button);
+
+ColorButtonConfig *read_color_button_config_from_dialog();
+
+ColorButtonConfig *read_color_button_config_from_widget(GtkWidget *widget);
 
 gchar *write_color_button_property(FILE *output_file, View *view, int tabs_number);
 

@@ -6,6 +6,12 @@
 #define MAX_LABEL_TEXT_SIZE 1024
 /* Default values for label configuration */
 
+/*  default values */
+#define DEFAULT_LABEL_DIMENSIONS \
+    {                             \
+        .height = 0,              \
+        .width = 0}
+
 // Default Margins
 #define DEFAULT_LABEL_MARGINS { \
     .top = 0,                   \
@@ -22,6 +28,7 @@
         .jtype = GTK_JUSTIFY_CENTER,       \
         .ellipsize = PANGO_ELLIPSIZE_NONE, \
         .margins = DEFAULT_LABEL_MARGINS,  \
+        .dimensions = DEFAULT_LABEL_DIMENSIONS,  \
         .hexpand = FALSE,                  \
         .vexpand = FALSE,                  \
         .halign = GTK_ALIGN_FILL,          \
@@ -36,32 +43,36 @@
 
 typedef struct
 {
-    gint font_size;
     /* Text Content */
     gchar label_text[MAX_LABEL_TEXT_SIZE]; // Pointer for dynamic text allocation
+    gchar font_family[MAX_FONT_FAMILY_SIZE]; // font family style
+    
     gboolean is_markup;                    // Parse and render Pango markup
     gboolean is_underline;                 // Mnemonic support for underline
-
+    
     /* Appearance */
     GtkJustification jtype;                  // Text alignment (left, right, center)
     PangoEllipsizeMode ellipsize;            // Ellipsization mode
-    Margins margins;                         // Margins
+    
     gboolean is_wrap;                        // Enable word wrap
-    gchar text_color[MAX_COLOR_SIZE];        // Text color
-    gchar bg_color[MAX_COLOR_SIZE];          // Background color
-    gchar font_family[MAX_FONT_FAMILY_SIZE]; // font family style
-
+    gboolean is_selectable; // Text can be copied by user
+    
+    gint font_size;
     gfloat xalign; // aligne text to display on line start
     gfloat yalign;
-
+    
     gboolean hexpand;
     gboolean vexpand;
-
+    
     GtkAlign halign;
     GtkAlign valign;
-
+    
     /* Behavior */
-    gboolean is_selectable; // Text can be copied by user
+    Margins margins;                         // Margins
+    gchar text_color[MAX_COLOR_SIZE];        // Text color
+    gchar bg_color[MAX_COLOR_SIZE];          // Background color
+
+    Dimensions dimensions;
 
 } LabelConfig;
 
@@ -76,6 +87,10 @@ ViewConfig *init_label_config(FILE *index, LabelConfig *label_config);
 
 // function to creat lable widget
 GtkWidget *create_label(LabelConfig label);
+
+LabelConfig *read_label_config_from_dialog();
+
+LabelConfig *read_label_config_from_widget(GtkWidget *widget);
 
 gchar *write_label_property(FILE *output_file, View *view, int tabs_number);
 

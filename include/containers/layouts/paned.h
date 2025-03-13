@@ -67,6 +67,10 @@ ViewConfig *init_paned_config(FILE *index, PanedConfig *paned_box_config);
  */
 GtkWidget *create_paned(PanedConfig paned_config);
 
+PanedConfig *read_paned_config_from_dialog();
+
+PanedConfig *read_paned_config_from_widget(GtkWidget *widget);
+
 gchar *write_paned_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

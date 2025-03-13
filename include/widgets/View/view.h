@@ -10,14 +10,14 @@ typedef struct
     gchar view_id[MAX_VIEW_ID_SIZE];
 
     // Fixed container
-    int position_x;
-    int position_y;
+    gint position_x;
+    gint position_y;
 
     // Box container
-    int pack_direction;
+    gint pack_direction;
     gboolean box_expand;
     gboolean box_fill;
-    int box_padding;
+    gint box_padding;
 
     // FlowBox container
     gint flow_box_order;

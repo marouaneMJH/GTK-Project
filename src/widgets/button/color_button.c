@@ -236,7 +236,7 @@ gchar *write_color_button_property(FILE *output_file, View *view, int tabs_numbe
 
     // Get the tooltip text
     const gchar *tooltip = gtk_widget_get_tooltip_text(GTK_WIDGET(color_button));
-    if (g_strcmp0(tooltip, "\0") != 0) // Check if the tooltip text is not the default
+    if (tooltip && g_strcmp0(tooltip, "\0") != 0) // Check if the tooltip text is not the default
     {
         print_tabs(output_file, tabs_number + 1);
         fprintf(output_file, "tooltip=\"%s\"\n", tooltip);

@@ -3,8 +3,7 @@
 	width="952"
 	height="1003"
 	title="GTK controle"
-	icon_name="(null)"
-	position="510,25"
+	position="1086,445"
 	has_header="true"
 >
 	<scrolled_window 
@@ -17,10 +16,69 @@
 			width="900"
 			height="900"
 		>
+			<menu_bar 
+				id=""
+				width="900"
+				height="33"
+				tooltip="(null)"
+			>
+				<menu_item 
+					id=""
+					width="46"
+					height="33"
+					label="hhh"
+					use_underline="true"
+				/>
+				<menu_item 
+					id=""
+					width="46"
+					height="33"
+					label="hhh"
+					use_underline="true"
+				/>
+				<menu_item 
+					id=""
+					width="46"
+					height="33"
+					label="hhh"
+					use_underline="true"
+				/>
+				<menu_item 
+					id=""
+					width="46"
+					height="33"
+					label="hhh"
+					use_underline="true"
+				/>
+				<menu 
+					id=""
+				>
+					<menu_item 
+						id=""
+						label="hhh1"
+						use_underline="true"
+					/>
+					<menu_item 
+						id=""
+						label="hhh1"
+						use_underline="true"
+					/>
+					<menu_item 
+						id=""
+						label="hhh1"
+						use_underline="true"
+					/>
+				</menu>
+				<menu_item 
+					id=""
+					label="hhh"
+					use_underline="true"
+				/>
+			</menu_bar>
 			<box 
 				id="conent_box"
 				width="778"
-				height="860"
+				height="827"
 				margin_top="40"
 				margin_left="20"
 				spacing="20"
@@ -30,13 +88,13 @@
 				<paned 
 					id=""
 					width="778"
-					height="131"
-					position="130"
+					height="98"
+					position="97"
 				>
 					<box 
 						id=""
 						width="778"
-						height="130"
+						height="97"
 					>
 						<label 
 							id=""
@@ -55,14 +113,14 @@
 								id="box2"
 								width="776"
 								height="29"
-								orientation="horizontal"
+								on_click="djdjdjdjdjdj"								orientation="horizontal"
 							>
 								<radio_button 
 									id="rbtn1"
 									width="73"
 									height="29"
 									label="Faible"
-									tooltip="(null)"
+									tooltip="ahsan wahd"
 									is_selected="true"
 									is_button_mode="true"
 								/>
@@ -71,7 +129,6 @@
 									width="83"
 									height="29"
 									label="Moyen"
-									tooltip="(null)"
 									is_button_mode="true"
 								/>
 								<radio_button 
@@ -79,7 +136,6 @@
 									width="61"
 									height="29"
 									label="Bien"
-									tooltip="(null)"
 									is_button_mode="true"
 								/>
 								<radio_button 
@@ -87,7 +143,6 @@
 									width="98"
 									height="29"
 									label="Tres bien"
-									tooltip="(null)"
 									is_button_mode="true"
 								/>
 							</box>
@@ -123,28 +178,24 @@
 								width="73"
 								height="29"
 								label="Faible"
-								tooltip="(null)"
 							/>
 							<check_button 
 								id="rbtn2"
 								width="83"
 								height="29"
 								label="Moyen"
-								tooltip="(null)"
 							/>
 							<check_button 
 								id="rbtn3"
 								width="61"
 								height="29"
 								label="Bien"
-								tooltip="(null)"
 							/>
 							<check_button 
 								id="rbtn4"
 								width="98"
 								height="29"
 								label="Tres bien"
-								tooltip="(null)"
 							/>
 						</box>
 					</frame>
@@ -251,6 +302,8 @@
 						id=""
 						width="400"
 						height="84"
+						position_x="350"
+						position_y="250"
 						halign="start"
 						valign="start"
 					>
@@ -278,7 +331,6 @@
 									width="73"
 									height="29"
 									label="Faible"
-									tooltip="(null)"
 									is_selected="true"
 									is_button_mode="true"
 								/>
@@ -287,7 +339,6 @@
 									width="83"
 									height="29"
 									label="Moyen"
-									tooltip="(null)"
 									is_button_mode="true"
 								/>
 								<radio_button 
@@ -295,7 +346,6 @@
 									width="61"
 									height="29"
 									label="Bien"
-									tooltip="(null)"
 									is_button_mode="true"
 								/>
 								<radio_button 
@@ -303,7 +353,6 @@
 									width="98"
 									height="29"
 									label="Tres bien"
-									tooltip="(null)"
 									is_button_mode="true"
 								/>
 							</box>
@@ -313,6 +362,8 @@
 						id=""
 						width="135"
 						height="35"
+						position_x="350"
+						position_y="350"
 						orientation="horizontal"
 						spacing="10"
 						halign="start"
@@ -323,15 +374,13 @@
 							width="57"
 							height="35"
 							label="_Ok"
-							tooltip="(null)"
 							use_underline="true"
 						/>
 						<button 
 							id=""
 							width="68"
 							height="35"
-							label="_Quit"
-							tooltip="(null)"
+							on_click="sig_generate_xml"							label="_Quit"
 							use_underline="true"
 						/>
 					</box>

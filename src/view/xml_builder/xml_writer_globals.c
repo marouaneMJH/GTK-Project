@@ -352,7 +352,7 @@ void write_widget_signale(FILE *output_file, View *view, int tabs_number)
         break;
     }
 
-    fprintf(output_file, "\"%s\"", view->view_config->signal.sig_handler);
+    fprintf(output_file, "\"%s\"\n", view->view_config->signal.sig_handler);
 }
 void write_widget_tag_style_view_config(FILE *output_file, View *view, gchar *tag, int tabs_number)
 {

@@ -665,10 +665,6 @@ static void update_widget_config(GtkWidget *widget, gpointer data)
     {
         dialog = prepare_update_scrolled_window_config(target_view);
     }
-    else if (GTK_IS_BOX(target_view->widget))
-    {
-        dialog = prepare_update_box_config(target_view);
-    }
     else if (GTK_IS_FIXED(target_view->widget))
     {
         dialog = prepare_update_fixed_config(target_view);
@@ -701,19 +697,15 @@ static void update_widget_config(GtkWidget *widget, gpointer data)
     {
         dialog = prepare_update_stack_config(target_view);
     }
-    else if (GTK_IS_BUTTON(target_view->widget))
-    {
-        dialog = prepare_update_button_config(target_view);
-    }
-    else if (GTK_IS_CHECK_BUTTON(target_view->widget))
+    else if (GTK_IS_CHECK_BUTTON(target_view->widget) && !GTK_IS_RADIO_BUTTON(target_view->widget))
     {
         dialog = prepare_update_check_button_config(target_view);
     }
-    else if (GTK_IS_COLOR_BUTTON(target_view->widget))
+    else if (GTK_IS_COLOR_BUTTON(target_view->widget) && !GTK_IS_LINK_BUTTON(target_view->widget))
     {
         dialog = prepare_update_color_button_config(target_view);
     }
-    else if (GTK_IS_LINK_BUTTON(target_view->widget))
+    else if (GTK_IS_LINK_BUTTON(target_view->widget) && !GTK_IS_COLOR_BUTTON(target_view->widget))
     {
         dialog = prepare_update_link_button_config(target_view);
     }
@@ -721,16 +713,21 @@ static void update_widget_config(GtkWidget *widget, gpointer data)
     {
         dialog = prepare_update_radio_button_config(target_view);
     }
-    else if (GTK_IS_SPIN_BUTTON(target_view->widget))
+    else if (GTK_IS_SPIN_BUTTON(target_view->widget) && !GTK_IS_COLOR_BUTTON(target_view->widget) && !GTK_IS_SWITCH(target_view->widget))
     {
         dialog = prepare_update_spin_button_config(target_view);
     }
-    else if (GTK_IS_SWITCH(target_view->widget))
+    else if (GTK_IS_SWITCH(target_view->widget) && !GTK_IS_TOGGLE_BUTTON(target_view->widget))
     {
         dialog = prepare_update_switch_button_config(target_view);
     }
+    else if (GTK_IS_BUTTON(target_view->widget) && !GTK_IS_TOGGLE_BUTTON(target_view->widget))
+    {
+        dialog = prepare_update_button_config(target_view);
+    }
     else if (GTK_IS_TOGGLE_BUTTON(target_view->widget))
     {
+        g_print("TOGGLE PREP\n");
         dialog = prepare_update_toggle_button_config(target_view);
     }
     else if (GTK_IS_MENU_BAR(target_view->widget))

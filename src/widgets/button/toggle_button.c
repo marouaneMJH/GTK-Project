@@ -249,11 +249,17 @@ ToggleButtonConfig *read_toggle_button_config_from_widget(GtkWidget *widget)
 
     // Label
     const gchar *label = gtk_button_get_label(GTK_BUTTON(widget));
-    strncpy(toggle_button_config.label, label, MAX_BUTTON_LABEL_SIZE - 1);
+    if (label)
+        strcpy(toggle_button_config.label, label);
+    else
+        toggle_button_config.label[0] = '\0';
 
     // Tooltip
     const gchar *tooltip = gtk_widget_get_tooltip_text(widget);
-    strncpy(toggle_button_config.tooltip, tooltip, MAX_TOOLTIP_SIZE - 1);
+    if (tooltip)
+        strcpy(toggle_button_config.tooltip, tooltip);
+    else
+        toggle_button_config.tooltip[0] = '\0';
 
     // Is mnemonic
     gboolean is_mnemonic = gtk_button_get_use_underline(GTK_BUTTON(widget));

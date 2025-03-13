@@ -281,6 +281,7 @@
                                 box_fill="true"
                                 margin_right="20"
                                 halign="end"
+                                state="true"
                             />
 
                         </box>

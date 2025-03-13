@@ -3,31 +3,77 @@
 	width="1500"
 	height="900"
 	title="GTK IDE"
-	position="210,52"
+	position="210,66"
 >
 	<box 
 		id="box1"
 		width="1500"
 		height="900"
 	>
-		<button 
-			id=""
-			width="109"
-			height="35"
-			on_click="sig_generate_xml"			use_underline="true"
-		/>
-		<combo_text_box 
+		<menu_bar 
 			id=""
 			width="1500"
-			height="39"
-			popup_shown_rows="0"
-            option0="hello"
-            option1="hello"
-            option2="hell2"
-            option3="hell4"
-            option4="hell5"
-            option5="hell6"
-            option6="hell7"
-		/>
+			height="25"
+			tooltip="(null)"
+		>
+			<menu_item 
+				id=""
+				width="42"
+				height="25"
+				label="hello"
+				use_underline="true"
+			/>
+			<menu_item 
+				id=""
+				width="42"
+				height="25"
+				label="hello"
+				use_underline="true"
+			/>
+			<menu_item 
+				id=""
+				width="42"
+				height="25"
+				label="hello"
+				use_underline="true"
+			/>
+			<menu_item 
+				id=""
+				width="42"
+				height="25"
+				label="hello"
+				use_underline="true"
+			/>
+			<menu_item 
+				id=""
+				width="51"
+				height="25"
+				label="hdhdh"
+				use_underline="true"
+			>
+				<menu 
+					id=""
+					width="152"
+					height="50"
+					active_index="1"
+				>
+					<menu_item 
+						id=""
+						width="152"
+						height="25"
+						label="hello"
+						use_underline="true"
+					/>
+					<menu_item 
+						id=""
+						width="152"
+						height="25"
+						on_activate="sig_generate_xml"
+						label="hello"
+						use_underline="true"
+					/>
+				</menu>
+			</menu_item>
+		</menu_bar>
 	</box>
 </window>

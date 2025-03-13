@@ -58,7 +58,6 @@ static void sig_tree_widget_type(GtkWidget *widget, gpointer data)
 
 // end  testing signales
 
-
 static void sig_change_self_bg_color(GtkWidget *widget, gpointer data)
 {
     ParamNode *param_array = (ParamNode *)data;
@@ -83,9 +82,6 @@ static void sig_change_friend_bg_color(GtkWidget *widget, gpointer data)
     View *friend = find_view_by_id(param_array->params[0], root_view_global);
     widget_set_colors(friend->widget, param_array->params[1], param_array->params[2]);
 }
-
-
-
 
 /**
  * color
@@ -150,7 +146,6 @@ static void sig_destroy(GtkWidget *widget, gpointer data)
     gtk_widget_destroy(window);
 }
 
-
 static void sig_generate_xml(GtkWidget *widget, gpointer data)
 {
     build_xml("file.xml");
@@ -195,7 +190,6 @@ static void sig_self_destroy(GtkWidget *widget, gpointer data)
 {
     gtk_widget_destroy(widget);
 }
-
 
 void sig_print_content(GtkWidget *widget, gpointer data)
 {
@@ -669,7 +663,7 @@ View *create_new_button_from_dialog(View *parent_view, gboolean is_relative_cont
     View *new_button_view = create_view(new_button, view_config);
 
     g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
-    
+
     add_view(new_button_view, parent_view, is_relative_container);
 
     return new_button_view;
@@ -689,6 +683,8 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
     // 4 - Add the view a new view graph (or exist one except the main)
 
     View *viewer = find_view_by_id("viewer", root_view_global);
+    root_crud_ui = viewer;
+
     if (!viewer)
     {
         g_print("Error: ==> Cannot find the viewer\n");
@@ -776,7 +772,6 @@ void connect_signales(View *view)
         else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_self_destroy") == 0)
             callback_function = sig_self_destroy;
-
 
         else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_print_content") == 0)

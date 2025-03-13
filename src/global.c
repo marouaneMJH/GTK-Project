@@ -2,6 +2,7 @@
 
 View *root_view_global;
 View *root_dialog_view_global;
+View *root_crud_ui=NULL; // debug should change in futur for new versions
 GtkApplication *root_app;
 
 View *new_root_view_global;
@@ -30,15 +31,15 @@ GtkStyleContext *get_style_provider_context(GtkWidget *widget, const gchar *bg_c
     {
         // Append background image to the CSS style if provided
         g_string_append_printf(css_builder, "background-image: url('./assets/images/%s'); ", (bg_image && bg_image[0] != '\0') ? bg_image : "none;");
-        
+
         // Append background size to the CSS style if background image is provided
         if ((bg_image && bg_image[0] != '\0'))
             g_string_append_printf(css_builder, "background-size: cover; ");
-        
+
         // Append background color to the CSS style if provided
         if ((bg_color && bg_color[0] != '\0'))
             g_string_append_printf(css_builder, "background-color: %s; ", bg_color);
-        
+
         // Append text color to the CSS style if provided
         if ((color && color[0] != '\0'))
             g_string_append_printf(css_builder, "color: %s; ", color);
@@ -48,7 +49,6 @@ GtkStyleContext *get_style_provider_context(GtkWidget *widget, const gchar *bg_c
 
         // Convert GString to gchar*
         css_style = g_string_free(css_builder, FALSE);
-
     }
     else
     {
@@ -72,12 +72,12 @@ GtkStyleContext *get_style_provider_context(GtkWidget *widget, const gchar *bg_c
 
     // Get the style context of the widget
     GtkStyleContext *context = gtk_widget_get_style_context(widget);
-    
+
     // Add the CSS provider to the widget's style context
     gtk_style_context_add_provider(context,
                                    GTK_STYLE_PROVIDER(css_provider),
                                    GTK_STYLE_PROVIDER_PRIORITY_USER);
-    
+
     // Free the CSS provider after use
     g_object_unref(css_provider);
 
@@ -107,7 +107,6 @@ void widget_set_margins(GtkWidget *widget, Margins margins)
     gtk_widget_set_margin_end(widget, margins.end);
 }
 
-
 void widget_set_font_size(GtkWidget *widget, int size)
 {
     GtkCssProvider *provider = gtk_css_provider_new();
@@ -125,11 +124,11 @@ void widget_set_font_size(GtkWidget *widget, int size)
     g_object_unref(provider);
 }
 
-
 void widget_set_font_family(GtkWidget *widget, const char *font_family)
 {
     // If font_family is NULL, do nothing
-    if (font_family == NULL) {
+    if (font_family == NULL)
+    {
         return;
     }
 
@@ -175,30 +174,6 @@ void set_header_bar(GtkWidget *window, const gchar *title, const gchar *icon_pat
     // Set the header bar as the title bar of the window
     gtk_window_set_titlebar(GTK_WINDOW(window), header_bar);
 }
-
-// These functions are just for comparing with CSS not for use because the most of them are deprecated
-// void widget_set_text_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)
-// {
-//     GdkRGBA color_rgba;
-//     gdk_rgba_parse(&color_rgba, color);
-//     gtk_widget_override_color(widget, state, &color_rgba);
-// }
-
-// void widget_set_background_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)
-// {
-//     GdkRGBA color_rgba;
-//     gdk_rgba_parse(&color_rgba, color);
-//     gtk_widget_override_background_color(widget, state, &color_rgba);
-// }
-
-// void widget_set_font(GtkWidget *widget, const gchar *font_name, gint font_size)
-// {
-//     PangoFontDescription *font_desc = pango_font_description_new();
-//     pango_font_description_set_family(font_desc, font_name);
-//     pango_font_description_set_size(font_desc, font_size * PANGO_SCALE);
-//     gtk_widget_override_font(widget, font_desc);
-//     pango_font_description_free(font_desc);
-// }
 
 // TODO: Should be not manipulate the end of tag ">" in the file
 // TODO: Should manipulate spaces and tabs and new lines
@@ -269,7 +244,6 @@ gboolean is_character(gchar c)
     return (c > 'A' && c < 'Z') || (c > 'a' && c < 'z');
 }
 
-
 ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCallback configure_property_callback)
 {
     if (!config || !index)
@@ -317,7 +291,6 @@ ViewConfig *init_generic_config(FILE *index, void *config, ConfigurePropertyCall
     return view_config;
 }
 
-
 View *find_view_by_id(char *view_id, View *root_view)
 {
     // g_print("PASSED WIDGETS WHILE SEARCHING: %s\n", root_view->view_config->view_id);
@@ -343,7 +316,7 @@ View *find_view_by_id(char *view_id, View *root_view)
 // Function to force width and height using CSS for a widget
 void set_widget_size(GtkWidget *widget, Dimensions dimensions)
 {
-    gtk_widget_set_size_request(widget,dimensions.width,dimensions.height);
+    gtk_widget_set_size_request(widget, dimensions.width, dimensions.height);
     // // Create a CSS provider
     // GtkCssProvider *css_provider = gtk_css_provider_new();
     // GdkScreen *screen = gtk_widget_get_screen(widget);
@@ -357,7 +330,7 @@ void set_widget_size(GtkWidget *widget, Dimensions dimensions)
     //     "  min-height: %dpx; "
     //     "  max-height: %dpx; "
     //     "  height: %dpx; "
-    //     "}", 
+    //     "}",
     //     dimensions.width, dimensions.width, dimensions.width, dimensions.height, dimensions.height, dimensions.height);
 
     // // Load the CSS data into the provider
@@ -365,8 +338,8 @@ void set_widget_size(GtkWidget *widget, Dimensions dimensions)
 
     // // Apply the CSS provider to the widget's style context
     // gtk_style_context_add_provider(
-    //     gtk_widget_get_style_context(widget), 
-    //     GTK_STYLE_PROVIDER(css_provider), 
+    //     gtk_widget_get_style_context(widget),
+    //     GTK_STYLE_PROVIDER(css_provider),
     //     GTK_STYLE_PROVIDER_PRIORITY_USER
     // );
 

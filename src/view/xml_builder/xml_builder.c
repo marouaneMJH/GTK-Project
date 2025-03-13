@@ -184,17 +184,32 @@ void write_widget(FILE *output_file, View *view, int tabs_number)
 
 void build_xml(gchar *file_name)
 {
+    MessageDialogConfig m = DEFAULT_MESSAGE_DIALOG_CONFIG;
+    
     if (!file_name)
-        return;
-
+    return;
+    
     FILE *output_file = fopen(file_name, "w");
     if (!output_file)
     {
-        // message dialog for file not existing
+        // Properly format the error message
+        char *msg = g_strdup_printf("%s: not opening!", file_name);
+        strcpy(m.message, msg);
+        GtkWidget *message = create_message_dialog(m);
+        g_free(msg); // Free the allocated memory
+        
+        show_dialog(message);
         return;
     }
-    write_widget(output_file, root_view_global, 0);
+    
+    write_widget(output_file, root_crud_ui, 0);
     fclose(output_file);
-
-    // message dialog for completing the ask
+    
+    // Properly format the success message
+    char *msg = g_strdup_printf("Check the output in %s", file_name);
+    strcpy(m.message, msg);
+    g_free(msg); // Free the allocated memory
+    
+    GtkWidget *message = create_message_dialog(m);
+    show_dialog(message);
 }

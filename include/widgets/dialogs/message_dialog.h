@@ -7,8 +7,8 @@
 #define MAX_MESSAGE_DIALOG_TITLE_SIZE 50
 #define DEFAULT_MESSAGE_DIALOG_DIMENSIONS \
     {                                     \
-        .height = 200,                    \
-        .width = 300}
+        .height = 100,                    \
+        .width = 200}
 
 /* Default configuration for message dialog */
 #define DEFAULT_MESSAGE_DIALOG_CONFIG                    \

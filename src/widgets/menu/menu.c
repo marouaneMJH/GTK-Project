@@ -55,7 +55,7 @@ ViewConfig *configure_menu_property(MenuConfig *menu_config, ViewConfig *view_co
     if (g_strcmp0(property, "screen") == 0)
     {
         // TODO: advanced feature to be done later
-    }
+    } 
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 

@@ -1,4 +1,6 @@
+// #include "./../../../include/widgets/dialogs/dialog.h"
 #include "./../../../include/widgets/dialogs/dialog.h"
+#include "./../../../include/widgets/View/signals.h"
 
 ViewConfig *configure_dialog_property(DialogConfig *dialog_config, ViewConfig *view_config, gchar *property, gchar *value, int *status)
 {
@@ -100,6 +102,43 @@ ViewConfig *init_dialog_config(FILE *index, DialogConfig *dialog_config)
     return view_config;
 }
 
+
+static void dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data)
+{
+
+    switch (response_id)
+    {
+    case GTK_RESPONSE_OK:
+        g_print("User clicked OK.\n");
+        break;
+
+    case GTK_RESPONSE_CANCEL:
+    case GTK_RESPONSE_CLOSE:
+    case GTK_RESPONSE_DELETE_EVENT:
+        g_print("User clicked Exiting the box.\n");
+        gtk_widget_destroy(GTK_WIDGET(dialog)); // Close the dialog
+        break;
+
+    case GTK_RESPONSE_YES:
+        g_print("User clicked Yes.\n");
+        break;
+
+    case GTK_RESPONSE_NO:
+        g_print("User clicked No.\n");
+        gtk_widget_destroy(GTK_WIDGET(dialog)); // Close the dialog
+        break;
+
+    case 100: // Custom response
+        g_print("Custom response 100 triggered.\n");
+        break;
+
+    default:
+        g_print("Unknown response ID: %d\n", response_id);
+        break;
+    }
+}
+
+
 GtkWidget *create_dialog(DialogConfig dialog_config)
 {
     GtkWidget *dialog = gtk_dialog_new_with_buttons(
@@ -123,7 +162,8 @@ GtkWidget *create_dialog(DialogConfig dialog_config)
     // Set background color if provided
     widget_set_colors(dialog, dialog_config.bg_color, dialog_config.text_color);
 
-    // g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(sig_dialog_response), NULL);
+    g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(dialog_response), NULL);
+
 
     return dialog;
 }

@@ -29,9 +29,9 @@
         .vexpand = FALSE,                                  \
         .halign = GTK_ALIGN_FILL,                          \
         .valign = GTK_ALIGN_FILL,                          \
-        .bg_color = "\0",                                  \
-        .text_color = "\0",                                \
-        .bg_image = "\0"}
+        .bg_color[0] = '\0',                                  \
+        .text_color[0] = '\0',                                \
+        .bg_image[0] = '\0'}
 
 typedef struct
 {
@@ -66,12 +66,16 @@ typedef struct
 
 ViewConfig *init_box_config(FILE *index, BoxConfig *box_config);
 
+BoxConfig *read_box_config_from_dialog();
+
 /**
  * @brief create box widget with default
  * @param[in] box box structure
  * @return[ou] GtkWidget pointer to new box widget
  */
 GtkWidget *create_box(BoxConfig box_config);
+
+BoxConfig *read_box_config_from_widget(GtkWidget *widget);
 
 gchar *write_box_property(FILE *output_file, View *view, int tabs_number);
 

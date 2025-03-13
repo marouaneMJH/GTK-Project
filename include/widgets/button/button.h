@@ -40,8 +40,8 @@
         .hexpand = FALSE,                                  \
         .vexpand = FALSE,                                  \
         .icon_path = "\0",                                 \
-        .halign = GTK_ALIGN_CENTER,                        \
-        .valign = GTK_ALIGN_CENTER,                        \
+        .halign = GTK_ALIGN_FILL,                          \
+        .valign = GTK_ALIGN_FILL,                          \
         .always_show_image = TRUE,                         \
         .focus_on_click = TRUE,                            \
         .use_underline = FALSE,                            \
@@ -63,14 +63,15 @@ typedef struct
     /* Dimensions and placement */
     Dimensions dimensions; // dimensions of the button
     Margins margins;       // margin of the button
-    gboolean hexpand;      // If the button expands in its container (horizontal)
-    gboolean vexpand;      // If the button expands in its container (vertical)
-
+    
     gchar icon_path[MAX_ICON_PATH_SIZE]; // Path to the icon image file
     Dimensions icon_dimensions;          // Dimensions of the icon image
-
+    
+    gboolean hexpand;      // If the button expands in its container (horizontal)
+    gboolean vexpand;      // If the button expands in its container (vertical)
     GtkAlign halign;               // Horizontal alignment of the button label
     GtkAlign valign;               // Vertical alignment of the button label
+
     gboolean always_show_image;    // Whether to always show the image
     gboolean use_underline;        // Whether to use underline in the button label
     GtkPositionType icon_position; // Whether to use underline in the button label
@@ -91,6 +92,10 @@ typedef struct
 
 ViewConfig *init_button_config(FILE *index, ButtonConfig *button_config);
 
+ButtonConfig* read_button_config_from_dialog();
+
+ButtonConfig* read_button_config_from_widget(GtkWidget *widget);
+
 /**
  * @brief create button widget with default
  * @param[in] button button structure root_view for signals
@@ -99,5 +104,7 @@ ViewConfig *init_button_config(FILE *index, ButtonConfig *button_config);
 GtkWidget *create_button(ButtonConfig button);
 
 gchar *write_button_property(FILE *output_file, View *view, int tabs_number);
+
+// void apply_button_config_changes(GtkWidget *button, ButtonConfig button_config);
 
 #endif

@@ -1,6 +1,17 @@
 
 #include "./include/builder.h"
 
+void print_graph1(View *root)
+{
+    if (!root)
+        return;
+    g_print("WIDGET: ===> %s => PARENT ==> %s\n", root->view_config->view_id, root->parent->view_config->view_id);
+    if (root->next || root->child)
+        g_print("Has next or child\n");
+    print_graph1(root->child);
+    print_graph1(root->next);
+}
+
 // Activate callback for GtkApplication
 static void activate(GtkApplication *app, gpointer user_data)
 {
@@ -9,8 +20,6 @@ static void activate(GtkApplication *app, gpointer user_data)
 
     View *root_view = build_app(app, root_view, INDEX_TXT);
     GtkWidget *window = root_view->widget;
-
-
 
     // WindowConfig window_config = DEFAULT_WINDOW;
     // GtkWidget *window = create_window(app, window_config);
@@ -39,6 +48,7 @@ static void activate(GtkApplication *app, gpointer user_data)
     // gtk_container_add(GTK_CONTAINER(window), event_box);
 
     gtk_widget_show_all(window);
+
 }
 
 // Main function

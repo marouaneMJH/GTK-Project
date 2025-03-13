@@ -31,8 +31,8 @@
         .halign = GTK_ALIGN_FILL,             \
         .valign = GTK_ALIGN_FILL,             \
         .is_numeric = TRUE,                   \
-        .bg_color = "\0",                     \
-        .text_color = "\0",                   \
+        .bg_color[0] = '\0',                     \
+        .text_color[0] = '\0',                   \
         .is_digits = FALSE}
 
 typedef struct
@@ -88,6 +88,10 @@ static void get_button_value_call_back(GtkWidget *spin_button, gpointer val);
  * @return[ou] gdouble changed value
  */
 gdouble get_spin_button_value(GtkWidget *spin_widget);
+
+SpinButtonConfig *read_spin_button_config_from_dialog();
+
+SpinButtonConfig *read_spin_button_config_from_widget(GtkWidget *widget);
 
 gchar *write_spin_button_property(FILE *output_file, View *view, int tabs_number);
 

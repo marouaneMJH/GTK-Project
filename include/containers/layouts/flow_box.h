@@ -28,6 +28,10 @@
         .vadjustment = NULL,                       \
         .margins = DEFAULT_FLOW_BOX_MARGINS,       \
         .dimensions = DEFAULT_FLOW_BOX_DIMENSIONS, \
+        .hexpand = FALSE,                       \
+        .vexpand = FALSE,                       \
+        .halign = GTK_ALIGN_FILL,               \
+        .valign = GTK_ALIGN_FILL,               \
         .bg_color = "\0",                          \
         .text_color = "\0"}
 
@@ -44,6 +48,11 @@ typedef struct
 
     GtkAdjustment *hadjustment;
     GtkAdjustment *vadjustment;
+
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
 
     Margins margins;
 
@@ -76,6 +85,10 @@ ViewConfig *init_flow_box_config(FILE *index, FlowBoxConfig *flow_box_config);
  * @return[ou] GtkWidget pointer to new flow_box widget
  */
 GtkWidget *create_flow_box(FlowBoxConfig flow_box_config);
+
+FlowBoxConfig *read_flow_box_config_from_dialog();
+
+FlowBoxConfig *read_flow_box_config_from_widget(GtkWidget *widget);
 
 gchar *write_flow_box_property(FILE *output_file, View *view, int tabs_number);
 

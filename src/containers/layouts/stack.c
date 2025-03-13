@@ -60,6 +60,30 @@ ViewConfig *configure_stack_property(StackConfig *stack_config, ViewConfig *view
     else if (g_strcmp0(property, "margin_right") == 0)
         stack_config->margins.end = atoi(value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            stack_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            stack_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            stack_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            stack_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            stack_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            stack_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            stack_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            stack_config->halign = GTK_ALIGN_FILL;
+    }
+
     // Store additional properties in view_config (if needed)
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
@@ -99,7 +123,140 @@ GtkWidget *create_stack(StackConfig stack_config)
     // Set margins
     widget_set_margins(stack, stack_config.margins);
 
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(stack, stack_config.hexpand);
+    gtk_widget_set_vexpand(stack, stack_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(stack, stack_config.halign);
+    gtk_widget_set_valign(stack, stack_config.valign);
+
     return stack;
+}
+
+StackConfig *read_stack_config_from_dialog()
+{
+    StackConfig *stack_config_ptr = NULL;
+    SAFE_ALLOC(stack_config_ptr, StackConfig, 1);
+
+    StackConfig stack_config = DEFAULT_STACK;
+
+    // Homogeneous
+    stack_config.is_homogeneous = read_config_value_as_boolean("is_homogeneous_switch");
+
+    // Transition enabled
+    stack_config.is_transition_enabled = read_config_value_as_boolean("is_transition_enabled_switch");
+
+    // Transition duration
+    stack_config.transition_duration = read_config_value_as_int("transition_duration_spin");
+
+    // Transition type
+    const gchar *transition_type = read_config_value_as_string("transition_type_combo");
+    if (stricmp(transition_type, "slide left") == 0)
+        stack_config.transition_type = GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT;
+    else if (stricmp(transition_type, "slide right") == 0)
+        stack_config.transition_type = GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT;
+    else if (stricmp(transition_type, "slide up") == 0)
+        stack_config.transition_type = GTK_STACK_TRANSITION_TYPE_SLIDE_UP;
+    else if (stricmp(transition_type, "slide down") == 0)
+        stack_config.transition_type = GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN;
+    else
+        stack_config.transition_type = GTK_STACK_TRANSITION_TYPE_CROSSFADE;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    stack_config.dimensions.width = dimensions->width;
+    stack_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    stack_config.margins.top = margins->top;
+    stack_config.margins.bottom = margins->bottom;
+    stack_config.margins.start = margins->start;
+    stack_config.margins.end = margins->end;
+
+    // HAlign
+    stack_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    stack_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    stack_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    stack_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(stack_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(stack_config.text_color, text_color);
+
+    memcpy(stack_config_ptr, &stack_config, sizeof(StackConfig));
+    return stack_config_ptr;
+}
+
+StackConfig *read_stack_config_from_widget(GtkWidget *widget)
+{
+    StackConfig *stack_config_ptr = NULL;
+    SAFE_ALLOC(stack_config_ptr, StackConfig, 1);
+
+    StackConfig stack_config = DEFAULT_STACK;
+
+    // Homogeneous
+    stack_config.is_homogeneous = gtk_stack_get_homogeneous(GTK_STACK(widget));
+
+    // Transition enabled
+    stack_config.is_transition_enabled = gtk_stack_get_transition_type(GTK_STACK(widget)) != GTK_STACK_TRANSITION_TYPE_NONE;
+
+    // Transition duration
+    stack_config.transition_duration = gtk_stack_get_transition_duration(GTK_STACK(widget));
+
+    // Transition type
+    stack_config.transition_type = gtk_stack_get_transition_type(GTK_STACK(widget));
+
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    stack_config.dimensions.width = allocation.width;
+    stack_config.dimensions.height = allocation.height;
+
+    // Expand
+    stack_config.hexpand = gtk_widget_get_hexpand(widget);
+    stack_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    stack_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    stack_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    stack_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(stack_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(stack_config.text_color, property_value);
+
+    memcpy(stack_config_ptr, &stack_config, sizeof(StackConfig));
+
+    return stack_config_ptr;
 }
 
 gchar *write_stack_property(FILE *output_file, View *view, int tabs_number)

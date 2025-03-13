@@ -120,6 +120,8 @@ void widget_set_background_image_without_css(GtkWidget *widget, const gchar *bg_
  */
 void widget_set_margins(GtkWidget *widget, Margins margins);
 
+void widget_get_margins(GtkWidget *widget, Margins *margins);
+
 /**
  * @brief This function set the text color of a widget
  * @param widget Widget cible
@@ -227,5 +229,61 @@ View *find_view_by_id(char *view_id, View *root_view);
  * @param icon_path The path to the icon image file.
  */
 void set_header_bar(GtkWidget *window, const gchar *title, const gchar *icon_path);
+
+
+// Readers
+ViewConfig *read_view_config_from_dialog(gboolean update_mode);
+
+const gchar *read_config_value_as_string(gchar *view_id);
+
+gint read_config_value_as_int(gchar *view_id);
+
+gdouble read_config_value_as_double(gchar *view_id);
+
+gboolean read_config_value_as_boolean(gchar *view_id);
+
+GtkAlign read_align_config(gchar* input_combo);
+
+GtkPositionType read_position_config(gchar *input_combo, GtkPositionType default_position);
+
+Dimensions* read_dimensions_config();
+
+Margins *read_margins_config();
+
+gchar* read_text_color_from_widget(GtkWidget *widget);
+
+gchar* read_bg_color_from_widget(GtkWidget *widget);
+
+gchar *read_bg_image_from_widget(GtkWidget *widget);
+
+// Writers
+
+void write_view_config_to_dialog(ViewConfig *view_config);
+
+void write_config_value_as_combo_index(gchar *view_id, int index);
+
+void write_config_value_as_string(gchar *view_id, const gchar *value);
+
+void write_config_value_as_int(gchar *view_id, gint value);
+
+void write_config_value_as_double(gchar *view_id, gdouble value);
+
+void write_config_value_as_boolean(gchar *view_id, gboolean value);
+
+
+void write_align_config(GtkAlign halign, GtkAlign valign);
+
+void write_position_config(gchar *output_combo, GtkPositionType position);
+
+void write_dimensions_config(Dimensions dimensions);
+
+void write_margins_config(Margins margins);
+
+void write_expand_config(gboolean hexpand, gboolean vexpand);
+
+void write_orientation_config(gchar *output_combo, GtkOrientation orientation);
+
+// Testing
+void print_graph_to_debug(View *root);
 
 #endif

@@ -28,6 +28,10 @@
         .transition_type = GTK_STACK_TRANSITION_TYPE_CROSSFADE, \
         .bg_color = "\0",                                       \
         .text_color = "\0",                                     \
+        .hexpand = FALSE,                       \
+        .vexpand = FALSE,                       \
+        .halign = GTK_ALIGN_FILL,               \
+        .valign = GTK_ALIGN_FILL,               \
         .margins = DEFAULT_STACK_MARGINS,                       \
         .dimensions = DEFAULT_STACK_DIMENSIONS}
 
@@ -38,6 +42,12 @@ typedef struct
     gint transition_duration;       // Duration of transitions in milliseconds
 
     GtkStackTransitionType transition_type; // Type of transition (e.g., slide, fade)
+  
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
+    
     gchar bg_color[MAX_COLOR_SIZE];         // Background color
     gchar text_color[MAX_COLOR_SIZE];       // Text color
     Margins margins;                        // Margins for spacing
@@ -60,6 +70,10 @@ ViewConfig *init_stack_config(FILE *index, StackConfig *stack_config);
  * @return[ou] GtkWidget pointer to new stack widget
  */
 GtkWidget *create_stack(StackConfig stack_config);
+
+StackConfig *read_stack_config_from_dialog();
+
+StackConfig *read_stack_config_from_widget(GtkWidget *widget);
 
 gchar *write_stack_property(FILE *output_file, View *view, int tabs_number);
 

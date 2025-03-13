@@ -27,6 +27,10 @@
         .use_underline = FALSE,                        \
         .dimensions = DEFAULT_CHECK_BUTTON_DIMENSIONS, \
         .margins = DEFAULT_CHECK_BUTTON_MARGIN,        \
+        .hexpand = FALSE,                       \
+        .vexpand = FALSE,                       \
+        .halign = GTK_ALIGN_FILL,               \
+        .valign = GTK_ALIGN_FILL,               \
         .bg_color = "\0",                              \
         .text_color = "\0"}
 
@@ -40,6 +44,12 @@ typedef struct
     gboolean is_active;
     gboolean is_inconsistent;
     gboolean use_underline;
+
+
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
     Dimensions dimensions;
     Margins margins;
     gchar bg_color[MAX_COLOR_SIZE];
@@ -60,6 +70,10 @@ ViewConfig *init_check_button_config(FILE *index, CheckButtonConfig *check_butto
  * @return Un pointeur vers le GtkWidget représentant le bouton check.
  */
 GtkWidget *create_check_button(CheckButtonConfig check_button_config);
+
+CheckButtonConfig *read_check_button_config_from_dialog();
+
+CheckButtonConfig *read_check_button_config_from_widget(GtkWidget *widget);
 
 gchar *write_check_button_property(FILE *output_file, View *view, int tabs_number);
 

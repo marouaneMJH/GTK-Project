@@ -82,6 +82,30 @@ ViewConfig *configure_entry_property(EntryConfig *entry_config, ViewConfig *view
             entry_config->purpose = GTK_INPUT_PURPOSE_PIN;
     }
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            entry_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            entry_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            entry_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            entry_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            entry_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            entry_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            entry_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            entry_config->halign = GTK_ALIGN_FILL;
+    }
+
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
 
     return view_config;
@@ -117,6 +141,7 @@ void email_field_handler(GtkEntry *entry, const gchar *text, gint length)
         }
     }
 }
+
 void on_icon_press(GtkEntry *entry, gpointer user_data)
 {
 
@@ -126,7 +151,7 @@ void on_icon_press(GtkEntry *entry, gpointer user_data)
 GtkWidget *create_entry(EntryConfig entry_config)
 {
 
-    g_print("=============================================\n");
+    // g_print("=============================================\n");
     GtkWidget *entry = gtk_entry_new();
 
     if (entry_config.has_delete_icon)
@@ -151,7 +176,7 @@ GtkWidget *create_entry(EntryConfig entry_config)
         gtk_entry_set_visibility(GTK_ENTRY(entry), FALSE);
 
     gtk_entry_set_max_length(GTK_ENTRY(entry), entry_config.max_length);
-    g_print("Entry max length: %d\n", entry_config.max_length);
+    // g_print("Entry max length: %d\n", entry_config.max_length);
     if (entry_config.dimensions.height > 0 || entry_config.dimensions.width > 0)
         gtk_widget_set_size_request(entry, entry_config.dimensions.width, entry_config.dimensions.height);
 
@@ -169,9 +194,17 @@ GtkWidget *create_entry(EntryConfig entry_config)
     if (entry_config.completion)
         gtk_entry_set_completion(GTK_ENTRY(entry), entry_config.completion);
 
-    g_print("Entry bg color: %s\n", entry_config.bg_color);
+    // g_print("Entry bg color: %s\n", entry_config.bg_color);
     widget_set_colors(GTK_WIDGET(entry), entry_config.bg_color, entry_config.text_color);
     widget_set_margins(GTK_WIDGET(entry), entry_config.margins);
+
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(entry, entry_config.hexpand);
+    gtk_widget_set_vexpand(entry, entry_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(entry, entry_config.halign);
+    gtk_widget_set_valign(entry, entry_config.valign);
 
     // To look at later:
     // gtk_entry_set_cursor_hadjustment(GTK_ENTRY(Myentry), hadjustment);
@@ -206,6 +239,201 @@ GtkWidget *create_entry(EntryConfig entry_config)
 
 //     return completion;
 // }
+
+EntryConfig *read_entry_config_from_dialog()
+{
+    EntryConfig *entry_config_ptr = NULL;
+    SAFE_ALLOC(entry_config_ptr, EntryConfig, 1);
+
+    EntryConfig entry_config = DEFAULT_ENTRY;
+
+    // Text
+    const gchar *text = read_config_value_as_string("text_entry");
+    strcpy(entry_config.text, text);
+
+    // Placeholder text
+    const gchar *placeholder_text = read_config_value_as_string("placeholder_text_entry");
+    strcpy(entry_config.placeholder_text, placeholder_text);
+
+    // Visibility
+    gboolean is_visible = read_config_value_as_boolean("visible_switch");
+    entry_config.is_visible = is_visible;
+
+    // Has frame
+    gboolean has_frame = read_config_value_as_boolean("has_frame_switch");
+    entry_config.has_frame = has_frame;
+
+    // Has delete icon
+    gboolean has_delete_icon = read_config_value_as_boolean("has_delete_icon_switch");
+    entry_config.has_delete_icon = has_delete_icon;
+
+    // Overwrite mode
+    gboolean overwrite_mode = read_config_value_as_boolean("overwrite_mode_switch");
+    entry_config.overwrite_mode = overwrite_mode;
+
+    // Max length
+    gint max_length = read_config_value_as_int("max_length_spin");
+    entry_config.max_length = max_length;
+
+    // Alignment
+    gfloat alignment = (gfloat)read_config_value_as_double("alignment_spin");
+    entry_config.alignment = alignment;
+
+    // Progress fraction
+    gfloat progress_fraction = (gfloat)read_config_value_as_double("progress_fraction_spin");
+    entry_config.progress_fraction = progress_fraction;
+
+    // Progress pulse step
+    gfloat progress_pulse_step = (gfloat)read_config_value_as_double("progress_pulse_step_spin");
+    entry_config.progress_pulse_step = progress_pulse_step;
+
+    // Activates default
+    gboolean activates_default = read_config_value_as_boolean("activates_default_switch");
+    entry_config.activates_default = activates_default;
+
+    // Opacity
+    // gfloat opacity = (gfloat)read_config_value_as_double("opacity_spin");
+    // entry_config.opacity = opacity;
+
+    // Input purpose
+    const gchar *purpose = read_config_value_as_string("type_combo");
+    if (stricmp(purpose, "number") == 0)
+        entry_config.purpose = GTK_INPUT_PURPOSE_NUMBER;
+    else if (stricmp(purpose, "email") == 0)
+        entry_config.purpose = GTK_INPUT_PURPOSE_EMAIL;
+    else if (stricmp(purpose, "name") == 0)
+        entry_config.purpose = GTK_INPUT_PURPOSE_NAME;
+    else if (stricmp(purpose, "password") == 0)
+        entry_config.purpose = GTK_INPUT_PURPOSE_PASSWORD;
+    else if (stricmp(purpose, "pin") == 0)
+        entry_config.purpose = GTK_INPUT_PURPOSE_PIN;
+    else
+        entry_config.purpose = GTK_INPUT_PURPOSE_FREE_FORM;
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    entry_config.dimensions.width = dimensions->width;
+    entry_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    entry_config.margins.top = margins->top;
+    entry_config.margins.bottom = margins->bottom;
+    entry_config.margins.start = margins->start;
+    entry_config.margins.end = margins->end;
+
+    // HAlign
+    entry_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    entry_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    entry_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    entry_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(entry_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(entry_config.text_color, text_color);
+
+    memcpy(entry_config_ptr, &entry_config, sizeof(EntryConfig));
+    return entry_config_ptr;
+}
+
+EntryConfig *read_entry_config_from_widget(GtkWidget *widget)
+{
+    EntryConfig *entry_config_ptr = NULL;
+    SAFE_ALLOC(entry_config_ptr, EntryConfig, 1);
+
+    EntryConfig entry_config = DEFAULT_ENTRY;
+
+    // Text
+    const gchar *text = gtk_entry_get_text(GTK_ENTRY(widget));
+    strcpy(entry_config.text, text);
+
+    // Placeholder text
+    const gchar *placeholder_text = gtk_entry_get_placeholder_text(GTK_ENTRY(widget));
+    strcpy(entry_config.placeholder_text, placeholder_text);
+
+    // Visibility
+    entry_config.is_visible = gtk_entry_get_visibility(GTK_ENTRY(widget));
+
+    // Has frame
+    entry_config.has_frame = gtk_entry_get_has_frame(GTK_ENTRY(widget));
+
+    // Has delete icon
+    entry_config.has_delete_icon = gtk_entry_get_icon_name(GTK_ENTRY(widget), GTK_ENTRY_ICON_SECONDARY) != NULL;
+
+    // Overwrite mode
+    entry_config.overwrite_mode = gtk_entry_get_overwrite_mode(GTK_ENTRY(widget));
+
+    // Max length
+    entry_config.max_length = gtk_entry_get_max_length(GTK_ENTRY(widget));
+
+    // Alignment
+    entry_config.alignment = gtk_entry_get_alignment(GTK_ENTRY(widget));
+
+    // Progress fraction
+    entry_config.progress_fraction = gtk_entry_get_progress_fraction(GTK_ENTRY(widget));
+
+    // Progress pulse step
+    entry_config.progress_pulse_step = gtk_entry_get_progress_pulse_step(GTK_ENTRY(widget));
+
+    // Activates default
+    entry_config.activates_default = gtk_entry_get_activates_default(GTK_ENTRY(widget));
+
+    // Input purpose
+    entry_config.purpose = gtk_entry_get_input_purpose(GTK_ENTRY(widget));
+
+    // Opacity
+    // entry_config.opacity = gtk_widget_get_opacity(widget);
+   
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    entry_config.dimensions.width = allocation.width;
+    entry_config.dimensions.height = allocation.height;
+
+    // Expand
+    entry_config.hexpand = gtk_widget_get_hexpand(widget);
+    entry_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    entry_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    entry_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    entry_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(entry_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(entry_config.text_color, property_value);
+
+    memcpy(entry_config_ptr, &entry_config, sizeof(EntryConfig));
+
+    return entry_config_ptr;
+}
 
 gchar *write_entry_property(FILE *output_file, View *view, int tabs_number)
 {

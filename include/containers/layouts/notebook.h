@@ -28,6 +28,10 @@
         .tab_position = GTK_POS_TOP,               \
         .margins = DEFAULT_NOTEBOOK_MARGINS,       \
         .dimensions = DEFAULT_NOTEBOOK_DIMENSIONS, \
+        .hexpand = FALSE,                       \
+        .vexpand = FALSE,                       \
+        .halign = GTK_ALIGN_FILL,               \
+        .valign = GTK_ALIGN_FILL,               \
         .bg_color = "\0",                          \
         .text_color = "\0"}
 
@@ -51,6 +55,11 @@ typedef struct
     // Position of tabs
     GtkPositionType tab_position;
 
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
+
     Margins margins;
 
     Dimensions dimensions;
@@ -68,6 +77,10 @@ ViewConfig *init_notebook_config(FILE *index, NotebookConfig *notebook_config);
  * @return[ou] GtkWidget pointer to new notebook widget
  */
 GtkWidget *create_notebook(NotebookConfig notebook_config);
+
+NotebookConfig *read_notebook_config_from_dialog();
+
+NotebookConfig *read_notebook_config_from_widget(GtkWidget *widget);
 
 gchar *write_notebook_property(FILE *output_file, View *view, int tabs_number);
 

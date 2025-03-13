@@ -58,6 +58,30 @@ ViewConfig *configure_notebook_property(NotebookConfig *notebook_config, ViewCon
     if (g_strcmp0(property, "text_color") == 0)
         strcpy(notebook_config->text_color, value);
 
+    if (g_strcmp0(property, "valign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            notebook_config->valign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            notebook_config->valign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            notebook_config->valign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            notebook_config->valign = GTK_ALIGN_FILL;
+    }
+
+    if (g_strcmp0(property, "halign") == 0)
+    {
+        if (g_strcmp0(value, "center") == 0)
+            notebook_config->halign = GTK_ALIGN_CENTER;
+        else if (g_strcmp0(value, "end") == 0)
+            notebook_config->halign = GTK_ALIGN_END;
+        else if (g_strcmp0(value, "start") == 0)
+            notebook_config->halign = GTK_ALIGN_START;
+        else if (g_strcmp0(value, "fill") == 0)
+            notebook_config->halign = GTK_ALIGN_FILL;
+    }
+
     // Icon image and icon
 
     SET_VIEW_CONFIG_PROPERTY(property, value, view_config);
@@ -102,10 +126,157 @@ GtkWidget *create_notebook(NotebookConfig notebook_config)
     // Set margins
     widget_set_margins(notebook, notebook_config.margins);
 
+    // Enable or disable cells expand (the parent should be expandable; not important)
+    gtk_widget_set_hexpand(notebook, notebook_config.hexpand);
+    gtk_widget_set_vexpand(notebook, notebook_config.vexpand);
+
+    // Set alignments
+    gtk_widget_set_halign(notebook, notebook_config.halign);
+    gtk_widget_set_valign(notebook, notebook_config.valign);
+
     // gtk_notebook_set_tab_detachable(GTK_NOTEBOOK(notebook), child, TRUE);
     // gtk_notebook_set_menu_label(GTK_NOTEBOOK(notebook), child, label);
     // gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(notebook), child, TRUE);
     return notebook;
+}
+
+NotebookConfig *read_notebook_config_from_dialog()
+{
+    NotebookConfig *notebook_config_ptr = NULL;
+    SAFE_ALLOC(notebook_config_ptr, NotebookConfig, 1);
+
+    NotebookConfig notebook_config = DEFAULT_NOTEBOOK;
+
+    // Group name
+    const gchar *group_name = read_config_value_as_string("group_name_entry");
+    strcpy(notebook_config.group_name, group_name);
+
+    // Is scrollable
+    gboolean is_scrollable = read_config_value_as_boolean("is_scrollable_switch");
+    notebook_config.is_scrollable = is_scrollable;
+
+    // Show border
+    gboolean show_border = read_config_value_as_boolean("show_border_switch");
+    notebook_config.show_border = show_border;
+
+    // Show tabs
+    gboolean show_tabs = read_config_value_as_boolean("show_tabs_switch");
+    notebook_config.show_tabs = show_tabs;
+
+    // Current page
+    notebook_config.current_page = read_config_value_as_int("current_page_spin");
+
+    // Tab position
+    notebook_config.tab_position = read_position_config("tab_position_combo", GTK_POS_TOP);
+
+
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    notebook_config.dimensions.width = dimensions->width;
+    notebook_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    notebook_config.margins.top = margins->top;
+    notebook_config.margins.bottom = margins->bottom;
+    notebook_config.margins.start = margins->start;
+    notebook_config.margins.end = margins->end;
+
+    // HAlign
+    notebook_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    notebook_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    notebook_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    notebook_config.vexpand = vexpand;
+
+    // Background color
+    const gchar *bg_color = read_config_value_as_string("bg_color_entry");
+    strcpy(notebook_config.bg_color, bg_color);
+
+    // Text color
+    const gchar *text_color = read_config_value_as_string("color_entry");
+    strcpy(notebook_config.text_color, text_color);
+
+    memcpy(notebook_config_ptr, &notebook_config, sizeof(NotebookConfig));
+    return notebook_config_ptr;
+}
+
+NotebookConfig *read_notebook_config_from_widget(GtkWidget *widget)
+{
+    NotebookConfig *notebook_config_ptr = NULL;
+    SAFE_ALLOC(notebook_config_ptr, NotebookConfig, 1);
+
+    NotebookConfig notebook_config = DEFAULT_NOTEBOOK;
+
+    // Group name
+    const gchar *group_name = gtk_notebook_get_group_name(GTK_NOTEBOOK(widget));
+    if (group_name)
+        strcpy(notebook_config.group_name, group_name);
+
+    // Is scrollable
+    gboolean is_scrollable = gtk_notebook_get_scrollable(GTK_NOTEBOOK(widget));
+    notebook_config.is_scrollable = is_scrollable;
+
+    // Show border
+    gboolean show_border = gtk_notebook_get_show_border(GTK_NOTEBOOK(widget));
+    notebook_config.show_border = show_border;
+
+    // Show tabs
+    gboolean show_tabs = gtk_notebook_get_show_tabs(GTK_NOTEBOOK(widget));
+    notebook_config.show_tabs = show_tabs;
+
+    // Current page
+    gint current_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(widget));
+    notebook_config.current_page = current_page;
+
+    // Tab position
+    GtkPositionType tab_position = gtk_notebook_get_tab_pos(GTK_NOTEBOOK(widget));
+    notebook_config.tab_position = tab_position;
+
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    notebook_config.dimensions.width = allocation.width;
+    notebook_config.dimensions.height = allocation.height;
+
+    // Expand
+    notebook_config.hexpand = gtk_widget_get_hexpand(widget);
+    notebook_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    notebook_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    notebook_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    notebook_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(notebook_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(notebook_config.text_color, property_value);
+
+    memcpy(notebook_config_ptr, &notebook_config, sizeof(NotebookConfig));
+
+    return notebook_config_ptr;
 }
 
 gchar *write_notebook_property(FILE *output_file, View *view, int tabs_number)

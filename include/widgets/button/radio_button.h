@@ -32,6 +32,10 @@
         .icon_position = GTK_POS_LEFT,                 \
         .margins = DEFAULT_RADIO_BUTTON_MARGIN,        \
         .dimensions = DEFAULT_RADIO_BUTTON_DIMENSIONS, \
+        .hexpand = FALSE,                              \
+        .vexpand = FALSE,                              \
+        .halign = GTK_ALIGN_FILL,                      \
+        .valign = GTK_ALIGN_FILL,                      \
         .bg_color = "\0",                              \
         .text_color = "\0"}
 // .margin = DEFAULT_RADIO_BUTTON_MARGIN,
@@ -41,14 +45,22 @@ typedef struct
     gchar label[MAX_BUTTON_LABEL_SIZE];
     gchar icon_name[MAX_ICON_NAME_SIZE];
     gchar tooltip[MAX_TOOLTIP_SIZE];
+
     gboolean is_group;
     GtkRadioButton *group;
+
     gboolean is_mnemonic;
     gboolean is_selected;
     gboolean is_button_mode;
     gboolean is_inconsistent;
     gboolean use_underline;
+
     GtkPositionType icon_position;
+
+    gboolean hexpand;
+    gboolean vexpand;
+    GtkAlign halign;
+    GtkAlign valign;
     Dimensions dimensions;
     Margins margins;
     gchar bg_color[MAX_COLOR_SIZE];
@@ -61,6 +73,10 @@ ViewConfig *init_radio_button_config(FILE *index, RadioButtonConfig *radio_butto
 GtkWidget *create_radio_button(RadioButtonConfig radio_button_config);
 
 void radio_button_set_group(GtkWidget *widget, GtkWidget *group);
+
+RadioButtonConfig *read_radio_button_config_from_dialog();
+
+RadioButtonConfig *read_radio_button_config_from_widget(GtkWidget *widget);
 
 gchar *write_radio_button_property(FILE *output_file, View *view, int tabs_number);
 

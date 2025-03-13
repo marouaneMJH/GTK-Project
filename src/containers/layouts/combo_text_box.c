@@ -289,6 +289,144 @@ void combo_box_make_interval(GtkWidget *combo_text_box, int start, int end)
     }
 }
 
+ComboTextBoxConfig *read_combo_text_box_config_from_dialog()
+{
+    ComboTextBoxConfig *combo_text_box_config_ptr = NULL;
+    SAFE_ALLOC(combo_text_box_config_ptr, ComboTextBoxConfig, 1);
+
+    ComboTextBoxConfig combo_text_box_config = DEFAULT_COMBO_TEXT_BOX_CONFIG;
+
+    // Read has_entry property
+    gboolean has_entry = read_config_value_as_boolean("has_entry_switch");
+    combo_text_box_config.has_entry = has_entry;
+
+    // Read is_editable property
+    gboolean is_editable = read_config_value_as_boolean("editable_switch");
+    combo_text_box_config.is_editable = is_editable;
+
+    // Read popup_fixed_width property
+    gboolean popup_fixed_width = read_config_value_as_boolean("popup_fixed_width_switch");
+    combo_text_box_config.popup_fixed_width = popup_fixed_width;
+
+    // Read wrap_width property
+    gint wrap_width = read_config_value_as_int("wrap_width_spin");
+    combo_text_box_config.wrap_width = wrap_width;
+
+    // Read popup_shown_rows property
+    gint popup_shown_rows = read_config_value_as_int("popup_shown_rows_spin");
+    combo_text_box_config.popup_shown_rows = popup_shown_rows;
+
+    // Read placeholder_text property
+    const gchar *placeholder_text = read_config_value_as_string("placeholder_entry");
+    combo_text_box_config.placeholder_text = g_strdup(placeholder_text);
+
+    // Read default_value property
+    const gchar *default_value = read_config_value_as_string("default_value_entry");
+    combo_text_box_config.default_value = g_strdup(default_value);
+
+    // Read default_index property
+    gint default_index = read_config_value_as_int("default_index_spin");
+    combo_text_box_config.default_index = default_index;
+
+
+    // Read type property
+    const gchar *type = read_config_value_as_string("type_combo");
+    if (stricmp(type, "month") == 0)
+        combo_text_box_config.type.type_counter = MONTH;
+    else if (stricmp(type, "day") == 0)
+        combo_text_box_config.type.type_counter = DAY;
+    else if (stricmp(type, "year") == 0)
+        combo_text_box_config.type.type_counter = YEAR;
+    else if (stricmp(type, "counter") == 0)
+        combo_text_box_config.type.type_counter = COUNTER;
+    else
+        combo_text_box_config.type.type_counter = NONE;
+
+    // Read start property
+    gint start = read_config_value_as_int("start_spin");
+    combo_text_box_config.type.start = start;
+
+    // Read end property
+    gint end = read_config_value_as_int("end_spin");
+    combo_text_box_config.type.end = end;
+
+    // Read options property
+    const gchar *options = read_config_value_as_string("options_entry");
+    int key = 0;
+    int index = 0;
+    gchar temp[MAX_VALUE_SIZE];
+    
+    if (options)
+    {
+        while (options[key] != '\0' && options[key] != '\n')
+        {
+            if (options[key] != ';')
+            {
+                temp[index++] = options[key];
+            }
+            else
+            {
+                temp[index] = '\0';
+    
+                ComboTextBoxOption *combo_text_box_option = g_new(ComboTextBoxOption, 1);
+                combo_text_box_option->key = g_strdup_printf("%d", key); 
+                combo_text_box_option->value = g_strdup(temp);
+    
+                if (!combo_text_box_config.options)
+                    combo_text_box_config.options = g_ptr_array_new_with_free_func(g_free);
+    
+                g_ptr_array_add(combo_text_box_config.options, combo_text_box_option);
+    
+                index = 0; 
+            }
+            key++;
+        }
+    
+        if (index > 0)
+        {
+            temp[index] = '\0';
+    
+            ComboTextBoxOption *combo_text_box_option = g_new(ComboTextBoxOption, 1);
+            combo_text_box_option->key = g_strdup_printf("%d", key); 
+            combo_text_box_option->value = g_strdup(temp);
+    
+            if (!combo_text_box_config.options)
+                combo_text_box_config.options = g_ptr_array_new_with_free_func(g_free);
+    
+            g_ptr_array_add(combo_text_box_config.options, combo_text_box_option);
+        }
+    }
+    
+    // Dimensions
+    Dimensions *dimensions = read_dimensions_config();
+    combo_text_box_config.dimensions.width = dimensions->width;
+    combo_text_box_config.dimensions.height = dimensions->height;
+
+    // Margins
+    Margins *margins = read_margins_config();
+    combo_text_box_config.margins.top = margins->top;
+    combo_text_box_config.margins.bottom = margins->bottom;
+    combo_text_box_config.margins.start = margins->start;
+    combo_text_box_config.margins.end = margins->end;
+
+    // HAlign
+    combo_text_box_config.halign = read_align_config("halign_combo");
+
+    // VAlign
+    combo_text_box_config.valign = read_align_config("valign_combo");
+
+    // HExpand
+    gboolean hexpand = read_config_value_as_boolean("hexpand_switch");
+    combo_text_box_config.hexpand = hexpand;
+
+    // VExpand
+    gboolean vexpand = read_config_value_as_boolean("vexpand_switch");
+    combo_text_box_config.vexpand = vexpand;
+
+    memcpy(combo_text_box_config_ptr, &combo_text_box_config, sizeof(ComboTextBoxConfig));
+    return combo_text_box_config_ptr;
+}
+
 gchar *write_combo_text_box_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

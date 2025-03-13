@@ -1,4 +1,4 @@
-<window
+<!-- <window
     id="win1"
     width="1500"
     height="900"
@@ -412,5 +412,37 @@
             </paned>
 
         </scrolled_window>
+    </box>
+</window> -->
+<window
+    id="win1"
+    width="1500"
+    height="900"
+    title="GTK IDE"
+    icon_name="folder"
+    icon_path="assets\images\programer.jpg"
+    has_header="false"
+    is_maximized="false"
+>
+
+
+    <box
+        id="box1"
+    >
+
+    <button 
+        on_click="sig_generate_xml"
+    />
+
+    <combo_text_box 
+    
+        option1="hello"
+        option3="hello"
+        option2="hell2"
+        option4="hell4"
+        option5="hell5"
+        option6="hell6"
+        option7="hell7"
+    />
     </box>
 </window>

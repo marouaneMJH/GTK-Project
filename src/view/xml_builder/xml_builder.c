@@ -202,7 +202,8 @@ void build_xml(gchar *file_name)
         return;
     }
     
-    write_widget(output_file, root_crud_ui, 0);
+    // write_widget(output_file, root_crud_ui, 0);// debug work with this  
+    write_widget(output_file, root_view_global, 0);// debug for debuging
     fclose(output_file);
     
     // Properly format the success message

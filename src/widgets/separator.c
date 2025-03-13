@@ -159,6 +159,54 @@ SeparatorConfig *read_separator_config_from_dialog()
     return separator_config_ptr;
 }
 
+SeparatorConfig *read_separator_config_from_widget(GtkWidget *widget)
+{
+    SeparatorConfig *separator_config_ptr = NULL;
+    SAFE_ALLOC(separator_config_ptr, SeparatorConfig, 1);
+
+    SeparatorConfig separator_config = DEFAULT_SEPARATOR;
+
+    // Tooltip
+    const gchar *tooltip = gtk_widget_get_tooltip_text(widget);
+    if (tooltip)
+        strcpy(separator_config.tooltip, tooltip);
+
+    // Orientation
+    GtkOrientation orientation = gtk_orientable_get_orientation(GTK_ORIENTABLE(widget));
+    separator_config.orientation = orientation;
+
+    // Visibility
+    gboolean is_visible = gtk_widget_get_visible(widget);
+    separator_config.is_visible = is_visible;
+   
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    separator_config.dimensions.width = allocation.width;
+    separator_config.dimensions.height = allocation.height;
+
+    // Expand
+    separator_config.hexpand = gtk_widget_get_hexpand(widget);
+    separator_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    separator_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    separator_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    separator_config.margins = margins;
+
+    memcpy(separator_config_ptr, &separator_config, sizeof(SeparatorConfig));
+
+    return separator_config_ptr;
+}
+
 gchar *write_separator_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

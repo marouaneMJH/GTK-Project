@@ -184,6 +184,7 @@ GtkWidget *create_radio_button(RadioButtonConfig radio_button_config)
         GtkWidget *radio_button_icon = gtk_image_new_from_icon_name(radio_button_config.icon_name, GTK_ICON_SIZE_BUTTON);
         gtk_button_set_image(GTK_BUTTON(radio_button), radio_button_icon);
         gtk_button_set_image_position(GTK_BUTTON(radio_button), radio_button_config.icon_position);
+        g_object_set_data(G_OBJECT(radio_button), "icon_name", g_strdup(radio_button_config.icon_name));
     }
 
     // Set margins
@@ -303,6 +304,88 @@ RadioButtonConfig *read_radio_button_config_from_dialog()
     return radio_button_config_ptr;
 }
 
+RadioButtonConfig *read_radio_button_config_from_widget(GtkWidget *widget)
+{
+    RadioButtonConfig *radio_button_config_ptr = NULL;
+    SAFE_ALLOC(radio_button_config_ptr, RadioButtonConfig, 1);
+
+    RadioButtonConfig radio_button_config = DEFAULT_RADIO_BUTTON;
+
+    // Label
+    const gchar *label = gtk_button_get_label(GTK_BUTTON(widget));
+    if (label)
+        strcpy(radio_button_config.label, label);
+
+    // Icon name
+    gchar *icon_name = g_object_get_data(G_OBJECT(widget), "bg_color");
+    if (icon_name)
+        strcpy(radio_button_config.icon_name, icon_name);
+
+    // Tooltip
+    const gchar *tooltip = gtk_widget_get_tooltip_text(widget);
+    if (tooltip)
+        strcpy(radio_button_config.tooltip, tooltip);
+
+    // Is group
+    GSList *group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(widget));
+    radio_button_config.is_group = (group != NULL);
+
+    // Is mnemonic
+    radio_button_config.is_mnemonic = gtk_button_get_use_underline(GTK_BUTTON(widget));
+
+    // Is selected
+    radio_button_config.is_selected = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+    // Is button mode
+    radio_button_config.is_button_mode = gtk_toggle_button_get_mode(GTK_TOGGLE_BUTTON(widget));
+
+    // Is inconsistent
+    radio_button_config.is_inconsistent = gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget));
+
+    // Use underline
+    radio_button_config.use_underline = gtk_button_get_use_underline(GTK_BUTTON(widget));
+
+    // Icon position
+    radio_button_config.icon_position = gtk_button_get_image_position(GTK_BUTTON(widget));
+   
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    radio_button_config.dimensions.width = allocation.width;
+    radio_button_config.dimensions.height = allocation.height;
+
+    // Expand
+    radio_button_config.hexpand = gtk_widget_get_hexpand(widget);
+    radio_button_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    radio_button_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    radio_button_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    radio_button_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(radio_button_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(radio_button_config.text_color, property_value);
+
+    memcpy(radio_button_config_ptr, &radio_button_config, sizeof(RadioButtonConfig));
+
+    return radio_button_config_ptr;
+}
 
 gchar *write_radio_button_property(FILE *output_file, View *view, int tabs_number)
 {

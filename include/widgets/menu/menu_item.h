@@ -24,7 +24,7 @@
         .accel_path = "\0",                         \
         .reserve_indicator = FALSE,                 \
         .use_underline = FALSE,                     \
-        .is_memonic = TRUE,                         \
+        .is_mnemonic = TRUE,                         \
         .tooltip = "\0",                            \
         .dimensions = DEFAULT_MENU_ITEM_DIMENSIONS, \
         .margins = DEFAULT_MENU_ITEM_MARGIN,        \
@@ -42,7 +42,7 @@ typedef struct
     gchar accel_path[MAX_ACCEL_PATH_SIZE]; // Add accel path (keyboard shortcuts)
     gboolean reserve_indicator;
     gboolean use_underline; // Associate to the parent screen or else
-    gboolean is_memonic;
+    gboolean is_mnemonic;
     gchar tooltip[MAX_TOOLTIP_SIZE];
     
     gboolean hexpand;
@@ -63,6 +63,8 @@ GtkWidget *create_menu_item(MenuItemConfig menu_item_config);
 void menu_item_set_submenu(GtkWidget *widget, GtkWidget *group);
 
 MenuItemConfig *read_menu_item_config_from_dialog();
+
+MenuItemConfig *read_menu_item_config_from_widget(GtkWidget *widget);
 
 gchar *write_menu_item_property(FILE *output_file, View *view, int tabs_number);
 

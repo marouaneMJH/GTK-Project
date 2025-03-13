@@ -90,6 +90,8 @@ GtkWidget *create_label(LabelConfig label);
 
 LabelConfig *read_label_config_from_dialog();
 
+LabelConfig *read_label_config_from_widget(GtkWidget *widget);
+
 gchar *write_label_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

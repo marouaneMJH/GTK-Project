@@ -88,6 +88,8 @@ GtkWidget *create_flow_box(FlowBoxConfig flow_box_config);
 
 FlowBoxConfig *read_flow_box_config_from_dialog();
 
+FlowBoxConfig *read_flow_box_config_from_widget(GtkWidget *widget);
+
 gchar *write_flow_box_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

@@ -271,6 +271,100 @@ LabelConfig *read_label_config_from_dialog()
     return label_config_ptr;
 }
 
+LabelConfig *read_label_config_from_widget(GtkWidget *widget)
+{
+    LabelConfig *label_config_ptr = NULL;
+    SAFE_ALLOC(label_config_ptr, LabelConfig, 1);
+
+    LabelConfig label_config = DEFAULT_LABEL;
+
+    // Label text
+    const gchar *label_text = gtk_label_get_label(GTK_LABEL(widget));
+    strcpy(label_config.label_text, label_text);
+
+    // Is markup
+    gboolean is_markup = gtk_label_get_use_markup(GTK_LABEL(widget));
+    label_config.is_markup = is_markup;
+
+    // Is underline
+    gboolean is_underline = gtk_label_get_use_underline(GTK_LABEL(widget));
+    label_config.is_underline = is_underline;
+
+    // Justification type
+    GtkJustification jtype = gtk_label_get_justify(GTK_LABEL(widget));
+    label_config.jtype = jtype;
+    
+    // Ellipsize mode
+    PangoEllipsizeMode ellipsize = gtk_label_get_ellipsize(GTK_LABEL(widget));
+    label_config.ellipsize = ellipsize;
+    
+    // Is wrap
+    gboolean is_wrap = gtk_label_get_line_wrap(GTK_LABEL(widget));
+    label_config.is_wrap = is_wrap;
+    
+    // Is selectable
+    gboolean is_selectable = gtk_label_get_selectable(GTK_LABEL(widget));
+    label_config.is_selectable = is_selectable;
+    
+    PangoContext *pcontext = gtk_widget_get_pango_context(widget);
+    PangoFontDescription *font_desc = pango_context_get_font_description(pcontext);
+    const char *family = font_desc ? pango_font_description_get_family(font_desc) : "default";
+    int font_size = font_desc ? (pango_font_description_get_size(font_desc) / PANGO_SCALE) : 0;
+    
+    // Font size
+    label_config.font_size = font_size;
+    
+    // Font family
+    strcpy(label_config.font_family, family);
+
+
+    // XAlign
+    gfloat xalign = gtk_label_get_xalign(GTK_LABEL(widget));
+    label_config.xalign = xalign;
+
+    // YAlign
+    gfloat yalign = gtk_label_get_yalign(GTK_LABEL(widget));
+    label_config.yalign = yalign;
+   
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    label_config.dimensions.width = allocation.width;
+    label_config.dimensions.height = allocation.height;
+
+    // Expand
+    label_config.hexpand = gtk_widget_get_hexpand(widget);
+    label_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    label_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    label_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    label_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(label_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(label_config.text_color, property_value);
+
+    memcpy(label_config_ptr, &label_config, sizeof(LabelConfig));
+
+    return label_config_ptr;
+}
+
 gchar *write_label_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

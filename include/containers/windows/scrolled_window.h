@@ -66,6 +66,8 @@ GtkWidget *create_scrolled_window(ScrolledWindowConfig scrolled_window_config);
 
 ScrolledWindowConfig *read_scrolled_window_config_from_dialog();
 
+ScrolledWindowConfig *read_scrolled_window_config_from_widget(GtkWidget *widget);
+
 gchar *write_scrolled_window_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

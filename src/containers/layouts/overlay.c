@@ -157,6 +157,57 @@ OverlayConfig *read_overlay_config_from_dialog()
     return overlay_config_ptr;
 }
 
+OverlayConfig *read_overlay_config_from_widget(GtkWidget *widget)
+{
+    OverlayConfig *overlay_config_ptr = NULL;
+    SAFE_ALLOC(overlay_config_ptr, OverlayConfig, 1);
+
+    OverlayConfig overlay_config = DEFAULT_OVERLAY;
+
+    // Opacity
+    overlay_config.opacity = gtk_widget_get_opacity(widget);
+
+    // Border radius
+   
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    overlay_config.dimensions.width = allocation.width;
+    overlay_config.dimensions.height = allocation.height;
+
+    // Expand
+    overlay_config.hexpand = gtk_widget_get_hexpand(widget);
+    overlay_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    overlay_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    overlay_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    overlay_config.margins = margins;
+
+    gchar *property_value = NULL;
+
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(overlay_config.bg_color, property_value);
+
+    // Background image
+    property_value = read_bg_image_from_widget(widget);
+    if (property_value)
+        strcpy(overlay_config.bg_image, property_value);
+
+    memcpy(overlay_config_ptr, &overlay_config, sizeof(OverlayConfig));
+
+    return overlay_config_ptr;
+}
 
 gchar *write_overlay_property(FILE *output_file, View *view, int tabs_number)
 {

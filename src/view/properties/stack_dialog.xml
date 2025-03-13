@@ -152,6 +152,7 @@
                                 option3="Slide right"
                                 option4="Slide up"
                                 option5="Slide down"
+                                option6="None"
                                 box_expand="true"
                                 box_fill="true"
                             />

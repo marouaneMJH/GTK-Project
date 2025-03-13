@@ -105,6 +105,6 @@ GtkWidget *create_button(ButtonConfig button);
 
 gchar *write_button_property(FILE *output_file, View *view, int tabs_number);
 
-void apply_button_config_changes(GtkWidget *button, ButtonConfig button_config);
+// void apply_button_config_changes(GtkWidget *button, ButtonConfig button_config);
 
 #endif

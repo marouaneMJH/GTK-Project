@@ -87,6 +87,10 @@ GtkStyleContext *get_style_provider_context(GtkWidget *widget, const gchar *bg_c
 // Function to set both background and text colors for a widget
 void widget_set_colors(GtkWidget *widget, const gchar *bg_color, const gchar *color)
 {
+    if (bg_color)
+        g_object_set_data(G_OBJECT(widget), "bg_color", g_strdup(bg_color));
+    if (color)
+        g_object_set_data(G_OBJECT(widget), "text_color", g_strdup(color));
     // Add a CSS class to the widget's style context with the specified colors
     gtk_style_context_add_class(get_style_provider_context(widget, bg_color, color, NULL), "style");
 }
@@ -94,6 +98,10 @@ void widget_set_colors(GtkWidget *widget, const gchar *bg_color, const gchar *co
 // Function to set a background image for a widget
 void widget_set_background_image(GtkWidget *widget, const gchar *bg_image, const gchar *color)
 {
+    if (bg_image)
+        g_object_set_data(G_OBJECT(widget), "bg_image", g_strdup(bg_image));
+    if (color)
+        g_object_set_data(G_OBJECT(widget), "text_color", g_strdup(color));
     // Add a CSS class to the widget's style context with the specified background image
     gtk_style_context_add_class(get_style_provider_context(widget, NULL, color, bg_image), "style");
 }
@@ -535,16 +543,16 @@ gboolean read_config_value_as_boolean(gchar *view_id)
 
 GtkAlign read_align_config(gchar *input_combo)
 {
-    const gchar *valign = read_config_value_as_string(input_combo);
-    if (valign)
+    const gchar *align_text = read_config_value_as_string(input_combo);
+    if (align_text)
     {
-        if (stricmp(valign, "start") == 0)
+        if (stricmp(align_text, "start") == 0)
             return GTK_ALIGN_START;
-        else if (stricmp(valign, "end") == 0)
+        else if (stricmp(align_text, "end") == 0)
             return GTK_ALIGN_END;
-        else if (stricmp(valign, "baseline") == 0)
+        else if (stricmp(align_text, "baseline") == 0)
             return GTK_ALIGN_BASELINE;
-        else if (stricmp(valign, "center") == 0)
+        else if (stricmp(align_text, "center") == 0)
             return GTK_ALIGN_CENTER;
         else
             return GTK_ALIGN_FILL;
@@ -602,6 +610,68 @@ Margins *read_margins_config()
     return margins;
 }
 
+gchar *read_text_color_from_widget(GtkWidget *widget)
+{
+
+    return g_object_get_data(G_OBJECT(widget), "text_color");
+
+    // This approach also works
+    // GtkStyleContext *context = gtk_widget_get_style_context(widget);
+    // GdkRGBA fg_rgba;
+
+    // // Get the widget's foreground color (for the normal state)
+    // gtk_style_context_get_color(context, GTK_STATE_FLAG_NORMAL, &fg_rgba);
+    // guint fg_r = (guint)(fg_rgba.red * 255);
+    // guint fg_g = (guint)(fg_rgba.green * 255);
+    // guint fg_b = (guint)(fg_rgba.blue * 255);
+    // gchar *fg_hex = NULL; // Format: "#RRGGBB"
+    // SAFE_ALLOC(fg_hex, gchar, 8);
+
+    // sprintf(fg_hex, "#%02X%02X%02X", fg_r, fg_g, fg_b);
+
+    // return fg_hex;
+}
+
+gchar *read_bg_color_from_widget(GtkWidget *widget)
+{
+
+    return g_object_get_data(G_OBJECT(widget), "bg_color");
+
+    // This approach also works
+    // if (!widget)
+    //     return NULL;
+
+    // GtkStyleContext *context = gtk_widget_get_style_context(widget);
+    // GValue bg_value = G_VALUE_INIT;
+
+    // // Get background color property
+    // gtk_style_context_get_property(context, "background-color", GTK_STATE_FLAG_NORMAL, &bg_value);
+
+    // // Check if GValue contains a GdkRGBA
+    // if (G_VALUE_HOLDS(&bg_value, GDK_TYPE_RGBA))
+    // {
+    //     // Get the GdkRGBA from the GValue
+    //     const GdkRGBA *bg_rgba = g_value_get_boxed(&bg_value);
+
+    //     // Convert color to hex
+    //     gchar *bg_hex = g_strdup_printf("#%02X%02X%02X",
+    //                                     (guint)(bg_rgba->red * 255),
+    //                                     (guint)(bg_rgba->green * 255),
+    //                                     (guint)(bg_rgba->blue * 255));
+
+    //     g_value_unset(&bg_value); // Free GValue memory
+    //     return bg_hex;
+    // }
+
+    // g_value_unset(&bg_value); // Free GValue memory
+    // return NULL;              // Return NULL if no color is found
+}
+
+gchar *read_bg_image_from_widget(GtkWidget *widget)
+{
+    return g_object_get_data(G_OBJECT(widget), "bg_image");
+}
+
 // Writers
 
 void write_view_config_to_dialog(ViewConfig *view_config)
@@ -617,8 +687,8 @@ void write_view_config_to_dialog(ViewConfig *view_config)
     write_config_value_as_boolean("box_fill_switch", view_config->box_fill);
     write_config_value_as_int("box_padding_spin", view_config->box_padding);
 
-    gchar *pack_direction = (view_config->pack_direction == 0) ? "end" : "start";
-    write_config_value_as_string("pack_direction_combo", pack_direction);
+    write_config_value_as_combo_index("pack_direction_combo", view_config->pack_direction == 0 ? 1 : 0);
+    // write_config_value_as_string("pack_direction_combo", pack_direction);
 
     // Fixed config
     write_config_value_as_int("position_x_spin", view_config->position_x);
@@ -631,12 +701,31 @@ void write_view_config_to_dialog(ViewConfig *view_config)
     write_config_value_as_string("on_click_entry", view_config->signal.sig_handler);
 }
 
+void write_config_value_as_combo_index(gchar *view_id, int index)
+{
+    View *output_view = find_view_by_id(view_id, root_dialog_view_global);
+    if (!output_view)
+    {
+        g_print("Error: ==> Cannot find the %s\n", view_id);
+        return;
+    }
+    if (GTK_IS_COMBO_BOX_TEXT(output_view->widget))
+    {
+        gtk_combo_box_set_active(GTK_COMBO_BOX(output_view->widget), index);
+    }
+}
+
 void write_config_value_as_string(gchar *view_id, const gchar *value)
 {
     View *output_view = find_view_by_id(view_id, root_dialog_view_global);
     if (!output_view)
     {
         g_print("Error: ==> Cannot find the %s\n", view_id);
+        return;
+    }
+    if (!value)
+    {
+        g_print("Error: ==> The value is null\n");
         return;
     }
     g_print("OWIDGET FOUND IS: %s\n", output_view->view_config->view_id);
@@ -690,6 +779,110 @@ void write_config_value_as_boolean(gchar *view_id, gboolean value)
         g_print("Error: => Widget type not compatible with the expected value\n");
 }
 
+void write_align_config(GtkAlign halign, GtkAlign valign)
+{
+    // VAlign
+    gint index = 0;
+    switch (halign)
+    {
+    case GTK_ALIGN_FILL:
+        index = 0;
+        break;
+    case GTK_ALIGN_CENTER:
+        index = 1;
+        break;
+    case GTK_ALIGN_START:
+        index = 2;
+        break;
+    case GTK_ALIGN_END:
+        index = 3;
+        break;
+    case GTK_ALIGN_BASELINE:
+        index = 4;
+        break;
+    default:
+        index = 0;
+        break;
+    }
+    write_config_value_as_combo_index("halign_combo", index);
+
+    switch (valign)
+    {
+    case GTK_ALIGN_FILL:
+        index = 0;
+        break;
+    case GTK_ALIGN_CENTER:
+        index = 1;
+        break;
+    case GTK_ALIGN_START:
+        index = 2;
+        break;
+    case GTK_ALIGN_END:
+        index = 3;
+        break;
+    case GTK_ALIGN_BASELINE:
+        index = 4;
+        break;
+    default:
+        index = 0;
+        break;
+    }
+
+    write_config_value_as_combo_index("valign_combo", index);
+}
+
+void write_position_config(gchar *output_combo, GtkPositionType position)
+{
+    gint index = 0;
+    switch (position)
+    {
+    case GTK_BASELINE_POSITION_CENTER:
+        index = 0;
+        break;
+    case GTK_BASELINE_POSITION_TOP:
+        index = 1;
+        break;
+    case GTK_BASELINE_POSITION_BOTTOM:
+        index = 2;
+        break;
+    default:
+        index = 0;
+        break;
+    }
+    write_config_value_as_combo_index(output_combo, index);
+}
+
+void write_dimensions_config(Dimensions dimensions)
+{
+    // Width
+    write_config_value_as_int("width_spin", dimensions.width);
+
+    // Height
+    write_config_value_as_int("height_spin", dimensions.height);
+}
+
+void write_margins_config(Margins margins)
+{
+    // Margins
+    write_config_value_as_int("margin_top_spin", margins.top);
+    write_config_value_as_int("margin_bottom_spin", margins.bottom);
+    write_config_value_as_int("margin_left_spin", margins.start);
+    write_config_value_as_int("margin_right_spin", margins.end);
+}
+
+void write_expand_config(gboolean hexpand, gboolean vexpand)
+{
+    // HExpand
+    write_config_value_as_boolean("hexpand_switch", hexpand);
+
+    // VExpand
+    write_config_value_as_boolean("vexpand_switch", vexpand);
+}
+
+void write_orientation_config(gchar *output_combo, GtkOrientation orientation)
+{
+    write_config_value_as_combo_index(output_combo, orientation == GTK_ORIENTATION_VERTICAL ? 0 : 1);
+}
 
 // Testing
 void print_graph_to_debug(View *root)

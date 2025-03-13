@@ -208,6 +208,79 @@ MenuConfig *read_menu_config_from_dialog()
     return menu_config_ptr;
 }
 
+MenuConfig *read_menu_config_from_widget(GtkWidget *widget)
+{
+    MenuConfig *menu_config_ptr = NULL;
+    SAFE_ALLOC(menu_config_ptr, MenuConfig, 1);
+
+    MenuConfig menu_config = DEFAULT_MENU;
+
+    // Tooltip
+    const gchar *tooltip = gtk_widget_get_tooltip_text(widget);
+    if (tooltip)
+        strcpy(menu_config.tooltip, tooltip);
+
+    // // Accel Path
+    // const gchar *accel_path = gtk_menu_get_accel_path(GTK_MENU(widget));
+    // if (accel_path)
+    //     strcpy(menu_config.accel_path, accel_path);
+
+    // Active Index
+    GtkWidget *active_item = gtk_menu_get_active(GTK_MENU(widget));
+    if (active_item)
+    {
+        GList *children = gtk_container_get_children(GTK_CONTAINER(widget));
+        gint active_index = g_list_index(children, active_item);
+        g_list_free(children);
+        menu_config.active_index = active_index;
+    }
+
+    // Monitor Number
+    gint monitor_num = gtk_menu_get_monitor(GTK_MENU(widget));
+    menu_config.monitor_num = monitor_num;
+
+    // Reserve Toggle Size
+    gboolean reserve_toggle_size = gtk_menu_get_reserve_toggle_size(GTK_MENU(widget));
+    menu_config.reserve_toggle_size = reserve_toggle_size;
+   
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    menu_config.dimensions.width = allocation.width;
+    menu_config.dimensions.height = allocation.height;
+
+    // Expand
+    menu_config.hexpand = gtk_widget_get_hexpand(widget);
+    menu_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    menu_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    menu_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    menu_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(menu_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(menu_config.text_color, property_value);
+
+    memcpy(menu_config_ptr, &menu_config, sizeof(MenuConfig));
+
+    return menu_config_ptr;
+}
 
 gchar *write_menu_property(FILE *output_file, View *view, int tabs_number)
 {

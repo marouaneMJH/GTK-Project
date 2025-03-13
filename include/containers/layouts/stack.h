@@ -73,6 +73,8 @@ GtkWidget *create_stack(StackConfig stack_config);
 
 StackConfig *read_stack_config_from_dialog();
 
+StackConfig *read_stack_config_from_widget(GtkWidget *widget);
+
 gchar *write_stack_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

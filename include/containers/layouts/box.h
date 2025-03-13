@@ -75,6 +75,8 @@ BoxConfig *read_box_config_from_dialog();
  */
 GtkWidget *create_box(BoxConfig box_config);
 
+BoxConfig *read_box_config_from_widget(GtkWidget *widget);
+
 gchar *write_box_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

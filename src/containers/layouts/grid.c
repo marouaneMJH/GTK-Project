@@ -111,6 +111,10 @@ GtkWidget *create_grid(GridConfig grid_config)
     gtk_widget_set_halign(grid, grid_config.halign);
     gtk_widget_set_valign(grid, grid_config.valign);
 
+    // Dimensions
+    if (grid_config.dimensions.height || grid_config.dimensions.width)
+        gtk_widget_set_size_request(grid, grid_config.dimensions.width, grid_config.dimensions.height);
+
     // Set colors
     widget_set_colors(grid, grid_config.bg_color, grid_config.text_color);
 
@@ -187,6 +191,65 @@ GridConfig *read_grid_config_from_dialog()
     strcpy(grid_config.text_color, text_color);
 
     memcpy(grid_config_ptr, &grid_config, sizeof(GridConfig));
+    return grid_config_ptr;
+}
+
+GridConfig *read_grid_config_from_widget(GtkWidget *widget)
+{
+    GridConfig *grid_config_ptr = NULL;
+    SAFE_ALLOC(grid_config_ptr, GridConfig, 1);
+
+    GridConfig grid_config = DEFAULT_GRID;
+
+    // Column homogeneous
+    grid_config.column_homogeneous = gtk_grid_get_column_homogeneous(GTK_GRID(widget));
+
+    // Row homogeneous
+    grid_config.row_homogeneous = gtk_grid_get_row_homogeneous(GTK_GRID(widget));
+
+    // Column spacing
+    grid_config.column_spacing = gtk_grid_get_column_spacing(GTK_GRID(widget));
+
+    // Row spacing
+    grid_config.row_spacing = gtk_grid_get_row_spacing(GTK_GRID(widget));
+
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    grid_config.dimensions.width = allocation.width;
+    grid_config.dimensions.height = allocation.height;
+
+    // Expand
+    grid_config.hexpand = gtk_widget_get_hexpand(widget);
+    grid_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    grid_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    grid_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    grid_config.margins = margins;
+
+    gchar *property_value = NULL;
+
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(grid_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(grid_config.text_color, property_value);
+
+    memcpy(grid_config_ptr, &grid_config, sizeof(GridConfig));
+
     return grid_config_ptr;
 }
 

@@ -66,6 +66,8 @@ GtkWidget *create_color_button(ColorButtonConfig color_button);
 
 ColorButtonConfig *read_color_button_config_from_dialog();
 
+ColorButtonConfig *read_color_button_config_from_widget(GtkWidget *widget);
+
 gchar *write_color_button_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

@@ -91,6 +91,8 @@ gdouble get_spin_button_value(GtkWidget *spin_widget);
 
 SpinButtonConfig *read_spin_button_config_from_dialog();
 
+SpinButtonConfig *read_spin_button_config_from_widget(GtkWidget *widget);
+
 gchar *write_spin_button_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

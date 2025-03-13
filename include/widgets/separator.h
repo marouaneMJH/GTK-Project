@@ -48,6 +48,8 @@ GtkWidget *create_separator(SeparatorConfig separator_config);
 
 SeparatorConfig *read_separator_config_from_dialog();
 
+SeparatorConfig *read_separator_config_from_widget(GtkWidget *widget);
+
 gchar *write_separator_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

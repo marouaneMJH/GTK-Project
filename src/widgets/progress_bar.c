@@ -215,6 +215,75 @@ ProgressBarConfig *read_progress_bar_config_from_dialog()
     return progress_bar_config_ptr;
 }
 
+ProgressBarConfig *read_progress_bar_config_from_widget(GtkWidget *widget)
+{
+    ProgressBarConfig *progress_bar_config_ptr = NULL;
+    SAFE_ALLOC(progress_bar_config_ptr, ProgressBarConfig, 1);
+
+    ProgressBarConfig progress_bar_config = DEFAULT_PROGRESS_BAR;
+
+    // Progress fraction
+    progress_bar_config.progress_fraction = gtk_progress_bar_get_fraction(GTK_PROGRESS_BAR(widget));
+
+    // Pulse step
+    progress_bar_config.progress_pulse_step = gtk_progress_bar_get_pulse_step(GTK_PROGRESS_BAR(widget));
+
+    // Text
+    const gchar *text = gtk_progress_bar_get_text(GTK_PROGRESS_BAR(widget));
+    if (text)
+        strcpy(progress_bar_config.text, text);
+
+    // Text visibility
+    progress_bar_config.is_text_visible = gtk_progress_bar_get_show_text(GTK_PROGRESS_BAR(widget));
+
+    // Inverted
+    progress_bar_config.is_inverted = gtk_progress_bar_get_inverted(GTK_PROGRESS_BAR(widget));
+
+    // Ellipsize
+    progress_bar_config.ellipsize = gtk_progress_bar_get_ellipsize(GTK_PROGRESS_BAR(widget));
+
+    // Opacity
+    // progress_bar_config.opacity = gtk_widget_get_opacity(widget);
+   
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    progress_bar_config.dimensions.width = allocation.width;
+    progress_bar_config.dimensions.height = allocation.height;
+
+    // Expand
+    progress_bar_config.hexpand = gtk_widget_get_hexpand(widget);
+    progress_bar_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    progress_bar_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    progress_bar_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    progress_bar_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(progress_bar_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(progress_bar_config.text_color, property_value);
+
+    memcpy(progress_bar_config_ptr, &progress_bar_config, sizeof(ProgressBarConfig));
+
+    return progress_bar_config_ptr;
+}
+
 gchar *write_progress_bar_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

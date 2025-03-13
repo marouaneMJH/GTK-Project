@@ -52,6 +52,8 @@ GtkWidget *create_menu_bar(MenuBarConfig menu_bar_config);
 
 MenuBarConfig *read_menu_bar_config_from_dialog();
 
+MenuBarConfig *read_menu_bar_config_from_widget(GtkWidget *widget);
+
 gchar *write_menu_bar_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

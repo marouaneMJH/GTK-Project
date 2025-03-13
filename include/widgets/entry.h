@@ -65,10 +65,7 @@ typedef struct
     gboolean is_visible;                                     // Whether the entry is visible or hidden
     GtkInputPurpose purpose;                                 // Purpose of the entry (e.g., free form, number, etc.)
 
-    /* Dimensions and placement */
-    Dimensions dimensions; // Dimensions of the entry
-    Margins margins;       // Margins around the entry
-
+    
     /* Entry appearance */
     gboolean has_delete_icon;         // Whether the entry has a delete icon
     gboolean has_frame;               // Whether the entry has a frame
@@ -86,6 +83,10 @@ typedef struct
     
     /* Activation */
     gboolean activates_default; // Whether the entry activates the default widget when Enter is pressed
+    
+    /* Dimensions and placement */
+    Dimensions dimensions; // Dimensions of the entry
+    Margins margins;       // Margins around the entry
 
     gboolean hexpand;
     gboolean vexpand;
@@ -106,6 +107,8 @@ ViewConfig *init_entry_config(FILE *index, EntryConfig *entry_config);
 GtkWidget *create_entry(EntryConfig entry_data);
 
 EntryConfig *read_entry_config_from_dialog();
+
+EntryConfig *read_entry_config_from_widget(GtkWidget *widget);
 
 gchar *write_entry_property(FILE *output_file, View *view, int tabs_number);
 

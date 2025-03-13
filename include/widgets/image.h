@@ -116,6 +116,8 @@ GtkWidget *create_image_from_pixbuf(char *path, Dimensions dimensions);
 
 ImageConfig *read_image_config_from_dialog();
 
+ImageConfig *read_image_config_from_widget(GtkWidget *widget);
+
 gchar *write_image_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

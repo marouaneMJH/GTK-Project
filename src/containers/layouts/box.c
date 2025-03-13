@@ -144,14 +144,16 @@ BoxConfig *read_box_config_from_dialog()
 
     // Orientation
     const gchar *selected_orientation = read_config_value_as_string("orientation_combo");
-    if (selected_orientation) {
+    if (selected_orientation)
+    {
         if (stricmp(selected_orientation, "horizontal") == 0)
             box_config.orientation = GTK_ORIENTATION_HORIZONTAL;
     }
 
     // Baseline
     const gchar *baseline = read_config_value_as_string("baseline_combo");
-    if (baseline) {
+    if (baseline)
+    {
         if (stricmp(baseline, "top") == 0)
             box_config.baseline_position = GTK_BASELINE_POSITION_TOP;
         else if (stricmp(baseline, "bottom") == 0)
@@ -206,26 +208,100 @@ BoxConfig *read_box_config_from_dialog()
 
     // Background color
     const gchar *bg_color = read_config_value_as_string("bg_color_entry");
-    if (bg_color) {
+    if (bg_color)
+    {
         strncpy(box_config.bg_color, bg_color, sizeof(box_config.bg_color) - 1);
         box_config.bg_color[sizeof(box_config.bg_color) - 1] = '\0'; // Ensure null termination
     }
 
     // Text color
     const gchar *text_color = read_config_value_as_string("color_entry");
-    if (text_color) {
+    if (text_color)
+    {
         strncpy(box_config.text_color, text_color, sizeof(box_config.text_color) - 1);
         box_config.text_color[sizeof(box_config.text_color) - 1] = '\0';
     }
 
     // Background image
     const gchar *bg_image = read_config_value_as_string("bg_image_entry");
-    if (bg_image) {
+    if (bg_image)
+    {
         strncpy(box_config.bg_image, bg_image, sizeof(box_config.bg_image) - 1);
         box_config.bg_image[sizeof(box_config.bg_image) - 1] = '\0';
     }
 
     memcpy(box_config_ptr, &box_config, sizeof(BoxConfig));
+    return box_config_ptr;
+}
+
+BoxConfig *read_box_config_from_widget(GtkWidget *widget)
+{
+    BoxConfig *box_config_ptr = NULL;
+    SAFE_ALLOC(box_config_ptr, BoxConfig, 1);
+
+    BoxConfig box_config = DEFAULT_BOX;
+
+    // Orientation
+    GtkOrientation orientation;
+    g_object_get(widget, "orientation", &orientation, NULL);
+    box_config.orientation = orientation;
+
+    // Spacing
+    gint spacing;
+    g_object_get(widget, "spacing", &spacing, NULL);
+    box_config.spacing = spacing;
+
+    // Homogeneous
+    gboolean homogeneous;
+    g_object_get(widget, "homogeneous", &homogeneous, NULL);
+    box_config.homogeneous = homogeneous;
+
+    // Baseline position
+    GtkBaselinePosition baseline_position;
+    g_object_get(widget, "baseline-position", &baseline_position, NULL);
+    box_config.baseline_position = baseline_position;
+
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    box_config.dimensions.width = allocation.width;
+    box_config.dimensions.height = allocation.height;
+
+    // Expand
+    box_config.hexpand = gtk_widget_get_hexpand(widget);
+    box_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    box_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    box_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    box_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(box_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(box_config.text_color, property_value);
+
+    // Background image
+    property_value = read_bg_image_from_widget(widget);
+    if (property_value)
+        strcpy(box_config.bg_image, property_value);
+
+    memcpy(box_config_ptr, &box_config, sizeof(BoxConfig));
+
     return box_config_ptr;
 }
 

@@ -348,6 +348,93 @@ EntryConfig *read_entry_config_from_dialog()
     return entry_config_ptr;
 }
 
+EntryConfig *read_entry_config_from_widget(GtkWidget *widget)
+{
+    EntryConfig *entry_config_ptr = NULL;
+    SAFE_ALLOC(entry_config_ptr, EntryConfig, 1);
+
+    EntryConfig entry_config = DEFAULT_ENTRY;
+
+    // Text
+    const gchar *text = gtk_entry_get_text(GTK_ENTRY(widget));
+    strcpy(entry_config.text, text);
+
+    // Placeholder text
+    const gchar *placeholder_text = gtk_entry_get_placeholder_text(GTK_ENTRY(widget));
+    strcpy(entry_config.placeholder_text, placeholder_text);
+
+    // Visibility
+    entry_config.is_visible = gtk_entry_get_visibility(GTK_ENTRY(widget));
+
+    // Has frame
+    entry_config.has_frame = gtk_entry_get_has_frame(GTK_ENTRY(widget));
+
+    // Has delete icon
+    entry_config.has_delete_icon = gtk_entry_get_icon_name(GTK_ENTRY(widget), GTK_ENTRY_ICON_SECONDARY) != NULL;
+
+    // Overwrite mode
+    entry_config.overwrite_mode = gtk_entry_get_overwrite_mode(GTK_ENTRY(widget));
+
+    // Max length
+    entry_config.max_length = gtk_entry_get_max_length(GTK_ENTRY(widget));
+
+    // Alignment
+    entry_config.alignment = gtk_entry_get_alignment(GTK_ENTRY(widget));
+
+    // Progress fraction
+    entry_config.progress_fraction = gtk_entry_get_progress_fraction(GTK_ENTRY(widget));
+
+    // Progress pulse step
+    entry_config.progress_pulse_step = gtk_entry_get_progress_pulse_step(GTK_ENTRY(widget));
+
+    // Activates default
+    entry_config.activates_default = gtk_entry_get_activates_default(GTK_ENTRY(widget));
+
+    // Input purpose
+    entry_config.purpose = gtk_entry_get_input_purpose(GTK_ENTRY(widget));
+
+    // Opacity
+    // entry_config.opacity = gtk_widget_get_opacity(widget);
+   
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    entry_config.dimensions.width = allocation.width;
+    entry_config.dimensions.height = allocation.height;
+
+    // Expand
+    entry_config.hexpand = gtk_widget_get_hexpand(widget);
+    entry_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    entry_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    entry_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    entry_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(entry_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(entry_config.text_color, property_value);
+
+    memcpy(entry_config_ptr, &entry_config, sizeof(EntryConfig));
+
+    return entry_config_ptr;
+}
+
 gchar *write_entry_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

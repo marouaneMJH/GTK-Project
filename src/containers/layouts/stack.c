@@ -201,6 +201,64 @@ StackConfig *read_stack_config_from_dialog()
     return stack_config_ptr;
 }
 
+StackConfig *read_stack_config_from_widget(GtkWidget *widget)
+{
+    StackConfig *stack_config_ptr = NULL;
+    SAFE_ALLOC(stack_config_ptr, StackConfig, 1);
+
+    StackConfig stack_config = DEFAULT_STACK;
+
+    // Homogeneous
+    stack_config.is_homogeneous = gtk_stack_get_homogeneous(GTK_STACK(widget));
+
+    // Transition enabled
+    stack_config.is_transition_enabled = gtk_stack_get_transition_type(GTK_STACK(widget)) != GTK_STACK_TRANSITION_TYPE_NONE;
+
+    // Transition duration
+    stack_config.transition_duration = gtk_stack_get_transition_duration(GTK_STACK(widget));
+
+    // Transition type
+    stack_config.transition_type = gtk_stack_get_transition_type(GTK_STACK(widget));
+
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    stack_config.dimensions.width = allocation.width;
+    stack_config.dimensions.height = allocation.height;
+
+    // Expand
+    stack_config.hexpand = gtk_widget_get_hexpand(widget);
+    stack_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    stack_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    stack_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    stack_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(stack_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(stack_config.text_color, property_value);
+
+    memcpy(stack_config_ptr, &stack_config, sizeof(StackConfig));
+
+    return stack_config_ptr;
+}
+
 gchar *write_stack_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

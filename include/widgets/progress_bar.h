@@ -74,6 +74,8 @@ GtkWidget *create_progress_bar(ProgressBarConfig progress_bar_config);
 
 ProgressBarConfig *read_progress_bar_config_from_dialog();
 
+ProgressBarConfig *read_progress_bar_config_from_widget(GtkWidget *widget);
+
 gchar *write_progress_bar_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

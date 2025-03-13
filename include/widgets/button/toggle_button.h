@@ -24,7 +24,7 @@
         .is_mnemonic = FALSE,                           \
         .is_active = FALSE,                             \
         .is_visible = FALSE,                            \
-        .mode = TRUE,                                   \
+        .mode = FALSE,                                   \
         .is_inconsistent = FALSE,                       \
         .hexpand = FALSE,                               \
         .vexpand = FALSE,                               \
@@ -80,6 +80,8 @@ void set_toggle_button_inconsistent(GtkWidget *toggle_button, gboolean is_incons
 gboolean get_toggle_button_inconsistent(GtkWidget *toggle_button);
 
 ToggleButtonConfig *read_toggle_button_config_from_dialog(); 
+
+ToggleButtonConfig *read_toggle_button_config_from_widget(GtkWidget *widget);
 
 gchar *write_toggle_button_property(FILE *output_file, View *view, int tabs_number);
 

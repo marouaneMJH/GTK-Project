@@ -250,10 +250,17 @@ Dimensions* read_dimensions_config();
 
 Margins *read_margins_config();
 
+gchar* read_text_color_from_widget(GtkWidget *widget);
+
+gchar* read_bg_color_from_widget(GtkWidget *widget);
+
+gchar *read_bg_image_from_widget(GtkWidget *widget);
+
 // Writers
 
 void write_view_config_to_dialog(ViewConfig *view_config);
 
+void write_config_value_as_combo_index(gchar *view_id, int index);
 
 void write_config_value_as_string(gchar *view_id, const gchar *value);
 
@@ -262,6 +269,19 @@ void write_config_value_as_int(gchar *view_id, gint value);
 void write_config_value_as_double(gchar *view_id, gdouble value);
 
 void write_config_value_as_boolean(gchar *view_id, gboolean value);
+
+
+void write_align_config(GtkAlign halign, GtkAlign valign);
+
+void write_position_config(gchar *output_combo, GtkPositionType position);
+
+void write_dimensions_config(Dimensions dimensions);
+
+void write_margins_config(Margins margins);
+
+void write_expand_config(gboolean hexpand, gboolean vexpand);
+
+void write_orientation_config(gchar *output_combo, GtkOrientation orientation);
 
 // Testing
 void print_graph_to_debug(View *root);

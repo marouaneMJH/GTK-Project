@@ -211,6 +211,67 @@ FrameConfig *read_frame_config_from_dialog()
     return frame_config_ptr;
 }
 
+FrameConfig *read_frame_config_from_widget(GtkWidget *widget)
+{
+    FrameConfig *frame_config_ptr = NULL;
+    SAFE_ALLOC(frame_config_ptr, FrameConfig, 1);
+
+    FrameConfig frame_config = DEFAULT_FRAME;
+
+    // Label
+    const gchar *label = gtk_frame_get_label(GTK_FRAME(widget));
+    if (label)
+        strcpy(frame_config.label, label);
+
+    // Shadow type
+    GtkShadowType shadow_type = gtk_frame_get_shadow_type(GTK_FRAME(widget));
+    frame_config.shadow_type = shadow_type;
+
+    // Label alignment
+    gfloat label_xalign, label_yalign;
+    gtk_frame_get_label_align(GTK_FRAME(widget), &label_xalign, &label_yalign);
+    frame_config.label_xalign = label_xalign;
+    frame_config.label_yalign = label_yalign;
+
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    frame_config.dimensions.width = allocation.width;
+    frame_config.dimensions.height = allocation.height;
+
+    // Expand
+    frame_config.hexpand = gtk_widget_get_hexpand(widget);
+    frame_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    frame_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    frame_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    frame_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(frame_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(frame_config.text_color, property_value);
+
+    memcpy(frame_config_ptr, &frame_config, sizeof(FrameConfig));
+
+    return frame_config_ptr;
+}
+
 gchar *write_frame_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

@@ -175,6 +175,67 @@ LinkButtonConfig *read_link_button_config_from_dialog()
     return link_button_config_ptr;
 }
 
+LinkButtonConfig *read_link_button_config_from_widget(GtkWidget *widget)
+{
+    LinkButtonConfig *link_button_config_ptr = NULL;
+    SAFE_ALLOC(link_button_config_ptr, LinkButtonConfig, 1);
+
+    LinkButtonConfig link_button_config = DEFAULT_LINK_BUTTON;
+
+    // URI
+    const gchar *uri = gtk_link_button_get_uri(GTK_LINK_BUTTON(widget));
+    strcpy(link_button_config.uri, uri);
+
+    // Label
+    const gchar *label = gtk_button_get_label(GTK_BUTTON(widget));
+    strcpy(link_button_config.label, label);
+
+    // Tooltip
+    const gchar *tooltip = gtk_widget_get_tooltip_text(widget);
+    strcpy(link_button_config.tooltip, tooltip);
+
+    // Visited state
+    gboolean is_visited = gtk_link_button_get_visited(GTK_LINK_BUTTON(widget));
+    link_button_config.is_visited = is_visited;
+
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    link_button_config.dimensions.width = allocation.width;
+    link_button_config.dimensions.height = allocation.height;
+
+    // Expand
+    link_button_config.hexpand = gtk_widget_get_hexpand(widget);
+    link_button_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    link_button_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    link_button_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    link_button_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(link_button_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(link_button_config.text_color, property_value);
+
+    memcpy(link_button_config_ptr, &link_button_config, sizeof(LinkButtonConfig));
+
+    return link_button_config_ptr;
+}
 
 gchar *write_link_button_property(FILE *output_file, View *view, int tabs_number)
 {

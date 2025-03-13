@@ -211,6 +211,77 @@ FlowBoxConfig *read_flow_box_config_from_dialog()
     return flow_box_config_ptr;
 }
 
+
+FlowBoxConfig *read_flow_box_config_from_widget(GtkWidget *widget)
+{
+    FlowBoxConfig *flow_box_config_ptr = NULL;
+    SAFE_ALLOC(flow_box_config_ptr, FlowBoxConfig, 1);
+
+    FlowBoxConfig flow_box_config = DEFAULT_FLOW_BOX;
+
+    // Min children per line
+    flow_box_config.min_childern_per_line = gtk_flow_box_get_min_children_per_line(GTK_FLOW_BOX(widget));
+
+    // Max children per line
+    flow_box_config.max_childern_per_line = gtk_flow_box_get_max_children_per_line(GTK_FLOW_BOX(widget));
+
+    // Column spacing
+    flow_box_config.column_spacing = gtk_flow_box_get_column_spacing(GTK_FLOW_BOX(widget));
+
+    // Row spacing
+    flow_box_config.row_spacing = gtk_flow_box_get_row_spacing(GTK_FLOW_BOX(widget));
+
+    // Homogeneous
+    flow_box_config.is_homogeneous = gtk_flow_box_get_homogeneous(GTK_FLOW_BOX(widget));
+
+    // Selection mode
+    flow_box_config.selection_mode = gtk_flow_box_get_selection_mode(GTK_FLOW_BOX(widget));
+
+    // // Horizontal adjustment
+    // flow_box_config.hadjustment = gtk_flow_box_get_hadjustment(GTK_FLOW_BOX(widget));
+
+    // // Vertical adjustment
+    // flow_box_config.vadjustment = gtk_flow_box_get_vadjustment(GTK_FLOW_BOX(widget));
+
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    flow_box_config.dimensions.width = allocation.width;
+    flow_box_config.dimensions.height = allocation.height;
+
+    // Expand
+    flow_box_config.hexpand = gtk_widget_get_hexpand(widget);
+    flow_box_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    flow_box_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    flow_box_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    flow_box_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(flow_box_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(flow_box_config.text_color, property_value);
+
+    memcpy(flow_box_config_ptr, &flow_box_config, sizeof(FlowBoxConfig));
+
+    return flow_box_config_ptr;
+}
+
 gchar *write_flow_box_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

@@ -159,6 +159,53 @@ ColorButtonConfig *read_color_button_config_from_dialog()
     return color_button_config_ptr;
 }
 
+ColorButtonConfig *read_color_button_config_from_widget(GtkWidget *widget)
+{
+    ColorButtonConfig *color_button_config_ptr = NULL;
+    SAFE_ALLOC(color_button_config_ptr, ColorButtonConfig, 1);
+
+    ColorButtonConfig color_button_config = DEFAULT_COLOR_BUTTON;
+
+    // Tooltip
+    const gchar *tooltip = gtk_widget_get_tooltip_text(widget);
+    if (tooltip)
+        strcpy(color_button_config.tooltip, tooltip);
+
+    // Sensitivity
+    gboolean is_sensitive = gtk_widget_get_sensitive(widget);
+    color_button_config.is_sensitive = is_sensitive;
+
+    // Visibility
+    gboolean is_visible = gtk_widget_get_visible(widget);
+    color_button_config.is_visible = is_visible;
+
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    color_button_config.dimensions.width = allocation.width;
+    color_button_config.dimensions.height = allocation.height;
+
+    // Expand
+    color_button_config.hexpand = gtk_widget_get_hexpand(widget);
+    color_button_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    color_button_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    color_button_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    color_button_config.margins = margins;
+
+    memcpy(color_button_config_ptr, &color_button_config, sizeof(ColorButtonConfig));
+
+    return color_button_config_ptr;
+}
 
 gchar *write_color_button_property(FILE *output_file, View *view, int tabs_number)
 {

@@ -79,6 +79,8 @@ void add_grid(GtkWidget *widget, gint column, gint row, gint column_span, gint r
 
 GridConfig *read_grid_config_from_dialog();
 
+GridConfig *read_grid_config_from_widget(GtkWidget *widget);
+
 gchar *write_grid_property(FILE *output_file, View *view, int tabs_number);
 
 

@@ -240,6 +240,79 @@ ToggleButtonConfig *read_toggle_button_config_from_dialog()
     return toggle_button_config_ptr;
 }
 
+ToggleButtonConfig *read_toggle_button_config_from_widget(GtkWidget *widget)
+{
+    ToggleButtonConfig *toggle_button_config_ptr = NULL;
+    SAFE_ALLOC(toggle_button_config_ptr, ToggleButtonConfig, 1);
+
+    ToggleButtonConfig toggle_button_config = DEFAULT_TOGGLE_BUTTON;
+
+    // Label
+    const gchar *label = gtk_button_get_label(GTK_BUTTON(widget));
+    strncpy(toggle_button_config.label, label, MAX_BUTTON_LABEL_SIZE - 1);
+
+    // Tooltip
+    const gchar *tooltip = gtk_widget_get_tooltip_text(widget);
+    strncpy(toggle_button_config.tooltip, tooltip, MAX_TOOLTIP_SIZE - 1);
+
+    // Is mnemonic
+    gboolean is_mnemonic = gtk_button_get_use_underline(GTK_BUTTON(widget));
+    toggle_button_config.is_mnemonic = is_mnemonic;
+
+    // Is active
+    gboolean is_active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+    toggle_button_config.is_active = is_active;
+
+    // Is visible
+    gboolean is_visible = gtk_widget_get_visible(widget);
+    toggle_button_config.is_visible = is_visible;
+
+    // Mode
+    gboolean mode = gtk_toggle_button_get_mode(GTK_TOGGLE_BUTTON(widget));
+    toggle_button_config.mode = mode;
+
+    // Is inconsistent
+    gboolean is_inconsistent = gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget));
+    toggle_button_config.is_inconsistent = is_inconsistent;
+   
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    toggle_button_config.dimensions.width = allocation.width;
+    toggle_button_config.dimensions.height = allocation.height;
+
+    // Expand
+    toggle_button_config.hexpand = gtk_widget_get_hexpand(widget);
+    toggle_button_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    toggle_button_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    toggle_button_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    toggle_button_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(toggle_button_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(toggle_button_config.text_color, property_value);
+
+    memcpy(toggle_button_config_ptr, &toggle_button_config, sizeof(ToggleButtonConfig));
+
+    return toggle_button_config_ptr;
+}
 
 gchar *write_toggle_button_property(FILE *output_file, View *view, int tabs_number)
 {

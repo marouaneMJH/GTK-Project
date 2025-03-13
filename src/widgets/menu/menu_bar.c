@@ -178,6 +178,61 @@ MenuBarConfig *read_menu_bar_config_from_dialog()
     return menu_bar_config_ptr;
 }
 
+MenuBarConfig *read_menu_bar_config_from_widget(GtkWidget *widget)
+{
+    MenuBarConfig *menu_bar_config_ptr = NULL;
+    SAFE_ALLOC(menu_bar_config_ptr, MenuBarConfig, 1);
+
+    MenuBarConfig menu_bar_config = DEFAULT_MENU_BAR;
+
+    // Pack direction
+    GtkPackDirection pack_direction = gtk_menu_bar_get_pack_direction(GTK_MENU_BAR(widget));
+    menu_bar_config.pack_direction = pack_direction;
+
+    // Tooltip
+    const gchar *tooltip = gtk_widget_get_tooltip_text(widget);
+    if (tooltip)
+        strcpy(menu_bar_config.tooltip, tooltip);
+   
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    menu_bar_config.dimensions.width = allocation.width;
+    menu_bar_config.dimensions.height = allocation.height;
+
+    // Expand
+    menu_bar_config.hexpand = gtk_widget_get_hexpand(widget);
+    menu_bar_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    menu_bar_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    menu_bar_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    menu_bar_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(menu_bar_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(menu_bar_config.text_color, property_value);
+
+    memcpy(menu_bar_config_ptr, &menu_bar_config, sizeof(MenuBarConfig));
+
+    return menu_bar_config_ptr;
+}
+
 gchar *write_menu_bar_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

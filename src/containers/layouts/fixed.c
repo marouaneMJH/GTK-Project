@@ -145,6 +145,50 @@ FixedConfig *read_fixed_config_from_dialog()
     return fixed_config_ptr;
 }
 
+FixedConfig *read_fixed_config_from_widget(GtkWidget *widget)
+{
+    FixedConfig *fixed_config_ptr = NULL;
+    SAFE_ALLOC(fixed_config_ptr, FixedConfig, 1);
+
+    FixedConfig fixed_config = DEFAULT_FIXED;    
+
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    fixed_config.dimensions.width = allocation.width;
+    fixed_config.dimensions.height = allocation.height;
+
+    // Expand
+    fixed_config.hexpand = gtk_widget_get_hexpand(widget);
+    fixed_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    fixed_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    fixed_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    fixed_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(fixed_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(fixed_config.text_color, property_value);
+
+    memcpy(fixed_config_ptr, &fixed_config, sizeof(FixedConfig));
+    return fixed_config_ptr;
+}
 
 gchar *write_fixed_property(FILE *output_file, View *view, int tabs_number)
 {

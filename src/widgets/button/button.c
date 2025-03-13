@@ -186,66 +186,66 @@ GtkWidget *create_button(ButtonConfig button_config)
     return button;
 }
 
-void apply_button_config_changes(GtkWidget *button, ButtonConfig button_config)
-{
+// void apply_button_config_changes(GtkWidget *button, ButtonConfig button_config)
+// {
 
-    // Create button with or without mnemonic based on use_underline flag
-    gtk_button_set_label(GTK_BUTTON(button), button_config.label);
+//     // Create button with or without mnemonic based on use_underline flag
+//     gtk_button_set_label(GTK_BUTTON(button), button_config.label);
 
-    // Set sensitivity
-    gtk_widget_set_sensitive(button, button_config.is_sensitive);
+//     // Set sensitivity
+//     gtk_widget_set_sensitive(button, button_config.is_sensitive);
 
-    // Set visibility
-    if (!button_config.is_visible)
-        gtk_widget_hide(button);
+//     // Set visibility
+//     if (!button_config.is_visible)
+//         gtk_widget_hide(button);
 
-    // Set tooltip
-    if (button_config.tooltip) // Ensure tooltip is not empty
-        gtk_widget_set_tooltip_text(button, button_config.tooltip);
+//     // Set tooltip
+//     if (button_config.tooltip) // Ensure tooltip is not empty
+//         gtk_widget_set_tooltip_text(button, button_config.tooltip);
 
-    // Set dimensions (width and height)
-    if (button_config.dimensions.width > 0 || button_config.dimensions.height > 0)
-        gtk_widget_set_size_request(button, button_config.dimensions.width, button_config.dimensions.height);
+//     // Set dimensions (width and height)
+//     if (button_config.dimensions.width > 0 || button_config.dimensions.height > 0)
+//         gtk_widget_set_size_request(button, button_config.dimensions.width, button_config.dimensions.height);
 
-    // Set icon if provided
-    if (button_config.icon_path[0] != '\0')
-    {
-        Dimensions dimensions = {32, 32};
-        GtkWidget *image = create_image_from_pixbuf(button_config.icon_path, dimensions);
-        gtk_button_set_image(GTK_BUTTON(button), image);
-        gtk_button_set_image_position(GTK_BUTTON(button), button_config.icon_position);
-    }
+//     // Set icon if provided
+//     if (button_config.icon_path[0] != '\0')
+//     {
+//         Dimensions dimensions = {32, 32};
+//         GtkWidget *image = create_image_from_pixbuf(button_config.icon_path, dimensions);
+//         gtk_button_set_image(GTK_BUTTON(button), image);
+//         gtk_button_set_image_position(GTK_BUTTON(button), button_config.icon_position);
+//     }
 
-    // to hide button border
-    // gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE );
+//     // to hide button border
+//     // gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE );
 
-    // Set bg_image
-    if (strcmp(button_config.bg_image, "\0") != 0)
-        widget_set_background_image(button, button_config.bg_image, NULL);
+//     // Set bg_image
+//     if (strcmp(button_config.bg_image, "\0") != 0)
+//         widget_set_background_image(button, button_config.bg_image, NULL);
 
-    // Set Font Size
-    if (button_config.font_size != 10)
-        widget_set_font_size(button, button_config.font_size);
+//     // Set Font Size
+//     if (button_config.font_size != 10)
+//         widget_set_font_size(button, button_config.font_size);
 
-    // Set alignment
-    gtk_widget_set_halign(button, button_config.halign);
-    gtk_widget_set_valign(button, button_config.valign);
+//     // Set alignment
+//     gtk_widget_set_halign(button, button_config.halign);
+//     gtk_widget_set_valign(button, button_config.valign);
 
-    // Set expand property
-    gtk_widget_set_hexpand(button, button_config.hexpand);
-    gtk_widget_set_vexpand(button, button_config.vexpand);
+//     // Set expand property
+//     gtk_widget_set_hexpand(button, button_config.hexpand);
+//     gtk_widget_set_vexpand(button, button_config.vexpand);
 
-    // Control whether to always show the image
-    gtk_button_set_always_show_image(GTK_BUTTON(button), button_config.always_show_image);
+//     // Control whether to always show the image
+//     gtk_button_set_always_show_image(GTK_BUTTON(button), button_config.always_show_image);
 
-    // Set background and label colors
-    widget_set_colors(button, button_config.bg_color, button_config.color);
+//     // Set background and label colors
+//     widget_set_colors(button, button_config.bg_color, button_config.color);
 
-    // Set margins
-    widget_set_margins(button, button_config.margins);
+//     // Set margins
+//     widget_set_margins(button, button_config.margins);
 
-    g_print("Button config changes applied successfully.\n");
-}
+//     g_print("Button config changes applied successfully.\n");
+// }
 
 ButtonConfig *read_button_config_from_dialog()
 {
@@ -343,42 +343,62 @@ ButtonConfig *read_button_config_from_widget(GtkWidget *widget)
     ButtonConfig *button_config_ptr = NULL;
     SAFE_ALLOC(button_config_ptr, ButtonConfig, 1);
 
-    const gchar *label = gtk_button_get_label(GTK_BUTTON(widget));
-    strcpy(button_config_ptr->label, label ? label : "");
+    ButtonConfig button_config = DEFAULT_BUTTON;
 
-    button_config_ptr->is_sensitive = gtk_widget_get_sensitive(widget);
-    button_config_ptr->is_visible = gtk_widget_get_visible(widget);
+    const gchar *label = gtk_button_get_label(GTK_BUTTON(widget));
+    strcpy(button_config.label, label ? label : "");
+
+    button_config.is_sensitive = gtk_widget_get_sensitive(widget);
+    button_config.is_visible = gtk_widget_get_visible(widget);
 
     const gchar *tooltip = gtk_widget_get_tooltip_text(widget);
-    strcpy(button_config_ptr->tooltip, tooltip ? tooltip : "");
+    strcpy(button_config.tooltip, tooltip ? tooltip : "");
 
     GtkAllocation allocation;
     gtk_widget_get_allocation(widget, &allocation);
-    button_config_ptr->dimensions.width = allocation.width;
-    button_config_ptr->dimensions.height = allocation.height;
+    button_config.dimensions.width = allocation.width;
+    button_config.dimensions.height = allocation.height;
 
-    button_config_ptr->hexpand = gtk_widget_get_hexpand(widget);
-    button_config_ptr->vexpand = gtk_widget_get_vexpand(widget);
+    button_config.hexpand = gtk_widget_get_hexpand(widget);
+    button_config.vexpand = gtk_widget_get_vexpand(widget);
 
     GtkAlign halign = gtk_widget_get_halign(widget);
-    button_config_ptr->halign = halign;
+    button_config.halign = halign;
 
     GtkAlign valign = gtk_widget_get_valign(widget);
-    button_config_ptr->valign = valign;
+    button_config.valign = valign;
 
     GtkWidget *image = gtk_button_get_image(GTK_BUTTON(widget));
     if (image)
     {
         const gchar *icon_path = g_object_get_data(G_OBJECT(image), "icon_path");
         if (icon_path)
-            strcpy(button_config_ptr->icon_path, icon_path);
+            strcpy(button_config.icon_path, icon_path);
     }
 
-    button_config_ptr->always_show_image = gtk_button_get_always_show_image(GTK_BUTTON(widget));
+    button_config.always_show_image = gtk_button_get_always_show_image(GTK_BUTTON(widget));
 
     Margins margins;
     widget_get_margins(widget, &margins);
-    button_config_ptr->margins = margins;
+    button_config.margins = margins;
+
+        gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(button_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(button_config.color, property_value);
+
+    // Background image
+    property_value = read_bg_image_from_widget(widget);
+    if (property_value)
+        strcpy(button_config.bg_image, property_value);
+
+    memcpy(button_config_ptr, &button_config, sizeof(ButtonConfig));
 
     return button_config_ptr;
 }

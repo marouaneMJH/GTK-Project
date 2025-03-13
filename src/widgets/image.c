@@ -121,6 +121,36 @@ GtkWidget *create_image(ImageConfig image_config)
         break;
     }
 
+    // Save the image path & type
+    gchar *image_type_str = NULL;
+    switch (image_config.type)
+    {
+    case IMAGE_ICON:
+        image_type_str = "icon";
+        break;
+    case IMAGE_ICON_NAME:
+        image_type_str = "icon_name";
+        break;
+    case IMAGE_FILE:
+        image_type_str = "file";
+        break;
+    case IMAGE_PIXBUF:
+        image_type_str = "pixbuf";
+        break;
+    case IMAGE_ANIMATION:
+        image_type_str = "animation";
+        break;
+    case IMAGE_RESOURCE:
+        image_type_str = "resource";
+        break;
+    case IMAGE_EMPTY:
+    default:
+        image_type_str = "empty";
+        break;
+    }
+    g_object_set_data(G_OBJECT(image), "image-type", image_type_str);
+    g_object_set_data(G_OBJECT(image), "image-path", image_config.path);
+
     gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
     gtk_widget_set_opacity(image, image_config.opacity);
     widget_set_margins(image, image_config.margins);
@@ -232,6 +262,69 @@ ImageConfig *read_image_config_from_dialog()
     image_config.vexpand = vexpand;
 
     memcpy(image_config_ptr, &image_config, sizeof(ImageConfig));
+    return image_config_ptr;
+}
+
+ImageConfig *read_image_config_from_widget(GtkWidget *widget)
+{
+    ImageConfig *image_config_ptr = NULL;
+    SAFE_ALLOC(image_config_ptr, ImageConfig, 1);
+
+    ImageConfig image_config = DEFAULT_IMAGE;
+
+    // Image type
+    gchar *image_type = g_object_get_data(G_OBJECT(widget), "image-type");
+    if (image_type)
+    {
+        if (g_strcmp0(image_type, "icon") == 0)
+            image_config.type = IMAGE_ICON;
+        else if (g_strcmp0(image_type, "icon_name") == 0)
+            image_config.type = IMAGE_ICON_NAME;
+        else if (g_strcmp0(image_type, "file") == 0)
+            image_config.type = IMAGE_FILE;
+        else if (g_strcmp0(image_type, "pixbuf") == 0)
+            image_config.type = IMAGE_PIXBUF;
+        else if (g_strcmp0(image_type, "animation") == 0)
+            image_config.type = IMAGE_ANIMATION;
+        else if (g_strcmp0(image_type, "resource") == 0)
+            image_config.type = IMAGE_RESOURCE;
+        else
+            image_config.type = IMAGE_EMPTY;
+    }
+
+    // Image path
+    gchar *image_path = g_object_get_data(G_OBJECT(widget), "image-path");
+    if (image_path)
+        strcpy(image_config.path, image_path);
+
+    // Opacity
+    image_config.opacity = gtk_widget_get_opacity(widget);
+
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    image_config.dimensions.width = allocation.width;
+    image_config.dimensions.height = allocation.height;
+
+    // Expand
+    image_config.hexpand = gtk_widget_get_hexpand(widget);
+    image_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    image_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    image_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    image_config.margins = margins;
+
+    memcpy(image_config_ptr, &image_config, sizeof(ImageConfig));
+
     return image_config_ptr;
 }
 

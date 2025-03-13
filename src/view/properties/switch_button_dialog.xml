@@ -112,30 +112,6 @@
                         >
                             <label
                                 id="label11"
-                                label_text="Label"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                            <entry
-                                id="label_entry"
-                                placeholder_text="eg: Click here"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                        </box>
-
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            box_expand="true"
-                            box_fill="true"
-                            margin_left="10"
-                            margin_right="10"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="label11"
                                 label_text="Tooltip"
                                 yalign="0.5"
                                 box_expand="true"
@@ -177,32 +153,6 @@
 
                         </box>
 
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            box_expand="true"
-                            box_fill="true"
-                            margin_left="10"
-                            margin_right="10"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="mnemonic_label"
-                                label_text="Mnemonic"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-
-                            <switch_button
-                                id="mnemonic_switch"
-                                box_expand="true"
-                                box_fill="true"
-                                margin_right="20"
-                                halign="end"
-                            />
-
-                        </box>
                         <box
                             orientation="horizontal"
                             spacing="10"

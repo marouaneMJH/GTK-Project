@@ -172,6 +172,56 @@ ScrolledWindowConfig *read_scrolled_window_config_from_dialog()
     return scrolled_window_config_ptr;
 }
 
+ScrolledWindowConfig *read_scrolled_window_config_from_widget(GtkWidget *widget)
+{
+    ScrolledWindowConfig *scrolled_window_config_ptr = NULL;
+    SAFE_ALLOC(scrolled_window_config_ptr, ScrolledWindowConfig, 1);
+
+    ScrolledWindowConfig scrolled_window_config = DEFAULT_SCROLLED_WINDOW;
+
+    // Scrollbar policy
+    gtk_scrolled_window_get_policy(GTK_SCROLLED_WINDOW(widget), &scrolled_window_config.h_policy, &scrolled_window_config.v_policy);
+
+
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    scrolled_window_config.dimensions.width = allocation.width;
+    scrolled_window_config.dimensions.height = allocation.height;
+
+    // Expand
+    scrolled_window_config.hexpand = gtk_widget_get_hexpand(widget);
+    scrolled_window_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    scrolled_window_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    scrolled_window_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    scrolled_window_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(scrolled_window_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(scrolled_window_config.text_color, property_value);
+
+    memcpy(scrolled_window_config_ptr, &scrolled_window_config, sizeof(ScrolledWindowConfig));
+
+    return scrolled_window_config_ptr;
+}
+
 gchar *write_scrolled_window_property(FILE *output_file, View *view, int tabs_number)
 {
     if (!output_file || !view)

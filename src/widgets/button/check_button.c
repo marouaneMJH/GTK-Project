@@ -199,6 +199,68 @@ CheckButtonConfig *read_check_button_config_from_dialog()
     return check_button_config_ptr;
 }
 
+CheckButtonConfig *read_check_button_config_from_widget(GtkWidget *widget)
+{
+    CheckButtonConfig *check_button_config_ptr = NULL;
+    SAFE_ALLOC(check_button_config_ptr, CheckButtonConfig, 1);
+
+    CheckButtonConfig check_button_config = DEFAULT_CHECK_BUTTON;
+
+    // Label
+    const gchar *label = gtk_button_get_label(GTK_BUTTON(widget));
+    strcpy(check_button_config.label, label ? label : "");
+
+    // Tooltip
+    const gchar *tooltip = gtk_widget_get_tooltip_text(widget);
+    strcpy(check_button_config.tooltip, tooltip ? tooltip : "");
+
+    // Active state
+    check_button_config.is_active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+    // Inconsistent state
+    check_button_config.is_inconsistent = gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget));
+
+    // Use underline
+    check_button_config.use_underline = gtk_button_get_use_underline(GTK_BUTTON(widget));
+
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    check_button_config.dimensions.width = allocation.width;
+    check_button_config.dimensions.height = allocation.height;
+
+    // Expand
+    check_button_config.hexpand = gtk_widget_get_hexpand(widget);
+    check_button_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    check_button_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    check_button_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    check_button_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(check_button_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(check_button_config.text_color, property_value);
+
+    memcpy(check_button_config_ptr, &check_button_config, sizeof(CheckButtonConfig));
+
+    return check_button_config_ptr;
+}
 
 gchar *write_check_button_property(FILE *output_file, View *view, int tabs_number)
 {

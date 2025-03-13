@@ -80,6 +80,8 @@ GtkWidget *create_notebook(NotebookConfig notebook_config);
 
 NotebookConfig *read_notebook_config_from_dialog();
 
+NotebookConfig *read_notebook_config_from_widget(GtkWidget *widget);
+
 gchar *write_notebook_property(FILE *output_file, View *view, int tabs_number);
 
 #endif

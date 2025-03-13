@@ -208,6 +208,76 @@ NotebookConfig *read_notebook_config_from_dialog()
     return notebook_config_ptr;
 }
 
+NotebookConfig *read_notebook_config_from_widget(GtkWidget *widget)
+{
+    NotebookConfig *notebook_config_ptr = NULL;
+    SAFE_ALLOC(notebook_config_ptr, NotebookConfig, 1);
+
+    NotebookConfig notebook_config = DEFAULT_NOTEBOOK;
+
+    // Group name
+    const gchar *group_name = gtk_notebook_get_group_name(GTK_NOTEBOOK(widget));
+    if (group_name)
+        strcpy(notebook_config.group_name, group_name);
+
+    // Is scrollable
+    gboolean is_scrollable = gtk_notebook_get_scrollable(GTK_NOTEBOOK(widget));
+    notebook_config.is_scrollable = is_scrollable;
+
+    // Show border
+    gboolean show_border = gtk_notebook_get_show_border(GTK_NOTEBOOK(widget));
+    notebook_config.show_border = show_border;
+
+    // Show tabs
+    gboolean show_tabs = gtk_notebook_get_show_tabs(GTK_NOTEBOOK(widget));
+    notebook_config.show_tabs = show_tabs;
+
+    // Current page
+    gint current_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(widget));
+    notebook_config.current_page = current_page;
+
+    // Tab position
+    GtkPositionType tab_position = gtk_notebook_get_tab_pos(GTK_NOTEBOOK(widget));
+    notebook_config.tab_position = tab_position;
+
+    // Dimensions
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    notebook_config.dimensions.width = allocation.width;
+    notebook_config.dimensions.height = allocation.height;
+
+    // Expand
+    notebook_config.hexpand = gtk_widget_get_hexpand(widget);
+    notebook_config.vexpand = gtk_widget_get_vexpand(widget);
+
+    // HAlign
+    GtkAlign halign = gtk_widget_get_halign(widget);
+    notebook_config.halign = halign;
+
+    // VAlign
+    GtkAlign valign = gtk_widget_get_valign(widget);
+    notebook_config.valign = valign;
+
+    // Margins
+    Margins margins;
+    widget_get_margins(widget, &margins);
+    notebook_config.margins = margins;
+
+    gchar *property_value = NULL;
+    // Background color
+    property_value = read_bg_color_from_widget(widget);
+    if (property_value)
+        strcpy(notebook_config.bg_color, property_value);
+
+    // Text color
+    property_value = read_text_color_from_widget(widget);
+    if (property_value)
+        strcpy(notebook_config.text_color, property_value);
+
+    memcpy(notebook_config_ptr, &notebook_config, sizeof(NotebookConfig));
+
+    return notebook_config_ptr;
+}
 
 gchar *write_notebook_property(FILE *output_file, View *view, int tabs_number)
 {

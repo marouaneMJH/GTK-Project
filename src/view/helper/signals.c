@@ -795,6 +795,8 @@ void add_view_to_content_box(View *view)
 static void sig_create_new_view(GtkWidget *widget, gpointer data)
 {
     View *viewer = find_view_by_id("viewer", root_view_global);
+    root_crud_ui = viewer;
+
     if (!viewer)
     {
         g_print("Error: ==> Cannot find the viewer\n");

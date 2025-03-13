@@ -9,27 +9,24 @@
     is_maximized="false"
 >
 
+
     <box
         id="box1"
     >
-        <menu_bar id="menu_bar1">
+        <menu_bar id="jkf">
 
             <menu_item
-                id="file_menu_item"
                 label="_File"
             >
                 <menu id="menu1">
                     <menu_item
-                        id="new_menu_item"
                         label="_New"
                     />
                     <menu_item
-                        id="open_menu_item"
                         label="_Save"
                     />
 
                     <menu_item
-                        id="save_menu_item"
                         label=" _Exit"
                     />
                 </menu>
@@ -46,7 +43,7 @@
 
         <scrolled_window
             on_key_press="sig_key_press"
-            id="scw1"
+            id="sw1"
             box_expand="true"
             box_fill="true"
         >
@@ -57,10 +54,10 @@
                 is_wide="true"
             >
                 <box
-                    id="content_box"
+                    id="conent_box"
                     paned_order="1"
                 >
-                    <label id="label1"
+                    <label id="id"
                         label_text="Widgets"
                         xalign="0.5"
                         yalign="0.5"
@@ -96,12 +93,12 @@
                     </scrolled_window>
 
                     <box
-                        id="box2"
+                        id="box"
                         paned_order="2"
                         spacing="10"
                     >
                         <frame
-                            id="frame1"
+                            id="btn1"
                             label="Containers"
                             margin_top="5"
                             margin_bottom="5"
@@ -111,7 +108,7 @@
                             hexpand="true"
                         >
                             <grid
-                                id="grid1"
+                                id="grd1"
                                 vexpand="true"
                                 hexpand="true"
                                 row_spacing="10"
@@ -123,7 +120,7 @@
                             >
 
                                 <button
-                                    id="btn0"
+                                    id="btn1"
                                     label="Box"
                                     hexpand="true"
                                     row="0"
@@ -134,7 +131,7 @@
                                 />
 
                                 <button
-                                    id="btn2"
+                                    id="btn1"
                                     label="Fixed"
                                     hexpand="true"
                                     row="0"
@@ -145,7 +142,7 @@
                                 />
 
                                 <button
-                                    id="btn3"
+                                    id="btn1"
                                     label="Grid"
                                     hexpand="true"
                                     row="1"
@@ -167,18 +164,18 @@
                                 />
 
                                 <button
-                                    id="btn4"
+                                    id="btn1"
                                     label="FlowBox"
                                     hexpand="true"
                                     row="2"
                                     column="0"
                                     icon_path="./assets/images/icons/container_bw.png"
                                     on_click="sig_properties_dialog"
-                                    param_1="flow_box"
+                                    param_1="flowbox"
                                 />
 
                                 <button
-                                    id="btn5"
+                                    id="btn1"
                                     label="Notebook"
                                     hexpand="true"
                                     row="2"
@@ -189,7 +186,7 @@
                                 />
 
                                 <button
-                                    id="btn6"
+                                    id="btn1"
                                     label="Overlay"
                                     hexpand="true"
                                     row="3"
@@ -200,7 +197,7 @@
                                 />
 
                                 <button
-                                    id="btn7"
+                                    id="btn1"
                                     label="Frame"
                                     hexpand="true"
                                     row="3"
@@ -209,23 +206,12 @@
                                     on_click="sig_properties_dialog"
                                     param_1="frame"
                                 />
-                              
-                                <button
-                                    id="btn25"
-                                    label="ScrolledWindow"
-                                    hexpand="true"
-                                    row="4"
-                                    column="1"
-                                    icon_path="./assets/images/icons/container_bw.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="scrolled_window"
-                                />
 
                             </grid>
                         </frame>
 
                         <frame
-                            id="frame2"
+                            id="btn1"
                             label="Menus"
                             margin_top="5"
                             margin_bottom="5"
@@ -235,7 +221,7 @@
                             hexpand="true"
                         >
                             <grid
-                                id="grid2"
+                                id="grd1"
                                 vexpand="true"
                                 hexpand="true"
                                 row_spacing="10"
@@ -247,43 +233,37 @@
                             >
 
                                 <button
-                                    id="btn8"
+                                    id="btn1"
                                     label="MenuBar"
                                     hexpand="true"
                                     row="0"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="menu_bar"
                                 />
 
                                 <button
-                                    id="btn9"
+                                    id="btn1"
                                     label="Menu"
                                     hexpand="true"
                                     row="0"
                                     column="1"
                                     icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="menu"
                                 />
 
                                 <button
-                                    id="btn10"
+                                    id="btn1"
                                     label="MenuItem"
                                     hexpand="true"
                                     row="1"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="menu_item"
                                 />
 
                             </grid>
                         </frame>
 
                         <frame
-                            id="frame3"
+                            id="btn1"
                             label="Widgets"
                             margin_top="5"
                             margin_bottom="5"
@@ -293,7 +273,7 @@
                             hexpand="true"
                         >
                             <grid
-                                id="grid3"
+                                id="grd1"
                                 vexpand="true"
                                 hexpand="true"
                                 row_spacing="10"
@@ -305,164 +285,132 @@
                             >
 
                                 <button
-                                    id="btn11"
+                                    id="btn1"
                                     label="Label"
                                     hexpand="true"
                                     row="0"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="label"
                                 />
 
                                 <button
-                                    id="btn12"
+                                    id="btn1"
                                     label="LinkButton"
                                     hexpand="true"
                                     row="0"
                                     column="1"
                                     icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="link_button"
                                 />
 
                                 <button
-                                    id="btn13"
+                                    id="btn1"
                                     label="Button"
                                     hexpand="true"
                                     row="1"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="button"
                                 />
 
                                 <button
-                                    id="btn14"
+                                    id="btn1"
                                     label="Entry"
                                     hexpand="true"
                                     row="1"
                                     column="1"
                                     icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="entry"
                                 />
 
                                 <button
-                                    id="btn15"
+                                    id="btn1"
                                     label="SwitchButton"
                                     hexpand="true"
                                     row="2"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="switch_button"
                                 />
 
                                 <button
-                                    id="btn16"
+                                    id="btn1"
                                     label="ToggleButton"
                                     hexpand="true"
                                     row="2"
                                     column="1"
                                     icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="toggle_button"
                                 />
 
                                 <button
-                                    id="btn17"
+                                    id="btn1"
                                     label="RadioButton"
                                     hexpand="true"
                                     row="3"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="radio_button"
                                 />
 
                                 <button
-                                    id="btn18"
+                                    id="btn1"
                                     label="Checkbox"
                                     hexpand="true"
                                     row="3"
                                     column="1"
                                     icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="check_button"
                                 />
 
                                 <button
-                                    id="btn19"
+                                    id="btn1"
                                     label="TextArea"
                                     hexpand="true"
                                     row="4"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="text_area"
                                 />
 
                                 <button
-                                    id="btn20"
+                                    id="btn1"
                                     label="SpinButton"
                                     hexpand="true"
                                     row="4"
                                     column="1"
                                     icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="spin_button"
                                 />
 
                                 <button
-                                    id="btn21"
+                                    id="btn1"
                                     label="ProgressBar"
                                     hexpand="true"
                                     row="5"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="progress_bar"
                                 />
 
                                 <button
-                                    id="btn22"
+                                    id="btn1"
                                     label="Separator"
                                     hexpand="true"
                                     row="5"
                                     column="1"
                                     icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="separator"
                                 />
 
                                 <button
-                                    id="btn23"
+                                    id="btn1"
                                     label="Image"
                                     hexpand="true"
                                     row="6"
                                     column="0"
                                     icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="image"
-                                />
-
-                                <button
-                                    id="btn24"
-                                    label="ComboTextBox"
-                                    hexpand="true"
-                                    row="6"
-                                    column="1"
-                                    icon_path="./assets/images/icons/open-menu.png"
-                                    on_click="sig_properties_dialog"
-                                    param_1="combo_text_box"
                                 />
 
                             </grid>
                         </frame>
+			<button 
+				label="generate code dude"
+				on_click="sig_generate_xml"
+			/>
                     </box>
                 </paned>
             </paned>
+
         </scrolled_window>
     </box>
 </window>

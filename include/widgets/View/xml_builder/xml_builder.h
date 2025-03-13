@@ -6,7 +6,7 @@
 
 void write_widget(FILE *output_file, View *view, int tabs_number);
 
-gboolean is_container(GtkWidget *widget);
+gboolean is_container(View *widget);
 
 gchar *write_widget_property(FILE *output_file, View *view, int tabs_number);
 

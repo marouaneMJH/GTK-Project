@@ -2,7 +2,7 @@
 
 View *root_view_global;
 View *root_dialog_view_global;
-View *root_crud_ui=NULL; // debug should change in futur for new versions
+View *root_crud_ui = NULL; // debug should change in futur for new versions
 GtkApplication *root_app;
 
 View *new_root_view_global;
@@ -175,16 +175,20 @@ void set_header_bar(GtkWidget *window, const gchar *title, const gchar *icon_pat
     // Set the title of the header bar
     gtk_header_bar_set_title(GTK_HEADER_BAR(header_bar), title);
 
-    // Load the icon from the specified path
-    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(icon_path, NULL);
-    GdkPixbuf *scaled_pixbuf = gdk_pixbuf_scale_simple(pixbuf, 32, 32, GDK_INTERP_BILINEAR);
-
     // Create a horizontal box to hold the icon and title
     GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
-    GtkWidget *icon = gtk_image_new_from_pixbuf(scaled_pixbuf);
 
-    // Add the icon to the box
-    gtk_box_pack_start(GTK_BOX(box), icon, FALSE, FALSE, 0);
+    // Load the icon from the specified path
+    if (icon_path[0] != '\0')
+    {
+
+        GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(icon_path, NULL);
+        GdkPixbuf *scaled_pixbuf = gdk_pixbuf_scale_simple(pixbuf, 32, 32, GDK_INTERP_BILINEAR);
+        GtkWidget *icon = gtk_image_new_from_pixbuf(scaled_pixbuf);
+        // Add the icon to the box
+        gtk_box_pack_start(GTK_BOX(box), icon, FALSE, FALSE, 0);
+    }
+
 
     // Add the box to the header bar
     gtk_header_bar_pack_start(GTK_HEADER_BAR(header_bar), box);

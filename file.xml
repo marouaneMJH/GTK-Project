@@ -1,23 +1,30 @@
-<frame 
-	id="viewer"
-	width="990"
-	height="857"
-	margin_top="5"
-	margin_bottom="5"
-	margin_left="5"
-	margin_right="5"
-	label="Viewer"
-	label_yalign="0.500000"
+<window 
+	id="window_2"
+	bg_color="#F6F5F4"
+	width="500"
+	height="600"
+	title="Second Window"
+	icon_name="folder"
+	position="710,204"
 >
-	<menu_bar 
-		id="wid-1-"
-		width="988"
-		height="830"
-		paned_order="1"
-		is_reorderable="false"
-		menu_right="1"
-		on_click=""
-		tooltip="(null)"
+	<scrolled_window 
+		id="sw2"
+		width="500"
+		height="600"
 	>
-	</menu_bar>
-</frame>
+		<box 
+			id="box2"
+			width="800"
+			height="700"
+		>
+			<button 
+				id=""
+				bg_color="#B50000"
+				width="800"
+				height="35"
+				on_click="sig_generate_xml"
+				use_underline="true"
+			/>
+		</box>
+	</scrolled_window>
+</window>

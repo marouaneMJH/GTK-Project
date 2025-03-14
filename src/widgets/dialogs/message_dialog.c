@@ -14,15 +14,24 @@ GtkWidget *create_message_dialog(MessageDialogConfig config)
     GtkWidget *dialog = create_dialog(dialog_config);
 
     LabelConfig label_config = DEFAULT_LABEL;
+    label_config.margins.bottom = 30;
+    label_config.margins.top = 30;
+    label_config.margins.start = 30;
+    label_config.margins.end = 30;
+
     strcpy(label_config.label_text, config.message);
     label_config.font_size = 15;
     GtkWidget *label = create_label(label_config);
 
     GtkWidget *content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+
+    widget_set_margins(content_area, (Margins){.top = 30, .bottom = 1, .end = 30, .start = 30});
     gtk_box_pack_start(GTK_BOX(content_area), label, FALSE, FALSE, 0);
 
     // Add "OK" button
     GtkWidget *button = gtk_dialog_add_button(GTK_DIALOG(dialog), "OK", GTK_RESPONSE_CLOSE);
+
+    set_widget_size(button, (Dimensions){.width = -1, .height = 60});
 
     // Get the action area (button box)
     GtkWidget *action_area = gtk_dialog_get_action_area(GTK_DIALOG(dialog));

@@ -88,7 +88,7 @@ void write_widget_style(FILE *output_file, GtkWidget *widget, int tabs_number)
         fprintf(output_file, "color=\"%s\"\n", fg_hex);
     }
 
-    if (strlen(bg_hex) && g_strcmp0(bg_hex, "B50000") != 0) // Check if the background color was found
+    if (strlen(bg_hex) && g_strcmp0(bg_hex, "B50000") != 0 && g_strcmp0(bg_hex, "\0")) // Check if the background color was found
     {
         print_tabs(output_file, tabs_number);
         fprintf(output_file, "bg_color=\"%s\"\n", bg_hex);
@@ -149,6 +149,14 @@ void write_widget_style(FILE *output_file, GtkWidget *widget, int tabs_number)
     {
         print_tabs(output_file, tabs_number);
         fprintf(output_file, "font_weight=\"%s\"\n", font_weight);
+    }
+
+    gchar *bg_image = g_object_get_data(G_OBJECT(widget), "bg_image");
+
+    if (bg_image && g_strcmp0(bg_image, "\0"))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "bg_image=\"%s\"\n", bg_image);
     }
 }
 

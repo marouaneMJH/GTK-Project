@@ -149,7 +149,7 @@ GtkWidget *create_image(ImageConfig image_config)
         break;
     }
     g_object_set_data(G_OBJECT(image), "image-type", image_type_str);
-    g_object_set_data(G_OBJECT(image), "image-path", image_config.path);
+    g_object_set_data(G_OBJECT(image), "image-path", g_strdup(image_config.path));
 
     gtk_widget_set_size_request(image, image_config.dimensions.width, image_config.dimensions.height);
     gtk_widget_set_opacity(image, image_config.opacity);
@@ -344,26 +344,48 @@ gchar *write_image_property(FILE *output_file, View *view, int tabs_number)
     if (image_type != GTK_IMAGE_EMPTY) // Check if the image type is not empty
     {
         print_tabs(output_file, tabs_number + 1);
-        fprintf(output_file, "type=\"%s\"\n", image_type == GTK_IMAGE_PIXBUF ? "file" : image_type == GTK_IMAGE_ICON_NAME ? "icon"
-                                                                                    : image_type == GTK_IMAGE_GICON       ? "gicon"
-                                                                                    : image_type == GTK_IMAGE_ANIMATION   ? "animation"
-                                                                                    : image_type == GTK_IMAGE_ICON_SET    ? "icon_set"
-                                                                                                                          : "unknown");
+        const gchar *type_str = "unknown";
+        switch (image_type)
+        {
+        case GTK_IMAGE_PIXBUF:
+            type_str = "file";
+            break;
+        case GTK_IMAGE_ICON_NAME:
+            type_str = "icon";
+            break;
+        case GTK_IMAGE_GICON:
+            type_str = "gicon";
+            break;
+        case GTK_IMAGE_ANIMATION:
+            type_str = "animation";
+            break;
+        case GTK_IMAGE_ICON_SET:
+            type_str = "icon_set";
+            break;
+        default:
+            break;
+        }
+        fprintf(output_file, "type=\"%s\"\n", type_str);
     }
 
     // Get the image path or icon name (if applicable)
     const gchar *path = NULL;
-    if (image_type == GTK_IMAGE_PIXBUF)
+    switch (image_type)
     {
-        // todo solve the problem of this type
-    }
-    else if (image_type == GTK_IMAGE_ICON_NAME)
+    case GTK_IMAGE_PIXBUF:
+        // Retrieve the image path from the GObject data
+        path = (gchar *)g_object_get_data(G_OBJECT(image), "image-path");
+        break;
+
+    case GTK_IMAGE_ICON_NAME:
     {
         const gchar *icon_name = NULL;
         gtk_image_get_icon_name(image, &icon_name, NULL);
         path = icon_name;
     }
-    else if (image_type == GTK_IMAGE_GICON)
+    break;
+
+    case GTK_IMAGE_GICON:
     {
         GIcon *gicon = NULL;
         gtk_image_get_gicon(image, &gicon, NULL);
@@ -373,8 +395,14 @@ gchar *write_image_property(FILE *output_file, View *view, int tabs_number)
             path = g_file_get_path(file);
         }
     }
+    break;
 
-    if (path && g_strcmp0(path, "\0") != 0) // Check if the path is not the default
+    default:
+        break;
+    }
+
+    // Write the path if it is valid and not empty
+    if (path && g_strcmp0(path, "\0") != 0)
     {
         print_tabs(output_file, tabs_number + 1);
         fprintf(output_file, "path=\"%s\"\n", path);

@@ -102,7 +102,6 @@ ViewConfig *init_dialog_config(FILE *index, DialogConfig *dialog_config)
     return view_config;
 }
 
-
 static void dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data)
 {
 
@@ -138,7 +137,6 @@ static void dialog_response(GtkDialog *dialog, gint response_id, gpointer user_d
     }
 }
 
-
 GtkWidget *create_dialog(DialogConfig dialog_config)
 {
     GtkWidget *dialog = gtk_dialog_new_with_buttons(
@@ -164,15 +162,17 @@ GtkWidget *create_dialog(DialogConfig dialog_config)
 
     g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(dialog_response), NULL);
 
-
     return dialog;
 }
 
 void show_dialog(GtkWidget *dialog)
 {
     /* Run the dialog */
-    gtk_widget_show_all(dialog);
-    gtk_dialog_run(GTK_DIALOG(dialog));
+    if (dialog)
+    {
+        gtk_widget_show_all(dialog);
+        gtk_dialog_run(GTK_DIALOG(dialog));
+    }
 }
 
 void destroy_dialog(GtkWidget *dialog)

@@ -2,7 +2,7 @@
 
 View *root_view_global;
 View *root_dialog_view_global;
-View *root_crud_ui = NULL; // debug should change in futur for new versions
+View *root_crud_ui ; // debug should change in futur for new versions
 GtkApplication *root_app;
 
 View *new_root_view_global;

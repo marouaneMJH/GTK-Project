@@ -86,6 +86,11 @@ GtkWidget *create_overlay(OverlayConfig overlay_config)
     gtk_widget_set_opacity(overlay, overlay_config.opacity);
     if (overlay_config.bg_color && overlay_config.bg_image[0] != '\0')
         widget_set_background_image(overlay, overlay_config.bg_image, overlay_config.bg_color);
+
+    if (overlay_config.bg_color)
+        widget_set_colors(overlay, overlay_config.bg_color, NULL);
+
+
     if (overlay_config.dimensions.height || overlay_config.dimensions.width)
         set_widget_size(overlay, overlay_config.dimensions);
 
@@ -114,7 +119,7 @@ OverlayConfig *read_overlay_config_from_dialog()
     OverlayConfig overlay_config = DEFAULT_OVERLAY;
 
     // Opacity
-    overlay_config.opacity = read_config_value_as_double("opacity_spin");
+    // overlay_config.opacity = read_config_value_as_double("opacity_spin");
     
     // Border radius
     overlay_config.border_radius = read_config_value_as_int("border_radius_spin");

@@ -462,7 +462,7 @@ void set_current_overlay_config_to_dialog(OverlayConfig *overlay_config)
 {
 
     // Opacity
-    write_config_value_as_double("opacity_spin", overlay_config->opacity);
+    // write_config_value_as_double("opacity_spin", overlay_config->opacity);
 
     // Border radius
     write_config_value_as_int("border_radius_spin", overlay_config->border_radius);
@@ -1302,53 +1302,53 @@ void set_current_separator_config_to_dialog(SeparatorConfig *separator_config)
     write_expand_config(separator_config->hexpand, separator_config->vexpand);
 }
 
-// void set_current_text_area_config_to_dialog(TextAreaConfig *text_area_config)
-// {
+void set_current_text_area_config_to_dialog(TextAreaConfig *text_area_config)
+{
 
-//     // Font size
-//     write_config_value_as_int("font_size_spin", text_area_config->font_size);
+    // Font size
+    write_config_value_as_int("font_size_spin", text_area_config->font_size);
 
-//     // Editable state
-//     write_config_value_as_boolean("editable_switch", text_area_config->is_editable);
+    // Editable state
+    write_config_value_as_boolean("editable_switch", text_area_config->is_editable);
 
-//     // Wrap mode
-//     switch (text_area_config->wrap_mode)
-//     {
-//     case GTK_WRAP_WORD:
-//         write_config_value_as_combo_index("wrap_mode_combo", 0);
-//         break;
-//     case GTK_WRAP_CHAR:
-//         write_config_value_as_combo_index("wrap_mode_combo", 1);
-//         break;
-//     case GTK_WRAP_WORD_CHAR:
-//         write_config_value_as_combo_index("wrap_mode_combo", 2);
-//         break;
-//     case GTK_WRAP_NONE:
-//         write_config_value_as_combo_index("wrap_mode_combo", 3);
-//         break;
-//     default:
-//         g_print("Unknown wrap mode\n");
-//         break;
-//     }
+    // Wrap mode
+    switch (text_area_config->wrap_mode)
+    {
+    case GTK_WRAP_WORD:
+        write_config_value_as_combo_index("wrap_mode_combo", 0);
+        break;
+    case GTK_WRAP_CHAR:
+        write_config_value_as_combo_index("wrap_mode_combo", 1);
+        break;
+    case GTK_WRAP_WORD_CHAR:
+        write_config_value_as_combo_index("wrap_mode_combo", 2);
+        break;
+    case GTK_WRAP_NONE:
+        write_config_value_as_combo_index("wrap_mode_combo", 3);
+        break;
+    default:
+        g_print("Unknown wrap mode\n");
+        break;
+    }
 
-//     // Dimensions
-//     write_dimensions_config(text_area_config->dimensions);
+    // Dimensions
+    write_dimensions_config(text_area_config->dimensions);
 
-//     // Margins
-//     write_margins_config(text_area_config->margins);
+    // Margins
+    write_margins_config(text_area_config->margins);
 
-//     // Align
-//     write_align_config(text_area_config->halign, text_area_config->valign);
+    // Align
+    write_align_config(text_area_config->halign, text_area_config->valign);
 
-//     // Expand
-//     write_expand_config(text_area_config->hexpand, text_area_config->vexpand);
+    // Expand
+    write_expand_config(text_area_config->hexpand, text_area_config->vexpand);
 
-//     // Background color
-//     write_config_value_as_string("bg_color_entry", text_area_config->bg_color);
+    // Background color
+    write_config_value_as_string("bg_color_entry", text_area_config->bg_color);
 
-//     // Text color
-//     write_config_value_as_string("color_entry", text_area_config->text_color);
-// }
+    // Text color
+    write_config_value_as_string("color_entry", text_area_config->text_color);
+}
 
 // void set_current_combo_text_box_config_to_dialog(ComboTextBoxConfig *combo_text_box_config)
 // {
@@ -1432,7 +1432,7 @@ void set_current_separator_config_to_dialog(SeparatorConfig *separator_config)
 GtkWidget *prepare_update_scrolled_window_config(View *target_view)
 {
     ScrolledWindowConfig *scrolled_window_config = read_scrolled_window_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, BOX_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, SCROLLED_WINDOW_PROPERTIES_DIALOG_TXT);
     set_current_scrolled_window_config_to_dialog(scrolled_window_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1441,7 +1441,7 @@ GtkWidget *prepare_update_scrolled_window_config(View *target_view)
 GtkWidget *prepare_update_box_config(View *target_view)
 {
     BoxConfig *box_config = read_box_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, BOX_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, BOX_PROPERTIES_DIALOG_TXT);
     set_current_box_config_to_dialog(box_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1450,7 +1450,7 @@ GtkWidget *prepare_update_box_config(View *target_view)
 GtkWidget *prepare_update_fixed_config(View *target_view)
 {
     FixedConfig *fixed_config = read_fixed_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, FIXED_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, FIXED_PROPERTIES_DIALOG_TXT);
     set_current_fixed_config_to_dialog(fixed_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1459,7 +1459,7 @@ GtkWidget *prepare_update_fixed_config(View *target_view)
 GtkWidget *prepare_update_flow_box_config(View *target_view)
 {
     FlowBoxConfig *flow_box_config = read_flow_box_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, FLOW_BOX_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, FLOW_BOX_PROPERTIES_DIALOG_TXT);
     set_current_flow_box_config_to_dialog(flow_box_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1468,7 +1468,7 @@ GtkWidget *prepare_update_flow_box_config(View *target_view)
 GtkWidget *prepare_update_frame_config(View *target_view)
 {
     FrameConfig *frame_config = read_frame_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, FRAME_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, FRAME_PROPERTIES_DIALOG_TXT);
     set_current_frame_config_to_dialog(frame_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1477,7 +1477,7 @@ GtkWidget *prepare_update_frame_config(View *target_view)
 GtkWidget *prepare_update_grid_config(View *target_view)
 {
     GridConfig *grid_config = read_grid_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, GRID_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, GRID_PROPERTIES_DIALOG_TXT);
     set_current_grid_config_to_dialog(grid_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1486,7 +1486,7 @@ GtkWidget *prepare_update_grid_config(View *target_view)
 GtkWidget *prepare_update_notebook_config(View *target_view)
 {
     NotebookConfig *notebook_config = read_notebook_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, NOTEBOOK_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, NOTEBOOK_PROPERTIES_DIALOG_TXT);
     set_current_notebook_config_to_dialog(notebook_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1495,7 +1495,7 @@ GtkWidget *prepare_update_notebook_config(View *target_view)
 GtkWidget *prepare_update_overlay_config(View *target_view)
 {
     OverlayConfig *overlay_config = read_overlay_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, OVERLAY_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, OVERLAY_PROPERTIES_DIALOG_TXT);
     set_current_overlay_config_to_dialog(overlay_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1504,7 +1504,7 @@ GtkWidget *prepare_update_overlay_config(View *target_view)
 GtkWidget *prepare_update_paned_config(View *target_view)
 {
     PanedConfig *paned_config = read_paned_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, PANED_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, PANED_PROPERTIES_DIALOG_TXT);
     set_current_paned_config_to_dialog(paned_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1513,7 +1513,7 @@ GtkWidget *prepare_update_paned_config(View *target_view)
 GtkWidget *prepare_update_stack_config(View *target_view)
 {
     StackConfig *stack_config = read_stack_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, STACK_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, STACK_PROPERTIES_DIALOG_TXT);
     set_current_stack_config_to_dialog(stack_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1523,7 +1523,7 @@ GtkWidget *prepare_update_stack_config(View *target_view)
 GtkWidget *prepare_update_button_config(View *target_view)
 {
     ButtonConfig *button_config = read_button_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, BUTTON_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, BUTTON_PROPERTIES_DIALOG_TXT);
     set_current_button_config_to_dialog(button_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1532,7 +1532,7 @@ GtkWidget *prepare_update_button_config(View *target_view)
 GtkWidget *prepare_update_check_button_config(View *target_view)
 {
     CheckButtonConfig *check_button_config = read_check_button_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, CHECK_BUTTON_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, CHECK_BUTTON_PROPERTIES_DIALOG_TXT);
     set_current_check_button_config_to_dialog(check_button_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1541,7 +1541,7 @@ GtkWidget *prepare_update_check_button_config(View *target_view)
 GtkWidget *prepare_update_color_button_config(View *target_view)
 {
     ColorButtonConfig *color_button_config = read_color_button_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, COLOR_BUTTON_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, COLOR_BUTTON_PROPERTIES_DIALOG_TXT);
     set_current_color_button_config_to_dialog(color_button_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1550,7 +1550,7 @@ GtkWidget *prepare_update_color_button_config(View *target_view)
 GtkWidget *prepare_update_link_button_config(View *target_view)
 {
     LinkButtonConfig *link_button_config = read_link_button_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, LINK_BUTTON_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, LINK_BUTTON_PROPERTIES_DIALOG_TXT);
     set_current_link_button_config_to_dialog(link_button_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1559,7 +1559,7 @@ GtkWidget *prepare_update_link_button_config(View *target_view)
 GtkWidget *prepare_update_radio_button_config(View *target_view)
 {
     RadioButtonConfig *radio_button_config = read_radio_button_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, RADIO_BUTTON_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, RADIO_BUTTON_PROPERTIES_DIALOG_TXT);
     set_current_radio_button_config_to_dialog(radio_button_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1568,7 +1568,7 @@ GtkWidget *prepare_update_radio_button_config(View *target_view)
 GtkWidget *prepare_update_spin_button_config(View *target_view)
 {
     SpinButtonConfig *spin_button_config = read_spin_button_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, SPIN_BUTTON_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, SPIN_BUTTON_PROPERTIES_DIALOG_TXT);
     set_current_spin_button_config_to_dialog(spin_button_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1577,7 +1577,7 @@ GtkWidget *prepare_update_spin_button_config(View *target_view)
 GtkWidget *prepare_update_switch_button_config(View *target_view)
 {
     SwitchButtonConfig *switch_button_config = read_switch_button_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, SWITCH_BUTTON_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, SWITCH_BUTTON_PROPERTIES_DIALOG_TXT);
     set_current_switch_button_config_to_dialog(switch_button_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1586,7 +1586,7 @@ GtkWidget *prepare_update_switch_button_config(View *target_view)
 GtkWidget *prepare_update_toggle_button_config(View *target_view)
 {
     ToggleButtonConfig *toggle_button_config = read_toggle_button_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, TOGGLE_BUTTON_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, TOGGLE_BUTTON_PROPERTIES_DIALOG_TXT);
     set_current_toggle_button_config_to_dialog(toggle_button_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1595,7 +1595,7 @@ GtkWidget *prepare_update_toggle_button_config(View *target_view)
 GtkWidget *prepare_update_menu_bar_config(View *target_view)
 {
     MenuBarConfig *menu_bar_config = read_menu_bar_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, MENU_BAR_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, MENU_BAR_PROPERTIES_DIALOG_TXT);
     set_current_menu_bar_config_to_dialog(menu_bar_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1604,7 +1604,7 @@ GtkWidget *prepare_update_menu_bar_config(View *target_view)
 GtkWidget *prepare_update_menu_item_config(View *target_view)
 {
     MenuItemConfig *menu_item_config = read_menu_item_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, MENU_ITEM_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, MENU_ITEM_PROPERTIES_DIALOG_TXT);
     set_current_menu_item_config_to_dialog(menu_item_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1613,7 +1613,7 @@ GtkWidget *prepare_update_menu_item_config(View *target_view)
 GtkWidget *prepare_update_menu_config(View *target_view)
 {
     MenuConfig *menu_config = read_menu_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, MENU_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, MENU_PROPERTIES_DIALOG_TXT);
     set_current_menu_config_to_dialog(menu_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1622,7 +1622,7 @@ GtkWidget *prepare_update_menu_config(View *target_view)
 GtkWidget *prepare_update_entry_config(View *target_view)
 {
     EntryConfig *entry_config = read_entry_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, ENTRY_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, ENTRY_PROPERTIES_DIALOG_TXT);
     set_current_entry_config_to_dialog(entry_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1631,7 +1631,7 @@ GtkWidget *prepare_update_entry_config(View *target_view)
 GtkWidget *prepare_update_image_config(View *target_view)
 {
     ImageConfig *image_config = read_image_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, IMAGE_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, IMAGE_PROPERTIES_DIALOG_TXT);
     set_current_image_config_to_dialog(image_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1640,7 +1640,7 @@ GtkWidget *prepare_update_image_config(View *target_view)
 GtkWidget *prepare_update_label_config(View *target_view)
 {
     LabelConfig *label_config = read_label_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, LABEL_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, LABEL_PROPERTIES_DIALOG_TXT);
     set_current_label_config_to_dialog(label_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1649,7 +1649,7 @@ GtkWidget *prepare_update_label_config(View *target_view)
 GtkWidget *prepare_update_progress_bar_config(View *target_view)
 {
     ProgressBarConfig *progress_bar_config = read_progress_bar_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, PROGRESS_BAR_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, PROGRESS_BAR_PROPERTIES_DIALOG_TXT);
     set_current_progress_bar_config_to_dialog(progress_bar_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
@@ -1658,25 +1658,25 @@ GtkWidget *prepare_update_progress_bar_config(View *target_view)
 GtkWidget *prepare_update_separator_config(View *target_view)
 {
     SeparatorConfig *separator_config = read_separator_config_from_widget(target_view->widget);
-    build_app(root_app, NULL, SEPARATOR_PROPERTIES_DIALOG_TXT);
+    root_dialog_view_global = build_app(root_app, NULL, SEPARATOR_PROPERTIES_DIALOG_TXT);
     set_current_separator_config_to_dialog(separator_config);
     set_current_view_config_to_dialog(target_view->view_config);
     return root_dialog_view_global->widget;
 }
 
-// GtkWidget *prepare_update_text_area_config(View *target_view)
-// {
-//     TextAreaConfig *text_area_config = read_text_area_config_from_widget(target_view->widget);
-//     build_app(root_app, NULL, TEXT_AREA_PROPERTIES_DIALOG_TXT);
-//     set_current_text_area_config_to_dialog(text_area_config);
-//     set_current_view_config_to_dialog(target_view->view_config);
-//     return root_dialog_view_global->widget;
-// }
+GtkWidget *prepare_update_text_area_config(View *target_view)
+{
+    TextAreaConfig *text_area_config = read_text_area_config_from_widget(target_view->widget);
+    root_dialog_view_global = build_app(root_app, NULL, TEXT_AREA_PROPERTIES_DIALOG_TXT);
+    set_current_text_area_config_to_dialog(text_area_config);
+    set_current_view_config_to_dialog(target_view->view_config);
+    return root_dialog_view_global->widget;
+}
 
 // GtkWidget *prepare_update_combo_text_box_config(View *target_view)
 // {
 //     ComboTextBoxConfig *combo_text_box_config = read_combo_text_box_config_from_widget(target_view->widget);
-//     build_app(root_app, NULL, COMBO_TEXT_BOX_PROPERTIES_DIALOG_TXT);
+//     root_dialog_view_global = build_app(root_app, NULL, COMBO_TEXT_BOX_PROPERTIES_DIALOG_TXT);
 //     set_current_combo_text_box_config_to_dialog(combo_text_box_config);
 //     set_current_view_config_to_dialog(target_view->view_config);
 //     return root_dialog_view_global->widget;

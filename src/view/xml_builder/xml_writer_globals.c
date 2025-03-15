@@ -22,21 +22,28 @@ void write_widget_style(FILE *output_file, GtkWidget *widget, int tabs_number)
     gchar fg_hex[8]; // Format: "#RRGGBB"
     sprintf(fg_hex, "#%02X%02X%02X", fg_r, fg_g, fg_b);
 
-    // Use gtk_render_background to render and obtain the background color
-    // Instead of directly calling the deprecated function, use gtk_render_background in a drawing context
-    GtkWidget *drawing_area = gtk_drawing_area_new();
-    GtkStyleContext *drawing_context = gtk_widget_get_style_context(drawing_area);
-    gtk_style_context_get_background_color(drawing_context, GTK_STATE_FLAG_NORMAL, &bg_rgba);
+    // Create a temporary surface to render the background
+    cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
+    cairo_t *cr = cairo_create(surface);
 
-    guint bg_r = (guint)(bg_rgba.red * 255);
-    guint bg_g = (guint)(bg_rgba.green * 255);
-    guint bg_b = (guint)(bg_rgba.blue * 255);
+    // Render the background
+    gtk_render_background(context, cr, 0, 0, 1, 1);
+
+    // Get the pixel color from the surface
+    unsigned char *data = cairo_image_surface_get_data(surface);
+    guint bg_r = data[2];
+    guint bg_g = data[1];
+    guint bg_b = data[0];
     gchar bg_hex[8] = "\0";
 
     if (bg_r || bg_g || bg_b) // Check if the background color is not empty
     {
         sprintf(bg_hex, "#%02X%02X%02X", bg_r, bg_g, bg_b);
     }
+
+    // Clean up
+    cairo_destroy(cr);
+    cairo_surface_destroy(surface);
 
     // Get widget dimensions from the allocation.
     gint width = gtk_widget_get_allocated_width(widget);
@@ -81,7 +88,7 @@ void write_widget_style(FILE *output_file, GtkWidget *widget, int tabs_number)
         fprintf(output_file, "color=\"%s\"\n", fg_hex);
     }
 
-    if (strlen(bg_hex)) // Check if the background color was found
+    if (strlen(bg_hex) && g_strcmp0(bg_hex, "B50000") != 0 && g_strcmp0(bg_hex, "\0")) // Check if the background color was found
     {
         print_tabs(output_file, tabs_number);
         fprintf(output_file, "bg_color=\"%s\"\n", bg_hex);
@@ -142,6 +149,14 @@ void write_widget_style(FILE *output_file, GtkWidget *widget, int tabs_number)
     {
         print_tabs(output_file, tabs_number);
         fprintf(output_file, "font_weight=\"%s\"\n", font_weight);
+    }
+
+    gchar *bg_image = g_object_get_data(G_OBJECT(widget), "bg_image");
+
+    if (bg_image && g_strcmp0(bg_image, "\0"))
+    {
+        print_tabs(output_file, tabs_number);
+        fprintf(output_file, "bg_image=\"%s\"\n", bg_image);
     }
 }
 

@@ -187,7 +187,7 @@ void write_widget(FILE *output_file, View *view, int tabs_number)
     write_widget(output_file, view->next, tabs_number);
 }
 
-void build_xml(gchar *file_name)
+void build_xml(gchar *file_name, gboolean dialog_is_showed)
 {
     MessageDialogConfig m = DEFAULT_MESSAGE_DIALOG_CONFIG;
 
@@ -197,25 +197,45 @@ void build_xml(gchar *file_name)
     FILE *output_file = fopen(file_name, "w");
     if (!output_file)
     {
-        // Properly format the error message
-        char *msg = g_strdup_printf("%s: not opening!", file_name);
-        strcpy(m.message, msg);
-        GtkWidget *message = create_message_dialog(m);
-        g_free(msg); // Free the allocated memory
+        if (dialog_is_showed)
+        { // Properly format the error message
 
-        show_dialog(message);
+            char *msg = g_strdup_printf("%s: not opening!", file_name);
+            strcpy(m.message, msg);
+            GtkWidget *message = create_message_dialog(m);
+            g_free(msg); // Free the allocated memory
+            show_dialog(message);
+        }
         return;
     }
 
-    write_widget(output_file, root_crud_ui, 0); 
-    // write_widget(output_file, root_view_global, 0);// debug for debuging
+    fprintf(output_file, "<dialog id=\"win1\" \n\t width=\"900\"\n\theight=\"500\"\n\ttitle=\"GTK IDE\"\n\ticon_name=\"folder\"\n\thas_header=\"false\"\n\tis_maximized=\"false\"\n>\n");
+    root_crud_ui = find_view_by_id("viewer", root_view_global);
+
+    // generate the xml the racine widget xml code
+    if (root_crud_ui && root_crud_ui->child)
+        write_widget(output_file, root_crud_ui->child, 1);
+    // write_widget(output_file, root_view_global, 0); // debug for debuging
+
+    else
+    {
+        strcpy(m.message, "can't generate UI: void tree\nadd element to the tree");
+        GtkWidget *message = create_message_dialog(m);
+        show_dialog(message);
+        fclose(output_file);
+        return;
+    }
+
+    fprintf(output_file, "</dialog>");
     fclose(output_file);
 
-    // Properly format the success message
-    char *msg = g_strdup_printf("Check the output in %s", file_name);
-    strcpy(m.message, msg);
-    g_free(msg); // Free the allocated memory
+    if (dialog_is_showed)
+    { // Properly format the success message
+        char *msg = g_strdup_printf("Check the output in %s", file_name);
+        strcpy(m.message, msg);
+        g_free(msg); // Free the allocated memory
 
-    GtkWidget *message = create_message_dialog(m);
-    show_dialog(message);
+        GtkWidget *message = create_message_dialog(m);
+        show_dialog(message);
+    }
 }

@@ -1,23 +1,80 @@
-<frame 
-	id="viewer"
-	width="990"
-	height="857"
-	margin_top="5"
-	margin_bottom="5"
-	margin_left="5"
-	margin_right="5"
-	label="Viewer"
-	label_yalign="0.500000"
+<dialog id="win1" 
+	 width="900"
+	height="500"
+	title="GTK IDE"
+	icon_name="folder"
+	has_header="false"
+	is_maximized="false"
 >
-	<menu_bar 
+	<box 
 		id="wid-1-"
-		width="988"
-		height="830"
+		width="998"
+		height="840"
 		paned_order="1"
 		is_reorderable="false"
 		menu_right="1"
 		on_click=""
-		tooltip="(null)"
 	>
-	</menu_bar>
-</frame>
+		<fixed 
+			id="wid-2-"
+			width="998"
+			height="33"
+			paned_order="1"
+			is_reorderable="false"
+			menu_right="1"
+		>
+			<menu_bar 
+				id="wid-3-"
+				width="76"
+				height="33"
+				paned_order="1"
+				is_reorderable="false"
+				menu_right="1"
+				on_click=""
+				tooltip="(null)"
+			>
+				<menu_item 
+					id="wid-4-"
+					width="76"
+					height="33"
+					paned_order="1"
+					is_reorderable="false"
+					menu_right="1"
+					on_click=""
+					label="dsddsd"
+					is_mnemonic="false"
+				/>
+				<menu_bar 
+					id="wid-5-"
+					color="#FFFFFF"
+					position_x="16"
+					paned_order="1"
+					is_reorderable="false"
+					menu_right="1"
+					on_click=""
+					tooltip="dsdsd"
+				>
+					<box 
+						id="wid-6-"
+						color="#FFFFFF"
+						paned_order="1"
+						is_reorderable="false"
+						menu_right="1"
+						on_click=""
+					>
+						<box 
+							id="wid-7-"
+							color="#FFFFFF"
+							bg_color="#FFFF00"
+							paned_order="1"
+							is_reorderable="false"
+							menu_right="1"
+							on_click=""
+						>
+						</box>
+					</box>
+				</menu_bar>
+			</menu_bar>
+		</fixed>
+	</box>
+</dialog>

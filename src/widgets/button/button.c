@@ -186,67 +186,6 @@ GtkWidget *create_button(ButtonConfig button_config)
     return button;
 }
 
-// void apply_button_config_changes(GtkWidget *button, ButtonConfig button_config)
-// {
-
-//     // Create button with or without mnemonic based on use_underline flag
-//     gtk_button_set_label(GTK_BUTTON(button), button_config.label);
-
-//     // Set sensitivity
-//     gtk_widget_set_sensitive(button, button_config.is_sensitive);
-
-//     // Set visibility
-//     if (!button_config.is_visible)
-//         gtk_widget_hide(button);
-
-//     // Set tooltip
-//     if (button_config.tooltip) // Ensure tooltip is not empty
-//         gtk_widget_set_tooltip_text(button, button_config.tooltip);
-
-//     // Set dimensions (width and height)
-//     if (button_config.dimensions.width > 0 || button_config.dimensions.height > 0)
-//         gtk_widget_set_size_request(button, button_config.dimensions.width, button_config.dimensions.height);
-
-//     // Set icon if provided
-//     if (button_config.icon_path[0] != '\0')
-//     {
-//         Dimensions dimensions = {32, 32};
-//         GtkWidget *image = create_image_from_pixbuf(button_config.icon_path, dimensions);
-//         gtk_button_set_image(GTK_BUTTON(button), image);
-//         gtk_button_set_image_position(GTK_BUTTON(button), button_config.icon_position);
-//     }
-
-//     // to hide button border
-//     // gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE );
-
-//     // Set bg_image
-//     if (strcmp(button_config.bg_image, "\0") != 0)
-//         widget_set_background_image(button, button_config.bg_image, NULL);
-
-//     // Set Font Size
-//     if (button_config.font_size != 10)
-//         widget_set_font_size(button, button_config.font_size);
-
-//     // Set alignment
-//     gtk_widget_set_halign(button, button_config.halign);
-//     gtk_widget_set_valign(button, button_config.valign);
-
-//     // Set expand property
-//     gtk_widget_set_hexpand(button, button_config.hexpand);
-//     gtk_widget_set_vexpand(button, button_config.vexpand);
-
-//     // Control whether to always show the image
-//     gtk_button_set_always_show_image(GTK_BUTTON(button), button_config.always_show_image);
-
-//     // Set background and label colors
-//     widget_set_colors(button, button_config.bg_color, button_config.color);
-
-//     // Set margins
-//     widget_set_margins(button, button_config.margins);
-
-//     g_print("Button config changes applied successfully.\n");
-// }
-
 ButtonConfig *read_button_config_from_dialog()
 {
     ButtonConfig *button_config_ptr = NULL;
@@ -382,7 +321,7 @@ ButtonConfig *read_button_config_from_widget(GtkWidget *widget)
     widget_get_margins(widget, &margins);
     button_config.margins = margins;
 
-        gchar *property_value = NULL;
+    gchar *property_value = NULL;
     // Background color
     property_value = read_bg_color_from_widget(widget);
     if (property_value)
@@ -440,7 +379,7 @@ gchar *write_button_property(FILE *output_file, View *view, int tabs_number)
 
     // Get the tooltip text
     const gchar *tooltip = gtk_widget_get_tooltip_text(GTK_WIDGET(button));
-    if (g_strcmp0(tooltip, "\0") != 0) // Check if the tooltip text is not the default
+    if (tooltip && g_strcmp0(tooltip, "\0") && g_strcmp0(tooltip, "(null)")) // Check if the tooltip text is not the default
     {
         print_tabs(output_file, tabs_number + 1);
         fprintf(output_file, "tooltip=\"%s\"\n", tooltip);

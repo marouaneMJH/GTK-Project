@@ -167,7 +167,7 @@
                             />
 
                             <switch_button
-                                id="visible_switch"
+                                id="markup_switch"
                                 box_expand="true"
                                 box_fill="true"
                                 margin_right="20"

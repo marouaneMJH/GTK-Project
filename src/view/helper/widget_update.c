@@ -1189,7 +1189,7 @@ void set_current_label_config_to_dialog(LabelConfig *label_config)
     write_config_value_as_boolean("underline_switch", label_config->is_underline);
 
     /* Appearance */
-    write_config_value_as_combo_index("justification_combo", label_config->jtype);
+    write_config_value_as_combo_index("jtype_combo", label_config->jtype);
     write_config_value_as_combo_index("ellipsize_combo", label_config->ellipsize);
 
     write_config_value_as_boolean("wrap_switch", label_config->is_wrap);

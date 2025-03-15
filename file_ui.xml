@@ -7,3 +7,15 @@ id="win1"
 	has_header="false"
 	is_maximized="false"
 >
+	<box 
+		id="wid-1-"
+		bg_color="#E01B24"
+		width="986"
+		height="800"
+		paned_order="1"
+		is_reorderable="false"
+		menu_right="1"
+		on_click=""
+	>
+	</box>
+</dialog>

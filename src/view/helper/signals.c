@@ -516,8 +516,11 @@ void set_available_scopes(const gchar *widget_type)
     // gtk_combo_box_set_active(GTK_COMBO_BOX(combo_text_box), 0);
     if (stricmp(widget_type, "menu_item") == 0 || stricmp(widget_type, "menu") == 0)
     {
-        while (!GTK_IS_MENU_BAR(temp->widget))
+        while (!GTK_IS_MENU_BAR(temp->widget) && stricmp(temp->view_config->view_id, "viewer"))
+        {
+            g_print("TEMP IN SCOPS: %s\n", temp->view_config->view_id);
             temp = temp->parent;
+        }
         display_available_scopes_in_combo(combo_text_box, temp);
     }
     else
@@ -743,6 +746,37 @@ static void remove_widget_from_graph(gchar *view_id)
     print_graph_to_debug(root_v);
 }
 
+gboolean check_text_view_widget(GtkWidget *widget)
+{
+    if (GTK_IS_SCROLLED_WINDOW(widget))
+    {
+        g_print("This is a scrolled window\n");
+
+        // Get the child of the scrolled window
+        GtkWidget *child = gtk_bin_get_child(GTK_BIN(widget));
+
+        if (child && GTK_IS_TEXT_VIEW(child))
+        {
+            g_print("Found a text view inside the scrolled window\n");
+            return TRUE;
+        }
+        else
+        {
+            g_print("No text view found inside this scrolled window\n");
+        }
+    }
+    else if (GTK_IS_TEXT_VIEW(widget))
+    {
+        g_print("This is a direct text view\n");
+        return TRUE;
+    }
+    else
+    {
+        g_print("This is neither a scrolled window nor a text view\n");
+    }
+    return FALSE;
+}
+
 static void update_widget_config(gchar *view_id)
 {
     g_print("EDIT DDDDD\n");
@@ -769,10 +803,6 @@ static void update_widget_config(gchar *view_id)
     if (GTK_IS_BOX(target_view->widget))
     {
         dialog = prepare_update_box_config(target_view);
-    }
-    else if (GTK_IS_SCROLLED_WINDOW(target_view->widget))
-    {
-        dialog = prepare_update_scrolled_window_config(target_view);
     }
     else if (GTK_IS_FIXED(target_view->widget))
     {
@@ -871,9 +901,13 @@ static void update_widget_config(gchar *view_id)
     {
         dialog = prepare_update_separator_config(target_view);
     }
-    else if (GTK_IS_TEXT_VIEW(target_view->widget))
+    else if (check_text_view_widget(target_view->widget))
     {
-        // dialog = prepare_update_text_area_config(target_view);
+        dialog = prepare_update_text_area_config(target_view);
+    }
+    else if (GTK_IS_SCROLLED_WINDOW(target_view->widget) && !check_text_view_widget(target_view->widget))
+    {
+        dialog = prepare_update_scrolled_window_config(target_view);
     }
     else if (GTK_IS_COMBO_BOX_TEXT(target_view->widget))
     {
@@ -1006,7 +1040,7 @@ ViewTreeView *create_view_tree_widget()
     // Create text renderer for edit button with clickable property
     GtkCellRenderer *edit_renderer = gtk_cell_renderer_text_new();
     g_object_set(edit_renderer,
-                 "foreground", "blue",
+                 "foreground", "#3498db",
                  "underline", PANGO_UNDERLINE_SINGLE,
                  NULL);
     GtkTreeViewColumn *edit_column = gtk_tree_view_column_new_with_attributes(
@@ -1019,7 +1053,7 @@ ViewTreeView *create_view_tree_widget()
     // Create text renderer for delete button with clickable property
     GtkCellRenderer *delete_renderer = gtk_cell_renderer_text_new();
     g_object_set(delete_renderer,
-                 "foreground", "red",
+                 "foreground", "#d35400",
                  "underline", PANGO_UNDERLINE_SINGLE,
                  NULL);
     GtkTreeViewColumn *delete_column = gtk_tree_view_column_new_with_attributes(

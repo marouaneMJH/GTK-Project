@@ -6,27 +6,26 @@
 	has_header="false"
 	is_maximized="false"
 >
-	<box 
-		id="wid-1-"
-		width="998"
-		height="840"
+	<scrolled_window 
+		id="wid-1-scw"
+		width="988"
+		height="838"
 		paned_order="1"
 		is_reorderable="false"
 		menu_right="1"
 		on_click=""
 	>
-		<fixed 
-			id="wid-2-"
-			width="998"
-			height="33"
+		<box 
+			id="wid-2-box1"
+			color="#FFFFFF"
 			paned_order="1"
 			is_reorderable="false"
 			menu_right="1"
+			on_click=""
 		>
 			<menu_bar 
-				id="wid-3-"
-				width="76"
-				height="33"
+				id="wid-3-bar"
+				color="#FFFFFF"
 				paned_order="1"
 				is_reorderable="false"
 				menu_right="1"
@@ -34,47 +33,109 @@
 				tooltip="(null)"
 			>
 				<menu_item 
-					id="wid-4-"
-					width="76"
-					height="33"
+					id="wid-4-i1"
+					color="#FFFFFF"
 					paned_order="1"
 					is_reorderable="false"
 					menu_right="1"
 					on_click=""
-					label="dsddsd"
+					label="File"
 					is_mnemonic="false"
 				/>
-				<menu_bar 
-					id="wid-5-"
+				<menu_item 
+					id="wid-5-i2"
 					color="#FFFFFF"
-					position_x="16"
 					paned_order="1"
 					is_reorderable="false"
 					menu_right="1"
 					on_click=""
-					tooltip="dsdsd"
+					label="E"
+					is_mnemonic="false"
 				>
-					<box 
-						id="wid-6-"
-						color="#FFFFFF"
+					<menu 
+						id="wid-7-mie"
+						bg_color="#FFFFFF"
 						paned_order="1"
 						is_reorderable="false"
 						menu_right="1"
 						on_click=""
+						reserve_toggle_size="false"
 					>
-						<box 
-							id="wid-7-"
-							color="#FFFFFF"
-							bg_color="#FFFF00"
+						<menu_item 
+							id="wid-8-si1"
 							paned_order="1"
 							is_reorderable="false"
 							menu_right="1"
 							on_click=""
+							label="SI1"
+							is_mnemonic="false"
+						/>
+						<menu_item 
+							id="wid-9-si2"
+							paned_order="1"
+							is_reorderable="false"
+							menu_right="1"
+							on_click=""
+							label="SI2"
+							is_mnemonic="false"
 						>
-						</box>
-					</box>
-				</menu_bar>
+							<menu 
+								id="wid-11-smih"
+								color="#FFFFFF"
+								bg_color="#FFFFFF"
+								paned_order="1"
+								is_reorderable="false"
+								menu_orientation="horizontal"
+								menu_right="1"
+								on_click=""
+								reserve_toggle_size="false"
+								monitor_num="-1"
+							>
+								<menu_item 
+									id="wid-12-sih1"
+									color="#FFFFFF"
+									paned_order="1"
+									is_reorderable="false"
+									menu_right="1"
+									on_click=""
+									label="SIH1"
+									is_mnemonic="false"
+								/>
+								<menu_item 
+									id="wid-13-sih2"
+									color="#FFFFFF"
+									paned_order="1"
+									is_reorderable="false"
+									menu_left="1"
+									menu_right="2"
+									on_click=""
+									label="SIH2"
+									is_mnemonic="false"
+								/>
+							</menu>
+						</menu_item>
+						<menu_item 
+							id="wid-10-si3"
+							paned_order="1"
+							is_reorderable="false"
+							menu_right="1"
+							on_click=""
+							label="SI3"
+							is_mnemonic="false"
+						/>
+					</menu>
+				</menu_item>
+				<menu_item 
+					id="wid-6-i3"
+					color="#FFFFFF"
+					paned_order="1"
+					is_reorderable="false"
+					menu_right="1"
+					on_click=""
+					label="A"
+					is_mnemonic="false"
+				/>
 			</menu_bar>
-		</fixed>
-	</box>
+		</box>
+	</scrolled_window>
 </dialog>

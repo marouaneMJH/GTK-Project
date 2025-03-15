@@ -450,6 +450,8 @@ ViewConfig *read_view_config_from_dialog(gboolean update_mode)
     view_config->menu_left = menu_left;
     view_config->menu_right = menu_right == 0 ? 1 : menu_right;
 
+    g_print("ML: %d, MR: %d, MT: %d, MB: %d\n", view_config->menu_left, view_config->menu_right, view_config->menu_top, view_config->menu_bottom);
+
     // Signals config
     // OnClick
     const gchar *sig_on_click_handler = read_config_value_as_string("on_click_entry");

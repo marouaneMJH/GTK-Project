@@ -70,9 +70,9 @@ void set_current_progress_bar_config_to_dialog(ProgressBarConfig *progress_bar_c
 
 void set_current_separator_config_to_dialog(SeparatorConfig *separator_config);
 
-// void set_current_text_area_config_to_dialog(TextAreaConfig *text_area_config);
+void set_current_text_area_config_to_dialog(TextAreaConfig *text_area_config);
 
-// void set_current_combo_text_box_config_to_dialog(ComboTextBoxConfig *combo_text_box_config);
+void set_current_combo_text_box_config_to_dialog(ComboTextBoxConfig *combo_text_box_config);
 
 // prepare the update dialog and show it
 // containers
@@ -130,9 +130,9 @@ GtkWidget *prepare_update_progress_bar_config(View *target_view);
 
 GtkWidget *prepare_update_separator_config(View *target_view);
 
-// GtkWidget *prepare_update_text_area_config(View *target_view);
+GtkWidget *prepare_update_text_area_config(View *target_view);
 
-// GtkWidget *prepare_update_combo_text_box_config(View *target_view);
+GtkWidget *prepare_update_combo_text_box_config(View *target_view);
 
 // update config
 // containers

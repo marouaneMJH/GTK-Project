@@ -1097,33 +1097,6 @@
                         >
                             <label
                                 id="label11"
-                                label_text="Menu orientation"
-                                yalign="0.5"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-
-                            <combo_text_box
-                                id="menu_orientation_combo"
-                                default_index="0"
-                                option1="vertical"
-                                option2="horizontal"
-                                box_expand="true"
-                                box_fill="true"
-                            />
-                        </box>
-
-                        <box
-                            orientation="horizontal"
-                            spacing="10"
-                            box_expand="true"
-                            box_fill="true"
-                            margin_left="10"
-                            margin_right="10"
-                            homogeneous="true"
-                        >
-                            <label
-                                id="label11"
                                 label_text="Menu top"
                                 yalign="0.5"
                                 box_expand="true"
@@ -1198,6 +1171,7 @@
                             box_fill="true"
                             margin_left="10"
                             margin_right="10"
+                            margin_bottom="10"
                             homogeneous="true"
                         >
                             <label

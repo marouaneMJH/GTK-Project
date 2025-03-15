@@ -1350,73 +1350,73 @@ void set_current_text_area_config_to_dialog(TextAreaConfig *text_area_config)
     write_config_value_as_string("color_entry", text_area_config->text_color);
 }
 
-// void set_current_combo_text_box_config_to_dialog(ComboTextBoxConfig *combo_text_box_config)
-// {
+void set_current_combo_text_box_config_to_dialog(ComboTextBoxConfig *combo_text_box_config)
+{
 
-//     // Basic properties
-//     // write_config_value_as_ptr_array("options_array", combo_text_box_config->options);
+    // Basic properties
+    // write_config_value_as_ptr_array("options_array", combo_text_box_config->options);
 
-//     write_config_value_as_boolean("has_entry_switch", combo_text_box_config->has_entry);
-//     write_config_value_as_string("placeholder_text_entry", combo_text_box_config->placeholder_text);
-//     write_config_value_as_string("default_value_entry", combo_text_box_config->default_value);
-//     write_config_value_as_int("default_index_spin", combo_text_box_config->default_index);
-//     write_config_value_as_int("wrap_width_spin", combo_text_box_config->wrap_width);
+    write_config_value_as_boolean("has_entry_switch", combo_text_box_config->has_entry);
+    write_config_value_as_string("placeholder_text_entry", combo_text_box_config->placeholder_text);
+    write_config_value_as_string("default_value_entry", combo_text_box_config->default_value);
+    write_config_value_as_int("default_index_spin", combo_text_box_config->default_index);
+    write_config_value_as_int("wrap_width_spin", combo_text_box_config->wrap_width);
 
-//     // Behavior properties
-//     write_config_value_as_boolean("popup_fixed_width_switch", combo_text_box_config->popup_fixed_width);
-//     write_config_value_as_int("popup_shown_rows_spin", combo_text_box_config->popup_shown_rows);
+    // Behavior properties
+    write_config_value_as_boolean("popup_fixed_width_switch", combo_text_box_config->popup_fixed_width);
+    write_config_value_as_int("popup_shown_rows_spin", combo_text_box_config->popup_shown_rows);
 
-//     switch (combo_text_box_config->type.type_counter)
-//     {
-//     case NONE:
-//         write_config_value_as_combo_index("type_combo", 0);
-//         break;
-//     case COUNTER:
-//         write_config_value_as_combo_index("type_combo", 1);
-//         break;
-//     case YEAR:
-//         write_config_value_as_combo_index("type_combo", 2);
-//         break;
-//     case DAY:
-//         write_config_value_as_combo_index("type_combo", 3);
-//         break;
-//     case MONTH:
-//         write_config_value_as_combo_index("type_combo", 4);
-//         break;
-//     default:
-//         g_print("Unknown combo text box type\n");
-//         break;
-//     }
+    switch (combo_text_box_config->type.type_counter)
+    {
+    case NONE:
+        write_config_value_as_combo_index("type_combo", 0);
+        break;
+    case COUNTER:
+        write_config_value_as_combo_index("type_combo", 1);
+        break;
+    case YEAR:
+        write_config_value_as_combo_index("type_combo", 2);
+        break;
+    case DAY:
+        write_config_value_as_combo_index("type_combo", 3);
+        break;
+    case MONTH:
+        write_config_value_as_combo_index("type_combo", 4);
+        break;
+    default:
+        g_print("Unknown combo text box type\n");
+        break;
+    }
 
-//     // TODO: Display options separated with semi-colon ;
-//     // gchar *options = NULL;
-//     // if (combo_text_box_config->type.type_counter == NONE &&
-//     //     combo_text_box_config->options)
-//     // {
-//     //     for (int i = 0; i < combo_text_box_config->options->len; i++)
-//     //     {
-//     //         ComboTextBoxOption *option = g_ptr_array_index(combo_text_box_config->options, i);
-//     //         gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo_text_box), option->key, option->value);
-//     //     }
-//     // }
+    // TODO: Display options separated with semi-colon ;
+    // gchar *options = NULL;
+    // if (combo_text_box_config->type.type_counter == NONE &&
+    //     combo_text_box_config->options)
+    // {
+    //     for (int i = 0; i < combo_text_box_config->options->len; i++)
+    //     {
+    //         ComboTextBoxOption *option = g_ptr_array_index(combo_text_box_config->options, i);
+    //         gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo_text_box), option->key, option->value);
+    //     }
+    // }
 
-//     write_config_value_as_int("start_spin", combo_text_box_config->type.start);
-//     write_config_value_as_int("end_spin", combo_text_box_config->type.end);
+    write_config_value_as_int("start_spin", combo_text_box_config->type.start);
+    write_config_value_as_int("end_spin", combo_text_box_config->type.end);
 
-//     write_config_value_as_boolean("editable_switch", combo_text_box_config->is_editable);
+    write_config_value_as_boolean("editable_switch", combo_text_box_config->is_editable);
 
-//     // Dimensions
-//     write_dimensions_config(combo_text_box_config->dimensions);
+    // Dimensions
+    write_dimensions_config(combo_text_box_config->dimensions);
 
-//     // Margins
-//     write_margins_config(combo_text_box_config->margins);
+    // Margins
+    write_margins_config(combo_text_box_config->margins);
 
-//     // Align
-//     write_align_config(combo_text_box_config->halign, combo_text_box_config->valign);
+    // Align
+    write_align_config(combo_text_box_config->halign, combo_text_box_config->valign);
 
-//     // Expand
-//     write_expand_config(combo_text_box_config->hexpand, combo_text_box_config->vexpand);
-// }
+    // Expand
+    write_expand_config(combo_text_box_config->hexpand, combo_text_box_config->vexpand);
+}
 
 // prepare the update dialog and show it
 // containers
@@ -1673,14 +1673,15 @@ GtkWidget *prepare_update_text_area_config(View *target_view)
     return root_dialog_view_global->widget;
 }
 
-// GtkWidget *prepare_update_combo_text_box_config(View *target_view)
-// {
-//     ComboTextBoxConfig *combo_text_box_config = read_combo_text_box_config_from_widget(target_view->widget);
-//     root_dialog_view_global = build_app(root_app, NULL, COMBO_TEXT_BOX_PROPERTIES_DIALOG_TXT);
-//     set_current_combo_text_box_config_to_dialog(combo_text_box_config);
-//     set_current_view_config_to_dialog(target_view->view_config);
-//     return root_dialog_view_global->widget;
-// }
+GtkWidget *prepare_update_combo_text_box_config(View *target_view)
+{
+    // ComboTextBoxConfig *combo_text_box_config = read_combo_text_box_config_from_widget(target_view->widget);
+    // root_dialog_view_global = build_app(root_app, NULL, COMBO_TEXT_BOX_PROPERTIES_DIALOG_TXT);
+    // set_current_combo_text_box_config_to_dialog(combo_text_box_config);
+    // set_current_view_config_to_dialog(target_view->view_config);
+    // return root_dialog_view_global->widget;
+    return NULL;
+}
 
 // GtkWidget *prepare_update_event_box_config(View *target_view)
 // {

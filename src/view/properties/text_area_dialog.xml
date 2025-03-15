@@ -124,7 +124,7 @@
                                 box_fill="true"
                                 margin_right="20"
                                 halign="end"
-                                is_active="true"
+                                state="true"
                             />
 
                         </box>

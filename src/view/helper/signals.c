@@ -155,15 +155,63 @@ static void sig_destroy(GtkWidget *widget, gpointer data)
     gtk_widget_destroy(window);
 }
 
+void sig_text_area_show_xml()
+{
+    View *text_area = find_view_by_id("main-text-area", root_view_global);
+    GtkTextBuffer *buffer;
+    gchar *contents = NULL;
+    GError *error = NULL;
+
+    // Get the text view widget from your View structure
+    GtkWidget *text_view = text_area->widget;
+
+    // Read the entire XML file contents
+    if (g_file_get_contents("file.xml", &contents, NULL, &error))
+    {
+        // Get the text buffer and set the content
+        buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
+        gtk_text_buffer_set_text(buffer, contents, -1);
+
+        // Free the loaded contents
+        g_free(contents);
+    }
+    else
+    {
+        // Handle error (optional)
+        g_printerr("Error loading XML file: %s\n", error->message);
+        g_error_free(error);
+
+        // Optionally set empty text or error message
+        buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
+        gtk_text_buffer_set_text(buffer, "Failed to load XML file", -1);
+    }
+}
+
 static void sig_generate_xml(GtkWidget *widget, gpointer data)
 {
     build_xml("file.xml", TRUE);
+    sig_text_area_show_xml();
 }
 
 static void sig_generate_ui(GtkWidget *widget, gpointer data)
 {
 
-    build_xml("file.xml", FALSE);
+    build_xml("file_ui.xml", FALSE);
+    View *app = NULL;
+    app = build_app(root_app, app, "file_ui.xml");
+    if (app)
+        show_window(app->widget);
+    else
+    {
+        MessageDialogConfig message_dialog_config = DEFAULT_MESSAGE_DIALOG_CONFIG;
+        strcpy(message_dialog_config.message, "can't generate UI: void tree\nadd element to the tree");
+        GtkWidget *dialog = create_message_dialog(message_dialog_config);
+        show_dialog(dialog);
+    }
+}
+static void sig_run_generated_xml(GtkWidget *widget, gpointer data)
+{
+
     View *app = NULL;
     app = build_app(root_app, app, "file.xml");
     if (app)
@@ -176,6 +224,7 @@ static void sig_generate_ui(GtkWidget *widget, gpointer data)
         show_dialog(dialog);
     }
 }
+
 
 static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data)
 {
@@ -1436,6 +1485,9 @@ void connect_signals(View *view)
         else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_generate_ui") == 0)
             callback_function = sig_generate_ui;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_run_generated_xml") == 0)
+            callback_function = sig_run_generated_xml;
     }
 
     // Connect the callback function

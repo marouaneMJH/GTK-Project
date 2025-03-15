@@ -18,7 +18,7 @@
 
 #define DEFAULT_TEXT_AREA                           \
     {                                               \
-        .font_size = 12,                            \
+        .font_size = 9,                            \
         .text_color = "\0",                         \
         .bg_color = "\0",                           \
         .is_editable = TRUE,                        \

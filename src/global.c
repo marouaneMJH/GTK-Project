@@ -2,6 +2,7 @@
 
 View *root_view_global;
 View *root_dialog_view_global;
+View *root_crud_ui ; // debug should change in futur for new versions
 GtkApplication *root_app;
 
 View *new_root_view_global;
@@ -174,16 +175,20 @@ void set_header_bar(GtkWidget *window, const gchar *title, const gchar *icon_pat
     // Set the title of the header bar
     gtk_header_bar_set_title(GTK_HEADER_BAR(header_bar), title);
 
-    // Load the icon from the specified path
-    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(icon_path, NULL);
-    GdkPixbuf *scaled_pixbuf = gdk_pixbuf_scale_simple(pixbuf, 32, 32, GDK_INTERP_BILINEAR);
-
     // Create a horizontal box to hold the icon and title
     GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
-    GtkWidget *icon = gtk_image_new_from_pixbuf(scaled_pixbuf);
 
-    // Add the icon to the box
-    gtk_box_pack_start(GTK_BOX(box), icon, FALSE, FALSE, 0);
+    // Load the icon from the specified path
+    if (icon_path[0] != '\0')
+    {
+
+        GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(icon_path, NULL);
+        GdkPixbuf *scaled_pixbuf = gdk_pixbuf_scale_simple(pixbuf, 32, 32, GDK_INTERP_BILINEAR);
+        GtkWidget *icon = gtk_image_new_from_pixbuf(scaled_pixbuf);
+        // Add the icon to the box
+        gtk_box_pack_start(GTK_BOX(box), icon, FALSE, FALSE, 0);
+    }
+
 
     // Add the box to the header bar
     gtk_header_bar_pack_start(GTK_HEADER_BAR(header_bar), box);
@@ -191,30 +196,6 @@ void set_header_bar(GtkWidget *window, const gchar *title, const gchar *icon_pat
     // Set the header bar as the title bar of the window
     gtk_window_set_titlebar(GTK_WINDOW(window), header_bar);
 }
-
-// These functions are just for comparing with CSS not for use because the most of them are deprecated
-// void widget_set_text_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)
-// {
-//     GdkRGBA color_rgba;
-//     gdk_rgba_parse(&color_rgba, color);
-//     gtk_widget_override_color(widget, state, &color_rgba);
-// }
-
-// void widget_set_background_color(GtkWidget *widget, const gchar *color,GtkStateFlags state)
-// {
-//     GdkRGBA color_rgba;
-//     gdk_rgba_parse(&color_rgba, color);
-//     gtk_widget_override_background_color(widget, state, &color_rgba);
-// }
-
-// void widget_set_font(GtkWidget *widget, const gchar *font_name, gint font_size)
-// {
-//     PangoFontDescription *font_desc = pango_font_description_new();
-//     pango_font_description_set_family(font_desc, font_name);
-//     pango_font_description_set_size(font_desc, font_size * PANGO_SCALE);
-//     gtk_widget_override_font(widget, font_desc);
-//     pango_font_description_free(font_desc);
-// }
 
 // TODO: Should be not manipulate the end of tag ">" in the file
 // TODO: Should manipulate spaces and tabs and new lines

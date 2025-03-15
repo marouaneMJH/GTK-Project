@@ -36,6 +36,8 @@ extern View *root_dialog_view_global;
 extern GtkApplication *root_app;
 
 extern View *new_root_view_global;
+extern View *root_crud_ui;
+
 
 // We should rename this from global to core wich means system libs and has more signification
 

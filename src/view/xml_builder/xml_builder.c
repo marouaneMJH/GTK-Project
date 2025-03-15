@@ -1,28 +1,33 @@
 #include "./../../../include/widgets/View/xml_builder/xml_builder.h"
 
-gboolean is_container(GtkWidget *widget)
+gboolean is_container(View *view)
 {
-    if (!widget)
+    if (!view->widget)
         return FALSE;
 
-    if (GTK_IS_BUTTON(widget))
+    if (GTK_IS_BUTTON(view->widget))
         return FALSE;
 
-    return (GTK_IS_BOX(widget) ||
-            GTK_IS_FLOW_BOX(widget) ||
-            GTK_IS_MENU(widget) ||
-            GTK_IS_MENU_BAR(widget) ||
-            GTK_IS_PANED(widget) ||
-            GTK_IS_FIXED(widget) ||
-            GTK_IS_FRAME(widget) ||
-            GTK_IS_EXPANDER(widget) ||
-            GTK_IS_NOTEBOOK(widget) ||
-            GTK_IS_OVERLAY(widget) ||
-            GTK_IS_EVENT_BOX(widget) ||
-            GTK_IS_WINDOW(widget) ||
-            GTK_IS_GRID(widget) ||
-            GTK_IS_SCROLLED_WINDOW(widget) ||
-            GTK_IS_STACK(widget));
+    if (GTK_IS_MENU_ITEM(view->widget) && view->child && GTK_IS_MENU(view->child->widget))
+    {
+        return TRUE;
+    }
+
+    return (GTK_IS_BOX(view->widget) ||
+            GTK_IS_FLOW_BOX(view->widget) ||
+            GTK_IS_MENU(view->widget) ||
+            GTK_IS_MENU_BAR(view->widget) ||
+            GTK_IS_PANED(view->widget) ||
+            GTK_IS_FIXED(view->widget) ||
+            GTK_IS_FRAME(view->widget) ||
+            GTK_IS_EXPANDER(view->widget) ||
+            GTK_IS_NOTEBOOK(view->widget) ||
+            GTK_IS_OVERLAY(view->widget) ||
+            GTK_IS_EVENT_BOX(view->widget) ||
+            GTK_IS_WINDOW(view->widget) ||
+            GTK_IS_GRID(view->widget) ||
+            GTK_IS_SCROLLED_WINDOW(view->widget) ||
+            GTK_IS_STACK(view->widget));
 }
 
 gchar *write_widget_property(FILE *output_file, View *view, int tabs_number)
@@ -142,7 +147,7 @@ void write_widget_close_tag(FILE *output_file, View *view, gchar *tag, int tabs_
         return;
     }
     // close tag for container
-    if (is_container(view->widget))
+    if (is_container(view))
     {
         print_tabs(output_file, tabs_number);
         fprintf(output_file, ">\n");
@@ -151,7 +156,7 @@ void write_widget_close_tag(FILE *output_file, View *view, gchar *tag, int tabs_
 
         // todo
         // verify the dual behavior widget
-        // sometime  act like container and other like widget combo_text_box menu_item ...
+        // sometime  act like container and other like widget  menu_item ...
 
         print_tabs(output_file, tabs_number);
         fprintf(output_file, "</%s>\n", tag);
@@ -182,19 +187,55 @@ void write_widget(FILE *output_file, View *view, int tabs_number)
     write_widget(output_file, view->next, tabs_number);
 }
 
-void build_xml(gchar *file_name)
+void build_xml(gchar *file_name, gboolean dialog_is_showed)
 {
+    MessageDialogConfig m = DEFAULT_MESSAGE_DIALOG_CONFIG;
+
     if (!file_name)
         return;
 
     FILE *output_file = fopen(file_name, "w");
     if (!output_file)
     {
-        // message dialog for file not existing
+        if (dialog_is_showed)
+        { // Properly format the error message
+
+            char *msg = g_strdup_printf("%s: not opening!", file_name);
+            strcpy(m.message, msg);
+            GtkWidget *message = create_message_dialog(m);
+            g_free(msg); // Free the allocated memory
+            show_dialog(message);
+        }
         return;
     }
-    write_widget(output_file, root_view_global, 0);
+
+    fprintf(output_file, "<dialog id=\"win1\" \n\t width=\"900\"\n\theight=\"500\"\n\ttitle=\"GTK IDE\"\n\ticon_name=\"folder\"\n\thas_header=\"false\"\n\tis_maximized=\"false\"\n>\n");
+    root_crud_ui = find_view_by_id("viewer", root_view_global);
+
+    // generate the xml the racine widget xml code
+    if (root_crud_ui && root_crud_ui->child)
+        write_widget(output_file, root_crud_ui->child, 1);
+    // write_widget(output_file, root_view_global, 0); // debug for debuging
+
+    else
+    {
+        strcpy(m.message, "can't generate UI: void tree\nadd element to the tree");
+        GtkWidget *message = create_message_dialog(m);
+        show_dialog(message);
+        fclose(output_file);
+        return;
+    }
+
+    fprintf(output_file, "</dialog>");
     fclose(output_file);
 
-    // message dialog for completing the ask
+    if (dialog_is_showed)
+    { // Properly format the success message
+        char *msg = g_strdup_printf("Check the output in %s", file_name);
+        strcpy(m.message, msg);
+        g_free(msg); // Free the allocated memory
+
+        GtkWidget *message = create_message_dialog(m);
+        show_dialog(message);
+    }
 }

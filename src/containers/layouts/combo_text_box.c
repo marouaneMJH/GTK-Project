@@ -149,8 +149,6 @@ GtkWidget *create_combo_text_box(ComboTextBoxConfig combo_text_box_config)
         gtk_editable_set_editable(GTK_EDITABLE(entry),
                                   combo_text_box_config.is_editable);
 
-        // this functio
-
         // Set default text if provided, else set placeholder
         if (combo_text_box_config.default_value && combo_text_box_config.default_value[0] != '\0')
         {
@@ -286,6 +284,31 @@ void combo_box_make_interval(GtkWidget *combo_text_box, int start, int end)
     for (int i = start; i <= end; i++)
     {
         gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo_text_box), (char *)g_strdup_printf("%0d", i), (char *)g_strdup_printf("%0d", i));
+    }
+}
+
+void write_combo_text_box_options(GtkComboBox *combo_box, FILE *output_file, View *view, int tabs_number)
+{
+    GtkTreeModel *model = gtk_combo_box_get_model(combo_box);
+    GtkTreeIter iter;
+    gchar *option_text;
+
+    g_print("Options\n");
+    if (gtk_tree_model_get_iter_first(model, &iter)) // Start from the first row
+    {
+        int index = 0;
+        do
+        {
+            // Get the text from the first column (assuming it's a simple text column)
+            gtk_tree_model_get(model, &iter, 0, &option_text, -1);
+            print_tabs(output_file, tabs_number);
+            fprintf(output_file, "option%d=\"%s\"\n", index++, option_text);
+            g_free(option_text);
+        } while (gtk_tree_model_iter_next(model, &iter));
+    }
+    else
+    {
+        g_print("The combo box %s has no options.\n", view->view_config->view_id);
     }
 }
 
@@ -436,34 +459,42 @@ gchar *write_combo_text_box_property(FILE *output_file, View *view, int tabs_num
     write_widget_tag_style_view_config(output_file, view, "combo_text_box", tabs_number);
 
     // Get the GtkComboBoxText from the view
-    GtkComboBoxText *combo_box = GTK_COMBO_BOX_TEXT(view->widget);
+    GtkComboBox *combo_box = GTK_COMBO_BOX(view->widget);
 
     // Check if the combo box has an entry
     gboolean has_entry = gtk_combo_box_get_has_entry(GTK_COMBO_BOX(combo_box));
     if (has_entry != FALSE) // Check if it's not the default value
     {
+        g_print("the combo have a entry");
         print_tabs(output_file, tabs_number + 1);
         fprintf(output_file, "has_entry=\"%s\"\n", has_entry ? "true" : "false");
+
+        // Get the placeholder text
+        const gchar *placeholder_text = gtk_entry_get_placeholder_text(
+            GTK_ENTRY(gtk_bin_get_child(GTK_BIN(combo_box))));
+
+        if (placeholder_text != NULL) // Check if it's not the default value
+        {
+            print_tabs(output_file, tabs_number + 1);
+            fprintf(output_file, "placeholder_text=\"%s\"\n", placeholder_text);
+        }
+
+        // Get the default value
+        const gchar *default_value = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(combo_box))));
+        if (default_value != NULL && g_strcmp0(default_value, "") != 0) // Check if it's not the default value
+        {
+            print_tabs(output_file, tabs_number + 1);
+            fprintf(output_file, "default_value=\"%s\"\n", default_value);
+        }
+
+        // Check if the combo box is editable
+        gboolean is_editable = gtk_editable_get_editable(GTK_EDITABLE(gtk_bin_get_child(GTK_BIN(combo_box))));
+        if (is_editable != TRUE) // Check if it's not the default value
+        {
+            print_tabs(output_file, tabs_number + 1);
+            fprintf(output_file, "is_editable=\"%s\"\n", is_editable ? "true" : "false");
+        }
     }
-
-    // Get the placeholder text
-    const gchar *placeholder_text = gtk_entry_get_placeholder_text(
-        GTK_ENTRY(gtk_bin_get_child(GTK_BIN(combo_box))));
-
-    if (placeholder_text != NULL) // Check if it's not the default value
-    {
-        print_tabs(output_file, tabs_number + 1);
-        fprintf(output_file, "placeholder_text=\"%s\"\n", placeholder_text);
-    }
-
-    // Get the default value
-    const gchar *default_value = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(combo_box))));
-    if (default_value != NULL && g_strcmp0(default_value, "") != 0) // Check if it's not the default value
-    {
-        print_tabs(output_file, tabs_number + 1);
-        fprintf(output_file, "default_value=\"%s\"\n", default_value);
-    }
-
     // Get the default index
     gint default_index = gtk_combo_box_get_active(GTK_COMBO_BOX(combo_box));
     if (default_index != -1) // Check if it's not the default value
@@ -494,14 +525,6 @@ gchar *write_combo_text_box_property(FILE *output_file, View *view, int tabs_num
     {
         print_tabs(output_file, tabs_number + 1);
         fprintf(output_file, "popup_shown_rows=\"%d\"\n", popup_shown_rows);
-    }
-
-    // Check if the combo box is editable
-    gboolean is_editable = gtk_editable_get_editable(GTK_EDITABLE(gtk_bin_get_child(GTK_BIN(combo_box))));
-    if (is_editable != TRUE) // Check if it's not the default value
-    {
-        print_tabs(output_file, tabs_number + 1);
-        fprintf(output_file, "is_editable=\"%s\"\n", is_editable ? "true" : "false");
     }
 
     // Get the horizontal expand property
@@ -541,6 +564,9 @@ gchar *write_combo_text_box_property(FILE *output_file, View *view, int tabs_num
                                                                                   : valign == GTK_ALIGN_FILL   ? "fill"
                                                                                                                : "unknown");
     }
+
+    // write options
+    write_combo_text_box_options(combo_box, output_file, view, tabs_number);
 
     return "combo_text_box";
 }

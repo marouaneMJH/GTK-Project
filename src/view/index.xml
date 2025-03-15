@@ -93,22 +93,20 @@
                             vexpand="true"
                             hexpand="true"
                         />
+						
                     </scrolled_window>
 
                     <box
                         id="box2"
                         paned_order="2"
                         spacing="10"
+						margin_left="10"
                     >
-                        <frame
+                        <expander
                             id="frame1"
                             label="Containers"
-                            margin_top="5"
-                            margin_bottom="5"
-                            margin_left="5"
-                            margin_right="5"
-                            vexpand="true"
-                            hexpand="true"
+							font_size="12"
+							is_expanded="true"
                         >
                             <grid
                                 id="grid1"
@@ -222,17 +220,13 @@
                                 />
 
                             </grid>
-                        </frame>
+                        </expander>
 
-                        <frame
+                        <expander
                             id="frame2"
                             label="Menus"
-                            margin_top="5"
-                            margin_bottom="5"
-                            margin_left="5"
-                            margin_right="5"
-                            vexpand="true"
-                            hexpand="true"
+     						font_size="12"
+
                         >
                             <grid
                                 id="grid2"
@@ -280,17 +274,12 @@
                                 />
 
                             </grid>
-                        </frame>
+                        </expander>
 
-                        <frame
+                        <expander
                             id="frame3"
                             label="Widgets"
-                            margin_top="5"
-                            margin_bottom="5"
-                            margin_left="5"
-                            margin_right="5"
-                            vexpand="true"
-                            hexpand="true"
+							font_size="12"
                         >
                             <grid
                                 id="grid3"
@@ -459,7 +448,22 @@
                                 />
 
                             </grid>
-                        </frame>
+                        </expander>
+						<box 
+							orientation="horizontal"
+							spacing="20"
+							valign="cetner"
+							halign="center"
+						>
+														<button 
+			                	label="Generate XML"
+				            	on_click="sig_generate_xml"
+		                	/>
+							<button 
+			                	label="Generate UI"
+				            	on_click="sig_generate_ui"
+		                	/>
+						</box>
                     </box>
                 </paned>
             </paned>

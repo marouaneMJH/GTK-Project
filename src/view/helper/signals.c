@@ -157,7 +157,24 @@ static void sig_destroy(GtkWidget *widget, gpointer data)
 
 static void sig_generate_xml(GtkWidget *widget, gpointer data)
 {
-    build_xml("file.xml");
+    build_xml("file.xml", TRUE);
+}
+
+static void sig_generate_ui(GtkWidget *widget, gpointer data)
+{
+
+    build_xml("file.xml", FALSE);
+    View *app = NULL;
+    app = build_app(root_app, app, "file.xml");
+    if (app)
+        show_window(app->widget);
+    else
+    {
+        MessageDialogConfig message_dialog_config = DEFAULT_MESSAGE_DIALOG_CONFIG;
+        strcpy(message_dialog_config.message, "can't generate UI: void tree\nadd element to the tree");
+        GtkWidget *dialog = create_message_dialog(message_dialog_config);
+        show_dialog(dialog);
+    }
 }
 
 static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data)
@@ -1050,6 +1067,7 @@ void add_view_to_content_box(View *view)
 static void sig_create_new_view(GtkWidget *widget, gpointer data)
 {
     View *viewer = find_view_by_id("viewer", root_view_global);
+
     if (!viewer)
     {
         g_print("Error: ==> Cannot find the viewer\n");
@@ -1415,6 +1433,9 @@ void connect_signals(View *view)
         else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_generate_xml") == 0)
             callback_function = sig_generate_xml;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_generate_ui") == 0)
+            callback_function = sig_generate_ui;
     }
 
     // Connect the callback function

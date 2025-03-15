@@ -155,15 +155,63 @@ static void sig_destroy(GtkWidget *widget, gpointer data)
     gtk_widget_destroy(window);
 }
 
+void sig_text_area_show_xml()
+{
+    View *text_area = find_view_by_id("main-text-area", root_view_global);
+    GtkTextBuffer *buffer;
+    gchar *contents = NULL;
+    GError *error = NULL;
+
+    // Get the text view widget from your View structure
+    GtkWidget *text_view = text_area->widget;
+
+    // Read the entire XML file contents
+    if (g_file_get_contents("file.xml", &contents, NULL, &error))
+    {
+        // Get the text buffer and set the content
+        buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
+        gtk_text_buffer_set_text(buffer, contents, -1);
+
+        // Free the loaded contents
+        g_free(contents);
+    }
+    else
+    {
+        // Handle error (optional)
+        g_printerr("Error loading XML file: %s\n", error->message);
+        g_error_free(error);
+
+        // Optionally set empty text or error message
+        buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
+        gtk_text_buffer_set_text(buffer, "Failed to load XML file", -1);
+    }
+}
+
 static void sig_generate_xml(GtkWidget *widget, gpointer data)
 {
     build_xml("file.xml", TRUE);
+    sig_text_area_show_xml();
 }
 
 static void sig_generate_ui(GtkWidget *widget, gpointer data)
 {
 
-    build_xml("file.xml", FALSE);
+    build_xml("file_ui.xml", FALSE);
+    View *app = NULL;
+    app = build_app(root_app, app, "file_ui.xml");
+    if (app)
+        show_window(app->widget);
+    else
+    {
+        MessageDialogConfig message_dialog_config = DEFAULT_MESSAGE_DIALOG_CONFIG;
+        strcpy(message_dialog_config.message, "can't generate UI: void tree\nadd element to the tree");
+        GtkWidget *dialog = create_message_dialog(message_dialog_config);
+        show_dialog(dialog);
+    }
+}
+static void sig_run_generated_xml(GtkWidget *widget, gpointer data)
+{
+
     View *app = NULL;
     app = build_app(root_app, app, "file.xml");
     if (app)
@@ -299,6 +347,49 @@ static void sig_color_btn_friend_color(GtkWidget *widget, gpointer data)
     // deallocate the memory
     if (bg_color_str)
         free(bg_color_str);
+}
+
+static void sig_fill_entry_bg_color_text(GtkWidget *widget, gpointer data)
+{
+    GdkRGBA bg_rgba;
+
+    // Get the selected color from the color button
+    gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(widget), &bg_rgba);
+
+    guint fg_r = (guint)(bg_rgba.red * 255);
+    guint fg_g = (guint)(bg_rgba.green * 255);
+    guint fg_b = (guint)(bg_rgba.blue * 255);
+    // Convert the color to a hexadecimal string (e.g., #RRGGBB)
+    gchar fg_hex[8]; // Format: "#RRGGBB"
+    sprintf(fg_hex, "#%02X%02X%02X", fg_r, fg_g, fg_b);
+
+    // Set the color value in the entry widget
+    View *entry_view = find_view_by_id("bg_color_entry", root_dialog_view_global);
+    if (entry_view)
+        gtk_entry_set_text(GTK_ENTRY(entry_view->widget), fg_hex);
+
+}
+
+static void sig_fill_entry_color_text(GtkWidget *widget, gpointer data)
+{
+
+    GdkRGBA bg_rgba;
+
+        // Get the selected color from the color button
+        gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(widget), &bg_rgba);
+
+        guint fg_r = (guint)(bg_rgba.red * 255);
+        guint fg_g = (guint)(bg_rgba.green * 255);
+        guint fg_b = (guint)(bg_rgba.blue * 255);
+        // Convert the color to a hexadecimal string (e.g., #RRGGBB)
+        gchar fg_hex[8]; // Format: "#RRGGBB"
+        sprintf(fg_hex, "#%02X%02X%02X", fg_r, fg_g, fg_b);
+    
+        // Set the color value in the entry widget
+        View *entry_view = find_view_by_id("color_entry", root_dialog_view_global);
+        if (entry_view)
+            gtk_entry_set_text(GTK_ENTRY(entry_view->widget), fg_hex);
+    
 }
 
 /* End of Color signales */
@@ -1209,6 +1300,7 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
         }
         update_mode = FALSE;
     }
+
     else
     {
         g_print("NORMAL MODE\n");
@@ -1436,6 +1528,15 @@ void connect_signals(View *view)
         else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_generate_ui") == 0)
             callback_function = sig_generate_ui;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_run_generated_xml") == 0)
+            callback_function = sig_run_generated_xml;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_fill_entry_color_text") == 0)
+            callback_function = sig_fill_entry_color_text;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_fill_entry_bg_color_text") == 0)
+            callback_function = sig_fill_entry_bg_color_text;
     }
 
     // Connect the callback function

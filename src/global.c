@@ -2,7 +2,7 @@
 
 View *root_view_global;
 View *root_dialog_view_global;
-View *root_crud_ui ; // debug should change in futur for new versions
+View *root_crud_ui; // debug should change in futur for new versions
 GtkApplication *root_app;
 
 View *new_root_view_global;
@@ -188,7 +188,6 @@ void set_header_bar(GtkWidget *window, const gchar *title, const gchar *icon_pat
         // Add the icon to the box
         gtk_box_pack_start(GTK_BOX(box), icon, FALSE, FALSE, 0);
     }
-
 
     // Add the box to the header bar
     gtk_header_bar_pack_start(GTK_HEADER_BAR(header_bar), box);
@@ -389,6 +388,12 @@ ViewConfig *read_view_config_from_dialog(gboolean update_mode)
     else
         strcpy(view_config->view_id, view_id);
 
+    // Fixed config
+    gint position = read_config_value_as_int("position_x_spin");
+    view_config->position_x = position;
+    position = read_config_value_as_int("position_y_spin");
+    view_config->position_y = position;
+
     // Box config
     gboolean box_expand = read_config_value_as_boolean("box_expand_switch");
     view_config->box_expand = box_expand;
@@ -405,11 +410,16 @@ ViewConfig *read_view_config_from_dialog(gboolean update_mode)
     else
         view_config->pack_direction = 1;
 
-    // Fixed config
-    gint position = read_config_value_as_int("position_x_spin");
-    view_config->position_x = position;
-    position = read_config_value_as_int("position_y_spin");
-    view_config->position_y = position;
+    // FlowBox container
+    gint flow_box_order = read_config_value_as_int("flowbox_order_spin");
+    view_config->flow_box_order = flow_box_order;
+
+    // Paned config
+    const gchar *paned_order = read_config_value_as_string("paned_order_combo");
+    if (stricmp(paned_order, "First") == 0)
+        view_config->paned_order = 1;
+    else
+        view_config->paned_order = 2;
 
     // Notebook config
     const gchar *tab_label = read_config_value_as_string("tab_label_entry");
@@ -424,13 +434,6 @@ ViewConfig *read_view_config_from_dialog(gboolean update_mode)
     view_config->row_span = row_span == 0 ? 1 : row_span;
     gint column_span = read_config_value_as_int("column_span_spin");
     view_config->column_span = column_span == 0 ? 1 : column_span;
-
-    // Paned config
-    const gchar *paned_order = read_config_value_as_string("paned_order_combo");
-    if (stricmp(paned_order, "First") == 0)
-        view_config->paned_order = 1;
-    else
-        view_config->paned_order = 2;
 
     // Menu config
     const gchar *menu_orientation_value = read_config_value_as_string("menu_orientation_combo");
@@ -447,15 +450,199 @@ ViewConfig *read_view_config_from_dialog(gboolean update_mode)
     view_config->menu_left = menu_left;
     view_config->menu_right = menu_right == 0 ? 1 : menu_right;
 
-    // TODO: Complete other view config properties
-
     // Signals config
     // OnClick
     const gchar *sig_on_click_handler = read_config_value_as_string("on_click_entry");
-    if (sig_on_click_handler)
+    // if (sig_on_click_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_CLICK;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_click_handler, MAX_SIGNAL_NAME_SIZE);
+    //     g_print("SIG///=> %s\n", sig_on_click_handler);
+    // }
+
+    // const gchar *sig_on_toggle_handler = read_config_value_as_string("on_toggle_entry");
+    // if (sig_on_toggle_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_TOGGLE;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_toggle_handler, MAX_SIGNAL_NAME_SIZE);
+    // }
+
+    // const gchar *sig_on_change_handler = read_config_value_as_string("on_change_entry");
+    // if (sig_on_change_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_CHANGE;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_change_handler, MAX_SIGNAL_NAME_SIZE);
+    // }
+
+    // const gchar *sig_on_activate_handler = read_config_value_as_string("on_activate_entry");
+    // if (sig_on_activate_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_ACTIVATE;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_activate_handler, MAX_SIGNAL_NAME_SIZE);
+    // }
+
+    // const gchar *sig_on_delete_event_handler = read_config_value_as_string("on_delete_event_entry");
+    // if (sig_on_delete_event_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_DELETE_EVENT;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_delete_event_handler, MAX_SIGNAL_NAME_SIZE);
+    // }
+
+    // const gchar *sig_on_destroy_handler = read_config_value_as_string("on_destroy_entry");
+    // if (sig_on_destroy_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_DESTROY;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_destroy_handler, MAX_SIGNAL_NAME_SIZE);
+    // }
+
+    // const gchar *sig_on_value_changed_handler = read_config_value_as_string("on_value_changed_entry");
+    // if (sig_on_value_changed_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_VALUE_CHANGED;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_value_changed_handler, MAX_SIGNAL_NAME_SIZE);
+    // }
+
+    // const gchar *sig_on_row_activated_handler = read_config_value_as_string("on_row_activated_entry");
+    // if (sig_on_row_activated_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_ROW_ACTIVATED;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_row_activated_handler, MAX_SIGNAL_NAME_SIZE);
+    // }
+
+    // const gchar *sig_on_key_press_handler = read_config_value_as_string("on_key_press_entry");
+    // if (sig_on_key_press_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_KEY_PRESS;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_key_press_handler, MAX_SIGNAL_NAME_SIZE);
+    // }
+
+    // const gchar *sig_on_button_press_handler = read_config_value_as_string("on_button_press_entry");
+    // if (sig_on_button_press_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_BUTTON_PRESS;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_button_press_handler, MAX_SIGNAL_NAME_SIZE);
+    // }
+
+    // const gchar *sig_on_button_release_handler = read_config_value_as_string("on_button_release_entry");
+    // if (sig_on_button_release_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_BUTTON_RELEASE;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_button_release_handler, MAX_SIGNAL_NAME_SIZE);
+    // }
+
+    // const gchar *sig_on_focus_in_handler = read_config_value_as_string("on_focus_in_entry");
+    // if (sig_on_focus_in_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_FOCUS_IN;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_focus_in_handler, MAX_SIGNAL_NAME_SIZE);
+    // }
+
+    // const gchar *sig_on_focus_out_handler = read_config_value_as_string("on_focus_out_entry");
+    // if (sig_on_focus_out_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_FOCUS_OUT;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_focus_out_handler, MAX_SIGNAL_NAME_SIZE);
+    // }
+
+    // const gchar *sig_on_selection_changed_handler = read_config_value_as_string("on_selection_changed_entry");
+    // if (sig_on_selection_changed_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_SELECTION_CHANGED;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_selection_changed_handler, MAX_SIGNAL_NAME_SIZE);
+    // }
+
+    // const gchar *sig_on_popup_menu_handler = read_config_value_as_string("on_popup_menu_entry");
+    // if (sig_on_popup_menu_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_POPUP_MENU;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_popup_menu_handler, MAX_SIGNAL_NAME_SIZE);
+    // }
+
+    // const gchar *sig_on_response_handler = read_config_value_as_string("on_response_entry");
+    // if (sig_on_response_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_RESPONSE;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_response_handler, MAX_SIGNAL_NAME_SIZE);
+    // }
+
+    // const gchar *sig_on_color_set_handler = read_config_value_as_string("on_color_set_entry");
+    // if (sig_on_color_set_handler)
+    // {
+    //     view_config->signal.event_type = SIG_ON_COLOR_SET;
+    //     g_strlcpy(view_config->signal.sig_handler, sig_on_color_set_handler, MAX_SIGNAL_NAME_SIZE);
+    // }
+
+    const gchar *sig_type = read_config_value_as_string("sig_type_combo");
+    if (sig_type)
     {
-        view_config->signal.event_type = SIG_ON_CLICK;
+        if (g_strcmp0(sig_type, "OnClick") == 0)
+            view_config->signal.event_type = SIG_ON_CLICK;
+        else if (g_strcmp0(sig_type, "OnToggle") == 0)
+            view_config->signal.event_type = SIG_ON_TOGGLE;
+        else if (g_strcmp0(sig_type, "OnChange") == 0)
+            view_config->signal.event_type = SIG_ON_CHANGE;
+        else if (g_strcmp0(sig_type, "OnActivate") == 0)
+            view_config->signal.event_type = SIG_ON_ACTIVATE;
+        else if (g_strcmp0(sig_type, "OnDeleteEvent") == 0)
+            view_config->signal.event_type = SIG_ON_DELETE_EVENT;
+        else if (g_strcmp0(sig_type, "OnDestroy") == 0)
+            view_config->signal.event_type = SIG_ON_DESTROY;
+        else if (g_strcmp0(sig_type, "OnValueChanged") == 0)
+            view_config->signal.event_type = SIG_ON_VALUE_CHANGED;
+        else if (g_strcmp0(sig_type, "OnRowActivated") == 0)
+            view_config->signal.event_type = SIG_ON_ROW_ACTIVATED;
+        else if (g_strcmp0(sig_type, "OnKeyPress") == 0)
+            view_config->signal.event_type = SIG_ON_KEY_PRESS;
+        else if (g_strcmp0(sig_type, "OnButtonPress") == 0)
+            view_config->signal.event_type = SIG_ON_BUTTON_PRESS;
+        else if (g_strcmp0(sig_type, "OnButtonRelease") == 0)
+            view_config->signal.event_type = SIG_ON_BUTTON_RELEASE;
+        else if (g_strcmp0(sig_type, "OnFocusIn") == 0)
+            view_config->signal.event_type = SIG_ON_FOCUS_IN;
+        else if (g_strcmp0(sig_type, "OnFocusOut") == 0)
+            view_config->signal.event_type = SIG_ON_FOCUS_OUT;
+        else if (g_strcmp0(sig_type, "OnSelectionChanged") == 0)
+            view_config->signal.event_type = SIG_ON_SELECTION_CHANGED;
+        else if (g_strcmp0(sig_type, "OnPopupMenu") == 0)
+            view_config->signal.event_type = SIG_ON_POPUP_MENU;
+        else if (g_strcmp0(sig_type, "OnResponse") == 0)
+            view_config->signal.event_type = SIG_ON_RESPONSE;
+        else if (g_strcmp0(sig_type, "OnColorSet") == 0)
+            view_config->signal.event_type = SIG_ON_COLOR_SET;
+    }
+
+    if (sig_on_click_handler)
         g_strlcpy(view_config->signal.sig_handler, sig_on_click_handler, MAX_SIGNAL_NAME_SIZE);
+
+    const gchar *params = read_config_value_as_string("sig_params_entry");
+    int key = 0;
+    int index = 0;
+    gchar temp[MAX_VALUE_SIZE];
+    int cpt = 0;
+    if (params)
+    {
+        while (params[key] != '\0' && params[key] != '\n')
+        {
+            if (params[key] != ';')
+            {
+                temp[index++] = params[key];
+            }
+            else
+            {
+                temp[index] = '\0';
+                strcpy(view_config->param[cpt++], g_strdup(temp));
+                g_print("PARAMS ===> %s\n", temp);
+                index = 0;
+            }
+            key++;
+        }
+
+        if (index > 0)
+        {
+            temp[index] = '\0';
+            strcpy(view_config->param[cpt++], g_strdup(temp));
+            g_print("PARAMS ===> %s\n", temp);
+        }
     }
 
     return view_config;
@@ -663,20 +850,46 @@ void write_view_config_to_dialog(ViewConfig *view_config)
     // View config
     write_config_value_as_string("view_id_entry", view_config->view_id);
 
-    // Box config
+    // Fixed container
+    write_config_value_as_int("position_x_spin", view_config->position_x);
+    write_config_value_as_int("position_y_spin", view_config->position_y);
+
+    // Box container
+    write_config_value_as_combo_index("pack_direction_combo", view_config->pack_direction == 0 ? 1 : 0);
     write_config_value_as_boolean("box_expand_switch", view_config->box_expand);
     write_config_value_as_boolean("box_fill_switch", view_config->box_fill);
     write_config_value_as_int("box_padding_spin", view_config->box_padding);
 
-    write_config_value_as_combo_index("pack_direction_combo", view_config->pack_direction == 0 ? 1 : 0);
-    // write_config_value_as_string("pack_direction_combo", pack_direction);
+    // FlowBox container
+    write_config_value_as_int("flowbox_order_spin", view_config->flow_box_order);
 
-    // Fixed config
-    write_config_value_as_int("position_x_spin", view_config->position_x);
-    write_config_value_as_int("position_y_spin", view_config->position_y);
+    // Paned container
+    write_config_value_as_combo_index("paned_order_combo", view_config->paned_order == 1 ? 0 : 1);
 
-    // TODO: Complete other view config properties
+    // NoteBook container properties
+    write_config_value_as_string("tab_label_entry", view_config->tab_label);
+    write_config_value_as_boolean("is_reorderable_switch", view_config->is_reorderable);
 
+    // Grid container properties
+    write_config_value_as_int("row_spin", view_config->row);
+    write_config_value_as_int("column_spin", view_config->column);
+    write_config_value_as_int("row_span_spin", view_config->row_span);
+    write_config_value_as_int("column_span_spin", view_config->column_span);
+
+    // Menu properties
+    write_config_value_as_combo_index("menu_orientation_combo", stricmp(view_config->menu_orientation, "vertical") == 0 ? 0 : 1);
+    write_config_value_as_int("menu_top_spin", view_config->menu_top);
+    write_config_value_as_int("menu_bottom_spin", view_config->menu_bottom);
+    write_config_value_as_int("menu_left_spin", view_config->menu_left);
+    write_config_value_as_int("menu_right_spin", view_config->menu_right);
+
+    // Signal properties
+    write_config_value_as_string("sig_type_combo", view_config->signal.sig_handler);
+    gchar params[200];
+    params[0] = '\0';
+    if (view_config->param)
+        g_strconcat(view_config->param[0] ? view_config->param[0] : "\0", ";", view_config->param[1] ? view_config->param[1] : "\0", ";", view_config->param[2] ? view_config->param[2] : "\0", ";", view_config->param[3] ? view_config->param[3] : "\0", NULL);
+    write_config_value_as_string("sig_params_entry", params);
     // Signals config
     // OnClick
     write_config_value_as_string("on_click_entry", view_config->signal.sig_handler);

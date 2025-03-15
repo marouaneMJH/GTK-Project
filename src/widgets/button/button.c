@@ -153,6 +153,7 @@ GtkWidget *create_button(ButtonConfig button_config)
     // Set icon if provided
     if (button_config.icon_path[0] != '\0')
     {
+        g_object_set_data(G_OBJECT(button), "icon-path", button_config.icon_path);
         Dimensions dimensions = {32, 32};
         GtkWidget *image = create_image_from_pixbuf(button_config.icon_path, dimensions);
         gtk_button_set_image(GTK_BUTTON(button), image);

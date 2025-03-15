@@ -579,10 +579,10 @@ gboolean check_scope_back(View *root)
 }
 
 // Remove a widget from the graph and the subgraph if exists
-static void remove_widget_from_graph(GtkWidget *widget, gpointer data)
+static void remove_widget_from_graph(gchar *view_id)
 {
-    const gchar *view_id = gtk_button_get_label(GTK_BUTTON(widget));
-    View *target = find_view_by_id((gchar *)view_id, root_view_global);
+    // const gchar *view_id = gtk_button_get_label(GTK_BUTTON(widget));
+    View *target = find_view_by_id(view_id, root_view_global);
     View *temp = NULL;
 
     if (target)
@@ -629,14 +629,15 @@ static void remove_widget_from_graph(GtkWidget *widget, gpointer data)
     }
 
     // gtk_widget_destroy(target->widget);
-    gtk_widget_destroy(widget);
+    // gtk_widget_destroy(widget);
 
     View *root_v = find_view_by_id("viewer", root_view_global);
     print_graph_to_debug(root_v);
 }
 
-static void update_widget_config(GtkWidget *widget, gpointer data)
+static void update_widget_config(gchar *view_id)
 {
+    g_print("EDIT DDDDD\n");
 
     // TODO: Update widget config
     // Steps:
@@ -646,8 +647,8 @@ static void update_widget_config(GtkWidget *widget, gpointer data)
     // 3 - Read new view config from the dialog
     // 4 - Update the view config
 
-    const gchar *view_id = gtk_button_get_label(GTK_BUTTON(widget));
-    View *target_view = find_view_by_id((gchar *)view_id, root_view_global);
+    // const gchar *view_id = gtk_button_get_label(GTK_BUTTON(widget));
+    View *target_view = find_view_by_id(view_id, root_view_global);
 
     GtkWidget *dialog = NULL;
 
@@ -776,20 +777,266 @@ static void update_widget_config(GtkWidget *widget, gpointer data)
         show_dialog(dialog);
 }
 
+static void on_column2_clicked(GtkTreeView *treeview, GtkTreePath *path,
+                               GtkTreeViewColumn *column, gpointer user_data)
+{
+    GtkTreeModel *model = gtk_tree_view_get_model(treeview);
+    GtkTreeIter iter;
+
+    if (gtk_tree_model_get_iter(model, &iter, path))
+    {
+        gchar *view_id;
+        gtk_tree_model_get(model, &iter, 1, &view_id, -1);
+        update_widget_config(view_id);
+        // g_print("Column 2 clicked: %s\n", view_id);
+    }
+}
+
+static void on_column3_clicked(GtkTreeView *treeview, GtkTreePath *path,
+                               GtkTreeViewColumn *column, gpointer user_data)
+{
+    GtkTreeModel *model = gtk_tree_view_get_model(treeview);
+    GtkTreeIter iter;
+
+    if (gtk_tree_model_get_iter(model, &iter, path))
+    {
+        gchar *view_id;
+        gtk_tree_model_get(model, &iter, 1, &view_id, -1);
+
+        remove_widget_from_graph(view_id);
+        // g_print("Column 3 clicked: %s\n", view_id);
+
+        gtk_tree_store_remove(GTK_TREE_STORE(model), &iter);
+        g_print("Child removed\n");
+    }
+}
+
+// Custom cell renderer click handler
+static gboolean on_cell_clicked(GtkWidget *widget, GdkEventButton *event, gpointer user_data) {
+    GtkTreeView *treeview = GTK_TREE_VIEW(widget);
+    GtkTreePath *path;
+    GtkTreeViewColumn *column;
+    gint cell_x, cell_y;
+    
+    // Check if it's a left-click
+    if (event->type == GDK_BUTTON_PRESS && event->button == 1) {
+        // Get the path and column at the clicked position
+        if (gtk_tree_view_get_path_at_pos(treeview, event->x, event->y, 
+                                         &path, &column, &cell_x, &cell_y)) {
+            // Get the tree model
+            GtkTreeModel *model = gtk_tree_view_get_model(treeview);
+            GtkTreeIter iter;
+            
+            if (gtk_tree_model_get_iter(model, &iter, path)) {
+                // Check if the clicked row has children
+                gboolean has_children = gtk_tree_model_iter_has_child(model, &iter);
+                
+                // If it has children and the click was in the expander area 
+                // (usually the first few pixels of the first column)
+                if (has_children && column == gtk_tree_view_get_column(treeview, 0) && cell_x < 20) {
+                    // Toggle expand/collapse
+                    if (gtk_tree_view_row_expanded(treeview, path)) {
+                        gtk_tree_view_collapse_row(treeview, path);
+                    } else {
+                        gtk_tree_view_expand_row(treeview, path, FALSE);
+                    }
+                } else {
+                    // Otherwise, process the column click as before
+                    if (column == gtk_tree_view_get_column(treeview, 0)) {
+                        on_column1_clicked(treeview, path, column, user_data);
+                    } else if (column == gtk_tree_view_get_column(treeview, 1)) {
+                        on_column2_clicked(treeview, path, column, user_data);
+                    } else if (column == gtk_tree_view_get_column(treeview, 2)) {
+                        on_column3_clicked(treeview, path, column, user_data);
+                    }
+                }
+            }
+            
+            gtk_tree_path_free(path);
+            return TRUE; // Stop event propagation
+        }
+    }
+    
+    return FALSE; // Continue event propagation
+}
+
+// Create the tree widget
+ViewTreeView *create_view_tree_widget()
+{
+    ViewTreeView *tree_view = g_new(ViewTreeView, 1);
+
+    // Create tree store with columns:
+    // 1. View pointer (hidden)
+    // 2. Name string
+    // 3. Edit button text
+    // 4. Delete button text
+    tree_view->tree_store = gtk_tree_store_new(NUM_COLUMNS,
+                                               G_TYPE_POINTER, // View pointer
+                                               G_TYPE_STRING,  // Name
+                                               G_TYPE_STRING,  // Edit button
+                                               G_TYPE_STRING); // Delete button
+
+    // Create the tree view
+    tree_view->tree_widget = gtk_tree_view_new_with_model(GTK_TREE_MODEL(tree_view->tree_store));
+
+    // Hide the headers
+    gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree_view->tree_widget), FALSE);
+
+    // Create text renderer for name column
+    GtkCellRenderer *name_renderer = gtk_cell_renderer_text_new();
+    GtkTreeViewColumn *name_column = gtk_tree_view_column_new_with_attributes(
+        "Name", name_renderer, "text", COLUMN_NAME, NULL);
+    gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view->tree_widget), name_column);
+
+    // Create text renderer for edit button with clickable property
+    GtkCellRenderer *edit_renderer = gtk_cell_renderer_text_new();
+    g_object_set(edit_renderer,
+                 "foreground", "blue",
+                 "underline", PANGO_UNDERLINE_SINGLE,
+                 NULL);
+    GtkTreeViewColumn *edit_column = gtk_tree_view_column_new_with_attributes(
+        "Edit", edit_renderer, "text", COLUMN_EDIT_BUTTON, NULL);
+    gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view->tree_widget), edit_column);
+
+    // Connect the "button-press-event" signal to the edit callback
+    // g_signal_connect(edit_renderer, "edited", G_CALLBACK(test_tree), tree_view);
+
+    // Create text renderer for delete button with clickable property
+    GtkCellRenderer *delete_renderer = gtk_cell_renderer_text_new();
+    g_object_set(delete_renderer,
+                 "foreground", "red",
+                 "underline", PANGO_UNDERLINE_SINGLE,
+                 NULL);
+    GtkTreeViewColumn *delete_column = gtk_tree_view_column_new_with_attributes(
+        "Delete", delete_renderer, "text", COLUMN_DELETE_BUTTON, NULL);
+    gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view->tree_widget), delete_column);
+
+    // Connect the "activate" signal to the delete callback
+    // g_signal_connect(delete_renderer, "edited", G_CALLBACK(test_tree), tree_view);
+
+    // Get the selection object
+    tree_view->selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view->tree_widget));
+
+    return tree_view;
+}
+
+// Function to add a View to the tree
+void add_view_to_tree(ViewTreeView *tree_view, View *view, GtkTreeIter *parent_iter)
+{
+    GtkTreeIter iter;
+
+    // Get view name from the view_config (assuming there's a name field)
+    // You'll need to modify this to match your ViewConfig structure
+    const char *view_name = view->view_config ? view->view_config->view_id : "Unnamed View";
+
+    // Add the view to the tree
+    gtk_tree_store_append(tree_view->tree_store, &iter, parent_iter);
+    gtk_tree_store_set(tree_view->tree_store, &iter,
+                       COLUMN_VIEW_POINTER, view,
+                       COLUMN_NAME, view_name,
+                       COLUMN_EDIT_BUTTON, "Edit",
+                       COLUMN_DELETE_BUTTON, "Delete",
+                       -1);
+
+    // Recursively add child views
+    if (view->child)
+    {
+        add_view_to_tree(tree_view, view->child, &iter);
+    }
+
+    // Add next (sibling) views at the same level
+    if (view->next)
+    {
+        add_view_to_tree(tree_view, view->next, parent_iter);
+    }
+}
+
+// Helper function to find the View pointer from a tree path
+static View *get_view_from_path(ViewTreeView *tree_view, GtkTreePath *path)
+{
+    GtkTreeIter iter;
+    View *view = NULL;
+
+    if (gtk_tree_model_get_iter(GTK_TREE_MODEL(tree_view->tree_store), &iter, path))
+    {
+        gtk_tree_model_get(GTK_TREE_MODEL(tree_view->tree_store), &iter,
+                           COLUMN_VIEW_POINTER, &view,
+                           -1);
+    }
+
+    return view;
+}
+
+// Function to populate the entire tree from a root View
+void populate_view_tree(ViewTreeView *tree_view, View *root_view)
+{
+    // Clear existing tree
+    gtk_tree_store_clear(tree_view->tree_store);
+
+    // Add root view and all its children recursively
+    if (root_view)
+    {
+        add_view_to_tree(tree_view, root_view, NULL);
+        // Connect button press event to handle column clicks
+        g_signal_connect(tree_view->tree_widget, "button-press-event",
+                         G_CALLBACK(on_cell_clicked), NULL);
+    }
+}
+
+void remove_all_children(GtkWidget *container)
+{
+    GList *children, *iter;
+
+    // Get all children of the container
+    children = gtk_container_get_children(GTK_CONTAINER(container));
+
+    for (iter = children; iter != NULL; iter = iter->next)
+    {
+        gtk_widget_destroy(GTK_WIDGET(iter->data)); // Destroy each child widget
+    }
+
+    g_list_free(children); // Free the list after use
+}
+
+static ViewTreeView *tree_view = NULL;
 void add_view_to_content_box(View *view)
 {
-    ButtonConfig content_btn_config = DEFAULT_BUTTON;
-    strcpy(content_btn_config.label, parent_view->view_config->view_id);
-    GtkWidget *content_btn = create_button(content_btn_config);
 
     View *content_box_view = find_view_by_id("content_box", root_view_global);
-    if (content_box_view)
+    if (!content_box_view)
     {
-        g_print("PARENT-VIEW: %s\n", parent_view->view_config->view_id);
-        g_signal_connect(G_OBJECT(content_btn), "clicked", G_CALLBACK(update_widget_config), NULL);
-        // g_signal_connect(G_OBJECT(content_btn), "clicked", G_CALLBACK(remove_widget_from_graph), NULL);
-        gtk_box_pack_end(GTK_BOX(content_box_view->widget), content_btn, TRUE, FALSE, 0);
+        return;
     }
+
+    View *viewer = find_view_by_id("viewer", root_view_global);
+    if (!viewer)
+    {
+        return;
+    }
+
+    remove_all_children(content_box_view->widget);
+
+    // Create the tree widget
+    tree_view = create_view_tree_widget();
+
+    // Assuming you have a root view
+    View *root_view = viewer->child;
+
+    // Populate the tree
+    populate_view_tree(tree_view, root_view);
+
+    // Add the tree view to your UI container
+    GtkWidget *scrolled_window = gtk_scrolled_window_new(NULL, NULL);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_POLICY_AUTOMATIC,
+                                   GTK_POLICY_AUTOMATIC);
+    gtk_container_add(GTK_CONTAINER(scrolled_window), tree_view->tree_widget);
+
+    gtk_box_pack_start(GTK_BOX(content_box_view->widget), scrolled_window, TRUE, TRUE, 0);
+
+    // ButtonConfig content_btn_config = DEFAULT_BUTTON;
+    // strcpy(content_btn_config.label, parent_view->view_config->view_id);
+    // GtkWidget *content_btn = create_button(content_btn_config);
 }
 
 static void sig_create_new_view(GtkWidget *widget, gpointer data)
@@ -1079,6 +1326,7 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
             is_relative_container = TRUE;
     }
     g_print("PARENT VIEW AFTER ==========> %s \n", parent_view->view_config->view_id);
+    g_print("COMBO: %s\n%s", parent_view->view_config->view_id, is_relative_container ? "TRUE" : "FALSE");
     sig_destroy_dialog(widget, NULL);
 }
 

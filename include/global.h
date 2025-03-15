@@ -63,6 +63,24 @@ typedef struct
     gint end;    /**< End margin */
 } Margins;
 
+
+// Column indices for our tree view
+enum {
+    COLUMN_VIEW_POINTER,  // Store the View pointer
+    COLUMN_NAME,          // Name of the view
+    COLUMN_EDIT_BUTTON,   // Text for edit button
+    COLUMN_DELETE_BUTTON, // Text for delete button
+    NUM_COLUMNS
+};
+
+// Tree structure and model
+typedef struct {
+    GtkWidget *tree_widget;
+    GtkTreeStore *tree_store;
+    GtkTreeSelection *selection;
+} ViewTreeView;
+
+
 /* inline function */
 
 /**

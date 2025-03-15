@@ -47,7 +47,7 @@ static void activate(GtkApplication *app, gpointer user_data)
     // // gtk_container_add(GTK_CONTAINER(expander), button);
     // gtk_container_add(GTK_CONTAINER(window), event_box);
 
-    gtk_widget_show_all(window);
+    show_window(window);
 
 }
 

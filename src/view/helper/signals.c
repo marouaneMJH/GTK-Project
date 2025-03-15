@@ -1040,7 +1040,7 @@ ViewTreeView *create_view_tree_widget()
     // Create text renderer for edit button with clickable property
     GtkCellRenderer *edit_renderer = gtk_cell_renderer_text_new();
     g_object_set(edit_renderer,
-                 "foreground", "blue",
+                 "foreground", "#3498db",
                  "underline", PANGO_UNDERLINE_SINGLE,
                  NULL);
     GtkTreeViewColumn *edit_column = gtk_tree_view_column_new_with_attributes(
@@ -1053,7 +1053,7 @@ ViewTreeView *create_view_tree_widget()
     // Create text renderer for delete button with clickable property
     GtkCellRenderer *delete_renderer = gtk_cell_renderer_text_new();
     g_object_set(delete_renderer,
-                 "foreground", "red",
+                 "foreground", "#d35400",
                  "underline", PANGO_UNDERLINE_SINGLE,
                  NULL);
     GtkTreeViewColumn *delete_column = gtk_tree_view_column_new_with_attributes(

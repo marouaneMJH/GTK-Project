@@ -784,7 +784,7 @@ gchar *read_text_color_from_widget(GtkWidget *widget)
 {
 
     return g_object_get_data(G_OBJECT(widget), "text_color");
-
+    
     // This approach also works
     // GtkStyleContext *context = gtk_widget_get_style_context(widget);
     // GdkRGBA fg_rgba;

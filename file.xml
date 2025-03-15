@@ -1,4 +1,5 @@
-<dialog id="win1" 
+<dialog
+id="win1" 
 	 width="900"
 	height="500"
 	title="GTK IDE"
@@ -6,32 +7,50 @@
 	has_header="false"
 	is_maximized="false"
 >
+<<<<<<< HEAD
 	<scrolled_window 
 		id="wid-1-scw"
 		width="988"
 		height="838"
+=======
+	<box 
+		id="wid-1-"
+		width="986"
+		height="791"
+>>>>>>> main
 		paned_order="1"
 		is_reorderable="false"
 		menu_right="1"
 		on_click=""
 	>
 		<box 
+<<<<<<< HEAD
 			id="wid-2-box1"
 			color="#FFFFFF"
+=======
+			id="wid-2-"
+			width="986"
+>>>>>>> main
 			paned_order="1"
 			is_reorderable="false"
 			menu_right="1"
 			on_click=""
 		>
+<<<<<<< HEAD
 			<menu_bar 
 				id="wid-3-bar"
 				color="#FFFFFF"
+=======
+			<box 
+				id="wid-3-"
+				width="986"
+>>>>>>> main
 				paned_order="1"
 				is_reorderable="false"
 				menu_right="1"
 				on_click=""
-				tooltip="(null)"
 			>
+<<<<<<< HEAD
 				<menu_item 
 					id="wid-4-i1"
 					color="#FFFFFF"
@@ -138,4 +157,9 @@
 			</menu_bar>
 		</box>
 	</scrolled_window>
+=======
+			</box>
+		</box>
+	</box>
+>>>>>>> main
 </dialog>

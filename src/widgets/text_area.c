@@ -90,8 +90,6 @@ ViewConfig *init_text_area_config(FILE *index, TextAreaConfig *text_area_config)
 
 GtkWidget *create_text_area(TextAreaConfig text_area_config)
 {
-    GtkWidget *scrolled_window = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
     GtkWidget *text_view_widget = gtk_text_view_new();
 
@@ -104,9 +102,9 @@ GtkWidget *create_text_area(TextAreaConfig text_area_config)
 
     widget_set_colors(text_view_widget, text_area_config.bg_color, text_area_config.text_color);
 
-    gtk_container_add(GTK_CONTAINER(scrolled_window), text_view_widget);
+    // gtk_container_add(GTK_CONTAINER(scrolled_window), text_view_widget);
     if (text_area_config.dimensions.width > 0 && text_area_config.dimensions.height > 0)
-        set_widget_size(scrolled_window, text_area_config.dimensions);
+        set_widget_size(text_view_widget, text_area_config.dimensions);
 
     widget_set_margins(text_view_widget, text_area_config.margins);
 
@@ -118,7 +116,7 @@ GtkWidget *create_text_area(TextAreaConfig text_area_config)
     gtk_widget_set_halign(text_view_widget, text_area_config.halign);
     gtk_widget_set_valign(text_view_widget, text_area_config.valign);
 
-    return scrolled_window;
+    return text_view_widget;
 }
 
 TextAreaConfig *read_text_area_config_from_dialog()

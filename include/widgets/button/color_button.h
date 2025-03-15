@@ -55,7 +55,7 @@ typedef struct
 
 ViewConfig *init_color_button_config(FILE *index, ColorButtonConfig *color_button_config);
 
-ViewConfig *init_color_button_config(FILE *index, ColorButtonConfig *color_button_config);
+// ViewConfig *init_color_button_config(FILE *index, ColorButtonConfig *color_button_config);
 
 /**
  * @brief create coordinate button widget with default

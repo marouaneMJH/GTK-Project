@@ -1,4 +1,5 @@
-<dialog id="win1" 
+<dialog
+id="win1" 
 	 width="900"
 	height="500"
 	title="GTK IDE"

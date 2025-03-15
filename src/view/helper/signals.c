@@ -225,7 +225,6 @@ static void sig_run_generated_xml(GtkWidget *widget, gpointer data)
     }
 }
 
-
 static void sig_dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data)
 {
 
@@ -348,6 +347,49 @@ static void sig_color_btn_friend_color(GtkWidget *widget, gpointer data)
     // deallocate the memory
     if (bg_color_str)
         free(bg_color_str);
+}
+
+static void sig_fill_entry_bg_color_text(GtkWidget *widget, gpointer data)
+{
+    GdkRGBA bg_rgba;
+
+    // Get the selected color from the color button
+    gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(widget), &bg_rgba);
+
+    guint fg_r = (guint)(bg_rgba.red * 255);
+    guint fg_g = (guint)(bg_rgba.green * 255);
+    guint fg_b = (guint)(bg_rgba.blue * 255);
+    // Convert the color to a hexadecimal string (e.g., #RRGGBB)
+    gchar fg_hex[8]; // Format: "#RRGGBB"
+    sprintf(fg_hex, "#%02X%02X%02X", fg_r, fg_g, fg_b);
+
+    // Set the color value in the entry widget
+    View *entry_view = find_view_by_id("bg_color_entry", root_dialog_view_global);
+    if (entry_view)
+        gtk_entry_set_text(GTK_ENTRY(entry_view->widget), fg_hex);
+
+}
+
+static void sig_fill_entry_color_text(GtkWidget *widget, gpointer data)
+{
+
+    GdkRGBA bg_rgba;
+
+        // Get the selected color from the color button
+        gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(widget), &bg_rgba);
+
+        guint fg_r = (guint)(bg_rgba.red * 255);
+        guint fg_g = (guint)(bg_rgba.green * 255);
+        guint fg_b = (guint)(bg_rgba.blue * 255);
+        // Convert the color to a hexadecimal string (e.g., #RRGGBB)
+        gchar fg_hex[8]; // Format: "#RRGGBB"
+        sprintf(fg_hex, "#%02X%02X%02X", fg_r, fg_g, fg_b);
+    
+        // Set the color value in the entry widget
+        View *entry_view = find_view_by_id("color_entry", root_dialog_view_global);
+        if (entry_view)
+            gtk_entry_set_text(GTK_ENTRY(entry_view->widget), fg_hex);
+    
 }
 
 /* End of Color signales */
@@ -1258,6 +1300,7 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
         }
         update_mode = FALSE;
     }
+
     else
     {
         g_print("NORMAL MODE\n");
@@ -1488,6 +1531,12 @@ void connect_signals(View *view)
         else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_run_generated_xml") == 0)
             callback_function = sig_run_generated_xml;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_fill_entry_color_text") == 0)
+            callback_function = sig_fill_entry_color_text;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_fill_entry_bg_color_text") == 0)
+            callback_function = sig_fill_entry_bg_color_text;
     }
 
     // Connect the callback function

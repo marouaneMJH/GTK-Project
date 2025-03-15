@@ -45,7 +45,6 @@
         </menu_bar>
 
         <scrolled_window
-            on_key_press="sig_key_press"
             id="scw1"
             box_expand="true"
             box_fill="true"
@@ -93,15 +92,17 @@
 								margin_right="5"
 								vexpand="true"
 								hexpand="true"
-                        	/>
+							/>
 
 							<text_area
-								id="main-text-area"
-								label="XML Viewer"
-								tab_label="XML Viewer"
-								placeholder="Void tree"
-								size=""
-                        	/>
+									id="main-text-area"
+									label="XML Viewer"
+									tab_label="XML Viewer"
+									placeholder="Void tree"
+									
+							/>
+
+							
 					</notebook>
 
                     </scrolled_window>
@@ -460,15 +461,16 @@
 							</expander>
 
 							<!-- Action Buttons -->
+							<separator />
 							<box 
-								spacing="20"
+								spacing="5"
 								valign="center"
 								halign="center"
 								margin_top="10"
 							>
 								<box 
 									orientation="horizontal"
-									spacing="20"
+									spacing="5"
 									valign="center"
 									halign="center"
 									margin_top="10"

@@ -209,7 +209,7 @@ void build_xml(gchar *file_name, gboolean dialog_is_showed)
         return;
     }
 
-    fprintf(output_file, "<dialog id=\"win1\" \n\t width=\"900\"\n\theight=\"500\"\n\ttitle=\"GTK IDE\"\n\ticon_name=\"folder\"\n\thas_header=\"false\"\n\tis_maximized=\"false\"\n>\n");
+    fprintf(output_file, "<dialog\nid=\"win1\" \n\t width=\"900\"\n\theight=\"500\"\n\ttitle=\"GTK IDE\"\n\ticon_name=\"folder\"\n\thas_header=\"false\"\n\tis_maximized=\"false\"\n>\n");
     root_crud_ui = find_view_by_id("viewer", root_view_global);
 
     // generate the xml the racine widget xml code

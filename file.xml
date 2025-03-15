@@ -1,0 +1,38 @@
+<dialog
+id="win1" 
+	 width="900"
+	height="500"
+	title="GTK IDE"
+	icon_name="folder"
+	has_header="false"
+	is_maximized="false"
+>
+	<box 
+		id="wid-1-"
+		width="986"
+		height="791"
+		paned_order="1"
+		is_reorderable="false"
+		menu_right="1"
+		on_click=""
+	>
+		<box 
+			id="wid-2-"
+			width="986"
+			paned_order="1"
+			is_reorderable="false"
+			menu_right="1"
+			on_click=""
+		>
+			<box 
+				id="wid-3-"
+				width="986"
+				paned_order="1"
+				is_reorderable="false"
+				menu_right="1"
+				on_click=""
+			>
+			</box>
+		</box>
+	</box>
+</dialog>

@@ -582,7 +582,7 @@ gboolean check_scope_back(View *root)
 static void remove_widget_from_graph(gchar *view_id)
 {
     // const gchar *view_id = gtk_button_get_label(GTK_BUTTON(widget));
-    View *target = find_view_by_id(view_id, root_view_global);
+    View *target = find_view_by_id((gchar *)view_id, root_view_global);
     View *temp = NULL;
 
     if (target)
@@ -648,7 +648,7 @@ static void update_widget_config(gchar *view_id)
     // 4 - Update the view config
 
     // const gchar *view_id = gtk_button_get_label(GTK_BUTTON(widget));
-    View *target_view = find_view_by_id(view_id, root_view_global);
+    View *target_view = find_view_by_id((gchar *)view_id, root_view_global);
 
     GtkWidget *dialog = NULL;
 
@@ -812,51 +812,58 @@ static void on_column3_clicked(GtkTreeView *treeview, GtkTreePath *path,
 }
 
 // Custom cell renderer click handler
-static gboolean on_cell_clicked(GtkWidget *widget, GdkEventButton *event, gpointer user_data) {
+static gboolean on_cell_clicked(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+{
     GtkTreeView *treeview = GTK_TREE_VIEW(widget);
     GtkTreePath *path;
     GtkTreeViewColumn *column;
     gint cell_x, cell_y;
-    
+
     // Check if it's a left-click
-    if (event->type == GDK_BUTTON_PRESS && event->button == 1) {
+    if (event->type == GDK_BUTTON_PRESS && event->button == 1)
+    {
         // Get the path and column at the clicked position
-        if (gtk_tree_view_get_path_at_pos(treeview, event->x, event->y, 
-                                         &path, &column, &cell_x, &cell_y)) {
+        if (gtk_tree_view_get_path_at_pos(treeview, event->x, event->y,
+                                          &path, &column, &cell_x, &cell_y))
+        {
             // Get the tree model
             GtkTreeModel *model = gtk_tree_view_get_model(treeview);
             GtkTreeIter iter;
-            
-            if (gtk_tree_model_get_iter(model, &iter, path)) {
+
+            if (gtk_tree_model_get_iter(model, &iter, path))
+            {
                 // Check if the clicked row has children
-                gboolean has_children = gtk_tree_model_iter_has_child(model, &iter);
-                
-                // If it has children and the click was in the expander area 
-                // (usually the first few pixels of the first column)
-                if (has_children && column == gtk_tree_view_get_column(treeview, 0) && cell_x < 20) {
-                    // Toggle expand/collapse
-                    if (gtk_tree_view_row_expanded(treeview, path)) {
-                        gtk_tree_view_collapse_row(treeview, path);
-                    } else {
-                        gtk_tree_view_expand_row(treeview, path, FALSE);
-                    }
-                } else {
-                    // Otherwise, process the column click as before
-                    if (column == gtk_tree_view_get_column(treeview, 0)) {
-                        on_column1_clicked(treeview, path, column, user_data);
-                    } else if (column == gtk_tree_view_get_column(treeview, 1)) {
-                        on_column2_clicked(treeview, path, column, user_data);
-                    } else if (column == gtk_tree_view_get_column(treeview, 2)) {
-                        on_column3_clicked(treeview, path, column, user_data);
-                    }
+                // gboolean has_children = gtk_tree_model_iter_has_child(model, &iter);
+
+                // // If it has children and the click was in the expander area
+                // // (usually the first few pixels of the first column)
+                // if (has_children && column == gtk_tree_view_get_column(treeview, 0) && cell_x < 20) {
+                //     // Toggle expand/collapse
+                //     if (gtk_tree_view_row_expanded(treeview, path)) {
+                //         gtk_tree_view_collapse_row(treeview, path);
+                //     } else {
+                //         gtk_tree_view_expand_row(treeview, path, FALSE);
+                //     }
+                // } else {
+                // Otherwise, process the column click as before
+                // if (column == gtk_tree_view_get_column(treeview, 0)) {
+                // on_column1_clicked(treeview, path, column, user_data);
+                if (column == gtk_tree_view_get_column(treeview, 1))
+                {
+                    on_column2_clicked(treeview, path, column, user_data);
                 }
+                else if (column == gtk_tree_view_get_column(treeview, 2))
+                {
+                    on_column3_clicked(treeview, path, column, user_data);
+                }
+                // }
             }
-            
+
             gtk_tree_path_free(path);
             return TRUE; // Stop event propagation
         }
     }
-    
+
     return FALSE; // Continue event propagation
 }
 
@@ -899,7 +906,7 @@ ViewTreeView *create_view_tree_widget()
     gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view->tree_widget), edit_column);
 
     // Connect the "button-press-event" signal to the edit callback
-    // g_signal_connect(edit_renderer, "edited", G_CALLBACK(test_tree), tree_view);
+    // g_signal_connect(edit_renderer, "edited", G_CALLBACK(update_widget_config), tree_view);
 
     // Create text renderer for delete button with clickable property
     GtkCellRenderer *delete_renderer = gtk_cell_renderer_text_new();
@@ -912,7 +919,7 @@ ViewTreeView *create_view_tree_widget()
     gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view->tree_widget), delete_column);
 
     // Connect the "activate" signal to the delete callback
-    // g_signal_connect(delete_renderer, "edited", G_CALLBACK(test_tree), tree_view);
+    // g_signal_connect(delete_renderer, "edited", G_CALLBACK(remove_widget_from_graph), tree_view);
 
     // Get the selection object
     tree_view->selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view->tree_widget));
@@ -980,6 +987,7 @@ void populate_view_tree(ViewTreeView *tree_view, View *root_view)
         // Connect button press event to handle column clicks
         g_signal_connect(tree_view->tree_widget, "button-press-event",
                          G_CALLBACK(on_cell_clicked), NULL);
+        gtk_tree_view_expand_all(GTK_TREE_VIEW(tree_view->tree_widget));
     }
 }
 

@@ -373,10 +373,10 @@ void set_widget_size(GtkWidget *widget, Dimensions dimensions)
 }
 
 // Readers
-
 ViewConfig *read_view_config_from_dialog(gboolean update_mode)
 {
     static int wid_index = 1;
+
     // View config
     ViewConfig *view_config = NULL;
     SAFE_ALLOC(view_config, ViewConfig, 1);
@@ -784,7 +784,7 @@ gchar *read_text_color_from_widget(GtkWidget *widget)
 {
 
     return g_object_get_data(G_OBJECT(widget), "text_color");
-    
+
     // This approach also works
     // GtkStyleContext *context = gtk_widget_get_style_context(widget);
     // GdkRGBA fg_rgba;

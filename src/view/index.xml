@@ -484,9 +484,26 @@
 										on_click="sig_run_generated_xml"
 									/>
 								</box>
+								<box 
+									orientation="horizontal"
+									spacing="5"
+									valign="center"
+									halign="center"
+									margin_top="10"
+								>
+									<button 
+										label="Import UI"
+										on_click="sig_import_ui_from_xml"
+									/>
+									<button 
+										label="Generate UI"
+										on_click="sig_generate_ui"
+									/>
+									
+								</box>
 								<button 
-									label="Generate UI"
-									on_click="sig_generate_ui"
+									label="Refrech UI"
+									on_click="sig_refrech_crud_ui"
 								/>
 							</box>
 						</box>

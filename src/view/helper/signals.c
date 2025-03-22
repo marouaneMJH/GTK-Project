@@ -367,7 +367,6 @@ static void sig_fill_entry_bg_color_text(GtkWidget *widget, gpointer data)
     View *entry_view = find_view_by_id("bg_color_entry", root_dialog_view_global);
     if (entry_view)
         gtk_entry_set_text(GTK_ENTRY(entry_view->widget), fg_hex);
-
 }
 
 static void sig_fill_entry_color_text(GtkWidget *widget, gpointer data)
@@ -375,21 +374,20 @@ static void sig_fill_entry_color_text(GtkWidget *widget, gpointer data)
 
     GdkRGBA bg_rgba;
 
-        // Get the selected color from the color button
-        gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(widget), &bg_rgba);
+    // Get the selected color from the color button
+    gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(widget), &bg_rgba);
 
-        guint fg_r = (guint)(bg_rgba.red * 255);
-        guint fg_g = (guint)(bg_rgba.green * 255);
-        guint fg_b = (guint)(bg_rgba.blue * 255);
-        // Convert the color to a hexadecimal string (e.g., #RRGGBB)
-        gchar fg_hex[8]; // Format: "#RRGGBB"
-        sprintf(fg_hex, "#%02X%02X%02X", fg_r, fg_g, fg_b);
-    
-        // Set the color value in the entry widget
-        View *entry_view = find_view_by_id("color_entry", root_dialog_view_global);
-        if (entry_view)
-            gtk_entry_set_text(GTK_ENTRY(entry_view->widget), fg_hex);
-    
+    guint fg_r = (guint)(bg_rgba.red * 255);
+    guint fg_g = (guint)(bg_rgba.green * 255);
+    guint fg_b = (guint)(bg_rgba.blue * 255);
+    // Convert the color to a hexadecimal string (e.g., #RRGGBB)
+    gchar fg_hex[8]; // Format: "#RRGGBB"
+    sprintf(fg_hex, "#%02X%02X%02X", fg_r, fg_g, fg_b);
+
+    // Set the color value in the entry widget
+    View *entry_view = find_view_by_id("color_entry", root_dialog_view_global);
+    if (entry_view)
+        gtk_entry_set_text(GTK_ENTRY(entry_view->widget), fg_hex);
 }
 
 /* End of Color signales */
@@ -424,11 +422,64 @@ gboolean sig_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data
 // Show dialog from xml file
 static void sig_dialog(GtkWidget *widget, gpointer data)
 {
-    build_app(root_app, NULL, DIALOG_TXT);
-    GtkWidget *dialog = root_dialog_view_global->widget;
+    View *dialog = build_app(root_app, NULL, DIALOG_TXT);
+    // view *dialog  root_dialog_view_global->widget;
+    if (dialog && dialog->widget)
+        show_dialog(dialog->widget);
+}
+static void sig_show_image(GtkWidget *widget, gpointer data)
+{
+    ParamNode *param_array = (ParamNode *)data;
+    if (!param_array)
+    {
+        g_print("\nError: sig_show_image(), missing parameters.\n");
+        return;
+    }
 
+    // Set up dialog configuration
+    DialogConfig dialog_config = DEFAULT_DIALOG;
+    strcpy(dialog_config.title, param_array->params[1][0] != '\0' ? param_array->params[1] : "Image Viewer");
+
+    // Set up box configuration
+    BoxConfig box_image_config = DEFAULT_BOX;
+    box_image_config.dimensions.height = 300; // Adjusted height
+    box_image_config.dimensions.width = 300;  // Adjusted width
+    box_image_config.halign = GTK_ALIGN_CENTER;
+    box_image_config.valign = GTK_ALIGN_CENTER;
+
+    // Create the box
+    GtkWidget *box = create_box(box_image_config);
+
+    // Set up image configuration
+    ImageConfig image_config = DEFAULT_IMAGE;
+    strcpy(image_config.path, param_array->params[0][0] != '\0' ? param_array->params[0] : "./assets/images/smale/img1.jpg");
+    image_config.dimensions.height = 200; // Adjusted image height
+    image_config.dimensions.width = 200;  // Adjusted image width
+    image_config.opacity = 1.0;           // Full opacity
+
+    // Check if the image file exists
+    if (!g_file_test(image_config.path, G_FILE_TEST_EXISTS))
+    {
+        g_print("Error: Image file '%s' not found.\n", image_config.path);
+        GtkWidget *error_label = gtk_label_new("Image not found.");
+        gtk_box_pack_start(GTK_BOX(box), error_label, TRUE, TRUE, 0);
+    }
+    else
+    {
+        // Create the image widget and add to the box
+        GtkWidget *image_widget = create_image(image_config);
+        gtk_box_pack_start(GTK_BOX(box), image_widget, TRUE, TRUE, 0);
+    }
+
+    // Create the dialog and add the box to its content area
+    GtkWidget *dialog = create_dialog(dialog_config);
+    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box);
+
+    // Show the dialog
     show_dialog(dialog);
 }
+
+
 
 // This function check if the previous widget is a container or not
 gboolean check_relative_container(GtkWidget *widget)
@@ -1149,19 +1200,20 @@ void remove_all_children(GtkWidget *container)
 }
 
 static ViewTreeView *tree_view = NULL;
-void add_view_to_content_box(View *view)
+
+View *add_view_to_content_box(View *view)
 {
 
     View *content_box_view = find_view_by_id("content_box", root_view_global);
     if (!content_box_view)
     {
-        return;
+        return NULL;
     }
 
     View *viewer = find_view_by_id("viewer", root_view_global);
     if (!viewer)
     {
-        return;
+        return NULL;
     }
 
     remove_all_children(content_box_view->widget);
@@ -1187,6 +1239,8 @@ void add_view_to_content_box(View *view)
     // ButtonConfig content_btn_config = DEFAULT_BUTTON;
     // strcpy(content_btn_config.label, parent_view->view_config->view_id);
     // GtkWidget *content_btn = create_button(content_btn_config);
+
+    return content_box_view;
 }
 
 static void sig_create_new_view(GtkWidget *widget, gpointer data)
@@ -1465,7 +1519,9 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
         // }
         // print_graph_to_debug(viewer);
         add_view_to_content_box(parent_view);
-        gtk_widget_show_all(root_view_global->widget);
+        // gtk_widget_show_all(root_view_global->widget);
+
+        gtk_widget_show_all(gtk_widget_get_toplevel(root_view_global->widget));
     }
 
     is_relative_container = check_relative_container(parent_view->widget);
@@ -1480,6 +1536,8 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
     g_print("PARENT VIEW AFTER ==========> %s \n", parent_view->view_config->view_id);
     g_print("COMBO: %s\n%s", parent_view->view_config->view_id, is_relative_container ? "TRUE" : "FALSE");
     sig_destroy_dialog(widget, NULL);
+
+    // gtk_widget_show_all(gtk_widget_get_toplevel(root_view_global->widget));
 }
 
 void connect_signals(View *view)
@@ -1571,6 +1629,15 @@ void connect_signals(View *view)
         else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_fill_entry_bg_color_text") == 0)
             callback_function = sig_fill_entry_bg_color_text;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_import_ui_from_xml") == 0)
+            callback_function = sig_import_ui_from_xml;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_refrech_crud_ui") == 0)
+            callback_function = sig_refrech_crud_ui;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_show_image") == 0)
+            callback_function = sig_show_image;
     }
 
     // Connect the callback function
@@ -1676,4 +1743,63 @@ void connect_signals(View *view)
             break;
         }
     }
+}
+
+static void sig_import_ui_from_xml(GtkWidget *widget, gpointer data)
+{
+    View *viewer = find_view_by_id("viewer", root_view_global);
+    if (!viewer)
+    {
+        g_print("sig_import_ui_from_xml: No view to import to.\n");
+        return;
+    }
+
+    viewer->child = build_app(root_app, NULL, "file.xml");
+    if (!viewer->child)
+    {
+        g_print("sig_import_ui_from_xml: Failed to build UI.\n");
+        return;
+    }
+    if (viewer->child && viewer->child->widget)
+    {
+        g_print("hgello");
+        // gtk_container_add(GTK_CONTAINER(content_view->widget), viewer->child->widget);
+        gtk_widget_show_all(viewer->widget);
+
+    }
+    viewer->child = viewer->child->child;
+    if (!viewer->child)
+    {
+        g_print("sig_import_ui_from_xml: Failed to build UI.\n");
+        return;
+    }
+
+    View *content_view = add_view_to_content_box(viewer);
+    g_print("UI imported successfully.\n");
+
+    if (!root_view_global || !root_view_global->widget)
+    {
+        g_print("sig_import_ui_from_xml: root_view_global or its widget is NULL.\n");
+        return;
+    }
+    if (!content_view || !content_view->widget)
+    {
+        g_print("sig_import_ui_from_xml: content_view is NULL or its widget is NULL.\n");
+        return;
+    }
+
+
+    gtk_widget_show_all(content_view->widget);
+}
+
+static void sig_refrech_crud_ui(GtkWidget *widget, gpointer data)
+{
+    View *viewer = find_view_by_id("viewer", root_view_global);
+    if (!viewer)
+    {
+        g_print("sig_refrech_crud_ui: No view to import to.\n");
+        return;
+    }
+
+    gtk_widget_show_all(viewer->widget);
 }

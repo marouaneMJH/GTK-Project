@@ -110,4 +110,11 @@ static void sig_color_btn_friend_color(GtkWidget *widget, gpointer data);
 void set_available_scopes(const gchar *widget_type);
 
 gboolean check_relative_container(GtkWidget *widget);
+
+static void sig_import_ui_from_xml(GtkWidget *widget, gpointer data); 
+
+
+static void sig_refrech_crud_ui(GtkWidget *widget, gpointer data);
+
+
 #endif

@@ -16,8 +16,8 @@ void print_graph1(View *root)
 static void activate(GtkApplication *app, gpointer user_data)
 {
     root_app = app;
-    // Create a new window
 
+    // Create a new window
     View *root_view = build_app(app, root_view, INDEX_TXT);
     GtkWidget *window = root_view->widget;
 
@@ -48,7 +48,6 @@ static void activate(GtkApplication *app, gpointer user_data)
     // gtk_container_add(GTK_CONTAINER(window), event_box);
 
     show_window(window);
-
 }
 
 // Main function

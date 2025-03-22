@@ -139,27 +139,34 @@ static void dialog_response(GtkDialog *dialog, gint response_id, gpointer user_d
 
 GtkWidget *create_dialog(DialogConfig dialog_config)
 {
+    // Use the provided parent window or fallback to the global root view
+    GtkWindow *parent = dialog_config.parent ? dialog_config.parent : GTK_WINDOW(root_view_global->widget);
+
     GtkWidget *dialog = gtk_dialog_new_with_buttons(
         dialog_config.title,
-        GTK_WINDOW(root_view_global->widget),
+        parent,
         dialog_config.is_modal ? GTK_DIALOG_MODAL : 0,
-        /**
-         * // review why we use this, we can personnlise the dialog as possible as we can so we can use our function
-         */
-        // "_Oui", GTK_RESPONSE_YES,
-        // "_Non", GTK_RESPONSE_NO,
-        // "_Annuler", GTK_RESPONSE_CANCEL,
         NULL);
 
+    // Make the dialog resizable
+    gtk_window_set_resizable(GTK_WINDOW(dialog), TRUE);
+
+    // Allow maximize and minimize buttons
+    gtk_window_set_deletable(GTK_WINDOW(dialog), TRUE);
+    gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
+    gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_NORMAL);
+
+    // Set the header bar if needed
     if (dialog_config.has_header)
         set_header_bar(dialog, dialog_config.title, dialog_config.icon_path);
-    // Set dimensions
 
+    // Set default size
     gtk_window_set_default_size(GTK_WINDOW(dialog), dialog_config.dimensions.width, dialog_config.dimensions.height);
 
     // Set background color if provided
     widget_set_colors(dialog, dialog_config.bg_color, dialog_config.text_color);
 
+    // Connect the response signal
     g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(dialog_response), NULL);
 
     return dialog;

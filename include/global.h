@@ -65,9 +65,9 @@ typedef struct
     gint end;    /**< End margin */
 } Margins;
 
-
 // Column indices for our tree view
-enum {
+enum
+{
     COLUMN_VIEW_POINTER,  // Store the View pointer
     COLUMN_NAME,          // Name of the view
     COLUMN_EDIT_BUTTON,   // Text for edit button
@@ -76,12 +76,12 @@ enum {
 };
 
 // Tree structure and model
-typedef struct {
+typedef struct
+{
     GtkWidget *tree_widget;
     GtkTreeStore *tree_store;
     GtkTreeSelection *selection;
 } ViewTreeView;
-
 
 /* inline function */
 
@@ -250,7 +250,6 @@ View *find_view_by_id(char *view_id, View *root_view);
  */
 void set_header_bar(GtkWidget *window, const gchar *title, const gchar *icon_path);
 
-
 // Readers
 ViewConfig *read_view_config_from_dialog(gboolean update_mode);
 
@@ -262,17 +261,17 @@ gdouble read_config_value_as_double(gchar *view_id);
 
 gboolean read_config_value_as_boolean(gchar *view_id);
 
-GtkAlign read_align_config(gchar* input_combo);
+GtkAlign read_align_config(gchar *input_combo);
 
 GtkPositionType read_position_config(gchar *input_combo, GtkPositionType default_position);
 
-Dimensions* read_dimensions_config();
+Dimensions *read_dimensions_config();
 
 Margins *read_margins_config();
 
-gchar* read_text_color_from_widget(GtkWidget *widget);
+gchar *read_text_color_from_widget(GtkWidget *widget);
 
-gchar* read_bg_color_from_widget(GtkWidget *widget);
+gchar *read_bg_color_from_widget(GtkWidget *widget);
 
 gchar *read_bg_image_from_widget(GtkWidget *widget);
 
@@ -289,7 +288,6 @@ void write_config_value_as_int(gchar *view_id, gint value);
 void write_config_value_as_double(gchar *view_id, gdouble value);
 
 void write_config_value_as_boolean(gchar *view_id, gboolean value);
-
 
 void write_align_config(GtkAlign halign, GtkAlign valign);
 

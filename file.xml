@@ -1,294 +1,275 @@
-<window
-    id="win1"
-    width="900"
-    height="900"
-    title="Presentation"
-    icon_name="folder"
-    icon_path="assets\images\paint.png"
-    has_header="true"
-    
+<dialog
+id="win1" 
+	 width="900"
+	height="500"
+	title="GTK IDE"
+	icon_name="folder"
+	has_header="false"
+	is_maximized="false"
 >
+	<scrolled_window 
+		id="sw1"
+	height="500"
 
-    <scrolled_window
-        id="sw1"
-    >
-        <box
-            id="box1"
-        >
-            <menu_bar >
-                <menu_item 
-                    label="_Ordinateur"
-                />
-                <menu_item 
-                    label="_Portable"
-                >
-                    <menu
-                        
-                    >
-                    <menu_item 
-                        label="_Marque"
-                    />
-                    <menu_item 
-                        label="Puissance"
-                    >
-                        <menu
-                            id="menu33"
-                            menu_orientation="horizontal"
+	>
+		<box 
+			id="box1"
+		>
+			<menu_bar 
+				id=""
 
-                        >
-                            <menu_item
-                                id="menu_item3"
-                                label="Processor"
-                                menu_left="0"
-                                menu_right="1"
-                            />
-                            <menu_item
-                                id="menu_item3"
-                                label="Viresse"
-                                menu_left="1"
-                                menu_right="2"
-                            />
-                            <menu_item
-                                id="menu_item3"
-                                label="Disque dur"
-                                menu_left="2"
-                                menu_right="3"
-                                on_active="sig_change_self_bg_color"
-                                param_1="red"
-                                param_2="red"
-                            />
-
-
-                        </menu>
-                    </menu_item>
-                    <menu_item 
-                        label=" _Prix"
-                    />
-                    </menu>
-                
-                </menu_item>
-
-
-                <menu_item 
-                    label="LeurChoix"
-                />
-            
-            
-            </menu_bar>
-
-
-            <box
-                id="conent_box"
-                margin_top="40"
-                margin_left="20"
-                    valign="start"
-                    halign="start"
-                    width="500"
-                    spacing="20"
-            >
-                <box
-                    orientation="horizontal" 
-                    spacing="20"
-                >
-                    <box 
-                        margin_buttom="10"
-                        width="50" >
-                        <label 
-                            label_text="La qualite de votre ordinateur"
-                        />
-                        <frame 
-                            width="50" >
-                            <box
-                                id="box2"
-                                orientation="horizontal"
-                                spacing="20"
-                            >   
-
-                                <radio_button
-                                    id="rbtn1"
-                                    label="Très bonne"
-                                    
-                                />
-
-                                <radio_button
-                                    id="rbtn2"
-                                    label="Moyen"
-                                />
-
-                                <radio_button
-                                    id="rbtn3"
-                                    label="faible     "
-
-                                />
-                            </box>
-                        </frame>
-                    
-                    </box>
-
-                    <box
-                        valign="start"
-                        halign="start"
-                        width="400"
-                        height="1"
-                    >
-                        <label 
-                            label_text="Liste déroulante"
-                            margin_top="20"
-                        />
-
-                        <fixed  
-                        
-                        >
-                            <combo_text_box 
-                            has_entry="true"
-                            option1="          HP             "
-                            option2="          DELL"
-                            option3="          ASSUS"
-                            option4="          ACER"
-                            is_editable="false"
-                            width="200"
-                            height="1"
-                            default_value="Choix de la marque"
-                        />
-                        
-                        
-                        </fixed>
-
-
-                    </box>
-                </box>
-
-                <box
-                    id="checks_"
-                    width="50"
-                    margin_buttom="10"
-                >
-                        <label 
-                            label_text=" Son ergonomie"
-                        />
-                        <frame 
-                            width="50"
-                                        
-                                valign="start"
-                                halign="start"
-                         >
-                            <box
-                                id="box2"
-                                orientation="horizontal"
-            
-                                valign="start"
-                                halign="start"
-                                width="50"
-
-                            >   
-
-                                <check_button
-                                    id="rbtn1"
-                                    label="Convivial"
-                                />
-
-                                <check_button
-                                    id="rbtn2"
-                                    label="Intéressant"
-                                />
-
-                                <check_button
-                                    id="rbtn3"
-                                    label="Facile à utilser "
-                                />
-
-                                <check_button
-                                    id="rbtn4"
-                                    label="Optimise le Travail"
-                                />
-                        </box>
-                    </frame>
-                
-                </box>
-
-                <box
-                    orientation="horizontal" 
-                >
-                    <box 
-                        halign="start"
-                        valign="start"
-                        margin_buttom="10"
-                        height="50" 
-                        width="50" 
-                    >
-                        <label 
-                            label_text="La qualite de votre ordinateur"
-                        />
-                        <frame 
-                                                            id="box2"
-                                spacing="20"
-                                halign="start"
-                            valign="start"
-                            height="50" 
-                            width="50" 
-                        >
-                            <box
-                                id="box2"
-                                halign="start"
-                            valign="start"
-                            height="50" 
-                            width="50" 
-                            >   
-
-                                <radio_button
-                                    id="rbtn1"
-                                    label="Très bonne"
-                                    
-                                />
-
-                                <radio_button
-                                    id="rbtn2"
-                                    label="Moyen"
-                                />
-
-                                <radio_button
-                                    id="rbtn3"
-                                    label="faible     "
-
-                                />
-                            </box>
-                        </frame>
-                    
-                    </box>
-
-
-                </box>
-            </box>
-
-
-            <fixed
-
-            >
-                <box
-                    position_x="450"
-                    position_y="140"
-                    width="1000"
-                    height="500"
-                    valign="start"
-                    halign="start"
-                    orientation="horizontal"
-                    spacing="20"
-
-                >
-                    <button 
-                        label="_Ok"
-                        width="150"
-                        onclick="sig_dialog"
-                    />
-                    <button 
-                        label="_Quiter"
-                        onclick="sig_destroy"
-                        width="150"
-                    />
-                </box>
-            </fixed>
-
-        
-        </box>
-    </scrolled_window>
-</window>
+			>
+				<menu_item 
+					id=""
+					label="_Ordinateur"
+					use_underline="true"
+				/>
+				<menu_item 
+					id=""
+					label="_Portable"
+					use_underline="true"
+				>
+					<menu 
+						id=""
+						bg_color="#FFFFFF"
+					>
+						<menu_item 
+							id=""
+							label="_Marque"
+							use_underline="true"
+						/>
+						<menu_item 
+							id=""
+							label="Puissance"
+							use_underline="true"
+						>
+							<menu 
+								id="menu33"
+								bg_color="#FFFFFF"
+								menu_orientation="horizontal"
+							>
+								<menu_item 
+									id="menu_item3"
+									menu_right="1"
+									menu_left="0"
+									label="Processor"
+									use_underline="true"
+								/>
+								<menu_item 
+									id="menu_item3"
+									menu_left="1"
+									menu_right="2"
+									label="Viresse"
+									use_underline="true"
+								/>
+								<menu_item 
+									id="menu_item3"
+									menu_left="2"
+									menu_right="3"
+									label="Disque dur"
+									use_underline="true"
+								/>
+							</menu>
+						</menu_item>
+						<menu_item 
+							id=""
+							label=" _Prix"
+							use_underline="true"
+						/>
+					</menu>
+				</menu_item>
+				<menu_item 
+					id=""
+					label="LeurChoix"
+					use_underline="true"
+				/>
+			</menu_bar>
+			<box 
+				id="conent_box"
+				margin_top="40"
+				margin_left="20"
+				spacing="20"
+				halign="start"
+				valign="start"
+			>
+				<box 
+					id=""
+					orientation="horizontal"
+					spacing="20"
+				>
+					<box 
+						id=""
+					>
+						<label 
+							id=""
+							font_size="10"
+							label_text="La qualite de votre ordinateur"
+						/>
+						<frame 
+							id=""
+							label_yalign="0.500000"
+						>
+							<box 
+								id="box2"
+								orientation="horizontal"
+								spacing="20"
+							>
+								<radio_button 
+									id="rbtn1"
+									label="Très bonne"
+									is_selected="true"
+									is_button_mode="true"
+								/>
+								<radio_button 
+									id="rbtn2"
+									label="Moyen"
+									is_button_mode="true"
+								/>
+								<radio_button 
+									id="rbtn3"
+									label="faible     "
+									is_button_mode="true"
+								/>
+							</box>
+						</frame>
+					</box>
+					<box 
+						id=""
+						halign="start"
+						valign="start"
+					>
+						<label 
+							id=""
+							margin_top="20"
+							font_size="10"
+							label_text="Liste déroulante"
+						/>
+						<fixed 
+							id=""
+						>
+							<combo_text_box 
+								id=""
+								has_entry="true"
+								default_value="Choix de la marque"
+								is_editable="false"
+								popup_shown_rows="0"
+							option0="          HP             "
+							option1="          DELL"
+							option2="          ASSUS"
+							option3="          ACER"
+							/>
+						</fixed>
+					</box>
+				</box>
+				<box 
+					id="checks_"
+				>
+					<label 
+						id=""
+						font_size="10"
+						label_text=" Son ergonomie"
+					/>
+					<frame 
+						id=""
+						label_yalign="0.500000"
+					>
+						<box 
+							id="box2"
+							orientation="horizontal"
+							halign="start"
+							valign="start"
+						>
+							<check_button 
+								id="rbtn1"
+								label="Convivial"
+							/>
+							<check_button 
+								id="rbtn2"
+								label="Intéressant"
+							/>
+							<check_button 
+								id="rbtn3"
+								label="Facile à utilser "
+							/>
+							<check_button 
+								id="rbtn4"
+								label="Optimise le Travail"
+							/>
+						</box>
+					</frame>
+				</box>
+				<box 
+					id=""
+					orientation="horizontal"
+				>
+					<box 
+						id=""
+						halign="start"
+						valign="start"
+					>
+						<label 
+							id=""
+							font_size="10"
+							label_text="La qualite de votre ordinateur"
+						/>
+						<frame 
+							id="box2"
+							label_yalign="0.500000"
+						>
+							<box 
+								id="box2"
+								halign="start"
+								valign="start"
+							>
+								<radio_button 
+									id="rbtn1"
+									label="Très bonne"
+									is_selected="true"
+									is_button_mode="true"
+								/>
+								<radio_button 
+									id="rbtn2"
+									label="Moyen"
+									is_button_mode="true"
+								/>
+								<radio_button 
+									id="rbtn3"
+									label="faible     "
+									is_button_mode="true"
+								/>
+							</box>
+						</frame>
+					</box>
+				</box>
+			</box>
+			<fixed 
+				id=""
+			>
+				<box 
+					id=""
+					position_x="450"
+					position_y="140"
+					orientation="horizontal"
+					spacing="20"
+					halign="start"
+					valign="start"
+				>
+					<button 
+						id=""
+						on_click="sig_dialog"
+						label="_Ok"
+						is_visible="false"
+						use_underline="true"
+					/>
+					<button 
+						id=""
+						on_click="sig_destroy"
+						label="_Quiter"
+						is_visible="false"
+						use_underline="true"
+					/>
+				</box>
+			</fixed>
+		</box>
+	</scrolled_window>
+</dialog>

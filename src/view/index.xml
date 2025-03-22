@@ -4,11 +4,11 @@
     height="900"
     title="GTK IDE"
     icon_name="folder"
-    icon_path="assets\images\programer.jpg"
-    has_header="false"
+    has_header="true"
     is_maximized="false"
 >
 
+    <!-- icon_path="assets\images\programer.jpg" -->
     <box
         id="box1"
     >

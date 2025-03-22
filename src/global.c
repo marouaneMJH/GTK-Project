@@ -170,7 +170,9 @@ void set_header_bar(GtkWidget *window, const gchar *title, const gchar *icon_pat
     // Create a header bar
     GtkWidget *header_bar = gtk_header_bar_new();
     gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(header_bar), TRUE);
-    gtk_header_bar_set_decoration_layout(GTK_HEADER_BAR(header_bar), "menu:close");
+    // gtk_header_bar_set_decoration_layout(GTK_HEADER_BAR(header_bar), "menu:close");
+    gtk_header_bar_set_decoration_layout(GTK_HEADER_BAR(header_bar), "icon:minimize,maximize,close");
+
 
     // Set the title of the header bar
     gtk_header_bar_set_title(GTK_HEADER_BAR(header_bar), title);

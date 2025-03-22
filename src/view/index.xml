@@ -1,6 +1,6 @@
 <window
     id="win1"
-    width="1500"
+    width="1570"
     height="900"
     title="GTK IDE"
     icon_name="folder"

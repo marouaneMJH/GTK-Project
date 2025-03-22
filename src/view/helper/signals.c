@@ -427,6 +427,59 @@ static void sig_dialog(GtkWidget *widget, gpointer data)
     if (dialog && dialog->widget)
         show_dialog(dialog->widget);
 }
+static void sig_show_image(GtkWidget *widget, gpointer data)
+{
+    ParamNode *param_array = (ParamNode *)data;
+    if (!param_array)
+    {
+        g_print("\nError: sig_show_image(), missing parameters.\n");
+        return;
+    }
+
+    // Set up dialog configuration
+    DialogConfig dialog_config = DEFAULT_DIALOG;
+    strcpy(dialog_config.title, param_array->params[1][0] != '\0' ? param_array->params[1] : "Image Viewer");
+
+    // Set up box configuration
+    BoxConfig box_image_config = DEFAULT_BOX;
+    box_image_config.dimensions.height = 300; // Adjusted height
+    box_image_config.dimensions.width = 300;  // Adjusted width
+    box_image_config.halign = GTK_ALIGN_CENTER;
+    box_image_config.valign = GTK_ALIGN_CENTER;
+
+    // Create the box
+    GtkWidget *box = create_box(box_image_config);
+
+    // Set up image configuration
+    ImageConfig image_config = DEFAULT_IMAGE;
+    strcpy(image_config.path, param_array->params[0][0] != '\0' ? param_array->params[0] : "./assets/images/smale/img1.jpg");
+    image_config.dimensions.height = 200; // Adjusted image height
+    image_config.dimensions.width = 200;  // Adjusted image width
+    image_config.opacity = 1.0;           // Full opacity
+
+    // Check if the image file exists
+    if (!g_file_test(image_config.path, G_FILE_TEST_EXISTS))
+    {
+        g_print("Error: Image file '%s' not found.\n", image_config.path);
+        GtkWidget *error_label = gtk_label_new("Image not found.");
+        gtk_box_pack_start(GTK_BOX(box), error_label, TRUE, TRUE, 0);
+    }
+    else
+    {
+        // Create the image widget and add to the box
+        GtkWidget *image_widget = create_image(image_config);
+        gtk_box_pack_start(GTK_BOX(box), image_widget, TRUE, TRUE, 0);
+    }
+
+    // Create the dialog and add the box to its content area
+    GtkWidget *dialog = create_dialog(dialog_config);
+    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box);
+
+    // Show the dialog
+    show_dialog(dialog);
+}
+
+
 
 // This function check if the previous widget is a container or not
 gboolean check_relative_container(GtkWidget *widget)
@@ -1582,6 +1635,9 @@ void connect_signals(View *view)
         else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_refrech_crud_ui") == 0)
             callback_function = sig_refrech_crud_ui;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_show_image") == 0)
+            callback_function = sig_show_image;
     }
 
     // Connect the callback function

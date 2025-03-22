@@ -252,7 +252,7 @@ void write_widget_view_config(FILE *output_file, View *view, int tabs_number)
     if (view->view_config->menu_left)
     {
         print_tabs(output_file, tabs_number);
-        fprintf(output_file, "menu_left=\"%d\"\n", view->view_config->menu_bottom);
+        fprintf(output_file, "menu_left=\"%d\"\n", view->view_config->menu_left);
     }
     if (view->view_config->menu_right)
     {

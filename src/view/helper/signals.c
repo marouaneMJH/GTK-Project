@@ -9,16 +9,6 @@ static gboolean is_relative_container = TRUE;
 
 static gboolean update_mode = FALSE;
 
-/**
- * @brief structure for handle signales parametres
- * //todo variable: checck if on_cllick signal activate or not and also for other signales
- */
-typedef struct
-{
-    gchar params[PARAM_COUNT][MAX_SIGNAL_NAME_SIZE]; // First function parameter
-
-} ParamNode;
-
 // debug for test
 
 gboolean sig_hello(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
@@ -209,6 +199,7 @@ static void sig_generate_ui(GtkWidget *widget, gpointer data)
         show_dialog(dialog);
     }
 }
+
 static void sig_run_generated_xml(GtkWidget *widget, gpointer data)
 {
 
@@ -427,6 +418,7 @@ static void sig_dialog(GtkWidget *widget, gpointer data)
     if (dialog && dialog->widget)
         show_dialog(dialog->widget);
 }
+
 static void sig_show_image(GtkWidget *widget, gpointer data)
 {
     ParamNode *param_array = (ParamNode *)data;
@@ -478,8 +470,6 @@ static void sig_show_image(GtkWidget *widget, gpointer data)
     // Show the dialog
     show_dialog(dialog);
 }
-
-
 
 // This function check if the previous widget is a container or not
 gboolean check_relative_container(GtkWidget *widget)
@@ -579,7 +569,7 @@ void set_available_scopes(const gchar *widget_type)
 }
 
 // Set view config from the dialog
-static void sig_properties_dialog(GtkWidget *widget, gpointer data)
+extern void sig_properties_dialog(GtkWidget *widget, gpointer data)
 {
     ParamNode *param_array = (ParamNode *)data;
     if (!param_array)
@@ -1540,6 +1530,39 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
     // gtk_widget_show_all(gtk_widget_get_toplevel(root_view_global->widget));
 }
 
+
+
+static void sig_create_notebook(GtkWidget *widget, gpointer data)
+{
+
+    ViewConfig *view_config;
+
+    NotebookConfig notebook_config = DEFAULT_NOTEBOOK;
+    GtkWidget *new_notebook = create_notebook(notebook_config);
+
+    View *new_notebook_view = create_view(new_notebook, view_config);
+    strcpy(new_notebook_view->view_config->view_id, "wid-notebook");
+    g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
+    parent_view = add_view(new_notebook_view, parent_view, is_relative_container);
+    is_relative_container = check_relative_container(parent_view->widget);
+
+    add_view_to_content_box(parent_view);
+    // gtk_widget_show_all(root_view_global->widget);
+
+    BoxConfig box_config = DEFAULT_BOX;
+    GtkWidget *new_box = create_box(box_config);
+    View *new_box_view = create_view(new_box, view_config);
+    strcpy(new_box_view->view_config->view_id, "wid-tab1");
+    strcpy(new_box_view->view_config->tab_label, "Onglet1");
+    g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
+    parent_view = add_view(new_box_view, parent_view, is_relative_container);
+    is_relative_container = check_relative_container(parent_view->widget);
+    add_view_to_content_box(parent_view);
+
+    gtk_widget_show_all(gtk_widget_get_toplevel(root_view_global->widget));
+}
+
+
 void connect_signals(View *view)
 {
     // Exit the function if no signale triggered
@@ -1638,6 +1661,9 @@ void connect_signals(View *view)
         else if (strcmp(view->view_config->signal.sig_handler,
                         "sig_show_image") == 0)
             callback_function = sig_show_image;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_create_notebook") == 0)
+            callback_function = sig_create_notebook;
     }
 
     // Connect the callback function
@@ -1765,7 +1791,6 @@ static void sig_import_ui_from_xml(GtkWidget *widget, gpointer data)
         g_print("hgello");
         // gtk_container_add(GTK_CONTAINER(content_view->widget), viewer->child->widget);
         gtk_widget_show_all(viewer->widget);
-
     }
     viewer->child = viewer->child->child;
     if (!viewer->child)
@@ -1787,7 +1812,6 @@ static void sig_import_ui_from_xml(GtkWidget *widget, gpointer data)
         g_print("sig_import_ui_from_xml: content_view is NULL or its widget is NULL.\n");
         return;
     }
-
 
     gtk_widget_show_all(content_view->widget);
 }

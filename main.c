@@ -1,25 +1,26 @@
 
 #include "./include/builder.h"
 
-void print_graph1(View *root)
-{
-    if (!root)
-        return;
-    g_print("WIDGET: ===> %s => PARENT ==> %s\n", root->view_config->view_id, root->parent->view_config->view_id);
-    if (root->next || root->child)
-        g_print("Has next or child\n");
-    print_graph1(root->child);
-    print_graph1(root->next);
-}
 
 // Activate callback for GtkApplication
 static void activate(GtkApplication *app, gpointer user_data)
 {
     root_app = app;
 
-    // Create a new window
-    View *root_view = build_app(app, root_view, INDEX_TXT);
+    // // Create a new window
+    View *root_view = build_app(app, NULL, INDEX_TXT);
     GtkWidget *window = root_view->widget;
+
+    // Test command creation
+
+    View *commands_container = find_view_by_id("commands_container", root_view);
+    if (!commands_container)
+    {
+        g_print("Error: ==> Cannot find the commands container\n");
+        return;
+    }
+
+    add_command("Create path", 10, 10, "button", commands_container, root_view);
 
     // WindowConfig window_config = DEFAULT_WINDOW;
     // GtkWidget *window = create_window(app, window_config);

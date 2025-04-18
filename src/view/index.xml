@@ -505,6 +505,19 @@
 									label="Refrech UI"
 									on_click="sig_refrech_crud_ui"
 								/>
+
+								<fixed
+									id="commands_container"
+									hexpand="true"
+									vexpand="true"
+									margin_top="10"
+									margin_bottom="10"
+									margin_left="10"
+									margin_right="10"
+									width="300"
+									height="400">
+
+								</fixed>
 							</box>
 						</box>
                 </paned>

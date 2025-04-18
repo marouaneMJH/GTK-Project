@@ -1,32 +1,26 @@
 
 #include "./include/builder.h"
-#include "./include/widgets/View/view.h"
-#include "./include/widgets/View/signals.h"
+
 
 // Activate callback for GtkApplication
 static void activate(GtkApplication *app, gpointer user_data)
 {
     root_app = app;
 
-    // Create a new window
-    View *root_view = build_app(app, root_view, INDEX_TXT);
+    // // Create a new window
+    View *root_view = build_app(app, NULL, INDEX_TXT);
     GtkWidget *window = root_view->widget;
 
-
-    test();
     // Test command creation
-    // ViewConfig *view_conf;
-    // SAFE_ALLOC(view_conf, ViewConfig, 1);
 
-    // ButtonConfig btn_conf = DEFAULT_BUTTON;
-    // strcpy(btn_conf.label, "Hello World");
-    // GtkWidget *btn_widget = create_button(btn_conf);
+    View *commands_container = find_view_by_id("commands_container", root_view);
+    if (!commands_container)
+    {
+        g_print("Error: ==> Cannot find the commands container\n");
+        return;
+    }
 
-    // view_conf->position_x = 10;
-    // view_conf->position_y = 10;
-
-    // add_command(btn_widget, view_conf, root_view);
-
+    add_command("Create path", 10, 10, "button", commands_container, root_view);
 
     // WindowConfig window_config = DEFAULT_WINDOW;
     // GtkWidget *window = create_window(app, window_config);

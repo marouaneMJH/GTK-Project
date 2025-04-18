@@ -9,16 +9,6 @@ static gboolean is_relative_container = TRUE;
 
 static gboolean update_mode = FALSE;
 
-/**
- * @brief structure for handle signales parametres
- * //todo variable: checck if on_cllick signal activate or not and also for other signales
- */
-typedef struct
-{
-    gchar params[PARAM_COUNT][MAX_SIGNAL_NAME_SIZE]; // First function parameter
-
-} ParamNode;
-
 // debug for test
 
 gboolean sig_hello(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
@@ -579,7 +569,7 @@ void set_available_scopes(const gchar *widget_type)
 }
 
 // Set view config from the dialog
-static void sig_properties_dialog(GtkWidget *widget, gpointer data)
+extern void sig_properties_dialog(GtkWidget *widget, gpointer data)
 {
     ParamNode *param_array = (ParamNode *)data;
     if (!param_array)

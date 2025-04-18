@@ -1,16 +1,7 @@
 
 #include "./include/builder.h"
-
-void print_graph1(View *root)
-{
-    if (!root)
-        return;
-    g_print("WIDGET: ===> %s => PARENT ==> %s\n", root->view_config->view_id, root->parent->view_config->view_id);
-    if (root->next || root->child)
-        g_print("Has next or child\n");
-    print_graph1(root->child);
-    print_graph1(root->next);
-}
+#include "./include/widgets/View/view.h"
+#include "./include/widgets/View/signals.h"
 
 // Activate callback for GtkApplication
 static void activate(GtkApplication *app, gpointer user_data)
@@ -20,6 +11,22 @@ static void activate(GtkApplication *app, gpointer user_data)
     // Create a new window
     View *root_view = build_app(app, root_view, INDEX_TXT);
     GtkWidget *window = root_view->widget;
+
+
+    test();
+    // Test command creation
+    // ViewConfig *view_conf;
+    // SAFE_ALLOC(view_conf, ViewConfig, 1);
+
+    // ButtonConfig btn_conf = DEFAULT_BUTTON;
+    // strcpy(btn_conf.label, "Hello World");
+    // GtkWidget *btn_widget = create_button(btn_conf);
+
+    // view_conf->position_x = 10;
+    // view_conf->position_y = 10;
+
+    // add_command(btn_widget, view_conf, root_view);
+
 
     // WindowConfig window_config = DEFAULT_WINDOW;
     // GtkWidget *window = create_window(app, window_config);

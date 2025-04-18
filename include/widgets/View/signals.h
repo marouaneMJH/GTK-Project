@@ -3,6 +3,12 @@
 
 #include "./../../global.h"
 
+
+static void test()
+{
+    g_print("test\n");
+}
+
 /**
  * @brief Most commonly used GTK3 signals
  *

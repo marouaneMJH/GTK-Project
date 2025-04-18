@@ -492,7 +492,7 @@
 									margin_top="10"
 								>
 									<button 
-										label="Import UI"
+										label="LOAD"
 										on_click="sig_import_ui_from_xml"
 									/>
 									<button 
@@ -504,6 +504,10 @@
 								<button 
 									label="Refrech UI"
 									on_click="sig_refrech_crud_ui"
+								/>
+								<button 
+									label="CHANGER FENETRE"
+									on_click="sig_open_my_dialog"
 								/>
 							</box>
 						</box>

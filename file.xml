@@ -9,8 +9,9 @@ id="win1"
 >
 	<box 
 		id="wid-1-bx"
+		bg_color="#FF7800"
 		width="986"
-		height="800"
+		height="967"
 		paned_order="1"
 		is_reorderable="false"
 		menu_right="1"
@@ -18,6 +19,7 @@ id="win1"
 	>
 		<box 
 			id="wid-10-bx2"
+			bg_color="#ED333B"
 			width="986"
 			paned_order="1"
 			is_reorderable="false"

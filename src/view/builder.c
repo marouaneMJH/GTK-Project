@@ -28,6 +28,7 @@ void add_command(const gchar *label, gint x, gint y, const gchar *signal_option,
 
     link_with_container(commands_container->widget, btn_widget, view_conf);
     g_print("Command added\n");
+
 }
 
 void add_custom_command(const gchar *label, gint x, gint y, const gchar *signal, ParamNode params, View *commands_container, View *root_view)

@@ -1885,7 +1885,7 @@ static void sig_import_ui_from_xml(GtkWidget *widget, gpointer data)
 
     gtk_widget_show_all(content_view->widget);
     // sig_destroy_dialog(widget,NULL);
-    gtk_widget_destroy(root_dialog_view_global->widget);
+   
 }
 
 static void sig_refrech_crud_ui(GtkWidget *widget, gpointer data)

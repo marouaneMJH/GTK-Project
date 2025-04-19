@@ -1,7 +1,6 @@
 
 #include "./include/builder.h"
 
-
 // Activate callback for GtkApplication
 static void activate(GtkApplication *app, gpointer user_data)
 {
@@ -22,31 +21,19 @@ static void activate(GtkApplication *app, gpointer user_data)
 
     add_command("Create path", 10, 10, "button", commands_container, root_view);
 
-    // WindowConfig window_config = DEFAULT_WINDOW;
-    // GtkWidget *window = create_window(app, window_config);
+    add_command("label name", 10, 100, "label", commands_container, root_view);
 
-    // GtkWidget* box=gtk_box_new(10,10);
-    // GtkWidget* button=gtk_button_new_with_label(NULL);
+    ParamNode node = {
+        .params = {
+            "param1",
+            "param2",
+            "param3",
+            "param4",
+        }};
 
-    // gboolean id=GTK_IS_CONTAINER(button);
-    // g_print("\nis box container: %d",id);
+    add_custom_command("hhhhhhh label_name", 100, 100, "sig_entry_activate", node, commands_container, root_view);
+    add_custom_command("hhhhhhh label_name", 100, 100, "sig_hello", node, commands_container, root_view);
 
-    // gboolean id2=GTK_IS_EVENT_BOX(button);
-    // g_print("\nbutton button container: %d",id2);
-
-    // GtkWidget *label=gtk_label_new("hello");
-    // GtkWidget *event_box = gtk_event_box_new();
-    // gtk_container_add(GTK_CONTAINER(event_box), label);
-    // gtk_widget_show(label);
-    // gtk_widget_show(event_box);
-
-    // g_signal_connect(event_box, "button-press-event",
-    //                  G_CALLBACK(on_event_box_button_press), NULL);
-
-    // GtkWidget *button=gtk_font_button_new();
-
-    // // gtk_container_add(GTK_CONTAINER(expander), button);
-    // gtk_container_add(GTK_CONTAINER(window), event_box);
 
     show_window(window);
 }

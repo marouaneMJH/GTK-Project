@@ -11,18 +11,9 @@ static gboolean update_mode = FALSE;
 
 // debug for test
 
-gboolean sig_hello(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+void  sig_hello(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
     g_print("\nsignale: hello\n");
-    // print_graph_to_debug(root_view_global);
-    // if (event->type == GDK_BUTTON_PRESS)
-    // {
-    //     g_print("Label clicked! Button %d at (%.2f, %.2f)\n",
-    //             event->button, event->x, event->y);
-    //     // Return TRUE to indicate the event was handled.
-    //     return TRUE;
-    // }
-    return FALSE;
 }
 
 void widget_type(View *root)

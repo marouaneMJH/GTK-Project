@@ -1,64 +1,121 @@
 #include "./../../include/builder.h"
 #include "helper/read_tag.h"
 #include "helper/link_with_container.h"
+#include "./../../include/widgets/View/signals.h"
 
 static gint wid = 0;
+
+/*
+ * *******************************************
+ * *******************************************
+ * **************ADD_COMAND*******************
+ * *******************************************
+ * *******************************************
+ */
+
+/**
+ * Adds a simple command button to a container with a single parameter.
+ *
+ * @param label Text displayed on the button
+ * @param x X-coordinate position of the button
+ * @param y Y-coordinate position of the button
+ * @param signal_option Parameter passed to the signal handler
+ * @param commands_container Container view where button will be added
+ * @param root_view Root view of the application
+ */
 void add_command(const gchar *label, gint x, gint y, const gchar *signal_option, View *commands_container, View *root_view)
 {
-
+    // Allocate memory for view configuration
     ViewConfig *view_conf;
     SAFE_ALLOC(view_conf, ViewConfig, 1);
 
+    // Return if any essential pointers are NULL
     if (!view_conf || !root_view || !commands_container)
         return;
 
+    // Generate unique view ID using global widget counter
     strcpy(view_conf->view_id, g_strconcat("cmd-", g_strdup_printf("%d", wid++), NULL));
+    // Set event type to handle click events
     view_conf->signal.event_type = SIG_ON_CLICK;
+    // Set signal handler function name
     strcpy(view_conf->signal.sig_handler, "sig_properties_dialog");
 
+    // Set position coordinates
     view_conf->position_x = x;
     view_conf->position_y = y;
+    // Store the signal option as first parameter
     strcpy(view_conf->param[0], signal_option);
 
+    // Create button with default configuration and specified label
     ButtonConfig btn_conf = DEFAULT_BUTTON;
     strcpy(btn_conf.label, label);
     GtkWidget *btn_widget = create_button(btn_conf);
 
+    // Connect clicked signal to the properties dialog handler
     g_signal_connect(G_OBJECT(btn_widget), "clicked", G_CALLBACK(sig_properties_dialog), (ParamNode *)view_conf->param);
 
+    // Add button to the container
     link_with_container(commands_container->widget, btn_widget, view_conf);
+    // Log that command was added
     g_print("Command added\n");
 }
 
+/**
+ * Adds a custom command button to a container with multiple parameters and custom signal handler.
+ *
+ * @param label Text displayed on the button
+ * @param x X-coordinate position of the button
+ * @param y Y-coordinate position of the button
+ * @param signal Custom signal handler function name
+ * @param params Structure containing up to 4 parameters to pass to the handler
+ * @param commands_container Container view where button will be added
+ * @param root_view Root view of the application
+ */
 void add_custom_command(const gchar *label, gint x, gint y, const gchar *signal, ParamNode params, View *commands_container, View *root_view)
 {
-
+    // Allocate memory for view configuration
     ViewConfig *view_conf;
     SAFE_ALLOC(view_conf, ViewConfig, 1);
 
+    // Return if any essential pointers are NULL
     if (!view_conf || !root_view || !commands_container)
         return;
 
+    // Generate unique view ID using global widget counter
     strcpy(view_conf->view_id, g_strconcat("cmd-", g_strdup_printf("%d", wid++), NULL));
+    // Set event type to handle click events
     view_conf->signal.event_type = SIG_ON_CLICK;
+    // Set custom signal handler function name
     strcpy(view_conf->signal.sig_handler, signal);
 
+    // Set position coordinates
     view_conf->position_x = x;
     view_conf->position_y = y;
+
+    // Copy all parameters from the ParamNode
     strcpy(view_conf->param[0], params.params[0]);
     strcpy(view_conf->param[1], params.params[1]);
     strcpy(view_conf->param[2], params.params[2]);
     strcpy(view_conf->param[3], params.params[3]);
 
+    // Create button with default configuration and specified label
     ButtonConfig btn_conf = DEFAULT_BUTTON;
     strcpy(btn_conf.label, label);
     GtkWidget *btn_widget = create_button(btn_conf);
 
-    g_signal_connect(G_OBJECT(btn_widget), "clicked", G_CALLBACK(sig_properties_dialog), (ParamNode *)view_conf->param);
+    View *my_view = create_view(btn_widget, view_conf);
+    add_view(my_view, commands_container, TRUE);
 
-    link_with_container(commands_container->widget, btn_widget, view_conf);
+    // Connect clicked signal to the properties dialog handler
+    // g_signal_connect(G_OBJECT(btn_widget), "clicked", G_CALLBACK(sig_refrech_crud_ui), (ParamNode *)view_conf->param);
+
+    // // Add button to the container
+    // link_with_container(commands_container->widget, btn_widget, view_conf);
+    // Log that command was added
     g_print("Command added\n");
 }
+
+// void add_command_
 
 static void sig_entry_activate(GtkWidget *entry, gpointer data)
 {

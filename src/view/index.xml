@@ -114,6 +114,22 @@
 							margin_left="10"
 							margin_top="20"
 						>
+						
+						<expander
+							id="frame1"
+							label="Hide"
+							font_size="12"
+							is_expanded="false"
+						>
+						<box
+							id="box2"
+							paned_order="2"
+							spacing="10"
+							margin_left="10"
+							margin_top="20"
+						>
+						
+						
 							<!-- Layout Containers -->
 							<expander
 								id="frame1"
@@ -460,65 +476,69 @@
 								</grid>
 							</expander>
 
-							<!-- Action Buttons -->
+
 							<separator />
-							<box 
-								spacing="5"
-								valign="center"
-								halign="center"
-								margin_top="10"
-							>
-								<box 
-									orientation="horizontal"
-									spacing="5"
-									valign="center"
-									halign="center"
-									margin_top="10"
-								>
-									<button 
-										label="Generate XML"
-										on_click="sig_generate_xml"
-									/>
-									<button 
-										label="RUN XML"
-										on_click="sig_run_generated_xml"
-									/>
-								</box>
-								<box 
-									orientation="horizontal"
-									spacing="5"
-									valign="center"
-									halign="center"
-									margin_top="10"
-								>
-									<button 
-										label="LOAD"
-										on_click="sig_open_import_dialog"
-									/>
-									<button 
-										label="Generate UI"
-										on_click="sig_generate_ui"
-									/>
-									
-								</box>
-								<button 
-									label="Refrech UI"
-									on_click="sig_refrech_crud_ui"
-								/>
-
-								<fixed
-									id="commands_container"
-									hexpand="true"
-									vexpand="true"
-									margin_top="10"
-									margin_bottom="10"
-									margin_left="10"
-									margin_right="10"
-									width="300"
-									height="400">
-
-								</fixed>
+		
 							</box>
+						</expander>
+						<box 
+						spacing="5"
+						valign="center"
+						halign="center"
+						margin_top="10"
+					>
+						<box 
+							orientation="horizontal"
+							spacing="5"
+							valign="center"
+							halign="center"
+							margin_top="10"
+						>
+							<button 
+								label="Generate XML"
+								on_click="sig_generate_xml"
+							/>
+							<button 
+								label="RUN XML"
+								on_click="sig_run_generated_xml"
+							/>
+						</box>
+						<box 
+							orientation="horizontal"
+							spacing="5"
+							valign="center"
+							halign="center"
+							margin_top="10"
+						>
+							<button 
+								label="LOAD"
+								on_click="sig_open_import_dialog"
+							/>
+							<button 
+								label="Generate UI"
+								on_click="sig_generate_ui"
+							/>
+							
+						</box>
+						<button 
+							label="Refrech UI"
+							on_click="sig_refrech_crud_ui"
+						/>
+
+						<fixed
+							id="commands_container"
+							hexpand="true"
+							vexpand="true"
+							margin_top="10"
+							margin_bottom="10"
+							margin_left="10"
+							margin_right="10"
+							width="300"
+							height="400">
+
+						</fixed>
+					</box>
+
 						</box>
                 </paned>
             </paned>

@@ -39,7 +39,6 @@
 #define EVENT_BOX_PROPERTIES_DIALOG_TXT "./src/view/properties/event_box_dialog.xml"
 #define SWITCH_BUTTON_PROPERTIES_DIALOG_TXT "./src/view/properties/switch_button_dialog.xml"
 
-
 #define MODE "r"
 
 typedef enum
@@ -92,5 +91,9 @@ int get_view_index(gchar *widget_tag);
 View *build_app(GtkApplication *app, View *root_view, const gchar *file_path);
 
 void connect_signals(View *view);
+
+void add_command(const gchar *label, gint x, gint y, const gchar *signal_option, View *commands_container, View *root_view);
+
+void add_custom_command(const gchar *label, gint x, gint y, const gchar *signal, ParamNode params, View *commands_container, View *root_view);
 
 #endif

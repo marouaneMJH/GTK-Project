@@ -9,16 +9,6 @@ static gboolean is_relative_container = TRUE;
 
 static gboolean update_mode = FALSE;
 
-/**
- * @brief structure for handle signales parametres
- * //todo variable: checck if on_cllick signal activate or not and also for other signales
- */
-typedef struct
-{
-    gchar params[PARAM_COUNT][MAX_SIGNAL_NAME_SIZE]; // First function parameter
-
-} ParamNode;
-
 // debug for test
 
 gboolean sig_hello(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
@@ -259,6 +249,7 @@ static void sig_generate_ui(GtkWidget *widget, gpointer data)
         show_dialog(dialog);
     }
 }
+
 static void sig_run_generated_xml(GtkWidget *widget, gpointer data)
 {
 
@@ -477,6 +468,7 @@ static void sig_dialog(GtkWidget *widget, gpointer data)
     if (dialog && dialog->widget)
         show_dialog(dialog->widget);
 }
+
 static void sig_show_image(GtkWidget *widget, gpointer data)
 {
     ParamNode *param_array = (ParamNode *)data;
@@ -627,7 +619,7 @@ void set_available_scopes(const gchar *widget_type)
 }
 
 // Set view config from the dialog
-static void sig_properties_dialog(GtkWidget *widget, gpointer data)
+extern void sig_properties_dialog(GtkWidget *widget, gpointer data)
 {
     ParamNode *param_array = (ParamNode *)data;
     if (!param_array)
@@ -1588,6 +1580,39 @@ static void sig_create_new_view(GtkWidget *widget, gpointer data)
     // gtk_widget_show_all(gtk_widget_get_toplevel(root_view_global->widget));
 }
 
+
+
+static void sig_create_notebook(GtkWidget *widget, gpointer data)
+{
+
+    ViewConfig *view_config;
+
+    NotebookConfig notebook_config = DEFAULT_NOTEBOOK;
+    GtkWidget *new_notebook = create_notebook(notebook_config);
+
+    View *new_notebook_view = create_view(new_notebook, view_config);
+    strcpy(new_notebook_view->view_config->view_id, "wid-notebook");
+    g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
+    parent_view = add_view(new_notebook_view, parent_view, is_relative_container);
+    is_relative_container = check_relative_container(parent_view->widget);
+
+    add_view_to_content_box(parent_view);
+    // gtk_widget_show_all(root_view_global->widget);
+
+    BoxConfig box_config = DEFAULT_BOX;
+    GtkWidget *new_box = create_box(box_config);
+    View *new_box_view = create_view(new_box, view_config);
+    strcpy(new_box_view->view_config->view_id, "wid-tab1");
+    strcpy(new_box_view->view_config->tab_label, "Onglet1");
+    g_print("PARENT VIEW ===============> %s\n", parent_view->view_config->view_id);
+    parent_view = add_view(new_box_view, parent_view, is_relative_container);
+    is_relative_container = check_relative_container(parent_view->widget);
+    add_view_to_content_box(parent_view);
+
+    gtk_widget_show_all(gtk_widget_get_toplevel(root_view_global->widget));
+}
+
+
 void connect_signals(View *view)
 {
     // Exit the function if no signale triggered
@@ -1692,6 +1717,9 @@ void connect_signals(View *view)
             callback_function = sig_open_my_dialog;
         else if (strcmp(view->view_config->signal.sig_handler, "sig_open_import_dialog") == 0)
             callback_function = sig_open_import_dialog;
+        else if (strcmp(view->view_config->signal.sig_handler,
+                        "sig_create_notebook") == 0)
+            callback_function = sig_create_notebook;
     }
 
     // Connect the callback function

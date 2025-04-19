@@ -7,13 +7,61 @@ id="win1"
 	has_header="false"
 	is_maximized="false"
 >
-	<scrolled_window 
-		id="wid-1-"
-		bg_color="#C061CB"
+	<box 
+		id="wid-1-ssd"
+		bg_color="#613583"
+		width="986"
+		height="1375"
 		paned_order="1"
 		is_reorderable="false"
 		menu_right="1"
 		on_click=""
 	>
-	</scrolled_window>
+		<menu_bar 
+			id="wid-2-dd"
+			width="986"
+			height="29"
+			paned_order="1"
+			is_reorderable="false"
+			menu_right="1"
+			on_click=""
+			tooltip="(null)"
+		>
+			<menu_item 
+				id="wid-3-"
+				color="#FFFFFF"
+				width="39"
+				height="29"
+				paned_order="1"
+				is_reorderable="false"
+				menu_right="1"
+				on_click=""
+				label="File"
+				is_mnemonic="false"
+			/>
+		</menu_bar>
+		<fixed 
+			id="wid-4-fff"
+			width="986"
+			height="666"
+			paned_order="1"
+			is_reorderable="false"
+			menu_right="1"
+			on_click=""
+		>
+			<image 
+				id="wid-5-"
+				width="200"
+				height="200"
+				position_x="40"
+				position_y="40"
+				paned_order="1"
+				is_reorderable="false"
+				menu_right="1"
+				on_click=""
+				type="file"
+				path="./assets/images/programer.jpg"
+			/>
+		</fixed>
+	</box>
 </dialog>

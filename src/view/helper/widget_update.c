@@ -765,7 +765,7 @@ void set_current_radio_button_config_to_dialog(RadioButtonConfig *radio_button_c
     write_config_value_as_boolean("selected_switch", radio_button_config->is_selected);
 
     // Is button mode
-    write_config_value_as_boolean("button_mode_switch", radio_button_config->is_button_mode);
+    // write_config_value_as_boolean("button_mode_switch", radio_button_config->is_button_mode);
 
     // Is inconsistent
     write_config_value_as_boolean("inconsistent_switch", radio_button_config->is_inconsistent);

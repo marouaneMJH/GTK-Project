@@ -493,7 +493,7 @@
 								>
 									<button 
 										label="LOAD"
-										on_click="sig_import_ui_from_xml"
+										on_click="sig_open_import_dialog"
 									/>
 									<button 
 										label="Generate UI"

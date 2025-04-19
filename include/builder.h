@@ -5,6 +5,7 @@
 #define INDEX_TXT "./src/view/index.xml"
 #define DIALOG_TXT "./src/view/dialog.xml"
 #define MYDIALOG_TXT "./src/view/my_dialog.xml"
+#define IMPORTDIALOG_TXT "./src/view/import_dialog.xml"
 #define ERROR_DIALOG_TXT "./src/view/error_dialog.xml"
 #define BOX_PROPERTIES_DIALOG_TXT "./src/view/properties/box_dialog.xml"
 #define FIXED_PROPERTIES_DIALOG_TXT "./src/view/properties/fixed_dialog.xml"

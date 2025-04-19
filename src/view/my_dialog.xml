@@ -47,7 +47,7 @@
             box_expand="true"
             box_fill="true"
         />
-        <buttonzzz
+        <button
             id="btnAplly"
             label="Apply"
             on_click="sig_change_friend_bg_color"

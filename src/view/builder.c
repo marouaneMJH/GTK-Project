@@ -28,34 +28,35 @@ void add_command(const gchar *label, gint x, gint y, const gchar *signal_option,
 
     link_with_container(commands_container->widget, btn_widget, view_conf);
     g_print("Command added\n");
+
 }
 
-void add_custom_command(const gchar *label, gint x, gint y, const gchar *signal, ParamNode params, View *commands_container, View *root_view)
+void add_custom_command(ViewConfig* view_conf, const gchar *label, gint x, gint y, View *commands_container, View *root_view)
 {
-
-    ViewConfig *view_conf;
-    SAFE_ALLOC(view_conf, ViewConfig, 1);
 
     if (!view_conf || !root_view || !commands_container)
         return;
 
     strcpy(view_conf->view_id, g_strconcat("cmd-", g_strdup_printf("%d", wid++), NULL));
     view_conf->signal.event_type = SIG_ON_CLICK;
-    strcpy(view_conf->signal.sig_handler, signal);
+    // if (view_conf->signal.sig_handler[0] == '\0') 
+    // {
+        // strcpy(view_conf->signal.sig_handler, signal);
+    // }
 
     view_conf->position_x = x;
     view_conf->position_y = y;
-    strcpy(view_conf->param[0], params.params[0]);
-    strcpy(view_conf->param[1], params.params[1]);
-    strcpy(view_conf->param[2], params.params[2]);
-    strcpy(view_conf->param[3], params.params[3]);
+    // strcpy(view_conf->param[0], params.params[0]);
+    // strcpy(view_conf->param[1], params.params[1]);
+    // strcpy(view_conf->param[2], params.params[2]);
+    // strcpy(view_conf->param[3], params.params[3]);
 
     ButtonConfig btn_conf = DEFAULT_BUTTON;
     strcpy(btn_conf.label, label);
     GtkWidget *btn_widget = create_button(btn_conf);
 
-    g_signal_connect(G_OBJECT(btn_widget), "clicked", G_CALLBACK(sig_properties_dialog), (ParamNode *)view_conf->param);
-
+    // g_signal_connect(G_OBJECT(btn_widget), "clicked", G_CALLBACK(sig_properties_dialog), (ParamNode *)view_conf->param);
+    connect_signals(create_view(btn_widget, view_conf));
     link_with_container(commands_container->widget, btn_widget, view_conf);
     g_print("Command added\n");
 }

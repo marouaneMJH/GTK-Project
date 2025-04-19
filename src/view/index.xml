@@ -10,7 +10,7 @@
 
     <!-- icon_path="assets\images\programer.jpg" -->
     <box
-        id="box1"
+        id="box1-main"
     >
         <menu_bar id="menu_bar1">
 

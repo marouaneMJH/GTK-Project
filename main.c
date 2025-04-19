@@ -11,7 +11,9 @@ static void activate(GtkApplication *app, gpointer user_data)
     View *root_view = build_app(app, NULL, INDEX_TXT);
     GtkWidget *window = root_view->widget;
 
-    // Test command creation
+
+    ViewConfig *view_conf;
+    SAFE_ALLOC(view_conf, ViewConfig, 1);
 
     View *commands_container = find_view_by_id("commands_container", root_view);
     if (!commands_container)
@@ -20,34 +22,13 @@ static void activate(GtkApplication *app, gpointer user_data)
         return;
     }
 
-    add_command("Create path", 10, 10, "button", commands_container, root_view);
+    add_command("Create button", 10, 10, "button", commands_container, root_view);
+    add_command("Create notebook", 100, 10, "notebook", commands_container, root_view);
 
-    // WindowConfig window_config = DEFAULT_WINDOW;
-    // GtkWidget *window = create_window(app, window_config);
 
-    // GtkWidget* box=gtk_box_new(10,10);
-    // GtkWidget* button=gtk_button_new_with_label(NULL);
-
-    // gboolean id=GTK_IS_CONTAINER(button);
-    // g_print("\nis box container: %d",id);
-
-    // gboolean id2=GTK_IS_EVENT_BOX(button);
-    // g_print("\nbutton button container: %d",id2);
-
-    // GtkWidget *label=gtk_label_new("hello");
-    // GtkWidget *event_box = gtk_event_box_new();
-    // gtk_container_add(GTK_CONTAINER(event_box), label);
-    // gtk_widget_show(label);
-    // gtk_widget_show(event_box);
-
-    // g_signal_connect(event_box, "button-press-event",
-    //                  G_CALLBACK(on_event_box_button_press), NULL);
-
-    // GtkWidget *button=gtk_font_button_new();
-
-    // // gtk_container_add(GTK_CONTAINER(expander), button);
-    // gtk_container_add(GTK_CONTAINER(window), event_box);
-
+    strcpy(view_conf->signal.sig_handler, "sig_open_import_dialog");
+    add_custom_command(view_conf, "Print hello", 10, 50, commands_container, root_view);
+  
     show_window(window);
 }
 

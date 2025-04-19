@@ -94,6 +94,6 @@ void connect_signals(View *view);
 
 void add_command(const gchar *label, gint x, gint y, const gchar *signal_option, View *commands_container, View *root_view);
 
-void add_custom_command(const gchar *label, gint x, gint y, const gchar *signal, ParamNode params, View *commands_container, View *root_view);
+void add_custom_command(ViewConfig *view_conf, const gchar *label, gint x, gint y, View *commands_container, View *root_view);
 
 #endif

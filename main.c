@@ -12,6 +12,9 @@ static void activate(GtkApplication *app, gpointer user_data)
     GtkWidget *window = root_view->widget;
 
 
+    ViewConfig *view_conf;
+    SAFE_ALLOC(view_conf, ViewConfig, 1);
+
     View *commands_container = find_view_by_id("commands_container", root_view);
     if (!commands_container)
     {
@@ -22,6 +25,9 @@ static void activate(GtkApplication *app, gpointer user_data)
     add_command("Create button", 10, 10, "button", commands_container, root_view);
     add_command("Create notebook", 100, 10, "notebook", commands_container, root_view);
 
+
+    strcpy(view_conf->signal.sig_handler, "sig_open_import_dialog");
+    add_custom_command(view_conf, "Print hello", 10, 50, commands_container, root_view);
   
     show_window(window);
 }

@@ -100,6 +100,14 @@ static void sig_open_my_dialog()
         show_dialog(dialog->widget);
 }
 
+static void sig_open_import_dialog()
+{
+    root_dialog_view_global = build_app(root_app, NULL, IMPORTDIALOG_TXT);
+
+    if (root_dialog_view_global && root_dialog_view_global->widget)
+        show_dialog(root_dialog_view_global->widget);
+}
+
 static void sig_modify_window(GtkWidget *widget, gpointer data)
 {
     View *viewer = find_view_by_id("wid-1-", root_view_global);
@@ -123,7 +131,7 @@ static void sig_modify_window(GtkWidget *widget, gpointer data)
     // ScrolledWindowConfig* configS = DEFAULT_SCROLLED_WINDOW;
     // strcpy(configS->bg_color, "red");
     // GtkWidget *scrolled_window_widget = create_scrolled_window(*configS);
-    
+
     update_mode = FALSE;
 }
 // static void sig_dialog(GtkWidget *widget, gpointer data)
@@ -1002,12 +1010,17 @@ static void update_widget_config(gchar *view_id)
     }
     else if (GTK_IS_COMBO_BOX_TEXT(target_view->widget))
     {
+    
         // dialog = prepare_update_combo_text_box_config(target_view);
     }
+    
 
     update_mode = TRUE;
-    if (dialog)
+    if (dialog){
+        g_print("dialoog hnaa");
         show_dialog(dialog);
+    }
+        
 }
 
 static void on_column2_clicked(GtkTreeView *treeview, GtkTreePath *path,
@@ -1682,6 +1695,8 @@ void connect_signals(View *view)
             callback_function = sig_modify_window;
         else if (strcmp(view->view_config->signal.sig_handler, "sig_open_my_dialog") == 0)
             callback_function = sig_open_my_dialog;
+        else if (strcmp(view->view_config->signal.sig_handler, "sig_open_import_dialog") == 0)
+            callback_function = sig_open_import_dialog;
     }
 
     // Connect the callback function
@@ -1798,7 +1813,21 @@ static void sig_import_ui_from_xml(GtkWidget *widget, gpointer data)
         return;
     }
 
-    viewer->child = build_app(root_app, NULL, "file.xml");
+    View *entry_viewer = find_view_by_id("entry_import_id", root_dialog_view_global);
+
+    if (!entry_viewer)
+    {
+        g_print("sig_import_ui_from_xml: No entry_viewer to.\n");
+        return;
+    }
+
+    const char *path = gtk_entry_get_text(GTK_ENTRY(entry_viewer->widget));
+
+    
+
+
+
+    viewer->child = build_app(root_app, NULL, path);
     if (!viewer->child)
     {
         g_print("sig_import_ui_from_xml: Failed to build UI.\n");
@@ -1832,6 +1861,8 @@ static void sig_import_ui_from_xml(GtkWidget *widget, gpointer data)
     }
 
     gtk_widget_show_all(content_view->widget);
+    // sig_destroy_dialog(widget,NULL);
+    gtk_widget_destroy(root_dialog_view_global->widget);
 }
 
 static void sig_refrech_crud_ui(GtkWidget *widget, gpointer data)
@@ -1845,3 +1876,4 @@ static void sig_refrech_crud_ui(GtkWidget *widget, gpointer data)
 
     gtk_widget_show_all(viewer->widget);
 }
+

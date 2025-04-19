@@ -177,6 +177,7 @@ void show_dialog(GtkWidget *dialog)
     /* Run the dialog */
     if (dialog)
     {
+        
         gtk_widget_show_all(dialog);
         gtk_dialog_run(GTK_DIALOG(dialog));
     }

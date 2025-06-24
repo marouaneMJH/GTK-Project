@@ -92,8 +92,54 @@ View *build_app(GtkApplication *app, View *root_view, const gchar *file_path);
 
 void connect_signals(View *view);
 
+/**
+ * Adds a simple command button to a container with a single parameter.
+ *
+ * @param label Text displayed on the button
+ * @param x X-coordinate position of the button
+ * @param y Y-coordinate position of the button
+ * @param signal_option Parameter passed to the signal handler
+ * @param commands_container Container view where button will be added
+ * @param root_view Root view of the application
+ */
 void add_command(const gchar *label, gint x, gint y, const gchar *signal_option, View *commands_container, View *root_view);
 
+/**
+ * Adds a simple command button to a container with a single parameter.
+ *
+ * @param btn_conf Complete button configuration structure
+ * @param x X-coordinate position of the button
+ * @param y Y-coordinate position of the button
+ * @param signal_option Parameter passed to the signal handler
+ * @param commands_container Container view where button will be added
+ * @param root_view Root view of the application
+ */
+void add_command_with_config(ButtonConfig btn_conf, gint x, gint y, const gchar *signal_option, View *commands_container, View *root_view);
+
+/**
+ * Adds a custom command button to a container with multiple parameters and custom signal handler.
+ *
+ * @param label Text displayed on the button
+ * @param x X-coordinate position of the button
+ * @param y Y-coordinate position of the button
+ * @param signal Custom signal handler function name
+ * @param params Structure containing up to 4 parameters to pass to the handler
+ * @param commands_container Container view where button will be added
+ * @param root_view Root view of the application
+ */
 void add_custom_command(const gchar *label, gint x, gint y, const gchar *signal, ParamNode params, View *commands_container, View *root_view);
+
+/**
+ * Adds a custom command button to a container with multiple parameters and custom signal handler.
+ *
+ * @param btn_conf Complete button configuration structure
+ * @param x X-coordinate position of the button
+ * @param y Y-coordinate position of the button
+ * @param signal Custom signal handler function name
+ * @param params Structure containing up to 4 parameters to pass to the handler
+ * @param commands_container Container view where button will be added
+ * @param root_view Root view of the application
+ */
+void add_custom_command_with_config(ButtonConfig btn_conf, gint x, gint y, const gchar *signal, ParamNode params, View *commands_container, View *root_view);
 
 #endif

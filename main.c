@@ -22,6 +22,7 @@ static void activate(GtkApplication *app, gpointer user_data)
     add_command("Create path", 10, 10, "button", commands_container, root_view);
 
     add_command("label name", 10, 100, "label", commands_container, root_view);
+    add_command("label name", 10, 100, "label", commands_container, root_view);
 
     ParamNode node = {
         .params = {
@@ -31,9 +32,22 @@ static void activate(GtkApplication *app, gpointer user_data)
             "param4",
         }};
 
-    add_custom_command("hhhhhhh label_name", 100, 100, "sig_entry_activate", node, commands_container, root_view);
-    add_custom_command("hhhhhhh label_name", 100, 100, "sig_hello", node, commands_container, root_view);
+    ButtonConfig btn_config = DEFAULT_BUTTON_NEW;
 
+        add_custom_command("label_name",
+                       100,
+                       100,
+                       "sig_entry_activate",
+                       node, commands_container,
+                       root_view);
+
+    add_custom_command_with_config(btn_config,
+                                   10,
+                                   100,
+                                   "sig_hello",
+                                   node,
+                                   commands_container,
+                                   root_view);
 
     show_window(window);
 }

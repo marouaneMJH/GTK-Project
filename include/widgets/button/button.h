@@ -30,16 +30,16 @@
 
 #define DEFAULT_BUTTON                                     \
     {                                                      \
-        .label[0] = '\0',                             \
+        .label[0] = '\0',                                  \
         .is_sensitive = TRUE,                              \
         .is_visible = TRUE,                                \
-        .tooltip[0] = '\0',                                   \
+        .tooltip[0] = '\0',                                \
         .dimensions = DEFAULT_BUTTON_DIMENSIONS,           \
         .icon_dimensions = DEFAULT_BUTTON_ICON_DIMENSIONS, \
         .margins = DEFAULT_BUTTON_MARGINS,                 \
         .hexpand = FALSE,                                  \
         .vexpand = FALSE,                                  \
-        .icon_path[0] = '\0',                                 \
+        .icon_path[0] = '\0',                              \
         .halign = GTK_ALIGN_FILL,                          \
         .valign = GTK_ALIGN_FILL,                          \
         .always_show_image = TRUE,                         \
@@ -47,11 +47,36 @@
         .use_underline = FALSE,                            \
         .use_stock = FALSE,                                \
         .icon_position = GTK_POS_LEFT,                     \
-        .bg_color[0] = '\0',                                  \
+        .bg_color[0] = '\0',                               \
         .font_size = 10,                                   \
-        .bg_image[0] = '\0',                                  \
+        .bg_image[0] = '\0',                               \
         .color[0] = '\0'}
 
+#define DEFAULT_BUTTON_NEW                                 \
+    {                                                      \
+        .label = "Click me",                               \
+        .is_sensitive = TRUE,                              \
+        .is_visible = TRUE,                                \
+        .tooltip = "Click to perform action",              \
+        .dimensions = DEFAULT_BUTTON_DIMENSIONS,           \
+        .icon_dimensions = DEFAULT_BUTTON_ICON_DIMENSIONS, \
+        .margins = DEFAULT_BUTTON_MARGINS,                 \
+        .hexpand = TRUE,                                   \
+        .vexpand = FALSE,                                  \
+        .icon_path = "/usr/share/icons/action-icon.png",   \
+        .halign = GTK_ALIGN_CENTER,                        \
+        .valign = GTK_ALIGN_CENTER,                        \
+        .always_show_image = TRUE,                         \
+        .focus_on_click = TRUE,                            \
+        .use_underline = TRUE,                             \
+        .use_stock = FALSE,                                \
+        .icon_position = GTK_POS_LEFT,                     \
+        .bg_color = "#3498db",                             \
+        .color = "#ffffff",                                \
+        .font_size = 12,                                   \
+        .bg_image = "",                                    \
+        .alignment_x = 0.5,                                \
+        .alignment_y = 0.5}
 typedef struct
 {
     /* Basic properties */
@@ -63,14 +88,14 @@ typedef struct
     /* Dimensions and placement */
     Dimensions dimensions; // dimensions of the button
     Margins margins;       // margin of the button
-    
+
     gchar icon_path[MAX_ICON_PATH_SIZE]; // Path to the icon image file
     Dimensions icon_dimensions;          // Dimensions of the icon image
-    
-    gboolean hexpand;      // If the button expands in its container (horizontal)
-    gboolean vexpand;      // If the button expands in its container (vertical)
-    GtkAlign halign;               // Horizontal alignment of the button label
-    GtkAlign valign;               // Vertical alignment of the button label
+
+    gboolean hexpand; // If the button expands in its container (horizontal)
+    gboolean vexpand; // If the button expands in its container (vertical)
+    GtkAlign halign;  // Horizontal alignment of the button label
+    GtkAlign valign;  // Vertical alignment of the button label
 
     gboolean always_show_image;    // Whether to always show the image
     gboolean use_underline;        // Whether to use underline in the button label
@@ -92,9 +117,9 @@ typedef struct
 
 ViewConfig *init_button_config(FILE *index, ButtonConfig *button_config);
 
-ButtonConfig* read_button_config_from_dialog();
+ButtonConfig *read_button_config_from_dialog();
 
-ButtonConfig* read_button_config_from_widget(GtkWidget *widget);
+ButtonConfig *read_button_config_from_widget(GtkWidget *widget);
 
 /**
  * @brief create button widget with default
